@@ -1,0 +1,114 @@
+-- build.settings for project: JumpR
+-- Managed with http://CoronaProjectManager.com
+-- Copyright 2012 . All Rights Reserved.
+
+settings = {
+    android =
+    {
+        -- determines if the build is split into expansion packs for games > 1MB
+        -- usesExpansionFile = true,
+        supportsTV = true,
+        isGame = true,
+
+        usesPermissions =
+        {
+            "com.android.vending.BILLING",
+            "com.android.vending.CHECK_LICENSE",
+            "android.permission.INTERNET",
+            "android.permission.ACCESS_NETWORK_STATE",
+            "android.permission.WRITE_EXTERNAL_STORAGE"
+        },
+    },
+	iphone =
+	{
+		plist=
+		{
+            CFBundleShortVersionString = "1.0.6",
+			CFBundleDisplayName        = "Star Jumper",
+            CFBundleName               = "Star Jumper",
+            CFBundleIconFile           = "Icon.png",
+            CFBundleIconFiles          = {
+                "Icon@2x.png", 
+                "Icon.png", 
+                "Icon-xhdpi.png", 
+                "Icon-mdpi.png", 
+                "Icon-ldpi.png", 
+                "Icon-hdpi.png", 
+                "Icon-120.png", 
+                "Icon-76@2x.png", 
+                "Icon-76.png", 
+                "Icon-72@2x.png", 
+                "Icon-72.png",
+                "Icon-60@2x", 
+            },
+            UIApplicationExitsOnSuspend         = false,
+            NSAppTransportSecurity              = { NSAllowsArbitraryLoads=true },
+            NSLocationAlwaysUsageDescription    = { "" },
+            NSLocationWhenInUseUsageDescription = { "" },
+            -- UIPrerenderedIcon                   = true,
+            UIStatusBarHidden                   = true,
+            --UILaunchImages                      = {},
+            --MinimumOSVersion                    = "7.0",
+		},
+	},
+	androidPermissions = 
+	{
+        "android.permission.INTERNET",
+    },
+    usesPermissions = 
+    {
+        "android.permission.INTERNET",
+    },
+    usesFeatures = 
+    {
+        { name="android.hardware.location",         required=false },
+        { name="android.hardware.location.gps",     required=false },
+        { name="android.hardware.location.network", required=false },
+    },
+    plugins = 
+    {
+        ["plugin.bit"] =
+        {
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { iphone=true, android=true, osx=true, win32=true, ["android-kindle"]=true }
+        },
+        ["plugin.flurry.analytics"] =
+        {
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { iphone=true, android=true, ["android-kindle"]=true }
+        },
+        ["plugin.google.play.services"] =
+        {
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { android=true, ["android-kindle"]=true }
+        },
+        ["shared.android.support.v4"] = {
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { android=true, ["android-kindle"]=true }
+        },
+        ["plugin.google.iap.v3"] =
+        {
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { android=true, ["android-kindle"]=true }
+        },
+        ["plugin.amazon.iap"] =
+        {
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { ["android-kindle"]=true }
+        },
+        ["CoronaProvider.ads.iads"] =
+        {
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { iphone=true, ["iphone-sim"]=true },
+        },
+        ["plugin.coronaAds"] =
+        {
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { iphone=true, android=true, ["android-kindle"]=true }
+        },
+        ["CoronaProvider.ads.vungle"] =
+        {
+            publisherId = "com.vungle"
+        },
+    },
+}

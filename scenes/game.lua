@@ -92,7 +92,7 @@ function scene:loadGame()
     display.newImage(self.view, "images/backgrounds/canyon.jpg", globalCenterX, globalCenterY)
 
     level:new(camera)
-    level:createElements({})
+    level:createElements(self:getElements())
 
     camera:setParallax(1.1, 1, 1, 1, 0.2, 0.15, 0.1, 0.05)
     --camera:setBounds(-300, level.endXPos, level.data.floor+100, level.data.ceiling)
@@ -103,6 +103,14 @@ function scene:loadGame()
     player:setWeapon(Weapons.rifle)
     
     hud:create(camera, player, scene.pauseLevel, scene.resumeLevel)
+end
+
+
+function scene:getElements()
+    return {
+        {object="enemy", xpos=250, ypos=250, weapon=Weapons.rifle, angle=180, aggression=70},
+        {object="enemy", xpos=500, ypos=250, weapon=Weapons.rifle, angle=180, aggression=30},
+    }
 end
 
 

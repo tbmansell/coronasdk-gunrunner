@@ -26,7 +26,7 @@ system.activate("multitouch")
 -- turn off phone display status
 display.setStatusBar(display.HiddenStatusBar)
 -- load sounds
-sounds:loadStaticSounds()
+sounds:preload()
 
 
 -- Global debug game logic

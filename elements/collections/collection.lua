@@ -32,6 +32,8 @@ function Collection:add(object)
 
     local newId = #self.items + 1
     
+    print("Collection ["..self.name.."] add "..object.class)
+
     -- create a reference to this collection in the added object, so they can remove themselves from it
     object.collections[self.name] = {
         id  = newId,
@@ -133,6 +135,19 @@ function Collection:forEach(func)
         local object = items[i]
         if object and object ~= -1 then
             func(object)
+        end
+    end
+end
+
+
+function Collection:checkBehaviour(player)
+    local items = self.items
+    local num   = #items
+
+    for i=1,num do
+        local object = items[i]
+        if object and object ~= -1 and object.checkBehaviour then
+            object:checkBehaviour(player)
         end
     end
 end

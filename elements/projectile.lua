@@ -1,5 +1,9 @@
 -- Class
-local Projectile = {}
+local Projectile = {
+    
+    isProjectile = true,
+    class        = "Projectile",
+}
 
 -- Aliases
 local cos = math.cos
@@ -8,18 +12,37 @@ local rad = math.rad
 local abs = math.abs
 
 
+function Projectile.eventCollision(self, event)
+    local other = event.other.object
+    local self  = self.object
+
+    if other then
+        if other.isPlayer or other.isEnemy then 
+            other:hit(self)
+        end
+
+        sounds:projectile(self.weapon.hitSound)
+        self:destroy()
+    end
+end
+
+
 function Projectile:setPhysics()
     physics.addBody(self.image, "dynamic", {density=0, friction=0, bounce=0, filter=self.filter})
+
+    self.image.collision = Projectile.eventCollision
+    self.image:addEventListener("collision", self.image)
 end
 
 
 function Projectile:fire()
-    local forceX = self.speed * -cos(rad(self.angle))
-    local forceY = self.speed * -sin(rad(self.angle))
+    local weapon = self.weapon
+    local forceX = weapon.speed * -cos(rad(self.angle))
+    local forceY = weapon.speed * -sin(rad(self.angle))
 
     self:applyForce(forceX, forceY)
 
-    sounds:play(sounds.rifleShot)
+    sounds:projectile(weapon.shotSound)
 end
 
 

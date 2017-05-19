@@ -24,6 +24,8 @@ function PlayerBuilder:newPlayer(camera, spec)
 
     -- Allow override of destroy()
     player.spineObjectDestroy = player.destroy
+    -- Override updateSpine for multilpe spine animations
+    player.updateSingleSpine  = player.updateSpine
 
     builder:deepCopy(playerDef, player)
 

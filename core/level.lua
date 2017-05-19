@@ -2,6 +2,7 @@ local anim               = require("core.animations")
 local particles          = require("core.particles")
 local builder            = require("elements.builders.builder")
 local playerBuilder      = require("elements.builders.playerBuilder")
+local enemyBuilder       = require("elements.builders.enemyBuilder")
 local projectileBuilder  = require("elements.builders.projectileBuilder")
 
 -- Class
@@ -14,6 +15,7 @@ local camera                = nil
 local mainPlayer            = nil
 local spineCollection       = nil
 local movingCollection      = nil
+local enemyCollection       = nil
 local particleCollection    = nil
 
 -- Aliases
@@ -52,6 +54,7 @@ function Level:new(cameraRef)
     spineCollection    = builder:newSpineCollection()
     movingCollection   = builder:newMovementCollection()
     particleCollection = builder:newParticleEmitterCollection()
+    enemyCollection    = builder:newMasterCollection("enemySet", spineCollection, movingCollection, particleCollection)
 
     -- local aliases:
     camera = cameraRef
@@ -71,8 +74,9 @@ function Level:destroy()
     spineCollection:destroy()
     movingCollection:destroy()
     particleCollection:destroy()
+    enemyCollection:destroy()
 
-    spineCollection, movingCollection, particleCollection, mainPlayer, camera = nil, nil, nil, nil, nil
+    spineCollection, movingCollection, particleCollection, enemyCollection, mainPlayer, camera = nil, nil, nil, nil, nil, nil
 end
 
 
@@ -113,6 +117,10 @@ end
 
 
 function Level:createEnemy(item)
+    local enemy = enemyBuilder:newEnemy(camera, item)
+
+    --spineCollection:add(enemy)
+    enemyCollection:add(enemy)
 end
 
 
@@ -143,14 +151,10 @@ end
 
 
 function Level:updateBehaviours()
-    --mainPlayer:checkBehaviour(camera)
-
     particleCollection:checkEach()
-    --[[
-    if hasEnemies then
-        enemyCollection:checkBehaviours(mainPlayer, playerCollection, floorY)
-    end
+    enemyCollection:checkBehaviour(mainPlayer)
 
+    --[[
     if hasEmitters then
         emitterCollection:checkEmittedOutOfPlay(camera)
     end
@@ -170,7 +174,6 @@ function Level:eventUpdateFrame(event)
     lastTime          = currentTime
 
     mainPlayer:updateSpine(delta)
-    mainPlayer.legs:updateSpine(delta)
 
     check_background_movement(delta)
     check_spine_animation(spineCollection, delta, true)

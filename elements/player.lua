@@ -11,23 +11,31 @@ local Player = {
     intHeight   = 30,
     intWidth    = 30,
 
-    ingame      = false,
     mode        = PlayerMode.ready,
-    hasDied     = false,
     health      = 100,
     gear        = {},
     shielded    = false,
     weapon      = nil,
     shotsFired  = 0,
 
-    flagShootAllowed = true,    
+    flagShootAllowed = true,
 }
 
 -- Aliases:
---local play     = globalSoundPlayer
-local math_abs = math.abs
-local osTime   = os.time
 
+
+--[[function Player:updateChildSpine(delta)
+    self.legs:updateSpine(delta)
+end]]
+
+
+function Player:updateSpine(delta)
+    self.state:update(delta)
+    self.state:apply(self.skeleton)
+    self.skeleton:updateWorldTransform()
+
+    self.legs:updateSpine(delta)
+end
 
 
 function Player:topEdge()
@@ -184,11 +192,12 @@ end
 
 
 function Player:hit(shot)
-    if self.mode ~= PlayerMode.dead then
-        if not self.shielded or shot.shieldBuster then
-            self.health = self.health - shot.damage
-
-            self:animate("hit")
+    if not self:isDead() then
+        if not self.shielded or shot.weapon.shieldBuster then
+            self.health = self.health - shot.weapon.damage
+            
+            sounds:player("hurt")
+            --self:animate("hit")
 
             if self.health < 0 then
                 self:explode()
@@ -221,40 +230,33 @@ end
 -- Base function which performs the common things that happen when a player is killed
 function Player:die(animation, sound, stopMoving, fall, message)
     -- guard to stop multiple deaths
-    if self.mode ~= PlayerMode.dead then
+    if not self:isDead() then
         self.mode = PlayerMode.dead
 
-        if self.runSound then
+        --[[if self.runSound then
             self:stopSound(self.runSound)
             self.runSound = nil
-        end
+        end]]
 
         self:destroyEmitter()
         --self:emit("deathflash")
         --self:emit("die")
 
-        -- Sound can be empty (no sound), string (just play sound of that name) or table (sound with options)
-        if sound then
-            if type(sound) == "string" then
-                self:sound(sound)
-            else
-                self:sound(sound.action, sound)
-            end
-        end
+        sounds:player("killed")
 
-        self.animationOverride = nil
-        self:animate(animation or "Death EXPLODE BIG")
+        --self.animationOverride = nil
+        --self:animate(animation or "Death EXPLODE BIG")
 
         if stopMoving then
             self:stopMomentum(true)
         end
 
-        if message and self.main then
+        --[[if message and self.main then
             hud:displayMessageDied(message)
-        end
+        end]]
 
-        after(3000, function() 
-            
+        after(3000, function()
+            self:destroy()            
 
             if self.failedCallback then 
                 self:failedCallback() 
@@ -328,14 +330,9 @@ function Player:sound(action, params)
 
     if self.main and not params.manage then
         -- Sound should be in full and not in sound engine as its the main player
-        play(params.sound, params)
+        --sounds:play(params.sound, params)
     else
-        -- Some sounds should be allowed to be playe as many times as called and not bound by the action name:
-        if action == "randomRing" then
-            action = action..osTime()
-        end
-
-        soundEngine:playManagedAction(self, action, params)
+        --sounds:play(action, params)
     end
 end
 

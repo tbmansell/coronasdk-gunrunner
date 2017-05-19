@@ -11,8 +11,7 @@ function ProjectileBuilder:newShot(camera, weapon, spec)
 
     builder:deepCopy(projectileDef, shot)
 
-    shot.speed  = weapon.speed
-    shot.damage = weapon.damage
+    shot.weapon = weapon
     shot.filter = spec.filter
 
     shot:moveTo(spec.xpos or 0, spec.ypos or 0)

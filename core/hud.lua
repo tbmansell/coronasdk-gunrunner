@@ -95,13 +95,13 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler)
     self.playerIcon        = draw:newImage(self.group, "hud/player-icon", 45, 45, 0.5)
     self.textScore         = draw:newText(self.group,  self.score, globalWidth-5, 25, 0.7, "green", "RIGHT")
     self.controlMove       = draw:newImage(self.group, "hud/control-move",  100,             globalHeight-110, nil, 0.7)
-    self.controlShoot      = draw:newImage(self.group, "hud/control-shoot", globalWidth-100, globalHeight-100, nil, 0.7)
+    self.controlShoot      = draw:newImage(self.group, "hud/control-shoot", globalWidth-100, globalHeight-130, nil, 0.7)
 
     self.background:setFillColor(0.5, 0.2, 0.5, 0.2)
 
     -- assign shortcuts variables
-    moveControllerX,  moveControllerY  = self.controlMove.x, self.controlMove.y
-    shootControllerX, shootControllerY = self.controlShoot.x, self.controlShoot.y
+    moveControllerX,  moveControllerY  = self.controlMove.x,  self.controlMove.y
+    shootControllerX, shootControllerY = self.controlShoot.x, self.controlShoot.y + (self.controlShoot.height/2)
 
     self.playerIcon:addEventListener("tap",     self.eventPauseGame)
     self.controlMove:addEventListener("touch",  eventMovePlayer)

@@ -2,23 +2,10 @@ local spine            = require("core.spine")
 local gameObject       = require("elements.gameObject")
 local spineObject      = require("elements.spineObject")
 local collection   	   = require("elements.collections.collection")
---local masterCollection = require("element.collections.master-collection")
-
+local masterCollection = require("elements.collections.masterCollection")
 
 -- Class
-local Builder = {
-	-- Methods:
-	-----------
-	-- setCollectionBoundaries()
-	-- deepCopy()
-	-- newClone()
-	-- newGameObject()
-	-- newSpineObject()
-	-- setupCustomShape()
-	-- newCollection()
-	-- newSpineCollection()
-	-- newMovementCollection()
-}
+local Builder = {}
 
 -- Local vars for performance
 -- (x >= -300 and x <= 1200 and y >= -200 and y <= 800)
@@ -46,9 +33,7 @@ local new_image 		= display.newImage
 local move_item_pattern = moveItemPattern
 
 
--- Global function to scale the boundaries used for movement and animation
--- @param bool scale - nil or false to set normal boundaries, true to set scaled boundaries
-----
+
 function Builder:setCollectionBoundaries(scale)
 	if scale then
 		leftBoundary   = constLeftScaled
@@ -64,11 +49,6 @@ function Builder:setCollectionBoundaries(scale)
 end
 
 
-
--- Performs a deep copy of the original into the target (used when target is an existing object)
--- @param orig   - source table to copy
--- @param target - object to copy properties from orig into
-----
 function Builder:deepCopy(orig, copy)
     local orig_type = type(orig)
     
@@ -85,10 +65,6 @@ function Builder:deepCopy(orig, copy)
 end
 
 
--- Creates a replica of the original passed in, using a deep copy
--- @param orig - source table to clone
--- @return newly created table
-----
 function Builder:newClone(orig)
     local orig_type = type(orig)
     local copy
@@ -105,11 +81,6 @@ function Builder:newClone(orig)
 end
 
 
--- Creates a new gameObject which is the base for all elements in level:
--- @param spec  - original table used to create any element ingame (eg. {object="ledge", x=300, y=0} )
--- @param image - the object holding the image or image collection (for spine)
--- @return new gameObject
-----
 function Builder:newGameObject(spec, image)
 	-- an object is at its foundation a copy of the table spec passed in where we can override specifics
 	local object = self:newClone(spec)
@@ -134,16 +105,6 @@ function Builder:newGameObject(spec, image)
 end
 
 
--- Creates a new spine object (derived from gameObject) and loads in the spine data
--- @param spec
--- @param spineParams  - a table of paramteers to load the spine data
--- 			jsonName
---			imagePath
---			scale
---			skin
---			animation
--- @return new spineObject
-----
 function Builder:newSpineObject(spec, spineParams)
 	local imagePath = spineParams.imagePath
 	local json 		= spine.SkeletonJson.new()
@@ -203,11 +164,6 @@ function Builder:newSpineObject(spec, spineParams)
 end
 
 
--- Modifies an object by supplying a custom shape that does not fit its image and overrides methods to determine its size and edges
--- @param object - gameObject to modify
--- @param width  - new width
--- @param height - new height
-----
 function Builder:setupCustomShape(object, width, height)
 	object.customWidth  = width
 	object.customHeight = height
@@ -224,9 +180,6 @@ function Builder:setupCustomShape(object, width, height)
 end
 
 
--- Creates a new collection with a given name
--- @param name - for the collection (shoud be unique for an object)
-----
 function Builder:newCollection(name)
 	local coll = self:newClone(collection)
 	coll.name  = name
@@ -235,8 +188,6 @@ function Builder:newCollection(name)
 end
 
 
--- Creates a collection specific to animating spine objects
-----
 function Builder:newSpineCollection()
 	local collection = self:newCollection("spineSet")
 
@@ -252,13 +203,11 @@ function Builder:newSpineCollection()
 	        	local image = object.image
 	            local x, y  = image.x, image.y
 
-                print("spine display "..tostring(object.class).." x="..tostring(x).." y="..tostring(y))
+                --print("spine display "..tostring(object.class).." x="..tostring(x).." y="..tostring(y))
 
 	            if x and y then
 	            	if not visibleOnly or object.alwaysAnimate or (x >= leftBoundary and x <= rightBoundary and y >= topBoundary and y <= bottomBoundary) then
-		            	object.state:update(delta)
-		            	object.state:apply(object.skeleton)
-		            	object.skeleton:updateWorldTransform()
+		            	object:updateSpine(delta)
 		            end
 	            end
 	        end
@@ -269,9 +218,6 @@ function Builder:newSpineCollection()
 end
 
 
--- Creates a new collection specific to moving game objects: note this is tempoaray as its calling a ref to a global to do all the work
--- TODO: move all the required code from movement.lua into its own collection
-----
 function Builder:newMovementCollection()
 	local collection = self:newCollection("movementSet")
 
@@ -303,8 +249,6 @@ function Builder:newMovementCollection()
 end
 
 
--- Creates a new collection specific to game objects that have a bound aprticle emitter - so that we can control it only emitting when on-screen
-----
 function Builder:newParticleEmitterCollection()
 	local collection = self:newCollection("particleEmitterSet")
 
@@ -338,20 +282,15 @@ function Builder:newParticleEmitterCollection()
 end
 
 
--- Creates a new master collection, which extends collection to allow manage a particular class of objects
--- @param name of the collection
--- @param spineCollection    - ref to an existing spine collection, to add enemies to it
--- @param movementCollection - ref to an existing move  collection, to add enemies to it
--- @return new master collection
-----
 function Builder:newMasterCollection(name, spineCollection, movementCollection, particleEmitterCollection)
 	local collection = self:newCollection(name)
 
     -- override base clear(), destroy() but provide base references to them
     collection.baseClear   = collection.clear
     collection.baseDestroy = collection.destroy
+    collection.baseAdd     = collection.add
 
-	builder:deepCopy(masterCollection, collection)
+	self:deepCopy(masterCollection, collection)
 
 	collection.spineCollection   	     = spineCollection
 	collection.movementCollection 	     = movementCollection

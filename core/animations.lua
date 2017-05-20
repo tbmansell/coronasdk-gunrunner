@@ -151,13 +151,13 @@ function Anim:newSeq(name, target, type, removeTargetOnFinish)
                 seq.onComplete()
             end
 
-            self:removeSeq(self)
+            Anim:removeSeq(self)
         end
     end
 
     -- Just a nicer way for external callers to close a seq
     function seq:destroy()
-        self:removeSeq(self)
+        Anim:removeSeq(self)
     end
 
     -- determine if we should add to queue or replace existing seq

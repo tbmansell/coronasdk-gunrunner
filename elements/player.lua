@@ -6,17 +6,19 @@ local projectileBuilder = require("elements.builders.projectileBuilder")
 -- Class
 local Player = {
 
-    isPlayer    = true,
-    class       = "Player",
-    intHeight   = 30,
-    intWidth    = 30,
+    isPlayer      = true,
+    class         = "Player",
+    intHeight     = 30,
+    intWidth      = 30,
+    verticalSpeed = 2,
+    strafeSpeed   = 4,
 
-    mode        = PlayerMode.ready,
-    health      = 100,
-    gear        = {},
-    shielded    = false,
-    weapon      = nil,
-    shotsFired  = 0,
+    mode          = PlayerMode.ready,
+    health        = 20,
+    gear          = {},
+    shielded      = false,
+    weapon        = nil,
+    ammo          = 0,
 
     flagShootAllowed = true,
 }
@@ -63,14 +65,6 @@ function Player:midHeight()
 end
 
 
-function Player:stopMomentum(completely)
-    if self.image then
-        self.image.angularVelocity = 0
-        self.image:setLinearVelocity(0, 0)
-    end
-end
-
-
 function Player:isDead()
     return self.mode == PlayerMode.dead
 end
@@ -92,18 +86,29 @@ end
 
 
 function Player:canShoot()
-    return self.mode ~= PlayerMode.dead and self.flagShootAllowed
+    return self.mode ~= PlayerMode.dead and self.flagShootAllowed and self.ammo > 0
 end
 
 
-function Player:shoot(camera)
+function Player:shoot(camera, ammoCounter)
     if self:canShoot() then
         self.flagShootAllowed = false
-        self.shotsFired = self.shotsFired + 1
+        self.ammo = self.ammo - 1
 
+        -- enable more firing after ROF period ending
         after(self.weapon.rof, function() 
             self.flagShootAllowed = true 
         end)
+
+        -- If run out of ammo reload
+        if self.ammo <= 0 then
+            sounds:projectile("reload")
+
+            after(1500, function() 
+                self.ammo = self.weapon.ammo
+                ammoCounter:setText(self.ammo)
+            end)
+        end
 
         local shot = projectileBuilder:newShot(nil, self.weapon, {xpos=self:x(), ypos=self:y()-50, angle=self.angle+90, filter=Filters.playerShot})
 
@@ -198,6 +203,7 @@ function Player:hit(shot)
             
             sounds:player("hurt")
             --self:animate("hit")
+            self:updateHudHealth()
 
             if self.health < 0 then
                 self:explode()
@@ -255,12 +261,10 @@ function Player:die(animation, sound, stopMoving, fall, message)
             hud:displayMessageDied(message)
         end]]
 
-        after(3000, function()
-            self:destroy()            
+        self:hide()
 
-            if self.failedCallback then 
-                self:failedCallback() 
-            end
+        after(1000, function()
+            self:failedCallback() 
         end)
     end
 end
@@ -273,6 +277,7 @@ end
 
 function Player:setWeapon(weapon)
     self.weapon            = weapon
+    self.ammo              = weapon.ammo
     self.flagShootAllowed  = true
     self.gear[weapon.name] = true
     self:loadGear()

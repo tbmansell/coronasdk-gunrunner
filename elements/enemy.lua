@@ -9,10 +9,13 @@ local Enemy = {
     intHeight  = 30,
     intWidth   = 30,
 
-    mode       = EnemyMode.ready,
-    health     = 10,
-    aggression = 50,    -- % chance enemy will trigger attack after wait period
-    quickness  = 1000,  -- waiting time for enemy between attacks
+    mode          = EnemyMode.ready,
+    health        = 10,
+    decisionDelay = 1000,  -- waiting time for enemy between decisions
+    aggression    = 50,    -- % chance enemy will trigger attack after wait period
+    fidgit        = 50,    -- % chance enemy will move after wait period
+    roaming       = 1000,  -- max duration will walk for
+    speed         = 200,   -- movement force
 
     weapon     = nil,
     melee      = false,
@@ -20,7 +23,9 @@ local Enemy = {
     shotsFired = 0,
 
     flagShootAllowed = true,
+    flagMoveAllowed  = true,
     waitingToShoot   = false,
+    waitingToMove    = false,
     waitingToCharge  = false,
 }
 
@@ -83,8 +88,41 @@ function Enemy:canShoot()
 end
 
 
+function Enemy:canMove()
+    return self.mode ~= EnemyMode.dead and self.flagMoveAllowed
+end
+
+
 function Enemy:lineOfSight(player)
     return true
+end
+
+
+function Enemy:checkBehaviour(player)
+    if self:lineOfSight(player) then
+        -- Face player
+        local angle = round(90 + atan2(player:y()- self:y(), player:x() - self:x()) * PI)
+        
+        if angle ~= self.angle then
+            self:rotate(angle)
+        end
+
+        -- Check if should shoot player
+        if self.weapon then
+            if self:decideToShoot() then
+                self:shoot()
+            end
+        -- Check if should chrge and attack
+        elseif self.melee then
+            if self:decideToCharge() then
+                self:charge()
+            end
+        end
+    end
+
+    if self:decideToMove() then
+        self:move()
+    end
 end
 
 
@@ -96,9 +134,20 @@ function Enemy:decideToShoot()
         else
             -- Decide to think about it
             self.waitingToShoot = true
-            after(self.quickness, function() self.waitingToShoot = false end)
+            after(self.decisionDelay, function() self.waitingToShoot = false end)
             return false
         end
+    end
+end
+
+
+function Enemy:decideToMove()
+    if not self.waitingToMove then
+        -- always have to wait to decide again
+        self.waitingToMove = true
+        after(self.decisionDelay, function() self.waitingToMove = false end)
+        
+        return (random(100) < self.fidgit)
     end
 end
 
@@ -128,6 +177,25 @@ function Enemy:charge()
 end
 
 
+function Enemy:move()
+    if self:canMove() then
+        self.flagMoveAllowed = false
+
+        local duration  = utils.randomRange(250, self.roaming)
+        local direction = utils.randomRange(1, 360)
+        local forceX    = self.speed * -cos(rad(direction))
+        local forceY    = self.speed * -sin(rad(direction))
+
+        self:applyForce(forceX, forceY)
+
+        after(duration, function()
+            self:stopMomentum()
+            self.flagMoveAllowed = true
+        end)
+    end
+end
+
+
 function Enemy:hit(shot)
     if not self:isDead() then
         if not self.shielded or shot.weapon.shieldBuster then
@@ -139,7 +207,7 @@ function Enemy:hit(shot)
             if self.health < 0 then
                 self:die()
             end
-        end 
+        end
     end
 end
 
@@ -156,30 +224,6 @@ function Enemy:die()
         sounds:enemy("killed")
 
         self:destroy()
-    end
-end
-
-
-function Enemy:checkBehaviour(player)
-    if self:lineOfSight(player) then
-        -- Face player
-        local angle = round(90 + atan2(player:y()- self:y(), player:x() - self:x()) * PI)
-        
-        if angle ~= self.angle then
-            self:rotate(angle)
-        end
-
-        -- Check if should shoot player
-        if self.weapon then
-            if self:decideToShoot() then
-                self:shoot()
-            end
-        -- Check if should chrge and attack
-        elseif self.melee then
-            if self:decideToCharge() then
-                self:charge()
-            end
-        end
     end
 end
 

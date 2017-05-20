@@ -9,7 +9,8 @@ local Hud = {}
 local movePlayerX      = nil
 local movePlayerY      = nil
 local movePlayerAllow  = false
-local movePlayerSpeed  = 2
+local movePlayerSpeedX = 0
+local movePlayerSppedY = 0
 local aimPlayerAllow   = false
 local aimPlayerX       = nil
 local aimPlayerY       = nil
@@ -96,10 +97,20 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler)
     self.textScore         = draw:newText(self.group,  self.score, globalWidth-5, 25, 0.7, "green", "RIGHT")
     self.controlMove       = draw:newImage(self.group, "hud/control-move",  100,             globalHeight-110, nil, 0.7)
     self.controlShoot      = draw:newImage(self.group, "hud/control-shoot", globalWidth-100, globalHeight-130, nil, 0.7)
+    self.healthCounter     = display.newRoundedRect(self.group, globalCenterX, globalHeight-100, 200, 50, 10)
+    self.ammoCounter       = draw:newText(self.group,  player.weapon.ammo,  globalWidth-100, globalHeight-40,  0.8, "red")
 
     self.background:setFillColor(0.5, 0.2, 0.5, 0.2)
+    self.healthCounter:setFillColor(0.5,   1,   0.5, 0.5)
+    self.healthCounter:setStrokeColor(0.2, 0.5, 0.2, 0.9)
+    self.healthCounter.strokeWidth    = 3
+    self.healthCounter.originalWidth  = self.healthCounter.width
+    self.healthCounter.widthPerHealth = self.healthCounter.width / player.health
+
+    print("Health: "..self.healthCounter.originalWidth.." / "..self.healthCounter.widthPerHealth)
 
     -- assign shortcuts variables
+    movePlayerSpeedX, movePlayerSpeedY = player.strafeSpeed,  player.verticalSpeed
     moveControllerX,  moveControllerY  = self.controlMove.x,  self.controlMove.y
     shootControllerX, shootControllerY = self.controlShoot.x, self.controlShoot.y + (self.controlShoot.height/2)
 
@@ -229,8 +240,8 @@ end
 function Hud:eventUpdateFrame(event)
     if movePlayerAllow then 
         local angle = atan2(moveControllerY - movePlayerY, moveControllerX - movePlayerX) * PI
-        local dx    = movePlayerSpeed * -cos(rad(angle))
-        local dy    = movePlayerSpeed * -sin(rad(angle))
+        local dx    = movePlayerSpeedX * -cos(rad(angle))
+        local dy    = movePlayerSpeedY * -sin(rad(angle))
 
         self.player:moveBy(dx, dy)
     end
@@ -239,7 +250,8 @@ function Hud:eventUpdateFrame(event)
         local angle = 90 + atan2(aimPlayerY - shootControllerY, aimPlayerX - shootControllerX) * PI
         
         self.player:rotate(angle)
-        self.player:shoot()
+        self.player:shoot(camera, self.ammoCounter)
+        self.ammoCounter:setText(self.player.ammo)
     end
 end
 
@@ -259,19 +271,11 @@ function Hud:collect(item)
 end
 
 
-function Hud:displayMessage(message, type)
-    local game  = state.data.gameSelected
-    local color = "purple"
-    local ypos  = 110
+function Hud:displayMessage(message, color, ypos)
+    color = color or "purple"
+    ypos  = ypos  or globalCenterY
 
-    if type == good then color="green" elseif type == average then color="yellow" end
-
-    if infiniteGameType[game] then 
-        ypos = 140
-        if game == gameTypeTimeRunner then ypos = 170 end 
-    end
-
-    local text = draw:newText(self.group, message, 480, ypos, 0.8, color, "CENTER")
+    local text = draw:newText(self.group, message, globalCenterX, ypos, 0.8, color, "CENTER")
     local seq  = anim:oustSeq("levelMessage", text, true)
     seq:add("pulse", {time=1000, scale=0.025, expires=3000})
     seq:tran({time=750, scale=0.1, alpha=0})

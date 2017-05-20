@@ -102,6 +102,21 @@ function scene:loadGame()
     player = level:createPlayer({xpos=globalCenterX, ypos=globalHeight-250})
     player:setWeapon(Weapons.rifle)
     
+    player.failedCallback = function()
+        scene:pauseLevel()
+        globalGameMode = GameMode.over
+        hud:displayMessage("game over man")
+        after(4000, function() composer.gotoScene("scenes.game", {effect="fade", time=3000}) end)
+    end
+
+    player.updateHudHealth = function()
+        if player.health <= 0 then
+            hud.healthCounter.alpha = 0
+        else
+            hud.healthCounter.width = hud.healthCounter.widthPerHealth * player.health
+        end
+    end
+    
     hud:create(camera, player, scene.pauseLevel, scene.resumeLevel)
 end
 

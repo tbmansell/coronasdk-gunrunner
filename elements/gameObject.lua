@@ -390,6 +390,14 @@ function GameObject:getForce()
 end
 
 
+function GameObject:stopMomentum()
+    if self.image then
+        self.image.angularVelocity = 0
+        self.image:setLinearVelocity(0, 0)
+    end
+end
+
+
 function GameObject:pose()
     self.skeleton:setToSetupPose()
 end

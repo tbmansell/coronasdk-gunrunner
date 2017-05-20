@@ -41,7 +41,7 @@ Filters = {
 
 
 Weapons = {
-    rifle       = {name="rifle",      ammoType="bullet",  shotSound="rifleShot", hitSound="bulletHit", hitAnim="", damage=1,  speed=200, rof=250,  ammo=25,  shieldBuster=false},
+    rifle       = {name="rifle",      ammoType="bullet",  shotSound="rifleShot", hitSound="bulletHit", hitAnim="", damage=1,  speed=200, rof=250,  ammo=25,   shieldBuster=false},
     machineGun  = {name="machinegun", ammoType="bullet",  shotSound="rifleShot", hitSound="bulletHit", hitAnim="", damage=1,  speed=300, rof=100,  ammo=50,  shieldBuster=false},
     launcher    = {name="launcher",   ammoType="rocket",  shotSound="",          hitSound="",          hitAnim="", damage=10, speed=250, rof=1000, ammo=6,   shieldBuster=true},
     laserGun    = {name="laser",      ammoType="laser",   shotSound="",          hitSound="",          hitAnim="", damage=5,  speed=400, rof=300,  ammo=100, shieldBuster=false},

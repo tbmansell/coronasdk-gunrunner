@@ -65,17 +65,23 @@ function Builder:deepCopy(orig, copy)
 end
 
 
-function Builder:newClone(orig)
+function Builder:newClone(orig, debug)
     local orig_type = type(orig)
     local copy
+
+    if debug then print(orig_type) end
     
     if orig_type == 'table' then
         copy = {}
         for orig_key, orig_value in next, orig, nil do
-        	copy[self:newClone(orig_key)] = self:newClone(orig_value)
+        	if debug then print(orig_key.."=") end
+            
+            copy[self:newClone(orig_key)] = self:newClone(orig_value)
         end
     else  -- number, string, boolean, etc
     	copy = orig
+        
+        if debug then print(orig) end
     end
     return copy
 end

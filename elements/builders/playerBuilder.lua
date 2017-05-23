@@ -38,30 +38,29 @@ function PlayerBuilder:newPlayer(camera, spec)
     player.legs:visible()
 
     self:applyCharacterAbilities(player)
-    self:applyPlayerOptions(camera, spec, player)
+    self:applyPlayerOptions(player)
 
-    --sounds:loadPlayer(spec.model)
-    --camera:add(player.image, 3, true)
+    camera:add(player.image, 3)
 	
 	  return player
 end
 
 
-function PlayerBuilder:applyPlayerOptions(camera, spec, player)
+function PlayerBuilder:applyPlayerOptions(player)
     -- apply animation after reset as that makes players stand:
-    if spec.animation then
-        if spec.dontLoop then
-            player:animate(spec.animation)
+    if player.animation then
+        if player.dontLoop then
+            player:animate(player.animation)
         else
-            player:loop(spec.animation)
+            player:loop(player.animation)
         end
     end
 
-    if spec.loadGear then
-        for _,gear in pairs(spec.loadGear) do
+    --[[if player.loadGear then
+        for _,gear in pairs(player.loadGear) do
             player:setIndividualGear(gear)
         end
-    end
+    end]]
 end
 
 

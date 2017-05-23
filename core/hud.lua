@@ -72,7 +72,7 @@ local function eventShootPlayerTap(event)
         local angle = 90 + atan2(event.y - Hud.controlShoot.y, event.x - Hud.controlShoot.x) * PI
 
         Hud.player:rotate(angle)
-        Hud.player:shoot()
+        Hud.player:shoot(Hud.camera)
     end
 end
 
@@ -106,8 +106,6 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler)
     self.healthCounter.strokeWidth    = 3
     self.healthCounter.originalWidth  = self.healthCounter.width
     self.healthCounter.widthPerHealth = self.healthCounter.width / player.health
-
-    print("Health: "..self.healthCounter.originalWidth.." / "..self.healthCounter.widthPerHealth)
 
     -- assign shortcuts variables
     movePlayerSpeedX, movePlayerSpeedY = player.strafeSpeed,  player.verticalSpeed
@@ -238,7 +236,10 @@ end
 
 
 function Hud:eventUpdateFrame(event)
-    if movePlayerAllow then 
+    if movePlayerAllow then
+        -- befor emoving player, check if any force has been applied and cancel it
+        self.player:stopMomentum()
+
         local angle = atan2(moveControllerY - movePlayerY, moveControllerX - movePlayerX) * PI
         local dx    = movePlayerSpeedX * -cos(rad(angle))
         local dy    = movePlayerSpeedY * -sin(rad(angle))
@@ -250,7 +251,7 @@ function Hud:eventUpdateFrame(event)
         local angle = 90 + atan2(aimPlayerY - shootControllerY, aimPlayerX - shootControllerX) * PI
         
         self.player:rotate(angle)
-        self.player:shoot(camera, self.ammoCounter)
+        self.player:shoot(self.camera, self.ammoCounter)
         self.ammoCounter:setText(self.player.ammo)
     end
 end

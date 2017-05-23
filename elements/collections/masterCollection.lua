@@ -46,8 +46,6 @@ function MasterCollection:addToMaster(object)
     object.master = self
 
     self.items[newId] = object
-
-    print("MasterCollection ["..self.name.."] add "..object.key)
 end
 
 

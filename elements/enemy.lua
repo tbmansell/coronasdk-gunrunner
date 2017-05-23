@@ -4,29 +4,30 @@ local projectileBuilder = require("elements.builders.projectileBuilder")
 -- Class
 local Enemy = {
     
-    isEnemy    = true,
-    class      = "Enemy",
-    intHeight  = 30,
-    intWidth   = 30,
+    isEnemy       = true,
+    class         = "Enemy",
+    intHeight     = 30,
+    intWidth      = 30,
 
     mode          = EnemyMode.ready,
-    health        = 10,
-    decisionDelay = 1000,  -- waiting time for enemy between decisions
-    aggression    = 50,    -- % chance enemy will trigger attack after wait period
-    fidgit        = 50,    -- % chance enemy will move after wait period
-    roaming       = 1000,  -- max duration will walk for
-    speed         = 200,   -- movement force
+    health        = 0,
+    decisionDelay = 0,  -- waiting time for enemy between decisions
+    aggression    = 0,  -- % chance enemy will trigger attack after wait period
+    fidgit        = 0,  -- % chance enemy will move after wait period
+    roaming       = 0,  -- max duration will walk for
+    speed         = 0,  -- movement force
 
-    weapon     = nil,
-    melee      = false,
-    shielded   = false,
-    shotsFired = 0,
+    weapon        = nil,
+    melee         = false,
+    shielded      = false,
+    ammo          = 0,
 
-    flagShootAllowed = true,
-    flagMoveAllowed  = true,
-    waitingToShoot   = false,
-    waitingToMove    = false,
-    waitingToCharge  = false,
+    flagShootAllowed  = true,
+    flagMoveAllowed   = true,
+    flagChargeAllowed = true,
+    waitingToShoot    = false,
+    waitingToMove     = false,
+    waitingToCharge   = false,
 }
 
 -- Aliases
@@ -38,6 +39,21 @@ local rad   = math.rad
 local atan2 = math.atan2
 local round = math.round
 local random= math.random
+
+local Melee = {weapon=Weapons.melee}
+
+
+function Enemy.eventCollision(self, event)
+    local other = event.other.object
+    local self  = self.object
+
+    if other and other.isPlayer then 
+        if event.phase == "began" then
+            sounds:enemy("melee")
+            other:hit(Melee)
+        end
+    end
+end
 
 
 function Enemy:updateSpine(delta)
@@ -75,6 +91,9 @@ function Enemy:setPhysics()
    
     self.image.isFixedRotation   = true
     self.image.isSleepingAllowed = false
+
+    self.image.collision = Enemy.eventCollision
+    self.image:addEventListener("collision", self.image)
 end
 
 
@@ -84,12 +103,17 @@ end
 
 
 function Enemy:canShoot()
-    return self.mode ~= EnemyMode.dead and self.flagShootAllowed
+    return self.mode ~= EnemyMode.dead and self.flagShootAllowed and self.ammo > 0
 end
 
 
 function Enemy:canMove()
-    return self.mode ~= EnemyMode.dead and self.flagMoveAllowed
+    return self.mode ~= EnemyMode.dead and self.mode ~= EnemyMode.charge and self.flagMoveAllowed
+end
+
+
+function Enemy:canCharge()
+    return self.mode ~= EnemyMode.dead and self.mode ~= EnemyMode.walk and self.flagChargeAllowed
 end
 
 
@@ -98,24 +122,26 @@ function Enemy:lineOfSight(player)
 end
 
 
-function Enemy:checkBehaviour(player)
+function Enemy:checkBehaviour(camera, player)
     if self:lineOfSight(player) then
-        -- Face player
-        local angle = round(90 + atan2(player:y()- self:y(), player:x() - self:x()) * PI)
-        
-        if angle ~= self.angle then
-            self:rotate(angle)
+        -- Face player if not charging
+        if self.mode ~= EnemyMode.charge then
+            local angle = round(90 + atan2(player:y()- self:y(), player:x() - self:x()) * PI)
+            
+            if angle ~= self.angle then
+                self:rotate(angle)
+            end
         end
 
         -- Check if should shoot player
         if self.weapon then
             if self:decideToShoot() then
-                self:shoot()
+                self:shoot(camera)
             end
         -- Check if should chrge and attack
         elseif self.melee then
             if self:decideToCharge() then
-                self:charge()
+                self:charge(player)
             end
         end
     end
@@ -127,7 +153,7 @@ end
 
 
 function Enemy:decideToShoot()
-    if not self.waitingToShoot then
+    if self:canShoot() and not self.waitingToShoot then
         if random(100) < self.aggression then
             -- Go and shoot, (note repeat call allow repeat true returns)
             return true
@@ -142,7 +168,7 @@ end
 
 
 function Enemy:decideToMove()
-    if not self.waitingToMove then
+    if self:canMove() and not self.waitingToMove then
         -- always have to wait to decide again
         self.waitingToMove = true
         after(self.decisionDelay, function() self.waitingToMove = false end)
@@ -153,46 +179,75 @@ end
 
 
 function Enemy:decideToCharge()
+    if self:canCharge() and not self.waitingToCharge then
+        -- always have to wait to decide again
+        self.waitingToCharge = true
+        after(self.decisionDelay, function() self.waitingToCharge = false end)
 
+        return (random(100) < self.aggression)
+    end
 end
 
 
 function Enemy:shoot(camera)
-    if self:canShoot() then
-        self.flagShootAllowed = false
-        self.shotsFired = self.shotsFired + 1
+    self.flagShootAllowed = false
+    self.ammo = self.ammo - 1
 
-        after(self.weapon.rof, function() 
-            self.flagShootAllowed = true 
-        end)
+    -- Enable more firing after ROF period ending
+    after(self.weapon.rof, function() 
+        self.flagShootAllowed = true 
+    end)
 
-        local shot = projectileBuilder:newShot(nil, self.weapon, {xpos=self:x(), ypos=self:y(), angle=self.angle+90, filter=Filters.enemyShot})
+    -- If run out of ammo reload
+    if self.ammo <= 0 then
+        sounds:projectile("reload")
 
-        shot:fire()
+        after(1500, function() self.ammo = self.weapon.ammo end)
     end
-end
 
-
-function Enemy:charge()
+    local shot = projectileBuilder:newShot(camera, self.weapon, {xpos=self:x(), ypos=self:y(), angle=self.angle+90, filter=Filters.enemyShot})
+    shot:fire()
 end
 
 
 function Enemy:move()
-    if self:canMove() then
-        self.flagMoveAllowed = false
+    self.flagMoveAllowed = false
+    self.mode = EnemyMode.walk
 
-        local duration  = utils.randomRange(250, self.roaming)
-        local direction = utils.randomRange(1, 360)
-        local forceX    = self.speed * -cos(rad(direction))
-        local forceY    = self.speed * -sin(rad(direction))
+    local duration  = utils.randomRange(250, self.roaming)
+    local direction = utils.randomRange(1, 360)
+    local forceX    = self.speed * -cos(rad(direction))
+    local forceY    = self.speed * -sin(rad(direction))
 
-        self:applyForce(forceX, forceY)
+    self:applyForce(forceX, forceY)
 
-        after(duration, function()
-            self:stopMomentum()
-            self.flagMoveAllowed = true
-        end)
-    end
+    after(duration, function()
+        self:stopMomentum()
+        self.flagMoveAllowed = true
+        self.mode = EnemyMode.ready
+    end)
+end
+
+
+function Enemy:charge(player)
+    self.flagChargeAllowed = false
+    self.mode = EnemyMode.charge
+
+    local runSpeed  = self.speed * 2
+    local duration  = 2000
+    local direction = atan2(self:y() - player:y(), self:x() - player:x()) * PI
+    local forceX    = runSpeed * -cos(rad(direction))
+    local forceY    = runSpeed * -sin(rad(direction))
+
+    sounds:enemy("charge")
+    self:stopMomentum()
+    self:applyForce(forceX, forceY)
+
+    after(duration, function()
+        self:stopMomentum()
+        self.flagChargeAllowed = true
+        self.mode = EnemyMode.ready
+    end)
 end
 
 

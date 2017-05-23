@@ -110,7 +110,7 @@ function Player:shoot(camera, ammoCounter)
             end)
         end
 
-        local shot = projectileBuilder:newShot(nil, self.weapon, {xpos=self:x(), ypos=self:y()-50, angle=self.angle+90, filter=Filters.playerShot})
+        local shot = projectileBuilder:newShot(camera, self.weapon, {xpos=self:x(), ypos=self:y(), angle=self.angle+90, filter=Filters.playerShot})
 
         shot:fire()
     end

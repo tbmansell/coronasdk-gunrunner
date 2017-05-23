@@ -13,13 +13,12 @@ function ProjectileBuilder:newShot(camera, weapon, spec)
 
     shot.weapon = weapon
     shot.filter = spec.filter
+    shot.angle  = spec.angle
 
     shot:moveTo(spec.xpos or 0, spec.ypos or 0)
     shot:setPhysics()
 
-    if spec.angle then
-        shot:rotate(spec.angle)
-    end
+    camera:add(shot.image, 3)
 
     return shot
 end

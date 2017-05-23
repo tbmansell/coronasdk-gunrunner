@@ -21,8 +21,8 @@ function Projectile.eventCollision(self, event)
             other:hit(self)
         end
 
-        sounds:projectile(self.weapon.hitSound)
-        self:destroy()
+    sounds:projectile(self.weapon.hitSound)
+    self:destroy()
     end
 end
 
@@ -39,6 +39,15 @@ function Projectile:fire()
     local weapon = self.weapon
     local forceX = weapon.speed * -cos(rad(self.angle))
     local forceY = weapon.speed * -sin(rad(self.angle))
+
+    if weapon.ammoType == "rocket" then
+        --[[if forceY > 0 then
+            self:flipY()
+        end]]
+        self:flipY()
+        -- dont call rotate() as this changes the angle
+        self.image.rotation = self.angle + 90    
+    end
 
     self:applyForce(forceX, forceY)
 

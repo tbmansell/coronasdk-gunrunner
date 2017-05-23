@@ -4,6 +4,7 @@ local Sounds = {
     projectileSounds  = {},
     enemySounds       = {},
     collectableSounds = {},
+    generalSounds     = {},
     music             = {},
 }
 
@@ -16,15 +17,23 @@ local play        = audio.play
 
 
 function Sounds:preload()
-    self.playerSounds.hurt          = loadSound("sounds/hurt.mp3")
-    self.playerSounds.killed        = loadSound("sounds/killed.mp3")
+    self.playerSounds.hurt           = loadSound("sounds/hurt.mp3")
+    self.playerSounds.killed         = loadSound("sounds/killed.mp3")
 
-    self.projectileSounds.rifleShot = loadSound("sounds/rifleShot.mp3")
-    self.projectileSounds.bulletHit = loadSound("sounds/bulletHit.mp3")
-    self.projectileSounds.reload    = loadSound("sounds/reload.mp3")
+    self.projectileSounds.rifleShot  = loadSound("sounds/rifleShot.mp3")
+    self.projectileSounds.bulletHit  = loadSound("sounds/bulletHit.mp3")
+    self.projectileSounds.rocketShot = loadSound("sounds/rocketShot.mp3")
+    self.projectileSounds.rocketHit  = loadSound("sounds/rocketHit.mp3")
+    self.projectileSounds.reload     = loadSound("sounds/reload.mp3")
 
-    self.enemySounds.hurt           = loadSound("sounds/hurt.mp3")
-    self.enemySounds.killed         = loadSound("sounds/killed.mp3")
+    self.enemySounds.hurt            = loadSound("sounds/hurt.mp3")
+    self.enemySounds.killed          = loadSound("sounds/killed.mp3")
+    self.enemySounds.charge          = loadSound("sounds/charge.mp3")
+    self.enemySounds.melee           = loadSound("sounds/melee.mp3")
+
+    self.collectableSounds.gotWeapon = loadSound("sounds/collectedWeapon.wav")
+
+    self.generalSounds.gameOver      = loadSound("sounds/gameOver.mp3")
 end
 
 
@@ -64,6 +73,11 @@ end
 
 function Sounds:collectable(sound, params)
     self:play(self.collectableSounds[sound], params)
+end
+
+
+function Sounds:general(sound, params)
+    self:play(self.generalSounds[sound], params)
 end
 
 

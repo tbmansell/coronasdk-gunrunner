@@ -6,7 +6,7 @@ local cameraLoader  = require("core.camera")
 local level         = require("core.level")
 local hud           = require("core.hud")
 local builder       = require("elements.builders.builder")
-local playerBuilder = require("elements.builders.player-builder")
+local playerBuilder = require("elements.builders.playerBuilder")
 
 -- local variables for performance
 local scene  = composer.newScene()
@@ -102,13 +102,16 @@ function scene:loadGame()
     player = level:createPlayer({xpos=globalCenterX, ypos=globalHeight-250})
     player:setWeapon(Weapons.rifle)
     
+    -- Create Game Over callback
     player.failedCallback = function()
         scene:pauseLevel()
         globalGameMode = GameMode.over
         hud:displayMessage("game over man")
+        sounds:general("gameOver")
         after(4000, function() composer.gotoScene("scenes.game", {effect="fade", time=3000}) end)
     end
 
+    -- Create callback to update player health
     player.updateHudHealth = function()
         if player.health <= 0 then
             hud.healthCounter.alpha = 0
@@ -123,8 +126,12 @@ end
 
 function scene:getElements()
     return {
-        {object="enemy", xpos=250, ypos=250, weapon=Weapons.rifle, angle=180, aggression=70},
-        {object="enemy", xpos=500, ypos=250, weapon=Weapons.rifle, angle=180, aggression=30},
+        {object="enemy",  xpos=250, ypos=250, type="melee",   rank=1},
+        {object="enemy",  xpos=500, ypos=250, type="shooter", rank=1},
+        {object="enemy",  xpos=400, ypos=150, type="shooter", rank=2},
+        {object="enemy",  xpos=200, ypos=150, type="shooter", rank=3},
+        {object="wall",   xpos=450, ypos=600, type="blue",    rotation=90},
+        {object="weapon", xpos=250, ypos=300, type="launcher"},
     }
 end
 
@@ -152,7 +159,7 @@ function scene:startPlaying(player)
     globalGameMode = GameMode.playing
 
     physics:start()
-    --camera:track()
+    camera:track()
 end
 
 

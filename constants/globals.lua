@@ -52,13 +52,13 @@ Weapons = {
 EnemyTypes = {
     melee = {
         -- ranked in order of dangerousness
-        [1] = {modifyImage={.1, .3, .1}, melee=true, health=2, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150},
+        [1] = {--[[modifyImage={.1, .3, .1},]] melee=true, health=2, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150},
     },
     shooter = {
         -- ranked in order of dangerousness
-        [1] = {modifyImage={.6, .6,  1}, weapon="rifle",    health=2, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100},
-        [2] = {modifyImage={.2, .2,  1}, weapon="smg",      health=4, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
-        [3] = {modifyImage={1,  .3, .3}, weapon="launcher", health=8, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=50},
+        [1] = {--[[modifyImage={.6, .6,  1},]] weapon="rifle",    health=2, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100},
+        [2] = {--[[modifyImage={.2, .2,  1},]] weapon="smg",      health=4, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
+        [3] = {--[[modifyImage={1,  .3, .3},]] weapon="launcher", health=8, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=50},
     },
 }
 

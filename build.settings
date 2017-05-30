@@ -67,6 +67,12 @@ settings = {
     },
     plugins = 
     {
+        -- key is the name passed to Lua's 'require()'
+        ["plugin.wattageTileEngine"] =
+        {
+            publisherId = "com.blindprophetsoftware",
+        },
+        --[[
         ["plugin.bit"] =
         {
             publisherId = "com.coronalabs",
@@ -76,7 +82,7 @@ settings = {
         {
             publisherId = "com.coronalabs",
             supportedPlatforms = { iphone=true, android=true, ["android-kindle"]=true }
-        },
+        },]]
         ["plugin.google.play.services"] =
         {
             publisherId = "com.coronalabs",
@@ -86,6 +92,7 @@ settings = {
             publisherId = "com.coronalabs",
             supportedPlatforms = { android=true, ["android-kindle"]=true }
         },
+        --[[
         ["plugin.google.iap.v3"] =
         {
             publisherId = "com.coronalabs",
@@ -109,6 +116,6 @@ settings = {
         ["CoronaProvider.ads.vungle"] =
         {
             publisherId = "com.vungle"
-        },
+        },]]
     },
 }

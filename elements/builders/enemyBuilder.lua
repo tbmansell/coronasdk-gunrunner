@@ -5,34 +5,23 @@ local enemyDef = require("elements.enemy")
 local EnemyBuilder = {}
 
 
---[[function EnemyBuilder:newEnemy(camera, spec)
-    print("NEW ENEMY")
-    local rankDef = builder:newClone(EnemyTypes[spec.category][spec.rank])
-    local object  = builder:newClone(spec)
-
-    builder:deepCopy(rankDef, object)
-
-    return self:createEnemy(camera, object)
-end]]
-
-
 function EnemyBuilder:newEnemy(camera, spec)
     -- Copy the enemy rank def and reference the modifyImage before spien creation
     local rankDef = builder:newClone(EnemyTypes[spec.type][spec.rank])
     spec.modifyImage = rankDef.modifyImage
 
     local enemy = builder:newSpineObject(spec, {
-                       jsonName  = "playerBody", 
-                       imagePath = "playerBody", 
-                       skin      = spec.skin      or "Player",
+                       jsonName  = "enemyBodyReptile",
+                       imagePath = "enemyBody/Lizard Basic",
+                       skin      = spec.skin      or "lizard_basic",
                        scale     = spec.scale     or 0.5,  
                        animation = spec.animation or "run"
                    })
 
     enemy.legs = builder:newSpineObject(spec, {
-                      jsonName  = "playerLegs", 
-                      imagePath = "playerLegs", 
-                      skin      = "Player", 
+                      jsonName  = "enemyLegsReptile", 
+                      imagePath = "enemyLegs/lizard_basic", 
+                      skin      = "lizard_basic", 
                       scale     = spec.scale or 0.5, 
                       animation = "run"
                   })

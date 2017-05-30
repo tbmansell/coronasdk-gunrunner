@@ -2,6 +2,7 @@ local composer      = require("composer")
 local physics       = require("physics")
 local anim          = require("core.animations")
 local particles     = require("core.particles")
+local tileEngine    = require("core.tileEngine")
 local cameraLoader  = require("core.camera")
 local level         = require("core.level")
 local hud           = require("core.hud")
@@ -9,15 +10,14 @@ local builder       = require("elements.builders.builder")
 local playerBuilder = require("elements.builders.playerBuilder")
 
 -- local variables for performance
-local scene  = composer.newScene()
-local player = nil
-local camera = nil
+local scene         = composer.newScene()
+
 
 -- Aliases:
 local math_abs   = math.abs
 local math_round = math.round
 
--- Local Event Handlers
+
 
 -- Treat phone back button same as back game button
 local function sceneKeyEvent(event)
@@ -35,6 +35,7 @@ end
 
 
 local function eventUpdateFrame(event)
+    tileEngine:eventUpdateFrame(event)
     level:eventUpdateFrame(event)
     hud:eventUpdateFrame(event)
 end
@@ -89,15 +90,15 @@ end
 function scene:loadGame()
     camera = cameraLoader.createView()
 
-    display.newImage(self.view, "images/backgrounds/canyon.jpg", globalCenterX, globalCenterY)
+    --display.newImage(self.view, "images/backgrounds/canyon.jpg", globalCenterX, globalCenterY)
+    tileEngine:create(self.view, "images/tiles.png", self:getEnvironment())
 
     level:new(camera)
     level:createElements(self:getElements())
 
-    camera:setParallax(1.1, 1, 1, 1, 0.2, 0.15, 0.1, 0.05)
-    --camera:setBounds(-300, level.endXPos, level.data.floor+100, level.data.ceiling)
-    camera:setBounds(0, globalWidth, 0, globalHeight)
-    camera:setFocusOffset(0, 0)
+    --camera:setParallax(1.1, 1, 1, 1, 0.2, 0.15, 0.1, 0.05)
+    --camera:setBounds(0, globalWidth, 0, globalHeight)
+    --camera:setFocusOffset(0, 0)
 
     player = level:createPlayer({xpos=globalCenterX, ypos=globalHeight-250})
     player:setWeapon(Weapons.rifle)
@@ -124,6 +125,40 @@ function scene:loadGame()
 end
 
 
+function scene:getEnvironment()
+    return {
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        
+    }
+end
+
+
 function scene:getElements()
     return {
         {object="enemy",  xpos=250, ypos=250, type="melee",   rank=1},
@@ -138,7 +173,6 @@ end
 
 function scene:createEventHandlers()
     Runtime:addEventListener("enterFrame", eventUpdateFrame)
-
     scene.gameLoopHandle = timer.performWithDelay(250, level.updateBehaviours, 0)
 end
 
@@ -202,9 +236,12 @@ function scene:unloadLevel()
     particles:destroy()
     level:destroy()
     hud:destroy()
-    camera:destroy()
+    tileEngine:destroy()
 
+    camera:destroy()
     cameraHolder, camera, player = nil, nil, nil
+
+    player = nil
     collectgarbage("collect")
 end
 

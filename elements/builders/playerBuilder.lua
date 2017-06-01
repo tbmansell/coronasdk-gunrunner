@@ -40,7 +40,7 @@ function PlayerBuilder:newPlayer(camera, spec)
     self:applyCharacterAbilities(player)
     self:applyPlayerOptions(player)
 
-    camera:add(player.image, 3)
+    --camera:add(player.image, 3)
 	
 	  return player
 end

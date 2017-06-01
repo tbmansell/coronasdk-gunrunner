@@ -42,7 +42,7 @@ Filters = {
 
 Weapons = {
     melee    = {name="melee",    damage=1, shieldBuster=false},
-    rifle    = {name="rifle",    ammoType="bullet",  shotSound="rifleShot",  hitSound="bulletHit", hitAnim="", damage=1,  speed=200, rof=250,  ammo=10,  shieldBuster=false},
+    rifle    = {name="rifle",    ammoType="bullet",  shotSound="rifleShot",  hitSound="bulletHit", hitAnim="", damage=1,  speed=400, rof=250,  ammo=10,  shieldBuster=false},
     smg      = {name="sgm",      ammoType="bullet",  shotSound="rifleShot",  hitSound="bulletHit", hitAnim="", damage=1,  speed=300, rof=100,  ammo=50,  shieldBuster=false},
     launcher = {name="launcher", ammoType="rocket",  shotSound="rocketShot", hitSound="rocketHit", hitAnim="", damage=10, speed=250, rof=3000, ammo=4,   shieldBuster=true},
     laserGun = {name="laser",    ammoType="laser",   shotSound="",           hitSound="",          hitAnim="", damage=5,  speed=400, rof=300,  ammo=100, shieldBuster=false},

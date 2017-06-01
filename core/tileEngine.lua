@@ -8,13 +8,19 @@ TileEngine = {
     columnCount = nil,
 }
 
+-- Aliases:
+local sqrt = math.sqrt
 
+-- Local variables:
 local coreEngine                  -- Reference to the tile engine
 local lightingModel               -- Reference to the lighting model
 local viewControl                 -- Reference to the UI view control
 local spriteSheet
 local spriteResolver = {}
 local lastTime = 0
+
+local TileSize    = 52
+local cameraSpeed = 4 / 1000      -- Camera speed, 4 tiles per second
 
 
 ----------------------- PRIVATE FUNCTIONS --------------------
@@ -98,7 +104,7 @@ end
 ----------------------- PUBLIC FUNCTIONS --------------------
 
 
-function TileEngine:create(group, tileSheet, environment)
+function TileEngine:create(group, tileSheet, player, environment)
     self.environment = environment
     self.rowCount    = #environment
     self.columnCount = #environment[1]
@@ -109,7 +115,7 @@ function TileEngine:create(group, tileSheet, environment)
 
     coreEngine = wattageEngine.Engine.new({
         parentGroup                          = tileEngineLayer,
-        tileSize                             = 50,
+        tileSize                             = TileSize,
         spriteResolver                       = spriteResolver,
         compensateLightingForViewingPosition = false,
         hideOutOfSightElements               = false
@@ -136,7 +142,31 @@ function TileEngine:create(group, tileSheet, environment)
     })
 
     addFloorToLayer(floorLayer)
+    floorLayer.resetDirtyTileCollection()
+
     module.insertLayerAtIndex(floorLayer, 1, 0)
+
+
+    ---
+    local entityLayer  = wattageEngine.EntityLayer.new({
+        tileSize       = TileSize,
+        spriteResolver = spriteResolver
+    })
+
+    local entityId, spriteInfo = entityLayer.addEntity("tiles_2")
+    entityLayer.centerEntityOnTile(entityId, 8, 8)
+    
+    local wall = spriteInfo.imageRect
+    physics.addBody(wall, "static", {density=1, friction=0, bounce=0, filter=Filters.obstacle})
+
+
+    local playerId = entityLayer.addNonResourceEntity(player.image)
+    entityLayer.centerEntityOnTile(playerId, 8, 11)
+
+
+    module.insertLayerAtIndex(entityLayer, 2, 0)
+    ---
+
 
     coreEngine.addModule({module = module})
     coreEngine.setActiveModule({moduleName = "moduleMain"})
@@ -150,7 +180,7 @@ function TileEngine:create(group, tileSheet, environment)
         tileEngineInstance  = coreEngine
     })
 
-    lightingModel.setAmbientLight(1, 1, 1, 0.7)
+    --lightingModel.setAmbientLight(1, 1, 1, 0.7)
 end
 
 
@@ -162,31 +192,33 @@ function TileEngine:destroy()
 end
 
 
-function TileEngine:eventUpdateFrame(event)
+function TileEngine:eventUpdateFrame(event, focus)
     local camera        = viewControl.getCamera()
-    local lightingModel = coreEngine.getActiveModule().lightingModel
+    --local lightingModel = coreEngine.getActiveModule().lightingModel
 
     if lastTime ~= 0 then
         -- Determine the amount of time that has passed since the last frame and
-        -- record the current time in the lastTime variable to be used in the next
-        -- frame.
-        local curTime = event.time
+        -- record the current time in the lastTime variable to be used in the next frame.
+        local curTime   = event.time
         local deltaTime = curTime - lastTime
         lastTime = curTime
 
-        -- Update the lighting model passing the amount of time that has passed since
-        -- the last frame.
-        lightingModel.update(deltaTime)
+        --local x, y = initFocusX - focus.x, initFocusY - focus.y
+        local x, y = focus.x / TileSize, focus.y / TileSize
+        camera.setLocation(x, y)
+        
+        -- Update the lighting model passing the amount of time that has passed since the last frame.
+        --lightingModel.update(deltaTime)
     else
         -- This is the first call to onFrame, so lastTime needs to be initialized.
         lastTime = event.time
 
         -- This is the initial position of the camera
-        camera.setLocation(7.5, 7.5)
+        camera.setLocation(7, 7)
+        --camera.setZoom(1.75)
 
-        -- Since a time delta cannot be calculated on the first frame, 1 is passed
-        -- in here as a placeholder.
-        lightingModel.update(1)
+        -- Since a time delta cannot be calculated on the first frame, 1 is passed in here as a placeholder.
+        --lightingModel.update(1)
     end
 
     -- Render the tiles visible to the passed in camera.
@@ -195,10 +227,8 @@ function TileEngine:eventUpdateFrame(event)
     -- The lighting model tracks changes, then acts on all accumulated changes in
     -- the lightingModel.update() function.  This call resets the change tracking
     -- and must be called after lightingModel.update().
-    lightingModel.resetDirtyFlags()
+    --lightingModel.resetDirtyFlags()
 end
-
-
 
 
 return TileEngine

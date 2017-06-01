@@ -35,7 +35,7 @@ end
 
 
 local function eventUpdateFrame(event)
-    tileEngine:eventUpdateFrame(event)
+    tileEngine:eventUpdateFrame(event, player.image)
     level:eventUpdateFrame(event)
     hud:eventUpdateFrame(event)
 end
@@ -43,9 +43,10 @@ end
 
 -- Called when the scene's view does not exist:
 function scene:create(event)
-    scene:initPhysics()
-    scene:loadGame()
-    scene:createEventHandlers()
+    self:initPhysics()
+    self:loadPlayer()
+    self:loadGame()
+    self:createEventHandlers()
     particles:preLoadEmitters()
 
     -- these top and bottom borders ensure that devices where the length is greater than 960 (ipad retina) the game doesnt show under or above the background size limits
@@ -87,19 +88,7 @@ function scene:initPhysics()
 end
 
 
-function scene:loadGame()
-    camera = cameraLoader.createView()
-
-    --display.newImage(self.view, "images/backgrounds/canyon.jpg", globalCenterX, globalCenterY)
-    tileEngine:create(self.view, "images/tiles.png", self:getEnvironment())
-
-    level:new(camera)
-    level:createElements(self:getElements())
-
-    --camera:setParallax(1.1, 1, 1, 1, 0.2, 0.15, 0.1, 0.05)
-    --camera:setBounds(0, globalWidth, 0, globalHeight)
-    --camera:setFocusOffset(0, 0)
-
+function scene:loadPlayer()
     player = level:createPlayer({xpos=globalCenterX, ypos=globalHeight-250})
     player:setWeapon(Weapons.rifle)
     
@@ -120,7 +109,18 @@ function scene:loadGame()
             hud.healthCounter.width = hud.healthCounter.widthPerHealth * player.health
         end
     end
-    
+end
+
+
+function scene:loadGame()
+    camera = cameraLoader.createView()
+
+    --display.newImage(self.view, "images/backgrounds/canyon.jpg", globalCenterX, globalCenterY)
+    tileEngine:create(self.view, "images/tiles.png", player,  self:getEnvironment())
+
+    level:new(camera)
+    level:createElements(self:getElements())
+
     hud:create(camera, player, scene.pauseLevel, scene.resumeLevel)
 end
 
@@ -161,12 +161,12 @@ end
 
 function scene:getElements()
     return {
-        {object="enemy",  xpos=250, ypos=250, type="melee",   rank=1},
-        {object="enemy",  xpos=500, ypos=250, type="shooter", rank=1},
-        {object="enemy",  xpos=400, ypos=150, type="shooter", rank=2},
-        {object="enemy",  xpos=200, ypos=150, type="shooter", rank=3},
-        {object="wall",   xpos=450, ypos=600, type="blue",    rotation=90},
-        {object="weapon", xpos=250, ypos=300, type="launcher"},
+        --{object="enemy",  xpos=250, ypos=250, type="melee",   rank=1},
+        --{object="enemy",  xpos=500, ypos=250, type="shooter", rank=1},
+        --{object="enemy",  xpos=400, ypos=150, type="shooter", rank=2},
+        --{object="enemy",  xpos=200, ypos=150, type="shooter", rank=3},
+        --{object="wall",   xpos=450, ypos=600, type="blue",    rotation=90},
+        --{object="weapon", xpos=250, ypos=300, type="launcher"},
     }
 end
 

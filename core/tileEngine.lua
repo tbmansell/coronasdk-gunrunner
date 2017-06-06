@@ -6,6 +6,10 @@ TileEngine = {
     environment = nil,
     rowCount    = nil,
     columnCount = nil,
+
+    floorLayer  = nil,
+    wallLayer   = nil,
+    entityLayer = nil,
 }
 
 -- Aliases:
@@ -17,9 +21,10 @@ local lightingModel               -- Reference to the lighting model
 local viewControl                 -- Reference to the UI view control
 local spriteSheet
 local spriteResolver = {}
+local entityResolver = {}
 local lastTime = 0
 
-local TileSize    = 52
+local TileSize    = 75
 local cameraSpeed = 4 / 1000      -- Camera speed, 4 tiles per second
 
 
@@ -39,27 +44,20 @@ spriteResolver.resolveForKey = function(key)
 end
 
 
+entityResolver.resolveForKey = function(displayObject)
+    return wattageEngine.SpriteInfo.new({
+        imageRect = displayObject,
+    })
+end
+
+
 local function addFloorToLayer(layer)
     for row=1, TileEngine.rowCount do
         for col=1, TileEngine.columnCount do
             local value = TileEngine.environment[row][col]
-            if value == 0 then
-                layer.updateTile(
-                    row,
-                    col,
-                    wattageEngine.Tile.new({
-                        resourceKey="tiles_0"
-                    })
-                )
-            elseif value == 1 then
-                layer.updateTile(
-                    row,
-                    col,
-                    wattageEngine.Tile.new({
-                        resourceKey="tiles_1"
-                    })
-                )
-            end
+            local name  = spriteSheetInfo:getName(value)
+
+            layer.updateTile(row, col, wattageEngine.Tile.new({resourceKey=name}))
         end
     end
 end
@@ -69,14 +67,15 @@ local function addWallsToLayer(layer)
     for row=1, TileEngine.rowCount do
         for col=1, TileEngine.columnCount do
             local value = TileEngine.environment[row][col]
+            
+            if value > 0 then
+                local name  = spriteSheetInfo:getName(value)
 
-            if value == 1 then
-                layer.updateTile(
-                    row,
-                    col,
-                    wattageEngine.Tile.new({
-                        resourceKey="tiles_1"
-                    }))
+                local entityId, spriteInfo = layer.addEntity(name)
+                layer.centerEntityOnTile(entityId, row, col)
+                
+                local wall = spriteInfo.imageRect
+                physics.addBody(wall, "static", {density=1, friction=0, bounce=0, filter=Filters.obstacle})
             end
         end
     end
@@ -109,6 +108,7 @@ function TileEngine:create(group, tileSheet, player, environment)
     self.rowCount    = #environment
     self.columnCount = #environment[1]
 
+    spriteSheetInfo:setup()
     spriteSheet = graphics.newImageSheet(tileSheet, spriteSheetInfo:getSheet())
 
     local tileEngineLayer = display.newGroup()
@@ -136,37 +136,7 @@ function TileEngine:create(group, tileSheet, player, environment)
         losModel      = wattageEngine.LineOfSightModel.ALL_VISIBLE
     })
 
-    local floorLayer = wattageEngine.TileLayer.new({
-        rows    = self.rowCount,
-        columns = self.columnCount
-    })
-
-    addFloorToLayer(floorLayer)
-    floorLayer.resetDirtyTileCollection()
-
-    module.insertLayerAtIndex(floorLayer, 1, 0)
-
-
-    ---
-    local entityLayer  = wattageEngine.EntityLayer.new({
-        tileSize       = TileSize,
-        spriteResolver = spriteResolver
-    })
-
-    local entityId, spriteInfo = entityLayer.addEntity("tiles_2")
-    entityLayer.centerEntityOnTile(entityId, 8, 8)
-    
-    local wall = spriteInfo.imageRect
-    physics.addBody(wall, "static", {density=1, friction=0, bounce=0, filter=Filters.obstacle})
-
-
-    local playerId = entityLayer.addNonResourceEntity(player.image)
-    entityLayer.centerEntityOnTile(playerId, 8, 11)
-
-
-    module.insertLayerAtIndex(entityLayer, 2, 0)
-    ---
-
+    self:createLayers(wattageEngine, module)
 
     coreEngine.addModule({module = module})
     coreEngine.setActiveModule({moduleName = "moduleMain"})
@@ -180,7 +150,40 @@ function TileEngine:create(group, tileSheet, player, environment)
         tileEngineInstance  = coreEngine
     })
 
-    --lightingModel.setAmbientLight(1, 1, 1, 0.7)
+    lightingModel.setAmbientLight(1, 1, 1, 1)
+end
+
+
+function TileEngine:createLayers(wattageEngine, module)
+    -- Add elements to layers
+    self.floorLayer = wattageEngine.TileLayer.new({
+        rows    = self.rowCount,
+        columns = self.columnCount
+    })
+    
+    self.wallLayer  = wattageEngine.EntityLayer.new({
+        tileSize       = TileSize,
+        spriteResolver = spriteResolver
+    })
+
+    self.entityLayer  = wattageEngine.EntityLayer.new({
+        tileSize       = TileSize,
+        spriteResolver = entityResolver
+    })
+
+    addFloorToLayer(self.floorLayer)
+    addWallsToLayer(self.wallLayer)
+    
+    self.floorLayer.resetDirtyTileCollection()
+
+    -- Add player to layer: however this is moving the entity element matching the playerId
+    --local playerId = self.entityLayer.addNonResourceEntity(player.image)
+    --entityLayer.centerEntityOnTile(playerId, 5, 11)
+    --self.entityLayer.addNonResourceEntity(player.image)
+
+    module.insertLayerAtIndex(self.floorLayer,  1, 0)
+    module.insertLayerAtIndex(self.wallLayer,   2, 0)
+    module.insertLayerAtIndex(self.entityLayer, 3, 0)
 end
 
 
@@ -189,6 +192,11 @@ function TileEngine:destroy()
     viewControl.destroy()
 
     coreEngine, viewControl, lightingModel = nil, nil, nil
+end
+
+
+function TileEngine:addEntity(entity)
+    self.entityLayer.addNonResourceEntity(entity.image)
 end
 
 

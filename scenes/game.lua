@@ -44,8 +44,9 @@ end
 -- Called when the scene's view does not exist:
 function scene:create(event)
     self:initPhysics()
+    self:loadLevel()
     self:loadPlayer()
-    self:loadGame()
+    self:loadInterface()
     self:createEventHandlers()
     particles:preLoadEmitters()
 
@@ -88,6 +89,16 @@ function scene:initPhysics()
 end
 
 
+function scene:loadLevel()
+    --camera = cameraLoader.createView()
+
+    tileEngine:create(self.view, "images/tiles-extrude.png", player,  self:getEnvironment())
+
+    level:new(tileEngine)
+    level:createElements(self:getElements()) 
+end
+
+
 function scene:loadPlayer()
     player = level:createPlayer({xpos=globalCenterX, ypos=globalHeight-250})
     player:setWeapon(Weapons.rifle)
@@ -112,31 +123,23 @@ function scene:loadPlayer()
 end
 
 
-function scene:loadGame()
-    camera = cameraLoader.createView()
-
-    --display.newImage(self.view, "images/backgrounds/canyon.jpg", globalCenterX, globalCenterY)
-    tileEngine:create(self.view, "images/tiles.png", player,  self:getEnvironment())
-
-    level:new(camera)
-    level:createElements(self:getElements())
-
-    hud:create(camera, player, scene.pauseLevel, scene.resumeLevel)
+function scene:loadInterface()
+    hud:create(tileEngine, player, scene.pauseLevel, scene.resumeLevel)
 end
 
 
 function scene:getEnvironment()
     return {
+        {0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0},
+        {0,0,5,6,0,0,0,0,3,0,0,0,0,0,0,0},
+        {0,0,7,8,0,0,0,0,2,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,5,4,6,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,3,0,3,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,7,4,8,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -193,7 +196,7 @@ function scene:startPlaying(player)
     globalGameMode = GameMode.playing
 
     physics:start()
-    camera:track()
+    --camera:track()
 end
 
 

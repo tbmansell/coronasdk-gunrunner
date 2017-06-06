@@ -15,7 +15,7 @@ function ObstacleBuilder:newWall(camera, spec)
     wall:moveTo(wall.xpos or 0, wall.ypos or 0)
     wall:setPhysics()
 
-    camera:add(wall.image, 4)
+    --camera:add(wall.image, 4)
 
     return wall
 end

@@ -60,7 +60,7 @@ function EnemyBuilder:newEnemy(camera, spec)
         enemy:rotate(spec.angle)
     end
 
-    camera:add(enemy.image, 3)
+    --camera:add(enemy.image, 3)
     
    return enemy
 end

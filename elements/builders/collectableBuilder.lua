@@ -18,7 +18,7 @@ function CollectableBuilder:newItem(camera, spec)
     collectable:moveTo(collectable.xpos or 0, collectable.ypos or 0)
     collectable:setPhysics()
 
-    camera:add(collectable.image, 4)
+    --camera:add(collectable.image, 4)
 
     return collectable
 end

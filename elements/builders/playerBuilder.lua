@@ -41,6 +41,7 @@ function PlayerBuilder:newPlayer(camera, spec)
     self:applyPlayerOptions(player)
 
     --camera:add(player.image, 3)
+    camera:addEntity(player)
 	
 	  return player
 end

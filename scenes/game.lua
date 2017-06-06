@@ -1,17 +1,16 @@
-local composer      = require("composer")
-local physics       = require("physics")
-local anim          = require("core.animations")
-local particles     = require("core.particles")
-local tileEngine    = require("core.tileEngine")
-local cameraLoader  = require("core.camera")
-local level         = require("core.level")
-local hud           = require("core.hud")
-local builder       = require("elements.builders.builder")
-local playerBuilder = require("elements.builders.playerBuilder")
+local composer       = require("composer")
+local physics        = require("physics")
+local anim           = require("core.animations")
+local particles      = require("core.particles")
+local tileEngine     = require("core.tileEngine")
+local level          = require("core.level")
+local levelGenerator = require("core.levelGenerator")
+local hud            = require("core.hud")
+local builder        = require("elements.builders.builder")
+local playerBuilder  = require("elements.builders.playerBuilder")
 
 -- local variables for performance
-local scene         = composer.newScene()
-
+local scene = composer.newScene()
 
 -- Aliases:
 local math_abs   = math.abs
@@ -90,12 +89,10 @@ end
 
 
 function scene:loadLevel()
-    --camera = cameraLoader.createView()
-
-    tileEngine:create(self.view, "images/tiles-extrude.png", player,  self:getEnvironment())
+    tileEngine:create(self.view, "images/tiles-extrude.png", player,  levelGenerator:newTestEnvironment())
 
     level:new(tileEngine)
-    level:createElements(self:getElements()) 
+    level:createElements(levelGenerator:fillTestEnvironment()) 
 end
 
 
@@ -128,46 +125,6 @@ function scene:loadInterface()
 end
 
 
-function scene:getEnvironment()
-    return {
-        {1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,15},
-        {16,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
-        {31,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
-        {31,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
-        {46,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
-        {31,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
-        {31,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
-        {31,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
-        {46,2,2,2,2,3,4,4,5,2,2,2,2,2,2,2},
-        {31,2,2,2,2,31,2,2,31,2,2,2,2,2,2,2},
-        {31,2,2,2,2,31,2,2,31,2,2,2,2,2,2,2},
-        {31,2,2,2,2,33,4,4,35,2,2,2,2,2,2,2},
-        {46,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
-        {31,2,2,2,2,2,2,2,2,107,2,107,2,2,2,2},
-        {31,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
-        {31,2,2,2,2,2,2,2,2,107,2,107,2,2,2,2},
-        {46,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
-        {31,2,2,2,2,2,2,16,2,2,2,2,2,2,2,2},
-        {31,2,2,2,2,2,79,80,2,2,2,2,2,2,2,2},
-        {76,2,2,2,2,79,80,2,2,2,2,2,2,2,2,2},
-        {125,2,2,2,2,76,92,2,2,2,2,2,2,2,2,126},
-        {135,121,121,121,121,121,121,121,121,121,121,121,121,121,121,135},
-    }
-end
-
-
-function scene:getElements()
-    return {
-        --{object="enemy",  xpos=250, ypos=250, type="melee",   rank=1},
-        --{object="enemy",  xpos=500, ypos=250, type="shooter", rank=1},
-        --{object="enemy",  xpos=400, ypos=150, type="shooter", rank=2},
-        --{object="enemy",  xpos=200, ypos=150, type="shooter", rank=3},
-        --{object="wall",   xpos=450, ypos=600, type="blue",    rotation=90},
-        --{object="weapon", xpos=250, ypos=300, type="launcher"},
-    }
-end
-
-
 function scene:createEventHandlers()
     Runtime:addEventListener("enterFrame", eventUpdateFrame)
     scene.gameLoopHandle = timer.performWithDelay(250, level.updateBehaviours, 0)
@@ -190,7 +147,6 @@ function scene:startPlaying(player)
     globalGameMode = GameMode.playing
 
     physics:start()
-    --camera:track()
 end
 
 

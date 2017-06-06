@@ -8,45 +8,17 @@ local masterCollection = require("elements.collections.masterCollection")
 local Builder = {}
 
 -- Local vars for performance
--- (x >= -300 and x <= 1200 and y >= -200 and y <= 800)
-local constLeftNormal   = -300
-local constRightNormal  = 1200
-local constTopNormal    = -200
-local constBottomNormal = 800
-
-local constLeftScaled   = -300
-local constRightScaled  = 1200
-local constTopScaled    = -200
-local constBottomScaled = 800
-
-local leftBoundary      = constLeftNormal
-local rightBoundary     = constRightNormal
-local topBoundary       = constTopNormal
-local bottomBoundary    = constBottomNormal
+local leftBoundary      = -1000
+local rightBoundary     = 1000
+local topBoundary       = -1000
+local bottomBoundary    = 1000
 
 -- Used for spine animation
 local lastTime          = 0
 
-
 -- Aliases
 local new_image 		= display.newImage
 local move_item_pattern = moveItemPattern
-
-
-
-function Builder:setCollectionBoundaries(scale)
-	if scale then
-		leftBoundary   = constLeftScaled
-		rightBoundary  = constRightScaled
-		topBoundary    = constTopScaled
-		bottomBoundary = constBottomScaled
-	else
-		leftBoundary   = constLeftNormal
-		rightBoundary  = constRightNormal
-		topBoundary    = constTopNormal
-		bottomBoundary = constBottomNormal
-	end
-end
 
 
 function Builder:deepCopy(orig, copy)

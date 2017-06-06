@@ -39,7 +39,6 @@ function EnemyBuilder:newEnemy(camera, spec)
         enemy.ammo   = enemy.weapon.ammo
     end
 
-    enemy:moveTo(enemy.xpos or 0, enemy.ypos or 0)
     enemy:setPhysics()
     enemy:visible()
 
@@ -60,7 +59,7 @@ function EnemyBuilder:newEnemy(camera, spec)
         enemy:rotate(spec.angle)
     end
 
-    --camera:add(enemy.image, 3)
+    camera:addEntity(enemy, enemy.xpos, enemy.ypos)
     
    return enemy
 end

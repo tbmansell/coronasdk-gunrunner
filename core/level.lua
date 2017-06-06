@@ -93,9 +93,6 @@ function Level:createElements(levelElements)
     self:createElementsFromData(levelElements)
     --self:createBackgrounds(camera)
     self:createEventHandlers()
-
-    -- set boundaries to normal (unscaled) mode
-    builder:setCollectionBoundaries()
 end
 
 

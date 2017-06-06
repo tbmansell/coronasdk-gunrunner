@@ -9,30 +9,8 @@ local SheetInfo = {
     sheet = {
         frames = {}
     },
-
-    frameIndex = {
-        --[[
-        ["edgeTopLeft"]     = 1,
-        ["edgeTopRight"]    = 15,
-        ["edgeBotLeft"]     = 135,
-        ["edgeBotRight"]    = 120,
-
-        ["plain"]           = 2,
-
-        ["wallTop"]         = 16,
-        ["wallBot"]         = 76,
-        ["wallHoriz"]       = 4,
-        ["wallVert"]        = 46,
-        ["wallVertPattern"] = 61,
-        
-        ["wallTopLeft"]     = 3,
-        ["wallTopRight"]    = 5,
-        ["wallBotLeft"]     = 47,
-        ["wallBotRight"]    = 49,
-        ]]
-    },
-
-    nameIndex = {},
+    frameIndex = {},
+    nameIndex  = {},
 }
 
 

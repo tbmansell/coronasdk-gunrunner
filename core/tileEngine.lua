@@ -13,7 +13,8 @@ TileEngine = {
 }
 
 -- Aliases:
-local sqrt = math.sqrt
+local sqrt  = math.sqrt
+local floor = math.floor
 
 -- Local variables:
 local coreEngine                  -- Reference to the tile engine
@@ -64,12 +65,25 @@ end
 local function eventHoleCollision(self, event)
     local other = event.other.object
 
-    print("eventHoleCollision")
-
     if other and other.isPlayer then
         sounds:player("killed")
         other:fallToDeath(event)
     end
+end
+
+
+local function addSpecialTile(layer, frame, name, row, col, event, filter)
+    local entityId, spriteInfo = layer.addEntity(name)
+    
+    layer.centerEntityOnTile(entityId, row, col)
+
+    local item = spriteInfo.imageRect
+
+    physics.addBody(item, "static", {density=1, friction=0, bounce=0, shape=frame.shape, filter=filter})
+
+    item.collision = event
+    item:addEventListener("collision", item)
+    return item
 end
 
 
@@ -95,30 +109,11 @@ local function addWallsToLayer(layer)
             
             if frame then
                 if frame.isWall then
-                    local entityId, spriteInfo = layer.addEntity(name)
-
-                    layer.centerEntityOnTile(entityId, row, col)
+                    local item  = addSpecialTile(layer, frame, name, row, col, eventWallCollision, Filters.obstacle)
+                    item.isWall = true
                     
-                    local wall = spriteInfo.imageRect
-
-                    -- Create wall physics object
-                    physics.addBody(wall, "static", {density=1, friction=0, bounce=0, shape=frame.shape, filter=Filters.obstacle})
-
-                    -- Create collision effect that destroys any projectile touching it
-                    wall.collision = eventWallCollision
-                    wall:addEventListener("collision", wall)
-
                 elseif frame.isHole then
-                    local entityId, spriteInfo = layer.addEntity(name)
-                    
-                    layer.centerEntityOnTile(entityId, row, col)
-
-                    local hole = spriteInfo.imageRect
-
-                    physics.addBody(hole, "static", {density=1, friction=0, bounce=0, shape=frame.shape, filter=Filters.hole})
-
-                    hole.collision = eventHoleCollision
-                    hole:addEventListener("collision", hole)
+                    addSpecialTile(layer, frame, name, row, col, eventHoleCollision, Filters.hole)
                 end
             end
         end
@@ -239,12 +234,15 @@ function TileEngine:destroy()
 end
 
 
-function TileEngine:addEntity(entity, x, y)
-    if x and y then
-        self.entityLayer:centerEntityOnTile(entity, x, y)
-    end
-
+function TileEngine:addEntity(entity)
     self.entityLayer.addNonResourceEntity(entity.image)
+
+    if (entity.isEnemy or entity.isCollectable) and (entity.xpos or entity.ypos) then
+        entity:moveTo(entity.xpos * TileSize, entity.ypos * TileSize)
+
+        --print(id.." placing entity at "..x..","..y)
+        --self.entityLayer:centerNonResourceEntityOnTile(id, x, y)
+    end
 end
 
 

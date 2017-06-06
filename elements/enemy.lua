@@ -118,6 +118,16 @@ end
 
 
 function Enemy:lineOfSight(player)
+    local hits = physics.rayCast(self:x(), self:y(), player:x(), player:y(), "sorted")
+
+    if hits then
+        for i,v in pairs(hits) do
+            if v.object.isWall then
+                return false
+            end
+        end
+    end
+
     return true
 end
 

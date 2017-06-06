@@ -28,12 +28,12 @@ local TileSize    = 75
 local cameraSpeed = 4 / 1000      -- Camera speed, 4 tiles per second
 
 
------------------------ PRIVATE FUNCTIONS --------------------
 
 
 spriteResolver.resolveForKey = function(key)
     local frameIndex    = spriteSheetInfo:getFrameIndex(key)
     local frame         = spriteSheetInfo.sheet.frames[frameIndex]
+    --print("resolve: key="..tostring(key))
     local displayObject = display.newImageRect(spriteSheet, frameIndex, frame.width, frame.height)
     
     return wattageEngine.SpriteInfo.new({
@@ -51,12 +51,35 @@ entityResolver.resolveForKey = function(displayObject)
 end
 
 
+local function eventWallCollision(self, event)
+    local other = event.other.object
+
+    if other and other.isProjectile then 
+        sounds:projectile(other.weapon.hitSound)
+        other:destroy()
+    end
+end
+
+
+local function eventHoleCollision(self, event)
+    local other = event.other.object
+
+    print("eventHoleCollision")
+
+    if other and other.isPlayer then
+        sounds:player("killed")
+        other:fallToDeath(event)
+    end
+end
+
+
 local function addFloorToLayer(layer)
     for row=1, TileEngine.rowCount do
         for col=1, TileEngine.columnCount do
             local value = TileEngine.environment[row][col]
             local name  = spriteSheetInfo:getName(value)
 
+            --print(tostring(value).."="..tostring(name))
             layer.updateTile(row, col, wattageEngine.Tile.new({resourceKey=name}))
         end
     end
@@ -67,15 +90,36 @@ local function addWallsToLayer(layer)
     for row=1, TileEngine.rowCount do
         for col=1, TileEngine.columnCount do
             local value = TileEngine.environment[row][col]
+            local name  = spriteSheetInfo:getName(value)
+            local frame = spriteSheetInfo.sheet.frames[value]
             
-            if value > 0 then
-                local name  = spriteSheetInfo:getName(value)
+            if frame then
+                if frame.isWall then
+                    local entityId, spriteInfo = layer.addEntity(name)
 
-                local entityId, spriteInfo = layer.addEntity(name)
-                layer.centerEntityOnTile(entityId, row, col)
-                
-                local wall = spriteInfo.imageRect
-                physics.addBody(wall, "static", {density=1, friction=0, bounce=0, filter=Filters.obstacle})
+                    layer.centerEntityOnTile(entityId, row, col)
+                    
+                    local wall = spriteInfo.imageRect
+
+                    -- Create wall physics object
+                    physics.addBody(wall, "static", {density=1, friction=0, bounce=0, shape=frame.shape, filter=Filters.obstacle})
+
+                    -- Create collision effect that destroys any projectile touching it
+                    wall.collision = eventWallCollision
+                    wall:addEventListener("collision", wall)
+
+                elseif frame.isHole then
+                    local entityId, spriteInfo = layer.addEntity(name)
+                    
+                    layer.centerEntityOnTile(entityId, row, col)
+
+                    local hole = spriteInfo.imageRect
+
+                    physics.addBody(hole, "static", {density=1, friction=0, bounce=0, shape=frame.shape, filter=Filters.hole})
+
+                    hole.collision = eventHoleCollision
+                    hole:addEventListener("collision", hole)
+                end
             end
         end
     end
@@ -195,7 +239,11 @@ function TileEngine:destroy()
 end
 
 
-function TileEngine:addEntity(entity)
+function TileEngine:addEntity(entity, x, y)
+    if x and y then
+        self.entityLayer:centerEntityOnTile(entity, x, y)
+    end
+
     self.entityLayer.addNonResourceEntity(entity.image)
 end
 
@@ -212,7 +260,7 @@ function TileEngine:eventUpdateFrame(event, focus)
         lastTime = curTime
 
         --local x, y = initFocusX - focus.x, initFocusY - focus.y
-        local x, y = focus.x / TileSize, focus.y / TileSize
+        local x, y = focus.x / TileSize, (focus.y-230) / TileSize
         camera.setLocation(x, y)
         
         -- Update the lighting model passing the amount of time that has passed since the last frame.
@@ -222,7 +270,7 @@ function TileEngine:eventUpdateFrame(event, focus)
         lastTime = event.time
 
         -- This is the initial position of the camera
-        camera.setLocation(7, 7)
+        --camera.setLocation(7, 7)
         --camera.setZoom(1.75)
 
         -- Since a time delta cannot be calculated on the first frame, 1 is passed in here as a placeholder.

@@ -3,7 +3,6 @@ local particles          = require("core.particles")
 local builder            = require("elements.builders.builder")
 local playerBuilder      = require("elements.builders.playerBuilder")
 local enemyBuilder       = require("elements.builders.enemyBuilder")
-local obstacleBuilder    = require("elements.builders.obstacleBuilder")
 local collectableBuilder = require("elements.builders.collectableBuilder")
 local projectileBuilder  = require("elements.builders.projectileBuilder")
 
@@ -19,7 +18,6 @@ local spineCollection       = nil
 local movingCollection      = nil
 local enemyCollection       = nil
 local particleCollection    = nil
-local obstacleCollection    = nil
 local collectableCollection = nil
 
 -- Aliases
@@ -59,7 +57,6 @@ function Level:new(cameraRef)
     movingCollection      = builder:newMovementCollection()
     particleCollection    = builder:newParticleEmitterCollection()
     enemyCollection       = builder:newMasterCollection("enemySet",       spineCollection, movingCollection, particleCollection)
-    obstacleCollection    = builder:newMasterCollection("obstacleSet",    spineCollection, movingCollection, particleCollection)
     collectableCollection = builder:newMasterCollection("collectableSet", spineCollection, movingCollection, particleCollection)
 
     -- local aliases:
@@ -81,10 +78,9 @@ function Level:destroy()
     movingCollection:destroy()
     particleCollection:destroy()
     enemyCollection:destroy()
-    obstacleCollection:destroy()
     collectableCollection:destroy()
 
-    spineCollection, movingCollection, particleCollection, enemyCollection, obstacleCollection, collectableCollection = nil, nil, nil, nil, nil, nil
+    spineCollection, movingCollection, particleCollection, enemyCollection, collectableCollection = nil, nil, nil, nil, nil
     mainPlayer, camera = nil, nil
 end
 
@@ -112,17 +108,9 @@ function Level:createElementsFromData(levelElements)
     for _,item in pairs(levelElements) do
         local object = item.object
 
-        if     object == "wall"   then self:createObstacle(item)
-        elseif object == "enemy"  then self:createEnemy(item)
+        if     object == "enemy"  then self:createEnemy(item)
         elseif object == "weapon" then self:createCollectable(item) end
     end
-end
-
-
-function Level:createObstacle(item)
-    local obstacle = obstacleBuilder:newWall(camera, item)
-
-    obstacleCollection:add(obstacle)
 end
 
 

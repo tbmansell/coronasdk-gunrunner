@@ -30,13 +30,14 @@ EnemyMode = {
 
 
 Filters = {
-    player        = {categoryBits=1,  maskBits=92},
-    playerJumping = {categoryBits=2,  maskBits=0},
-    obstacle      = {categoryBits=4,  maskBits=113},
-    collectable   = {categoryBits=8,  maskBits=1},
-    enemy         = {categoryBits=16, maskBits=53},
-    playerShot    = {categoryBits=32, maskBits=20},
-    enemyShot     = {categoryBits=64, maskBits=5},
+    player        = {categoryBits=1,   maskBits=220},
+    playerJumping = {categoryBits=2,   maskBits=0},
+    obstacle      = {categoryBits=4,   maskBits=113},
+    collectable   = {categoryBits=8,   maskBits=1},
+    enemy         = {categoryBits=16,  maskBits=181},
+    playerShot    = {categoryBits=32,  maskBits=20},
+    enemyShot     = {categoryBits=64,  maskBits=5},
+    hole          = {categoryBits=128, maskBits=17}
 }
 
 

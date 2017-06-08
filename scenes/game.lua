@@ -89,10 +89,18 @@ end
 
 
 function scene:loadLevel()
-    tileEngine:create(self.view, "images/tiles-extrude.png", player,  levelGenerator:newTestEnvironment())
+    local bgr = display.newImage(self.view, "images/background.jpg", globalCenterX, globalCenterY)
+
+    --local environment = levelGenerator:newTestEnvironment()
+    --local entities    = levelGenerator:fillTestEnvironment()
+
+    local environment = levelGenerator:newEnvironment()
+    local entities    = levelGenerator:fillEnvironment()
+
+    tileEngine:create(self.view, "images/tiles-extrude.png", player, environment)
 
     level:new(tileEngine)
-    level:createElements(levelGenerator:fillTestEnvironment()) 
+    level:createElements(entities) 
 end
 
 
@@ -187,6 +195,7 @@ function scene:unloadLevel()
     physics.stop()
     anim:destroy()
     particles:destroy()
+    levelGenerator:destroy()
     level:destroy()
     hud:destroy()
     tileEngine:destroy()

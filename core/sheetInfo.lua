@@ -58,8 +58,6 @@ function SheetInfo:nameTiles()
     self.frameIndex["edgeBotRight"]     = 126
     self.frameIndex["noFloor"]          = 135
 
-
-
     self.frameIndex["wallTop"]          = 16
     self.frameIndex["wallBot"]          = 76
     self.frameIndex["wallHoriz"]        = 4

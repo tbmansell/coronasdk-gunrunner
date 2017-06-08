@@ -147,7 +147,6 @@ function TileEngine:create(group, tileSheet, player, environment)
     self.rowCount    = #environment
     self.columnCount = #environment[1]
 
-    spriteSheetInfo:setup()
     spriteSheet = graphics.newImageSheet(tileSheet, spriteSheetInfo:getSheet())
 
     local tileEngineLayer = display.newGroup()
@@ -269,7 +268,7 @@ function TileEngine:eventUpdateFrame(event, focus)
 
         -- This is the initial position of the camera
         --camera.setLocation(7, 7)
-        --camera.setZoom(1.75)
+        camera.setZoom(0.5)
 
         -- Since a time delta cannot be calculated on the first frame, 1 is passed in here as a placeholder.
         --lightingModel.update(1)

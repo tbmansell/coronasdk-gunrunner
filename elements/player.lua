@@ -23,13 +23,6 @@ local Player = {
     flagShootAllowed = true,
 }
 
--- Aliases:
-
-
---[[function Player:updateChildSpine(delta)
-    self.legs:updateSpine(delta)
-end]]
-
 
 function Player:updateSpine(delta)
     self.state:update(delta)
@@ -126,10 +119,7 @@ end
 
 
 function Player:setPhysics()
-    local w, h  = self.intWidth, self.intHeight  --self:width(), self:height()
-    local shape = {-w,-h, w,-h, w,h, -w,h}
-
-    physics.addBody(self.image, (self.physicsBody or "dynamic"), {shape=shape, density=1, friction=1, bounce=0, filter=Filters.player})
+    physics.addBody(self.image, (self.physicsBody or "dynamic"), {radius=self.intWidth, density=1, friction=1, bounce=0, filter=Filters.player})
    
     self.image.isFixedRotation   = true
     self.image.isSleepingAllowed = false

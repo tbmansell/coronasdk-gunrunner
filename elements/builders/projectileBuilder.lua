@@ -18,7 +18,7 @@ function ProjectileBuilder:newShot(camera, weapon, spec)
     shot:moveTo(spec.xpos or 0, spec.ypos or 0)
     shot:setPhysics()
 
-    camera:addEntity(shot)
+    camera:addProjectile(shot)
 
     return shot
 end

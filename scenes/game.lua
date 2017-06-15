@@ -97,7 +97,7 @@ function scene:loadLevel()
     local environment = levelGenerator:newEnvironment()
     local entities    = levelGenerator:fillEnvironment()
 
-    tileEngine:create(self.view, "images/tiles-extrude.png", player, environment)
+    tileEngine:create(self.view, "images/tiles.png", player, environment)
 
     level:new(tileEngine)
     level:createElements(entities) 
@@ -105,7 +105,8 @@ end
 
 
 function scene:loadPlayer()
-    player = level:createPlayer({xpos=globalCenterX, ypos=globalCenterY+500})
+    --player = level:createPlayer({xpos=globalCenterX, ypos=globalCenterY+500})
+    player = level:createPlayer({xpos=10, ypos=15})
     player:setWeapon(Weapons.rifle)
     
     -- Create Game Over callback

@@ -34,6 +34,8 @@ if globalDebugGame then
 	timer.performWithDelay(1000, draw.displayPerformance, 0)
 end
 
+-- for debug spacing
+print("")
 
 -- Fire off the start scene
 local composer = require("composer")

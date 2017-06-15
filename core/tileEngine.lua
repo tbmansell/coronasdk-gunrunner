@@ -233,14 +233,16 @@ function TileEngine:destroy()
 end
 
 
+function TileEngine:addProjectile(entity)
+    self.entityLayer.addNonResourceEntity(entity.image)
+end
+
+
 function TileEngine:addEntity(entity)
     self.entityLayer.addNonResourceEntity(entity.image)
 
-    if (entity.isEnemy or entity.isCollectable) and (entity.xpos or entity.ypos) then
-        entity:moveTo(entity.xpos * TileSize, entity.ypos * TileSize)
-
-        --print(id.." placing entity at "..x..","..y)
-        --self.entityLayer:centerNonResourceEntityOnTile(id, x, y)
+    if entity.xpos or entity.ypos then
+        entity:moveTo((entity.xpos or 0) * TileSize, (entity.ypos or 0) * TileSize)
     end
 end
 
@@ -268,7 +270,7 @@ function TileEngine:eventUpdateFrame(event, focus)
 
         -- This is the initial position of the camera
         --camera.setLocation(7, 7)
-        camera.setZoom(0.5)
+        camera.setZoom(0.4)
 
         -- Since a time delta cannot be calculated on the first frame, 1 is passed in here as a placeholder.
         --lightingModel.update(1)

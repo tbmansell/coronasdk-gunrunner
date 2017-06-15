@@ -84,10 +84,7 @@ end
 
 
 function Enemy:setPhysics()
-    local w, h  = self.intWidth, self.intHeight
-    local shape = {-w,-h, w,-h, w,h, -w,h}
-
-    physics.addBody(self.image, (self.physicsBody or "dynamic"), {shape=shape, density=1, friction=1, bounce=0, filter=Filters.enemy})
+    physics.addBody(self.image, (self.physicsBody or "dynamic"), {radius=intWidth, density=1, friction=1, bounce=0, filter=Filters.enemy})
    
     self.image.isFixedRotation   = true
     self.image.isSleepingAllowed = false

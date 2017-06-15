@@ -1,10 +1,10 @@
 local SheetInfo = {
 
-    sheetContentWidth  = 1185,
-    sheetContentHeight = 710,
+    sheetContentWidth  = 1190,
+    sheetContentHeight = 850,
     tileSize           = 75,
     tilesAccross       = 15,
-    tilesDown          = 9,
+    tilesDown          = 11,
 
     sheet = {
         frames = {}
@@ -50,6 +50,18 @@ end
 function SheetInfo:nameTiles()
     -- Create names to reference tiles
     self.frameIndex["plain"]            = 2
+    self.frameIndex["plain-1"]          = 6
+    self.frameIndex["plain-2"]          = 7
+    self.frameIndex["plain-3"]          = 8
+    self.frameIndex["plain-4"]          = 9
+    self.frameIndex["plain-5"]          = 21
+    self.frameIndex["plain-6"]          = 22
+    self.frameIndex["plain-7"]          = 23
+    self.frameIndex["plain-8"]          = 24
+    self.frameIndex["plain-9"]          = 36
+    self.frameIndex["plain-10"]         = 37
+    self.frameIndex["plain-11"]         = 38
+    self.frameIndex["plain-12"]         = 39
 
     self.frameIndex["edgeTopLeft"]      = 1
     self.frameIndex["edgeTopRight"]     = 15
@@ -60,7 +72,9 @@ function SheetInfo:nameTiles()
 
     self.frameIndex["wallTop"]          = 16
     self.frameIndex["wallBot"]          = 76
-    self.frameIndex["wallHoriz"]        = 4
+    self.frameIndex["wallLeft"]         = 47
+    self.frameIndex["wallRight"]        = 51
+    self.frameIndex["wallHoriz"]        = 48
     self.frameIndex["wallVert"]         = 31
     self.frameIndex["wallVertPattern"]  = 46
     self.frameIndex["wallPyramid"]      = 107
@@ -79,7 +93,7 @@ function SheetInfo:setupSpecialTiles()
     local size, half = self.tileSize, self.tileSize / 2
 
     -- Setup walls
-    local walls = {"wallTop", "wallBot", "wallHoriz", "wallVert", "wallVertPattern", "wallTopLeft", "wallTopRight", "wallBotLeft", "wallBotRight", "wallPyramid", "wallDiagTopRight", "wallDiagBotRight", "wallDiagTopLeft", "wallDiagBotLeft"}
+    local walls = {"wallTop", "wallBot", "wallRight", "wallLeft", "wallHoriz", "wallVert", "wallVertPattern", "wallTopLeft", "wallTopRight", "wallBotLeft", "wallBotRight", "wallPyramid", "wallDiagTopRight", "wallDiagBotRight", "wallDiagTopLeft", "wallDiagBotLeft"}
 
     for _,name in pairs(walls) do
         self:getFrame(name).isWall = true

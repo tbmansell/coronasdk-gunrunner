@@ -1,0 +1,17 @@
+{ "columns":15,
+ "image":"..\/images\/tiles.png",
+ "imageheight":850,
+ "imagewidth":1190,
+ "margin":0,
+ "name":"tileset",
+ "spacing":1,
+ "terrains":[
+        {
+         "name":"New Terrain",
+         "tile":15
+        }],
+ "tilecount":165,
+ "tileheight":75,
+ "tilewidth":75,
+ "type":"tileset"
+}

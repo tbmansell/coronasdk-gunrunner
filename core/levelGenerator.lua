@@ -5,7 +5,7 @@ local spriteSheetInfo = require("core.sheetInfo")
 local LevelGenerator = {
     MaxWidth     = 25,
     MinWidth     = 8,
-    StartWidth   = 20, 
+    StartWidth   = 20,
     Height       = 24,
 
     environments = {},
@@ -24,7 +24,7 @@ end
 function LevelGenerator:setup()
     spriteSheetInfo:setup()
 
-    self.tiles.default          = spriteSheetInfo:getFrameIndex("plain") 
+    self.tiles.default          = spriteSheetInfo:getFrameIndex("plain")
 
     self.tiles.noFloor          = spriteSheetInfo:getFrameIndex("noFloor")
 
@@ -61,9 +61,9 @@ function LevelGenerator:destroy()
 end
 
 
-function LevelGenerator:newTestEnvironment()
+function LevelGenerator:newTestEnvironmentStraight()
     self:setup()
-
+    
     return {
         {1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  15},
         {16, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  16},
@@ -78,15 +78,45 @@ function LevelGenerator:newTestEnvironment()
         {31, 2,  2,  2,  2,  31, 2,  2,  31, 2,  2,  2,  2,  2,  2,  31},
         {31, 2,  2,  2,  2,  33, 4,  4,  35, 2,  2,  2,  2,  2,  2,  31},
         {46, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  2,  2,  2,  2,  107,2,  107,2,  2,  2,  31},
         {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  2,  2,  2,  2,  107,2,  107,2,  2,  2,  31},
+        {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
+        {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
         {46, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  2,  2,  16, 2,  2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  2,  79, 80, 2,  2,  2,  2,  2,  2,  2,  31},
-        {76, 2,  2,  2,  2,  79, 80, 2,  2,  2,  2,  2,  2,  2,  2,  76},
-        {125,2,  2,  2,  2,  76, 92, 2,  2,  2,  2,  2,  2,  2,  2,  126},
+        {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
+        {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
+        {76, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  76},
+        {125,2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  126},
         {135,121,121,121,121,121,121,121,121,121,121,121,121,121,121,135},
+    }
+end
+
+
+function LevelGenerator:newTestEnvironmentLeft()
+    self:setup()
+
+    return {
+        {118,2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  15},
+        {135,118,2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  16},
+        {135,135,118,2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
+        {135,135,135,118,2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
+        {135,135,135,135,118,2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
+        {135,135,135,135,135,118,2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
+        {135,135,135,135,135,135,118,2,  2,  2,  2,  2,  2,  2,  2,  31},
+        {135,135,135,135,135,135,135,118,2,  2,  2,  2,  2,  2,  2,  31},
+        {135,135,135,135,135,135,135,135,118,2,  2,  2,  2,  2,  2,  31},
+        {135,135,135,135,135,135,135,135,135,118,2,  2,  2,  2,  2,  31},
+        {135,135,135,135,135,135,135,135,135,135,118,2,  2,  2,  2,  31},
+        {135,135,135,135,135,135,135,135,135,135,135,118,2,  2,  2,  31},
+        {135,135,135,135,135,135,135,135,135,135,135,135,118,2,  2,  31},
+        {135,135,135,135,135,135,135,135,135,135,135,135,135,118,2,  31},
+        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
+        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
+        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
+        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
+        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
+        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
+        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
+        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
     }
 end
 
@@ -126,6 +156,11 @@ function LevelGenerator:newEnvironment()
     self.environments[#self.environments + 1] = env
 
     return env.tiles
+end
+
+
+function LevelGenerator:nextEnvironment()
+    return self.environments[1]
 end
 
 
@@ -242,14 +277,14 @@ function LevelGenerator:setEnvironmentWalls(env)
         local pattern = "horiz"
 
         if spaceY >= 10 then
-            if percent(50) then 
-                pattern = "vert"
-            else
-                pattern = "box" 
-            end
+            local r = random(100)
+
+            if     r <= 33 then pattern = "horiz"
+            elseif r <= 66 then pattern = "vert"
+            else                pattern = "box" end
         end
 
-        print(pattern.." "..spaceY)
+        --print(pattern.." "..spaceY)
 
         if pattern == "horiz" then
             self:makeStripHorizWalls(env, spaceY)
@@ -377,7 +412,7 @@ end
 
 
 function LevelGenerator:makeHorizWall(env, x, y, width, randY)
-    print("vert: x="..x.." y="..y.." width="..width)
+    --print("vert: x="..x.." y="..y.." width="..width)
 
     if randY then
         y = (y-2) + random(3)
@@ -396,7 +431,7 @@ end
 
 
 function LevelGenerator:makeVertWall(env, x, y, length)
-    print("horiz: x="..x.." y="..y.." length="..length)
+    --print("horiz: x="..x.." y="..y.." length="..length)
 
     env.tiles[y][x] = self.tiles.wallBot
 
@@ -414,7 +449,7 @@ function LevelGenerator:makeBoxWall(env, x, y, width, height)
     local right, top = x+width+1, y-height-1
     --local midX, midY = width-2,   height-2
 
-    print("box: x="..x.." y="..y.." width="..width.." height="..height)
+    --print("box: x="..x.." y="..y.." width="..width.." height="..height)
 
     env.tiles[y][x]       = self.tiles.wallBotLeft
     env.tiles[y][right]   = self.tiles.wallBotRight
@@ -429,6 +464,12 @@ function LevelGenerator:makeBoxWall(env, x, y, width, height)
     for i=1, height do
         env.tiles[y - i][x]     = self.tiles.wallVert
         env.tiles[y - i][right] = self.tiles.wallVert
+    end
+
+    for i=1, height do
+        for v=1, width do
+            env.tiles[y - i][x + v] = self.tiles.noFloor
+        end
     end
 end
 
@@ -446,7 +487,16 @@ end
 
 
 function LevelGenerator:fillEnvironment()
-    return {}
+    local entities = {}
+
+    if #self.environments == 1 then
+        entities[1] = {object="enemy",  type="melee",    rank=1, xpos=5, ypos=-15}
+        entities[2] = {object="enemy",  type="shooter",  rank=1, xpos=8, ypos=-15}
+        entities[3] = {object="enemy",  type="shooter",  rank=2, xpos=12, ypos=-15}
+        entities[4] = {object="enemy",  type="shooter",  rank=3, xpos=15, ypos=-15}
+    end
+
+    return entities
 end
 
 

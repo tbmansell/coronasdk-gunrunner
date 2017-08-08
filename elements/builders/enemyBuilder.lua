@@ -6,22 +6,25 @@ local EnemyBuilder = {}
 
 
 function EnemyBuilder:newEnemy(camera, spec)
+    print("type="..tostring(spec.type).." rank="..tostring(spec.rank))
+
     -- Copy the enemy rank def and reference the modifyImage before spien creation
     local rankDef = builder:newClone(EnemyTypes[spec.type][spec.rank])
     spec.modifyImage = rankDef.modifyImage
 
-    local enemy = builder:newSpineObject(spec, {
-                       jsonName  = "enemyBodyReptile",
-                       imagePath = "enemyBody/Lizard Basic",
-                       skin      = spec.skin      or "lizard_basic",
-                       scale     = spec.scale     or 0.5,  
-                       animation = spec.animation or "run"
-                   })
 
+    local enemy = builder:newSpineObject(spec, {
+                       jsonName  = "characterBody",
+                       imagePath = "character",
+                       skin      = spec.skin      or rankDef.skin,
+                       scale     = spec.scale     or 0.5, 
+                       animation = spec.animation or "run_assault"
+                   })
+    
     enemy.legs = builder:newSpineObject(spec, {
-                      jsonName  = "enemyLegsReptile", 
-                      imagePath = "enemyLegs/lizard_basic", 
-                      skin      = "lizard_basic", 
+                      jsonName  = "characterLegs", 
+                      imagePath = "character", 
+                      skin      = "lizard_assault", 
                       scale     = spec.scale or 0.5, 
                       animation = "run"
                   })
@@ -33,12 +36,11 @@ function EnemyBuilder:newEnemy(camera, spec)
     builder:deepCopy(enemyDef, enemy)
     builder:deepCopy(rankDef,  enemy)
 
-    -- apply weapon if specified, otherwise they are melee-only enemy
-    if enemy.weapon then
-        enemy.weapon = Weapons[enemy.weapon]
-        enemy.ammo   = enemy.weapon.ammo
-    end
+    -- apply weapon
+    enemy.weapon = Weapons[enemy.weapon]
+    enemy.ammo   = enemy.weapon.ammo
 
+    enemy:loadWeapon(enemy.weapon)
     enemy:setPhysics()
     enemy:visible()
 
@@ -59,7 +61,7 @@ function EnemyBuilder:newEnemy(camera, spec)
         enemy:rotate(spec.angle)
     end
 
-    camera:addEntity(enemy, enemy.xpos, enemy.ypos)
+    camera:addEntity(enemy)
     
    return enemy
 end

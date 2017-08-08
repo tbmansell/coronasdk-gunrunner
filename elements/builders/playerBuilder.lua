@@ -7,21 +7,21 @@ local PlayerBuilder = {}
 
 function PlayerBuilder:newPlayer(camera, spec)
     local player = builder:newSpineObject(spec, {
-                       jsonName  = "playerBody", 
-                       imagePath = "playerBody", 
-                       skin      = spec.skin      or "Player",
+                       jsonName  = "characterBody", 
+                       imagePath = "character", 
+                       skin      = spec.skin      or "player_basic",
                        scale     = spec.scale     or 0.5,  
-                       animation = spec.animation or "run"
+                       animation = spec.animation or "run_assault"
                    })
-
+    
     player.legs = builder:newSpineObject(spec, {
-                      jsonName  = "playerLegs", 
-                      imagePath = "playerLegs", 
-                      skin      = "Player", 
+                      jsonName  = "characterLegs", 
+                      imagePath = "character", 
+                      skin      = "player_basic", 
                       scale     = spec.scale or 0.5, 
                       animation = "run"
                   })
-
+  
     -- Allow override of destroy()
     player.spineObjectDestroy = player.destroy
     -- Override updateSpine for multilpe spine animations
@@ -29,6 +29,7 @@ function PlayerBuilder:newPlayer(camera, spec)
 
     builder:deepCopy(playerDef, player)
 
+    player.gear = {}
     player:moveTo(player.xpos or 0, player.ypos or 0)
     player:setPhysics()
     player:visible()
@@ -40,8 +41,7 @@ function PlayerBuilder:newPlayer(camera, spec)
     self:applyCharacterAbilities(player)
     self:applyPlayerOptions(player)
 
-    --camera:add(player.image, 3)
-    camera:addEntity(player)
+    camera:addEntity(player, true)
 	
 	  return player
 end

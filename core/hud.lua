@@ -244,7 +244,7 @@ function Hud:eventUpdateFrame(event)
         local dx    = movePlayerSpeedX * -cos(rad(angle))
         local dy    = movePlayerSpeedY * -sin(rad(angle))
 
-        self.player:moveBy(dx, dy)
+        self.player:moveBy(dx, dy)        
     end
 
     if aimPlayerAllow then

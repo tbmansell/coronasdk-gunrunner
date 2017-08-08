@@ -72,12 +72,12 @@ settings = {
         {
             publisherId = "com.blindprophetsoftware",
         },
-        --[[
         ["plugin.bit"] =
         {
             publisherId = "com.coronalabs",
             supportedPlatforms = { iphone=true, android=true, osx=true, win32=true, ["android-kindle"]=true }
         },
+        --[[
         ["plugin.flurry.analytics"] =
         {
             publisherId = "com.coronalabs",

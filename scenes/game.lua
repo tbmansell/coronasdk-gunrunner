@@ -1,13 +1,14 @@
 local composer       = require("composer")
 local physics        = require("physics")
+--local tileEngine     = require("engines.wattageWrapper")
+local tileEngine     = require("engines.duskWrapper")
+--local tileEngine      = require("engines.mteWrapper")
 local anim           = require("core.animations")
 local particles      = require("core.particles")
-local tileEngine     = require("core.tileEngine")
 local level          = require("core.level")
 local levelGenerator = require("core.levelGenerator")
 local hud            = require("core.hud")
 local builder        = require("elements.builders.builder")
-local playerBuilder  = require("elements.builders.playerBuilder")
 
 -- local variables for performance
 local scene = composer.newScene()
@@ -34,7 +35,10 @@ end
 
 
 local function eventUpdateFrame(event)
-    tileEngine:eventUpdateFrame(event, player.image)
+    --player:moveBy(0, -2)
+    --tileEngine:eventUpdateFrame(event, player.image)
+    
+    tileEngine.map.updateView()
     level:eventUpdateFrame(event)
     hud:eventUpdateFrame(event)
 end
@@ -91,22 +95,22 @@ end
 function scene:loadLevel()
     local bgr = display.newImage(self.view, "images/background.jpg", globalCenterX, globalCenterY)
 
-    --local environment = levelGenerator:newTestEnvironment()
-    --local entities    = levelGenerator:fillTestEnvironment()
+    --local environment = levelGenerator:newTestEnvironmentStraight()
+    --local environment = levelGenerator:newTestEnvironmentLeft()
 
     local environment = levelGenerator:newEnvironment()
     local entities    = levelGenerator:fillEnvironment()
 
-    tileEngine:create(self.view, "images/tiles.png", player, environment)
+    --tileEngine:create(self.view, "images/tiles.png", environment)
+    tileEngine:create(self.view, "images/tiles.png", levelGenerator)
 
     level:new(tileEngine)
-    level:createElements(entities) 
+    level:createElements(entities)
 end
 
 
 function scene:loadPlayer()
-    --player = level:createPlayer({xpos=globalCenterX, ypos=globalCenterY+500})
-    player = level:createPlayer({xpos=10, ypos=15})
+    player = level:createPlayer({xpos=10, ypos=-10})
     player:setWeapon(Weapons.rifle)
     
     -- Create Game Over callback
@@ -150,7 +154,7 @@ function scene:startLevelSequence()
 end
 
 
-function scene:startPlaying(player)
+function scene:startPlaying()
     math.randomseed(os.time())
 
     globalGameMode = GameMode.playing

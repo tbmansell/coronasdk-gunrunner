@@ -127,6 +127,7 @@ end
 
 function Level:createPlayer(item)
     mainPlayer = playerBuilder:newPlayer(camera, item)
+    mainPlayer:visible()
     return mainPlayer
 end
 

@@ -15,7 +15,7 @@ local Player = {
 
     mode          = PlayerMode.ready,
     health        = 20,
-    gear          = {},
+    gear          = {},  -- array have to be set by the builder due to deep copy problems
     shielded      = false,
     weapon        = nil,
     ammo          = 0,
@@ -28,7 +28,7 @@ function Player:updateSpine(delta)
     self.state:update(delta)
     self.state:apply(self.skeleton)
     self.skeleton:updateWorldTransform()
-
+    
     self.legs:updateSpine(delta)
 end
 
@@ -97,13 +97,13 @@ function Player:shoot(camera, ammoCounter)
         if self.ammo <= 0 then
             sounds:projectile("reload")
 
-            after(1500, function() 
+            after(1500, function()
                 self.ammo = self.weapon.ammo
                 ammoCounter:setText(self.ammo)
             end)
         end
 
-        local shot = projectileBuilder:newShot(camera, self.weapon, {xpos=self:x(), ypos=self:y(), angle=self.angle+90, filter=Filters.playerShot})
+        local shot = projectileBuilder:newShot(camera, self.weapon, {xpos=self:x(), ypos=self:y() - 50, angle=self.angle+90, filter=Filters.playerShot})
 
         shot:fire()
     end
@@ -269,19 +269,19 @@ function Player:setWeapon(weapon)
     self.weapon            = weapon
     self.ammo              = weapon.ammo
     self.flagShootAllowed  = true
-    self.gear[weapon.name] = true
+    self.gear[weapon.name] = {slot=weapon.slot, skin=weapon.skin}
     self:loadGear()
 end
 
 
 function Player:setGear(item)
-    self.gear[item.name] = true
+    self.gear[item.name] = {slot=item.slot, skin=item.skin}
     self:loadGear()
 end
 
 
 function Player:removeGear(item)
-    self.gear[item.name] = false
+    self.gear[item.name] = nil
     self:loadGear()
 end
 
@@ -293,13 +293,12 @@ end
 
 
 function Player:loadGear()
-    for item,set in pairs(self.gear) do
-        --[[ if set then
-            self.skeleton:setAttachment(item.skeletonName, item.skeletonName)
+    for name, item in pairs(self.gear) do
+        if item then
+            self.skeleton:setAttachment(item.slot, item.skin)
         else
-            self.skeleton:setAttachment(item.skeletonName, nil)
+            self.skeleton:setAttachment(item.slot, nil)
         end
-        ]]
     end
 end
 

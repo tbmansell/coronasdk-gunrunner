@@ -1,0 +1,192 @@
+{ 
+ "properties":{},
+ "height":240,
+ "width":20,
+ "layers":[
+        {
+         "data":[],
+         "height":24,
+         "name":"TileLayer",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":20,
+         "x":0,
+         "y":0
+        },
+        {
+         "draworder":"topdown",
+         "name":"BelowEntityLayer",
+         "type":"objectgroup",
+         "opacity":1,
+         "visible":true,
+         "height":24,
+         "width":20,
+         "x":0,
+         "y":0,
+         "objects":[]
+        },
+        {
+         "draworder":"topdown",
+         "name":"EntityLayer",
+         "type":"objectgroup",
+         "opacity":1,
+         "visible":true,
+         "height":24,
+         "width":20,
+         "x":0,
+         "y":0,
+         "objects":[]
+        },
+        {
+         "draworder":"topdown",
+         "name":"AboveEntityLayer",
+         "type":"objectgroup",
+         "opacity":1,
+         "visible":true,
+         "height":24,
+         "width":20,
+         "x":0,
+         "y":0,
+         "objects":[]
+        }
+],
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"1.0.2",
+ "tileheight":75,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "columns":15,
+         "image":"..\/images\/tiles.png",
+         "imageheight":850,
+         "imagewidth":1190,
+         "margin":0,
+         "name":"RunAndGun",
+         "spacing":2,
+         "tilecount":165,
+         "tileheight":75,
+         "tilewidth":75,
+         "type":"tileset",
+         "tileproperties":
+            {
+             "15":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "75":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "46":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "50":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "47":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "30":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "45":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "106":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "2":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "4":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "32":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "34":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "79":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "78":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "80":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                },
+             "81":
+                {
+                 "bodyType":"static",
+                 "physics:bounce":"0",
+                 "physics:enabled":"true",
+                 "physics:filter":"{categoryBits=4,   maskBits=113}"
+                }
+            },
+        }],
+ "tilewidth":75,
+ "type":"map",
+ "version":1
+}

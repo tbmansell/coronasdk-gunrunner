@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="15" height="11" tilewidth="75" tileheight="75" nextobjectid="1">
+ <tileset firstgid="1" source="tiled1.tsx"/>
+ <imagelayer name="Images1"/>
+ <layer name="Tiles1" width="15" height="11">
+  <data encoding="csv">
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,3,4,4,4,4,4,4,5,2,2,2,2,
+2,2,2,18,2,2,2,2,2,2,20,2,2,2,2,
+2,2,2,18,2,2,3,5,2,2,20,2,2,2,2,
+2,2,2,18,2,2,33,35,2,2,20,2,2,2,2,
+2,2,2,18,2,2,2,2,2,2,20,2,2,2,2,
+2,2,2,33,34,51,2,2,47,34,35,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+</data>
+ </layer>
+ <objectgroup name="Objects1"/>
+</map>

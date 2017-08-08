@@ -21,8 +21,8 @@ function Projectile.eventCollision(self, event)
             other:hit(self)
         end
 
-    sounds:projectile(self.weapon.hitSound)
-    self:destroy()
+        sounds:projectile(self.weapon.hitSound)
+        self:destroy()
     end
 end
 

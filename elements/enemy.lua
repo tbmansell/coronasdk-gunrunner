@@ -40,7 +40,7 @@ local atan2 = math.atan2
 local round = math.round
 local random= math.random
 
-local Melee = {weapon=Weapons.melee}
+local Melee = {weapon=Weapons.club}
 
 
 function Enemy.eventCollision(self, event)
@@ -84,7 +84,7 @@ end
 
 
 function Enemy:setPhysics()
-    physics.addBody(self.image, (self.physicsBody or "dynamic"), {radius=intWidth, density=1, friction=1, bounce=0, filter=Filters.enemy})
+    physics.addBody(self.image, (self.physicsBody or "dynamic"), {radius=self.intWidth, density=1, friction=1, bounce=0, filter=Filters.enemy})
    
     self.image.isFixedRotation   = true
     self.image.isSleepingAllowed = false
@@ -129,6 +129,11 @@ function Enemy:lineOfSight(player)
 end
 
 
+function Enemy:loadWeapon(weapon)
+    self.skeleton:setAttachment(weapon.slot, weapon.skin)
+end
+
+
 function Enemy:checkBehaviour(camera, player)
     if self:lineOfSight(player) then
         -- Face player if not charging
@@ -141,7 +146,7 @@ function Enemy:checkBehaviour(camera, player)
         end
 
         -- Check if should shoot player
-        if self.weapon then
+        if self.ammo then
             if self:decideToShoot() then
                 self:shoot(camera)
             end

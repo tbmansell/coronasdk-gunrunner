@@ -34,6 +34,7 @@ function SheetInfo:setup()
             -- TEMPORARY: until all indexes manually added
             self.frameIndex[tostring(index)] = index
         end
+        
     end
 
     -- setup tile attributes:

@@ -27,6 +27,7 @@ local Enemy = {
     flagChargeAllowed = true,
     waitingToShoot    = false,
     waitingToMove     = false,
+    waitingToTurn     = false,
     waitingToCharge   = false,
 }
 
@@ -164,6 +165,11 @@ function Enemy:checkBehaviour(camera, player)
                 self:charge(player)
             end
         end
+    else
+        -- if not visible randomly rotate
+        if self:decideToTurn() then
+            self:randomTurn()
+        end
     end
 
     if self:decideToMove() then
@@ -192,7 +198,18 @@ function Enemy:decideToMove()
         -- always have to wait to decide again
         self.waitingToMove = true
         after(self.decisionDelay, function() self.waitingToMove = false end)
-        
+
+        return (random(100) < self.fidgit)
+    end
+end
+
+
+function Enemy:decideToTurn()
+    if not self.waitingToTurn then
+        -- always have to wait to decide again
+        self.waitingToTurn = true
+        after(self.decisionDelay, function() self.waitingToTurn = false end)
+
         return (random(100) < self.fidgit)
     end
 end
@@ -250,6 +267,17 @@ function Enemy:move()
         self.flagMoveAllowed = true
         self.mode = EnemyMode.ready
     end)
+end
+
+
+function Enemy:randomTurn()
+    local turn = random(45)
+
+    if random(100) > 50 then
+        turn = -turn
+    end
+
+    self:rotate(self.angle + turn)
 end
 
 

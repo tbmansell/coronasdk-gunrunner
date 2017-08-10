@@ -1,4 +1,5 @@
-local json = require "json"
+local json       = require "json"
+local tileEngine = require("engines.duskWrapper")
 
 -- Class
 local Particles       = {}
@@ -8,13 +9,14 @@ local createdEmitters = {}
 
 
 function Particles:preLoadEmitters()
-    --self:loadEmitter("die")
-    --self:loadEmitter("deathflash")
+    self:loadEmitter("bulletImpact")
+    self:loadEmitter("explosion")
+    self:loadEmitter("smoke")
 end
 
 
 function Particles:loadEmitter(name)
-    local filePath = system.pathForFile("json/particle-effects/"..name..".json")
+    local filePath = system.pathForFile("json/particles/"..name..".json")
     local f        = io.open(filePath, "r")
     local fileData = f:read("*a")
     f:close()
@@ -58,7 +60,7 @@ function Particles:resume()
 end
 
 
-function Particles:showEmitter(camera, name, x, y, duration, alpha, layer)
+function Particles:showEmitter(name, x, y, duration, alpha, layer)
     -- Typically we preload them all, but if called without pre-loading then check if loaded before calling
     if emitterData[name] == nil then
         self:loadEmitter(name)
@@ -73,18 +75,16 @@ function Particles:showEmitter(camera, name, x, y, duration, alpha, layer)
 
     createdEmitters[emitter.id] = emitter
 
-    if camera then
-        camera:add(emitter, layer or 2)
-    end
+    tileEngine:addParticle(emitter)
 
     function emitter:destroy()
         if self and self.removeSelf then
             if createdEmitters[self.id] then
                 createdEmitters[self.id] = nil
             end
-            if camera then
-                camera:remove(self)
-            end
+            --if camera then
+            --    camera:remove(self)
+            --end
             self:removeSelf()
             self = nil
         end

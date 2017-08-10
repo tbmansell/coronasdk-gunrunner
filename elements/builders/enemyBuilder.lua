@@ -40,7 +40,7 @@ function EnemyBuilder:newEnemy(camera, spec)
     enemy.weapon = Weapons[enemy.weapon]
     enemy.ammo   = enemy.weapon.ammo
 
-    enemy:loadWeapon(enemy.weapon)
+    enemy:setWeapon(enemy.weapon)
     enemy:setPhysics()
     enemy:visible()
 

@@ -59,6 +59,9 @@ end
 function Enemy:updateSpine(delta)
     self.state:update(delta)
     self.state:apply(self.skeleton)
+
+    self.boneRoot.rotation = - (self.angle + 30)
+
     self.skeleton:updateWorldTransform()
 
     self.legs:updateSpine(delta)
@@ -67,10 +70,9 @@ end
 
 function Enemy:rotate(rotation)
     if self.image then
-        self.image.rotation = rotation
         self.angle = rotation
 
-        self.legs:rotate(rotation)
+        --self.legs:rotate(rotation)
     end
 end
 
@@ -129,8 +131,14 @@ function Enemy:lineOfSight(player)
 end
 
 
-function Enemy:loadWeapon(weapon)
+function Enemy:setWeapon(weapon)
     self.skeleton:setAttachment(weapon.slot, weapon.skin)
+
+    self.boneRoot = self.skeleton:getRootBone()
+
+    if weapon.bone then
+        self.boneBarrel = self.skeleton:findBone("barrel-"..weapon.bone)
+    end
 end
 
 
@@ -217,7 +225,11 @@ function Enemy:shoot(camera)
         after(1500, function() self.ammo = self.weapon.ammo end)
     end
 
-    local shot = projectileBuilder:newShot(camera, self.weapon, {xpos=self:x(), ypos=self:y(), angle=self.angle+90, filter=Filters.enemyShot})
+    self:animate("shoot_assault")
+
+    local x    = self:x() + self.boneBarrel.worldX
+    local y    = self:y() - self.boneBarrel.worldY
+    local shot = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=self.angle+90, filter=Filters.enemyShot})
     shot:fire()
 end
 

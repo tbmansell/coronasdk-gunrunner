@@ -42,24 +42,24 @@ Filters = {
 
 
 Weapons = {
-    club     = {name="club",     slot="weapon", skin="weapons/weapon-club",  damage=1},
-    rifle    = {name="rifle",    slot="weapon", skin="weapons/gun_assault",  damage=1,  ammoType="bullet",  shotSound="rifleShot",  hitSound="bulletHit", hitAnim="", speed=800, rof=250,  ammo=10},
-    shotgun  = {name="shotgun",  slot="weapon", skin="weapons/gun_shotgun",  damage=5,  ammoType="bullet",  shotSound="rifleShot",  hitSound="bulletHit", hitAnim="", speed=300, rof=1000, ammo=8},
-    launcher = {name="launcher", slot="weapon", skin="weapons/gun_launcher", damage=10, ammoType="rocket",  shotSound="rocketShot", hitSound="rocketHit", hitAnim="", speed=250, rof=3000, ammo=4,   shieldBuster=true},
-    laserGun = {name="laser",    slot="weapon", skin="weapons/gun_laser",    damage=5,  ammoType="laser",   shotSound="",           hitSound="",          hitAnim="", speed=400, rof=300,  ammo=100},
+    club     = {name="club",     slot="weapon", skin="weapons/weapon-club",  damage=1,  hitSound=""},
+    rifle    = {name="rifle",    slot="weapon", skin="weapons/gun_assault",  damage=1,  ammoType="bullet", speed=800, rof=250,  ammo=100, bone="rifle",    shotSound="rifleShot",  hitSound="bulletHit", hitAnim="bulletImpact"},
+    shotgun  = {name="shotgun",  slot="weapon", skin="weapons/gun_shotgun",  damage=5,  ammoType="bullet", speed=300, rof=1000, ammo=8,   bone="rifle",    shotSound="rifleShot",  hitSound="bulletHit", hitAnim="bulletImpact"},
+    launcher = {name="launcher", slot="weapon", skin="weapons/gun_launcher", damage=10, ammoType="rocket", speed=250, rof=3000, ammo=4,   bone="launcher", shotSound="rocketShot", hitSound="rocketHit", hitAnim="explosion", hitAnim2nd="smoke", shieldBuster=true},
+    laserGun = {name="laser",    slot="weapon", skin="weapons/gun_laser",    damage=5,  ammoType="laser",  speed=400, rof=300,  ammo=100, bone="laser",    shotSound="",           hitSound="",          hitAnim=nil},
 }
 
 
 EnemyTypes = {
     melee = {
         -- ranked in order of dangerousness
-        [1] = {--[[modifyImage={.1, .3, .1},]] skin="lizard_club",     weapon="club",     health=2, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150, melee=true},
+        [1] = {skin="lizard_club",     weapon="club",     health=2, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150, melee=true},
     },
     shooter = {
         -- ranked in order of dangerousness
-        [1] = {--[[modifyImage={.6, .6,  1},]] skin="lizard_assault",  weapon="rifle",    health=2, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100},
-        [2] = {--[[modifyImage={.2, .2,  1},]] skin="lizard_shotgun",  weapon="shotgun",  health=4, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
-        [3] = {--[[modifyImage={1,  .3, .3},]] skin="lizard_launcher", weapon="launcher", health=8, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=50},
+        [1] = {skin="lizard_assault",  weapon="rifle",    health=2, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100},
+        [2] = {skin="lizard_shotgun",  weapon="shotgun",  health=4, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
+        [3] = {skin="lizard_launcher", weapon="launcher", health=8, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=50},
     },
 }
 

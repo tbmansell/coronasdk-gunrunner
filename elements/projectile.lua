@@ -21,8 +21,7 @@ function Projectile.eventCollision(self, event)
             other:hit(self)
         end
 
-        sounds:projectile(self.weapon.hitSound)
-        self:destroy()
+        self:impact()
     end
 end
 
@@ -52,6 +51,26 @@ function Projectile:fire()
     self:applyForce(forceX, forceY)
 
     sounds:projectile(weapon.shotSound)
+end
+
+
+function Projectile:impact()
+    sounds:projectile(self.weapon.hitSound)
+    self:displayImpact()
+    self:destroy()
+end
+
+
+function Projectile:displayImpact()
+    local particle = self.weapon.hitAnim
+
+    if particle then
+        self:emit(particle, {duration="forever"})
+
+        if self.weapon.hitAnim2nd then
+            self:emit(self.weapon.hitAnim2nd)
+        end
+    end
 end
 
 

@@ -410,19 +410,6 @@ function GameObject:updateSpine(delta)
 end
 
 
--- Function intended to encapulate objects from getting access to the viewport camera (for adding items or scaling)
--- In one place: rather than litter the code with different methods.
--- NOTE: this relies on the scene creating a global object called: cameraHolder and putting a camera reference to it
--- @return camera
-----
-function GameObject:getCamera()
-    if cameraHolder == nil or cameraHolder.camera == nil then
-        print("ERROR: no cameraHolder created with a camera reference")
-    end
-    return cameraHolder.camera
-end
-
-
 -- MOVEMENT
 
 
@@ -505,7 +492,7 @@ function GameObject:emit(effectName, params, attach)
     local params  = params or {}
 
     local emitter = particles:showEmitter(
-        self:getCamera(),
+        --self:getCamera(),
         effectName, 
         params.xpos     or self:x(), 
         params.ypos     or self:y(), 

@@ -19,8 +19,7 @@ local function eventWallCollision(self, event)
     local other = event.other.object
 
     if other and other.isProjectile then 
-        sounds:projectile(other.weapon.hitSound)
-        other:destroy()
+        other:impact()
     end
 end
 
@@ -45,14 +44,9 @@ function TileEngine:create(view, tiles, levelGenerator)
     self.objectLayer2 = self.map.layer["EntityLayer"]
     self.objectLayer3 = self.map.layer["AboveEntityLayer"]
 
-    print("cols="..self.cols.." rows="..self.rows)
-    --self.tileLayer.lock(1,1, self.cols, self.rows, "d")
-
     for tile in self.tileLayer.tilesInRange(1,1, self.cols, self.rows) do
         local index = tile.tilesetGID
         local frame = spriteSheetInfo.sheet.frames[index]
-
-        --print("tile ["..tile.tileX..","..tile.tileY.."] index="..tostring(index))
         
         if frame then
             if frame.isWall then
@@ -128,6 +122,11 @@ end
 
 function TileEngine:addProjectile(entity)
     self.objectLayer2:insert(entity.image)
+end
+
+
+function TileEngine:addParticle(entity)
+    self.objectLayer2:insert(entity)
 end
 
 

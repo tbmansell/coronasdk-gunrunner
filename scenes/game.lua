@@ -190,7 +190,6 @@ function scene:resumeLevel(resumeGameState)
 end
 
 
-
 function scene:unloadLevel()
     Runtime:removeEventListener("enterFrame", eventUpdateFrame)
 

@@ -244,13 +244,15 @@ function Hud:eventUpdateFrame(event)
         local dx    = movePlayerSpeedX * -cos(rad(angle))
         local dy    = movePlayerSpeedY * -sin(rad(angle))
 
-        self.player:moveBy(dx, dy)        
+        self.player:moveBy(dx, dy)
+
+        --self.player.legs:loop("strafe_left")
     end
 
     if aimPlayerAllow then
         local angle = 90 + atan2(aimPlayerY - shootControllerY, aimPlayerX - shootControllerX) * PI
         
-        self.player:rotate(angle)
+        self.player:rotate(angle, event)
         self.player:shoot(self.camera, self.ammoCounter)
         self.ammoCounter:setText(self.player.ammo)
     end

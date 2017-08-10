@@ -19,6 +19,7 @@ local Player = {
     shielded      = false,
     weapon        = nil,
     ammo          = 0,
+    boneBarrel    = nil,
 
     flagShootAllowed = true,
 }
@@ -27,6 +28,9 @@ local Player = {
 function Player:updateSpine(delta)
     self.state:update(delta)
     self.state:apply(self.skeleton)
+
+    self.boneRoot.rotation = - (self.angle + 30)
+
     self.skeleton:updateWorldTransform()
     
     self.legs:updateSpine(delta)
@@ -103,9 +107,21 @@ function Player:shoot(camera, ammoCounter)
             end)
         end
 
-        local shot = projectileBuilder:newShot(camera, self.weapon, {xpos=self:x(), ypos=self:y() - 50, angle=self.angle+90, filter=Filters.playerShot})
+        self:animate("shoot_assault")
 
+        local x    = self:x() + self.boneBarrel.worldX
+        local y    = self:y() - self.boneBarrel.worldY
+        local shot = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=self.angle+90, filter=Filters.playerShot})
         shot:fire()
+    end
+end
+
+
+
+---- override
+function Player:rotate(rotation, event)
+    if self.image then
+        self.angle = rotation
     end
 end
 
@@ -271,6 +287,12 @@ function Player:setWeapon(weapon)
     self.flagShootAllowed  = true
     self.gear[weapon.name] = {slot=weapon.slot, skin=weapon.skin}
     self:loadGear()
+
+    self.boneRoot = self.skeleton:getRootBone()
+    
+    if weapon.bone then
+        self.boneBarrel = self.skeleton:findBone("barrel-"..weapon.bone)
+    end
 end
 
 

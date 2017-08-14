@@ -13,7 +13,7 @@ function EnemyBuilder:newEnemy(camera, spec)
     spec.modifyImage = rankDef.modifyImage
 
 
-    local enemy = builder:newSpineObject(spec, {
+    local enemy = builder:newCharacter(spec, {
                        jsonName  = "characterBody",
                        imagePath = "character",
                        skin      = spec.skin      or rankDef.skin,

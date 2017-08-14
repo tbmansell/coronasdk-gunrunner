@@ -16,8 +16,6 @@ function Collectable.eventCollision(self, event)
     local other = event.other.object
     local self  = self.object
 
-    print(tostring(other.key).." hit collectable")
-
     if other and other.isPlayer then 
         self:collectedBy(other)
         self:destroy()

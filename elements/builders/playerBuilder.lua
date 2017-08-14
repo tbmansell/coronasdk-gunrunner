@@ -6,7 +6,7 @@ local PlayerBuilder = {}
 
 
 function PlayerBuilder:newPlayer(camera, spec)
-    local player = builder:newSpineObject(spec, {
+    local player = builder:newCharacter(spec, {
                        jsonName  = "characterBody", 
                        imagePath = "character", 
                        skin      = spec.skin      or "player_basic",

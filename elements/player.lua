@@ -89,30 +89,9 @@ end
 
 function Player:shoot(camera, ammoCounter)
     if self:canShoot() then
-        self.flagShootAllowed = false
-        self.ammo = self.ammo - 1
-
-        -- enable more firing after ROF period ending
-        after(self.weapon.rof, function() 
-            self.flagShootAllowed = true 
-        end)
-
-        -- If run out of ammo reload
-        if self.ammo <= 0 then
-            sounds:projectile("reload")
-
-            after(1500, function()
-                self.ammo = self.weapon.ammo
-                ammoCounter:setText(self.ammo)
-            end)
-        end
-
-        self:animate("shoot_assault")
-
-        local x    = self:x() + self.boneBarrel.worldX
-        local y    = self:y() - self.boneBarrel.worldY
-        local shot = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=self.angle+90, filter=Filters.playerShot})
-        shot:fire()
+        self:shootAmmoRof()
+        self:shootReloadCheck(function() ammoCounter:setText(self.ammo) end)
+        self:shootProjectile(projectileBuilder, camera, Filters.playerShot)
     end
 end
 
@@ -285,7 +264,7 @@ function Player:setWeapon(weapon)
     self.weapon            = weapon
     self.ammo              = weapon.ammo
     self.flagShootAllowed  = true
-    self.gear[weapon.name] = {slot=weapon.slot, skin=weapon.skin}
+    self.gear["weapon"]    = {slot=weapon.slot, skin=weapon.skin}
     self:loadGear()
 
     self.boneRoot = self.skeleton:getRootBone()
@@ -317,6 +296,7 @@ end
 function Player:loadGear()
     for name, item in pairs(self.gear) do
         if item then
+            print("loadGear "..item.slot..", "..item.skin)
             self.skeleton:setAttachment(item.slot, item.skin)
         else
             self.skeleton:setAttachment(item.slot, nil)

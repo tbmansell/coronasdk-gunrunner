@@ -1,6 +1,7 @@
 local spine            = require("core.spine")
 local gameObject       = require("elements.gameObject")
 local spineObject      = require("elements.spineObject")
+local characterObject  = require("elements.character")
 local collection   	   = require("elements.collections.collection")
 local masterCollection = require("elements.collections.masterCollection")
 
@@ -139,6 +140,15 @@ function Builder:newSpineObject(spec, spineParams)
 	end
 
 	return object
+end
+
+
+function Builder:newCharacter(spec, spineParams)
+    local character = self:newSpineObject(spec, spineParams)
+
+    self:deepCopy(characterObject, character)
+
+    return character
 end
 
 

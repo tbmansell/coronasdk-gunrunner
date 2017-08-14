@@ -490,10 +490,12 @@ function LevelGenerator:fillEnvironment()
     local entities = {}
 
     if #self.environments == 1 then
-        entities[1] = {object="enemy",  type="melee",    rank=1, xpos=5, ypos=-15}
-        entities[2] = {object="enemy",  type="shooter",  rank=1, xpos=8, ypos=-15}
-        entities[3] = {object="enemy",  type="shooter",  rank=2, xpos=12, ypos=-15}
-        entities[4] = {object="enemy",  type="shooter",  rank=3, xpos=15, ypos=-15}
+        entities[1] = {object="weapon", type="shotgun",  xpos=2, ypos=-5}
+        entities[2] = {object="weapon", type="launcher", xpos=18, ypos=-5}
+        --entities[1] = {object="enemy",  type="melee",    rank=1, xpos=5, ypos=-15}
+        --entities[2] = {object="enemy",  type="shooter",  rank=1, xpos=8, ypos=-15}
+        --entities[3] = {object="enemy",  type="shooter",  rank=2, xpos=12, ypos=-15}
+        --entities[4] = {object="enemy",  type="shooter",  rank=3, xpos=15, ypos=-15}
     end
 
     return entities

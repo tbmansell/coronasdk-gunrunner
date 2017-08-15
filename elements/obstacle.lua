@@ -44,7 +44,7 @@ function Obstacle:explode()
     if self.isCrate then
         self:emit("explosion")
     elseif self.isGas then
-        self:emit("explosion-gas")
+        self:emit("explosionGas")
     end
 
     self:destroy()

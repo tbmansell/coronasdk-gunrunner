@@ -11,8 +11,10 @@ local createdEmitters = {}
 function Particles:preLoadEmitters()
     self:loadEmitter("bulletImpact")
     self:loadEmitter("explosion")
-    self:loadEmitter("explosion-gas")
+    self:loadEmitter("explosionGas")
     self:loadEmitter("smoke")
+    self:loadEmitter("enemyDie1")
+    self:loadEmitter("enemyDie2")
 end
 
 

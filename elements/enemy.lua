@@ -307,7 +307,7 @@ function Enemy:die()
         self.mode = EnemyMode.dead
 
         self:destroyEmitter()
-        --self:emit("enemyDie1")
+        self:emit("enemyDie1")
         self:emit("enemyDie2")
 
         sounds:enemy("killed")

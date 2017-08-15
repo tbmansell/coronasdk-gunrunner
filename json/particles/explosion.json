@@ -39,7 +39,7 @@
 "blendFuncSource":770,
 "sourcePositionVariancey":40,
 "finishParticleSizeVariance":0,
-"blendFuncDestination":771,
+"blendFuncDestination":1,
 "startColorVarianceGreen":0.23,
 "finishColorBlue":0,
 "finishParticleSize":120,

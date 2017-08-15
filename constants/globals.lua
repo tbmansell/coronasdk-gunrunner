@@ -45,7 +45,7 @@ Weapons = {
     club     = {name="club",     slot="weapon", skin="weapons/weapon-club",  damage=1,  hitSound=""},
     rifle    = {name="rifle",    slot="weapon", skin="weapons/gun_assault",  damage=1,  ammoType="bullet", speed=700, rof=250,  ammo=30,  bone="rifle",    shotSound="rifleShot",  hitSound="bulletHit", hitAnim="bulletImpact"},
     shotgun  = {name="shotgun",  slot="weapon", skin="weapons/gun_shotgun",  damage=1,  ammoType="bullet", speed=700, rof=750,  ammo=10,  bone="rifle",    shotSound="rifleShot",  hitSound="bulletHit", hitAnim="bulletImpact"},
-    launcher = {name="launcher", slot="weapon", skin="weapons/gun_launcher", damage=10, ammoType="rocket", speed=250, rof=3000, ammo=4,   bone="launcher", shotSound="rocketShot", hitSound="rocketHit", hitAnim="explosion", hitAnim2nd="smoke", shieldBuster=true},
+    launcher = {name="launcher", slot="weapon", skin="weapons/gun_launcher", damage=10, ammoType="rocket", speed=250, rof=3000, ammo=4,   bone="launcher", shotSound="rocketShot", hitSound="rocketHit", hitAnim="smoke", hitAnim2nd="explosion", shieldBuster=true},
     laserGun = {name="laser",    slot="weapon", skin="weapons/gun_laser",    damage=5,  ammoType="laser",  speed=400, rof=300,  ammo=100, bone="laser",    shotSound="",           hitSound="",          hitAnim=nil},
 }
 

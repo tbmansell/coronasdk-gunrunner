@@ -2,6 +2,9 @@ local Character = {
     isCharacter = true
 }
 
+-- Aliases:
+local random = math.random
+
 
 function Character:shootAmmoRof()
     self.flagShootAllowed = false
@@ -28,23 +31,44 @@ end
 
 
 function Character:shootProjectile(projectileBuilder, camera, filter)
-    local x    = self:x() + self.boneBarrel.worldX
-    local y    = self:y() - self.boneBarrel.worldY
+    local x = self:x() + self.boneBarrel.worldX
+    local y = self:y() - self.boneBarrel.worldY
 
     self:animate("shoot_assault")
 
     if self.weapon.name == "shotgun" then
-        local shot1 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=self.angle+75, filter=filter})
-        local shot2 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=self.angle+90, filter=filter})
-        local shot3 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=self.angle+105, filter=filter})
+        local angle = self:getAngle()
+
+        local shot1 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=angle-25, filter=filter})
+        local shot2 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=angle,    filter=filter})
+        local shot3 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=angle+25, filter=filter})
 
         shot1:fire()
         shot2:fire()
         shot3:fire()
     else
-        local shot = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=self.angle+90, filter=filter})
+        local shot = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=self:getAngle(), filter=filter})
         shot:fire()
     end
+end
+
+
+function Character:getAngle(offset)
+    local a = offset or 90
+
+    if self.inaccuracy then
+        local r = random(100)
+
+        if r <= self.inaccuracy then
+            if random(100) > 50 then
+                a = a - r
+            else
+                a = a + r
+            end
+        end
+    end
+
+    return self.angle + a
 end
 
 

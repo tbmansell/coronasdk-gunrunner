@@ -57,9 +57,9 @@ EnemyTypes = {
     },
     shooter = {
         -- ranked in order of dangerousness
-        [1] = {skin="lizard_assault",  weapon="rifle",    health=2, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100},
-        [2] = {skin="lizard_shotgun",  weapon="shotgun",  health=4, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
-        [3] = {skin="lizard_launcher", weapon="launcher", health=8, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=50},
+        [1] = {skin="lizard_assault",  weapon="rifle",    health=2, inaccuracy=50, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100},
+        [2] = {skin="lizard_shotgun",  weapon="shotgun",  health=4, inaccuracy=40, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
+        [3] = {skin="lizard_launcher", weapon="launcher", health=8, inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=50},
     },
 }
 

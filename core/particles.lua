@@ -11,6 +11,7 @@ local createdEmitters = {}
 function Particles:preLoadEmitters()
     self:loadEmitter("bulletImpact")
     self:loadEmitter("explosion")
+    self:loadEmitter("explosion-gas")
     self:loadEmitter("smoke")
 end
 

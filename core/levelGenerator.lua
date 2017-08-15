@@ -487,19 +487,54 @@ end
 
 
 function LevelGenerator:fillEnvironment()
-    local entities = {}
+    self.entities = {}
 
     if #self.environments == 1 then
-        entities[1] = {object="weapon", type="shotgun",  xpos=2, ypos=-5}
-        entities[2] = {object="weapon", type="launcher", xpos=18, ypos=-5}
-        --entities[1] = {object="enemy",  type="melee",    rank=1, xpos=5, ypos=-15}
-        --entities[2] = {object="enemy",  type="shooter",  rank=1, xpos=8, ypos=-15}
-        --entities[3] = {object="enemy",  type="shooter",  rank=2, xpos=12, ypos=-15}
-        --entities[4] = {object="enemy",  type="shooter",  rank=3, xpos=15, ypos=-15}
+        self:addEntity({object="weapon", type="shotgun",  xpos=2,  ypos=-5})
+        self:addEntity({object="weapon", type="launcher", xpos=18, ypos=-5})
+        self:addEntity({object="weapon", type="rifle",    xpos=10, ypos=-5})
+
+        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=8, ypos=-8})
+        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=9, ypos=-8})
+        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=10, ypos=-8})
+        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=11, ypos=-8})
+        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=12, ypos=-8})
+
+        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=8, ypos=-11})
+        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=9, ypos=-11})
+        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=10, ypos=-11})
+        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=11, ypos=-11})
+        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=12, ypos=-11})
+
+        self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6, ypos=-8})
+        self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6, ypos=-7})
+        self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6, ypos=-6})
+        self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6, ypos=-5})
+        self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6, ypos=-4})
+        self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6, ypos=-3})
+        
+        self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-8})
+        self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-7})
+        self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-6})
+        self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-5})
+        self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-4})
+        self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-3})
+
+        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=5, ypos=-15})
+        self:addEntity({object="enemy",  type="shooter",  rank=1, xpos=8, ypos=-15})
+        self:addEntity({object="enemy",  type="shooter",  rank=2, xpos=12, ypos=-15})
+        self:addEntity({object="enemy",  type="shooter",  rank=3, xpos=15, ypos=-15})
     end
 
-    return entities
+    return self.entities
 end
+
+
+function LevelGenerator:addEntity(spec)
+    self.entities[#self.entities+1] = spec
+end
+
+
 
 
 return LevelGenerator

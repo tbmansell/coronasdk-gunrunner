@@ -65,7 +65,7 @@ function Projectile:displayImpact()
     local particle = self.weapon.hitAnim
 
     if particle then
-        self:emit(particle, {duration="forever"})
+        self:emit(particle)
 
         if self.weapon.hitAnim2nd then
             self:emit(self.weapon.hitAnim2nd)

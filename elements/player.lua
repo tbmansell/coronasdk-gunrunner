@@ -296,7 +296,6 @@ end
 function Player:loadGear()
     for name, item in pairs(self.gear) do
         if item then
-            print("loadGear "..item.slot..", "..item.skin)
             self.skeleton:setAttachment(item.slot, item.skin)
         else
             self.skeleton:setAttachment(item.slot, nil)

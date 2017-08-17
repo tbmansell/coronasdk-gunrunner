@@ -43,10 +43,10 @@ Filters = {
 
 Weapons = {
     club     = {name="club",     slot="weapon", skin="weapons/weapon-club",  damage=1,  hitSound=""},
-    rifle    = {name="rifle",    slot="weapon", skin="weapons/gun_assault",  damage=1,  ammoType="bullet", speed=700, rof=250,  ammo=30,  bone="rifle",    shotSound="rifleShot",  hitSound="bulletHit", hitAnim="bulletImpact"},
-    shotgun  = {name="shotgun",  slot="weapon", skin="weapons/gun_shotgun",  damage=1,  ammoType="bullet", speed=700, rof=750,  ammo=10,  bone="rifle",    shotSound="rifleShot",  hitSound="bulletHit", hitAnim="bulletImpact"},
-    launcher = {name="launcher", slot="weapon", skin="weapons/gun_launcher", damage=10, ammoType="rocket", speed=250, rof=3000, ammo=4,   bone="launcher", shotSound="rocketShot", hitSound="rocketHit", hitAnim="smoke", hitAnim2nd="explosion", shieldBuster=true},
-    laserGun = {name="laser",    slot="weapon", skin="weapons/gun_laser",    damage=5,  ammoType="laser",  speed=400, rof=300,  ammo=100, bone="laser",    shotSound="",           hitSound="",          hitAnim=nil},
+    rifle    = {name="rifle",    slot="weapon", skin="weapons/gun_assault",  damage=1,  ammoType="bullet", speed=700, rof=250,  ammo=30, bone="rifle",    shotSound="rifleShot",  hitSound="bulletHit", hitAnim="bulletImpact"},
+    shotgun  = {name="shotgun",  slot="weapon", skin="weapons/gun_shotgun",  damage=1,  ammoType="bullet", speed=700, rof=750,  ammo=10, bone="rifle",    shotSound="rifleShot",  hitSound="bulletHit", hitAnim="bulletImpact"},
+    launcher = {name="launcher", slot="weapon", skin="weapons/gun_launcher", damage=10, ammoType="rocket", speed=250, rof=2000, ammo=4,  bone="launcher", shotSound="rocketShot", hitSound="rocketHit", hitAnim="smoke", hitAnim2nd="explosion", shieldBuster=true, area=75},
+    laserGun = {name="laserGun", slot="weapon", skin="weapons/gun_laser",    damage=5,  ammoType="laser",  speed=700, rof=400,  ammo=20, bone="launcher", shotSound="laserShot",  hitSound="laserHit",  hitAnim=nil},
 }
 
 
@@ -57,9 +57,10 @@ EnemyTypes = {
     },
     shooter = {
         -- ranked in order of dangerousness
-        [1] = {skin="lizard_assault",  weapon="rifle",    health=2, inaccuracy=50, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100},
-        [2] = {skin="lizard_shotgun",  weapon="shotgun",  health=4, inaccuracy=40, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
-        [3] = {skin="lizard_launcher", weapon="launcher", health=8, inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=50},
+        [1] = {skin="lizard_assault",  weapon="rifle",    health=2,  inaccuracy=50, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100},
+        [2] = {skin="lizard_shotgun",  weapon="shotgun",  health=4,  inaccuracy=40, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
+        [3] = {skin="lizard_launcher", weapon="launcher", health=8,  inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=50},
+        [4] = {skin="lizard_laser",    weapon="laserGun", health=10, inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=200},
     },
 }
 

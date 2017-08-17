@@ -1,7 +1,6 @@
 local anim        = require("core.animations")
 local spine       = require("core.spine")
 --local soundEngine = require("core.sound-engine")
-local projectileBuilder = require("elements.builders.projectileBuilder")
 
 -- Class
 local Player = {

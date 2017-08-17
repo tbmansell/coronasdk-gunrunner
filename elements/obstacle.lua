@@ -16,16 +16,10 @@ function Obstacle.eventCollision(self, event)
     local other = event.other.object
     local self  = self.object
 
-    if other and other.isProjectile then
+    --[[if other and other.isProjectile then
         sounds:projectile(other.weapon.hitSound)
         other:destroy()
-
-        self.hits = self.hits - other.weapon.damage
-        
-        if self.hits <= 0 then
-            self:explode()            
-        end
-    end
+    end]]
 end
 
 
@@ -34,6 +28,15 @@ function Obstacle:setPhysics()
 
     self.image.collision = Obstacle.eventCollision
     self.image:addEventListener("collision", self.image)
+end
+
+
+function Obstacle:hit(shot)
+    self.hits = self.hits - shot.weapon.damage
+        
+    if self.hits <= 0 then
+        self:explode()
+    end
 end
 
 

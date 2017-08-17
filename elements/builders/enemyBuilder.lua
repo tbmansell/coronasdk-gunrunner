@@ -1,4 +1,3 @@
-local builder  = require("elements.builders.builder")
 local enemyDef = require("elements.enemy")
 
 -- Class
@@ -18,7 +17,7 @@ function EnemyBuilder:newEnemy(camera, spec)
                        imagePath = "character",
                        skin      = spec.skin      or rankDef.skin,
                        scale     = spec.scale     or 0.5, 
-                       animation = spec.animation or "run_assault"
+                       animation = spec.animation or "stationary_1" --"run_assault"
                    })
     
     enemy.legs = builder:newSpineObject(spec, {
@@ -26,7 +25,7 @@ function EnemyBuilder:newEnemy(camera, spec)
                       imagePath = "character", 
                       skin      = "lizard_assault", 
                       scale     = spec.scale or 0.5, 
-                      animation = "run"
+                      animation = "stationary"
                   })
 
     -- Allow override of destroy()
@@ -37,6 +36,7 @@ function EnemyBuilder:newEnemy(camera, spec)
     builder:deepCopy(rankDef,  enemy)
 
     -- apply weapon
+    print("weapon: "..enemy.weapon)
     enemy.weapon = Weapons[enemy.weapon]
     enemy.ammo   = enemy.weapon.ammo
 

@@ -1,4 +1,3 @@
-local builder   = require("elements.builders.builder")
 local playerDef = require("elements.player")
 
 -- Class

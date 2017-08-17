@@ -1,11 +1,5 @@
-local anim               = require("core.animations")
-local particles          = require("core.particles")
-local builder            = require("elements.builders.builder")
-local playerBuilder      = require("elements.builders.playerBuilder")
-local enemyBuilder       = require("elements.builders.enemyBuilder")
-local collectableBuilder = require("elements.builders.collectableBuilder")
-local obstacleBuilder    = require("elements.builders.obstacleBuilder")
-local projectileBuilder  = require("elements.builders.projectileBuilder")
+local anim      = require("core.animations")
+local particles = require("core.particles")
 
 -- Class
 local Level = {}
@@ -64,6 +58,9 @@ function Level:new(cameraRef)
 
     -- local aliases:
     camera = cameraRef
+
+    -- global reference for tricky cases where camera is not passed around
+    globalCamera = cameraRef
 
     -- set level vars:
 end

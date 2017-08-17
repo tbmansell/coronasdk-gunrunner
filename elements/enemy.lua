@@ -1,5 +1,4 @@
-local utils             = require("core.utils")
-local projectileBuilder = require("elements.builders.projectileBuilder")
+local utils = require("core.utils")
 
 -- Class
 local Enemy = {
@@ -243,9 +242,14 @@ function Enemy:move()
     local forceY    = self.speed * -sin(rad(direction))
 
     self:applyForce(forceX, forceY)
+    self:animate("run_assault")
+    self.legs:loop("run")
 
     after(duration, function()
         self:stopMomentum()
+        self:animate("stationary_1")
+        self.legs:animate("stationary")
+
         self.flagMoveAllowed = true
         self.mode = EnemyMode.ready
     end)
@@ -274,11 +278,17 @@ function Enemy:charge(player)
     local forceY    = runSpeed * -sin(rad(direction))
 
     sounds:enemy("charge")
+    self:animate("run_club")
+    self.legs:loop("run")
+
     self:stopMomentum()
     self:applyForce(forceX, forceY)
 
     after(duration, function()
         self:stopMomentum()
+        self:animate("stationary_1")
+        self.legs:animate("stationary")
+
         self.flagChargeAllowed = true
         self.mode = EnemyMode.ready
     end)

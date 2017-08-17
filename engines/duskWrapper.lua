@@ -43,6 +43,7 @@ function TileEngine:create(view, tiles, levelGenerator)
     self.objectLayer1 = self.map.layer["BelowEntityLayer"]
     self.objectLayer2 = self.map.layer["EntityLayer"]
     self.objectLayer3 = self.map.layer["AboveEntityLayer"]
+    self.shadowLayer  = self.map.layer["ShadowLayer"]
 
     for tile in self.tileLayer.tilesInRange(1,1, self.cols, self.rows) do
         local index = tile.tilesetGID
@@ -67,16 +68,15 @@ end
 
 
 function TileEngine:loadEnvironment(environment)
-    local flat = self.data.layers[1].data
-    local rows = #environment
-    local cols = #environment[1]
-    
-    --print("rows="..self.rows.." cols="..self.cols.." existingTiles="..self.existingTiles)
+    local tiles  = self.data.layers[1].data
+    local shadow = self.data.layers[5].data
+    local rows   = #environment
+    local cols   = #environment[1]
     
     for row=1, rows do
         for col=1, cols do
             local index = self.existingTiles + (((row-1)*cols) + col)
-            flat[index] = environment[row][col]
+            tiles[index]  = environment[row][col]
         end
     end
 
@@ -95,9 +95,6 @@ function TileEngine:destroy()
     self.objectLayer1 = nil
     self.objectLayer2 = nil
     self.objectLayer3 = nil
-
-    --self.tileLayer.collision = eventWallCollision
-    --self.tileLayer("collision", self.tileLayer)
 end
 
 
@@ -107,8 +104,6 @@ function TileEngine:addEntity(entity, focus)
     local moveY = self.rows   * self.tileHeight
     local xpos  = entity.xpos * self.tileHeight
     local ypos  = entity.ypos * self.tileHeight
-
-    print(tostring(entity.class).." entity at "..xpos..", "..ypos.." moveY="..moveY)
 
     entity:moveTo(xpos, ypos + moveY)
 
@@ -121,12 +116,13 @@ end
 
 
 function TileEngine:addProjectile(entity)
-    self.objectLayer2:insert(entity.image)
+    self.objectLayer2:insert(entity.image or entity)
 end
 
 
 function TileEngine:addParticle(entity)
-    self.objectLayer2:insert(entity)
+    entity.y = entity.y + 430
+    self.objectLayer3:insert(entity)
 end
 
 

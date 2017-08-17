@@ -1,4 +1,3 @@
-local builder       = require("elements.builders.builder")
 local projectileDef = require("elements.projectile")
 
 -- Class
@@ -21,6 +20,34 @@ function ProjectileBuilder:newShot(camera, weapon, spec)
     camera:addProjectile(shot)
 
     return shot
+end
+
+
+function ProjectileBuilder:newAreaOfEffect(camera, spec)
+    local area = display.newCircle(spec.xpos or 0, spec.ypos or 0, spec.area)
+    area.alpha = 0
+
+    after(10, function()
+        physics.addBody(area, "dynamic", {density=1, friction=0, bounce=0, radius=spec.area, filter=Filters.playerShot})
+    end)
+
+    area.collision = function(self, event)
+        local other = event.other.object
+
+        if other then
+            print("area of effect hit: "..tostring(other.key))
+            spec.effect(other)
+        end
+    end
+
+    area:addEventListener("collision", image)
+
+    camera:addProjectile(area)
+
+    after(20, function() area:removeSelf() end)
+
+    print("added new area of effect")
+    return area
 end
 
 

@@ -1,4 +1,3 @@
-local builder     = require("elements.builders.builder")
 local obstacleDef = require("elements.obstacle")
 
 -- Class
@@ -56,7 +55,6 @@ function ObstacleBuilder:newGas(camera, spec)
 
     return object
 end
-
 
 
 function ObstacleBuilder:newWall(camera, spec)

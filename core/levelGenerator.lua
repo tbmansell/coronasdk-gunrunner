@@ -493,6 +493,7 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="weapon", type="shotgun",  xpos=2,  ypos=-5})
         self:addEntity({object="weapon", type="launcher", xpos=18, ypos=-5})
         self:addEntity({object="weapon", type="rifle",    xpos=10, ypos=-5})
+        self:addEntity({object="weapon", type="laserGun", xpos=10, ypos=-15})
 
         self:addEntity({object="obstacle", type="crate", breadth="small", xpos=8, ypos=-8})
         self:addEntity({object="obstacle", type="crate", breadth="small", xpos=9, ypos=-8})
@@ -519,11 +520,13 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-5})
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-4})
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-3})
-
+        --[[
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=5, ypos=-15})
         self:addEntity({object="enemy",  type="shooter",  rank=1, xpos=8, ypos=-15})
         self:addEntity({object="enemy",  type="shooter",  rank=2, xpos=12, ypos=-15})
         self:addEntity({object="enemy",  type="shooter",  rank=3, xpos=15, ypos=-15})
+        self:addEntity({object="enemy",  type="shooter",  rank=4, xpos=10, ypos=-18})
+        ]]
     end
 
     return self.entities

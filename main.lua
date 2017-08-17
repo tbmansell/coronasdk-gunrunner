@@ -12,11 +12,19 @@ globalWidth            = display.contentWidth
 globalHeight           = display.contentHeight
 globalBackgroundWidth  = 640
 globalBackgroundHeight = 1300
+globalCamera           = nil
 
 -- Define global objects
 track  = require("core.track")
 draw   = require("core.draw")
-sounds = require("core.sounds")
+sounds  = require("core.sounds")
+
+builder            = require("elements.builders.builder")
+playerBuilder      = require("elements.builders.playerBuilder")
+enemyBuilder       = require("elements.builders.enemyBuilder")
+collectableBuilder = require("elements.builders.collectableBuilder")
+obstacleBuilder    = require("elements.builders.obstacleBuilder")
+projectileBuilder  = require("elements.builders.projectileBuilder")
 
 -- Generate the random number seed
 math.randomseed(os.time())

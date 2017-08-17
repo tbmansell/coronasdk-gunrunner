@@ -1,14 +1,12 @@
 local composer       = require("composer")
 local physics        = require("physics")
---local tileEngine     = require("engines.wattageWrapper")
 local tileEngine     = require("engines.duskWrapper")
---local tileEngine      = require("engines.mteWrapper")
 local anim           = require("core.animations")
 local particles      = require("core.particles")
 local level          = require("core.level")
 local levelGenerator = require("core.levelGenerator")
 local hud            = require("core.hud")
-local builder        = require("elements.builders.builder")
+--local builder        = require("elements.builders.builder")
 
 -- local variables for performance
 local scene = composer.newScene()
@@ -34,10 +32,7 @@ local function sceneKeyEvent(event)
 end
 
 
-local function eventUpdateFrame(event)
-    --player:moveBy(0, -2)
-    --tileEngine:eventUpdateFrame(event, player.image)
-    
+local function eventUpdateFrame(event)    
     tileEngine.map.updateView()
     level:eventUpdateFrame(event)
     hud:eventUpdateFrame(event)
@@ -95,13 +90,9 @@ end
 function scene:loadLevel()
     local bgr = display.newImage(self.view, "images/background.jpg", globalCenterX, globalCenterY)
 
-    --local environment = levelGenerator:newTestEnvironmentStraight()
-    --local environment = levelGenerator:newTestEnvironmentLeft()
-
     local environment = levelGenerator:newEnvironment()
     local entities    = levelGenerator:fillEnvironment()
 
-    --tileEngine:create(self.view, "images/tiles.png", environment)
     tileEngine:create(self.view, "images/tiles.png", levelGenerator)
 
     level:new(tileEngine)
@@ -111,7 +102,7 @@ end
 
 function scene:loadPlayer()
     player = level:createPlayer({xpos=10, ypos=-2})
-    player:setWeapon(Weapons.rifle)
+    player:setWeapon(Weapons.launcher)
     
     -- Create Game Over callback
     player.failedCallback = function()

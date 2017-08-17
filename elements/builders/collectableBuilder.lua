@@ -1,4 +1,3 @@
-local builder        = require("elements.builders.builder")
 local collectableDef = require("elements.collectable")
 
 -- Class

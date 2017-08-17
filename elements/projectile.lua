@@ -17,7 +17,7 @@ function Projectile.eventCollision(self, event)
     local self  = self.object
 
     if other then
-        if other.isPlayer or other.isEnemy then 
+        if other.isPlayer or other.isEnemy or other.isObstacle then 
             other:hit(self)
         end
 
@@ -57,6 +57,16 @@ end
 function Projectile:impact()
     sounds:projectile(self.weapon.hitSound)
     self:displayImpact()
+
+    if self.weapon.area then
+        local effect = function(target)
+            print("area effect called on "..tostring(target.key))
+            if target.hit then target:hit(self) end
+        end
+
+        projectileBuilder:newAreaOfEffect(globalCamera, {xpos=self:x(), ypos=self:y(), area=self.weapon.area, effect=effect})
+    end
+
     self:destroy()
 end
 

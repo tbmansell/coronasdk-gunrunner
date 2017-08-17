@@ -50,7 +50,7 @@ function clamp(v, l, h) return (v < l and l) or (v > h and h) or v end
 -- Reverse table ([1, 2, 3] -> [3, 2, 1])
 function reverseTable(t) local new = {} for i = 1, #t do new[#t - (i - 1)] = t[i] end return new end
 -- Get directory
-function getDirectory(dirTree, path) print("path="..tostring(path)); local path = path local numDirs = #dirTree local _i = 1 while path:sub(_i, _i + 2) == "../" do _i = _i + 3 numDirs = numDirs - 1 end local filename = path:sub(_i) local dirPath = table_concat(dirTree, "/", 1, numDirs) return dirPath, filename end
+function getDirectory(dirTree, path) local path = path local numDirs = #dirTree local _i = 1 while path:sub(_i, _i + 2) == "../" do _i = _i + 3 numDirs = numDirs - 1 end local filename = path:sub(_i) local dirPath = table_concat(dirTree, "/", 1, numDirs) return dirPath, filename end
 -- Rotate point
 function rotatePoint(pointX, pointY, degrees) local x, y = pointX, pointY local theta = math_rad(degrees) local cosTheta, sinTheta = math_cos(theta), math_sin(theta) local endX = x * cosTheta - y * sinTheta local endY = x * sinTheta + y * cosTheta return endX, endY end
 

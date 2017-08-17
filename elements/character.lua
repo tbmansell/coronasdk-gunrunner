@@ -39,9 +39,9 @@ function Character:shootProjectile(projectileBuilder, camera, filter)
     if self.weapon.name == "shotgun" then
         local angle = self:getAngle()
 
-        local shot1 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=angle-25, filter=filter})
+        local shot1 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=angle-10, filter=filter})
         local shot2 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=angle,    filter=filter})
-        local shot3 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=angle+25, filter=filter})
+        local shot3 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=angle+10, filter=filter})
 
         shot1:fire()
         shot2:fire()

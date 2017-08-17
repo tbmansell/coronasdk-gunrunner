@@ -43,10 +43,10 @@ Filters = {
 
 Weapons = {
     club     = {name="club",     slot="weapon", skin="weapons/weapon-club",  damage=1,  hitSound=""},
-    rifle    = {name="rifle",    slot="weapon", skin="weapons/gun_assault",  damage=1,  ammoType="bullet", speed=700, rof=250,  ammo=30, bone="rifle",    shotSound="rifleShot",  hitSound="bulletHit", hitAnim="bulletImpact"},
-    shotgun  = {name="shotgun",  slot="weapon", skin="weapons/gun_shotgun",  damage=1,  ammoType="bullet", speed=700, rof=750,  ammo=10, bone="rifle",    shotSound="rifleShot",  hitSound="bulletHit", hitAnim="bulletImpact"},
-    launcher = {name="launcher", slot="weapon", skin="weapons/gun_launcher", damage=10, ammoType="rocket", speed=250, rof=2000, ammo=4,  bone="launcher", shotSound="rocketShot", hitSound="rocketHit", hitAnim="smoke", hitAnim2nd="explosion", shieldBuster=true, area=75},
-    laserGun = {name="laserGun", slot="weapon", skin="weapons/gun_laser",    damage=5,  ammoType="laser",  speed=700, rof=400,  ammo=20, bone="launcher", shotSound="laserShot",  hitSound="laserHit",  hitAnim=nil},
+    rifle    = {name="rifle",    slot="weapon", skin="weapons/gun_assault",  damage=1,  ammoType="bullet", speed=650, rof=250,  ammo=30, bone="rifle",    shotSound="rifleShot",  hitSound="bulletHit", hitAnim="bulletImpact"},
+    shotgun  = {name="shotgun",  slot="weapon", skin="weapons/gun_shotgun",  damage=1,  ammoType="bullet", speed=650, rof=750,  ammo=10, bone="rifle",    shotSound="rifleShot",  hitSound="bulletHit", hitAnim="bulletImpact"},
+    launcher = {name="launcher", slot="weapon", skin="weapons/gun_launcher", damage=10, ammoType="rocket", speed=500, rof=2000, ammo=4,  bone="launcher", shotSound="rocketShot", hitSound="rocketHit", hitAnim="smoke", hitAnim2nd="explosion", shieldBuster=true, area=75},
+    laserGun = {name="laserGun", slot="weapon", skin="weapons/gun_laser",    damage=5,  ammoType="laser",  speed=600, rof=400,  ammo=20, bone="launcher", shotSound="laserShot",  hitSound="laserHit",  hitAnim=nil},
 }
 
 

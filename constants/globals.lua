@@ -53,7 +53,7 @@ Weapons = {
     rifle    = {name="rifle",    damage=1, ammoType="bullet", speed=650, rof=250,  ammo=30, reload=1000},
     shotgun  = {name="shotgun",  damage=1, ammoType="bullet", speed=650, rof=750,  ammo=10, reload=1000},
     launcher = {name="launcher", damage=5, ammoType="rocket", speed=500, rof=2000, ammo=4,  reload=1000, shieldBuster=true, area=75},
-    laserGun = {name="laserGun", damage=2, ammoType="laser",  speed=600, rof=400,  ammo=20, reload=1000, ricochet=5},
+    laserGun = {name="laserGun", damage=2, ammoType="laser",  speed=600, rof=400,  ammo=20, reload=1000, ricochet=2},
 }
 
 

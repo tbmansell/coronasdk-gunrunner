@@ -1,10 +1,10 @@
 local SheetInfo = {
 
     sheetContentWidth  = 1190,
-    sheetContentHeight = 850,
+    sheetContentHeight = 1190,
     tileSize           = 75,
     tilesAccross       = 15,
-    tilesDown          = 11,
+    tilesDown          = 15,
 
     sheet = {
         frames = {}

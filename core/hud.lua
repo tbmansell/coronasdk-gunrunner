@@ -253,8 +253,7 @@ function Hud:eventUpdateFrame(event)
         local angle = 90 + atan2(aimPlayerY - shootControllerY, aimPlayerX - shootControllerX) * PI
         
         self.player:rotate(angle, event)
-        self.player:shoot(self.camera, self.ammoCounter)
-        self.ammoCounter:setText(self.player.ammo)
+        self.player:shoot(self.camera)
     end
 end
 
@@ -271,6 +270,13 @@ end
 function Hud:collect(item)
     item:emit("collected")
     item:collect(self.camera)
+end
+
+
+function Hud:setAmmoCounter(number)
+    if self.ammoCounter then
+        self.ammoCounter:setText(number or 0)
+    end
 end
 
 

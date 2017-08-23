@@ -16,7 +16,7 @@ function Projectile.eventCollision(self, event)
     local other = event.other.object
     local self  = self.object
 
-    if other then
+    if other and event.phase == "began" then
         if other.isPlayer or other.isEnemy or other.isObstacle then 
             other:hit(self)
         end

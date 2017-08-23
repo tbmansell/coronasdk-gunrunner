@@ -88,9 +88,9 @@ end
 
 function Player:shoot(camera, ammoCounter)
     if self:canShoot() then
-        self:shootAmmoRof()
-        self:shootReloadCheck(function() ammoCounter:setText(self.ammo) end)
         self:shootProjectile(projectileBuilder, camera, Filters.playerShot)
+        self:shootReloadCheck(function() self:hookAmmoCounter() end)
+        self:hookAmmoCounter()
     end
 end
 
@@ -181,7 +181,6 @@ end
 
 
 function Player:hit(shot)
-    print("player hit")
     if not self:isDead() then
         if not self.shielded or shot.weapon.shieldBuster then
             self.health = self.health - shot.weapon.damage
@@ -269,6 +268,7 @@ function Player:setWeapon(weapon)
     self:loadGear()
     self:setWeaponBones(weapon)
     self:loop("run_"..weapon.name)
+    self:hookAmmoCounter()
 end
 
 

@@ -18,7 +18,7 @@ local TileEngine = {
 local function eventWallCollision(self, event)
     local other = event.other.object
 
-    if other and other.isProjectile then
+    if other and other.isProjectile and event.phase == "began" then
         if other.ricochet then
             other:bounce(true)
         else

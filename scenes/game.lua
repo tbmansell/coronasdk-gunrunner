@@ -6,7 +6,6 @@ local particles      = require("core.particles")
 local level          = require("core.level")
 local levelGenerator = require("core.levelGenerator")
 local hud            = require("core.hud")
---local builder        = require("elements.builders.builder")
 
 -- local variables for performance
 local scene = composer.newScene()
@@ -101,7 +100,7 @@ end
 
 
 function scene:loadPlayer()
-    player = level:createPlayer({xpos=10, ypos=-2})
+    player = level:createPlayer({xpos=10, ypos=-1}, hud)
     player:setWeapon(Weapons.rifle)
     
     -- Create Game Over callback

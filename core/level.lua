@@ -135,8 +135,8 @@ function Level:createObstacle(item)
 end
 
 
-function Level:createPlayer(item)
-    mainPlayer = playerBuilder:newPlayer(camera, item)
+function Level:createPlayer(item, hud)
+    mainPlayer = playerBuilder:newPlayer(camera, item, hud)
     mainPlayer:visible()
     return mainPlayer
 end

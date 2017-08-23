@@ -35,8 +35,7 @@ function ProjectileBuilder:newAreaOfEffect(camera, spec)
     area.collision = function(self, event)
         local other = event.other.object
 
-        if other then
-            print("area of effect hit: "..tostring(other.key))
+        if other and event.phase == "began" then
             spec.effect(other)
         end
     end
@@ -45,7 +44,7 @@ function ProjectileBuilder:newAreaOfEffect(camera, spec)
 
     camera:addProjectile(area)
 
-    after(20, function() area:removeSelf() end)
+    after(100, function() area:removeSelf() end)
 
     return area
 end

@@ -147,6 +147,7 @@ function Hud:destroy()
     self.player             = nil
     self.playerIcon         = nil
     self.textScore          = nil
+    self.ammoCounter        = nil
 end
 
 
@@ -275,7 +276,7 @@ end
 
 function Hud:setAmmoCounter(number)
     if self.ammoCounter then
-        self.ammoCounter:setText(number or 0)
+        self.ammoCounter:setText(number or "0")
     end
 end
 

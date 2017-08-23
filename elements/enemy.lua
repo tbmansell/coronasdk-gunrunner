@@ -358,13 +358,17 @@ function Enemy:die()
     if not self:isDead() then
         self.mode = EnemyMode.dead
 
+        sounds:enemy("killed")
+
+        self:stopMomentum()
         self:destroyEmitter()
         self:emit("enemyDie1")
         self:emit("enemyDie2")
+        self:animate("death_"..random(2))
 
-        sounds:enemy("killed")
-
-        self:destroy()
+        after(500, function()
+            self:destroy()
+        end)
     end
 end
 

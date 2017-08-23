@@ -235,7 +235,7 @@ function Player:die(animation, sound, stopMoving, fall, message)
         sounds:player("killed")
 
         --self.animationOverride = nil
-        --self:animate(animation or "Death EXPLODE BIG")
+        self:animate(animation or "death_1")
 
         if stopMoving then
             self:stopMomentum(true)
@@ -245,9 +245,8 @@ function Player:die(animation, sound, stopMoving, fall, message)
             hud:displayMessageDied(message)
         end]]
 
-        self:hide()
-
         after(1000, function()
+            self:hide()
             self:failedCallback() 
         end)
     end
@@ -257,6 +256,9 @@ end
 function Player:destroy(camera, destroyBoundItems)
     self:spineObjectDestroy(camera, destroyBoundItems)
 end
+
+
+----------------- FUNCTIONS TO HANDLE GEAR ------------------- 
 
 
 function Player:setWeapon(weapon)

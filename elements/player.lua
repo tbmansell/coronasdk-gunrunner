@@ -173,7 +173,7 @@ end
 
 function Player:startLevelSequence()
     self:pose()
-    self:loop("run")
+    self:loop("run_"..self.weapon.name)
 end
 
 
@@ -261,6 +261,7 @@ end
 
 function Player:setWeapon(weapon)
     self.weapon            = weapon
+    self.ammo              = weapon.ammo
     self.flagShootAllowed  = true
     self.gear["weapon"]    = {slot=weapon.slot, skin=weapon.skin}
     

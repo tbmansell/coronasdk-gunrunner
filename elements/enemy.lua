@@ -42,7 +42,7 @@ local atan2 = math.atan2
 local round = math.round
 local random= math.random
 
-local Melee = {weapon=Weapons.club}
+--local Melee = {weapon=Weapons.club}
 
 
 function Enemy.eventCollision(self, event)
@@ -261,7 +261,7 @@ function Enemy:strike(target)
     sounds:enemy("melee")
     self:stopMomentum()
     self:animate("strike_"..weapon.name)
-    target:hit(weapon)
+    target:hit({weapon=weapon})
 
     after(weapon.time, function() 
         self:animate("stationary_1")

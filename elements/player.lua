@@ -264,13 +264,9 @@ function Player:setWeapon(weapon)
     self.ammo              = weapon.ammo
     self.flagShootAllowed  = true
     self.gear["weapon"]    = {slot=weapon.slot, skin=weapon.skin}
-    self:loadGear()
-
-    self.boneRoot = self.skeleton:getRootBone()
     
-    if weapon.bone then
-        self.boneBarrel = self.skeleton:findBone("barrel-"..weapon.bone)
-    end
+    self:loadGear()
+    self:setWeaponBones(weapon)
 end
 
 

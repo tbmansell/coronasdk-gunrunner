@@ -10,9 +10,10 @@ function ProjectileBuilder:newShot(camera, weapon, spec)
 
     builder:deepCopy(projectileDef, shot)
 
-    shot.weapon = weapon
-    shot.filter = spec.filter
-    shot.angle  = spec.angle
+    shot.weapon   = weapon
+    shot.filter   = spec.filter
+    shot.angle    = spec.angle
+    shot.ricochet = weapon.ricochet
 
     shot:moveTo(spec.xpos or 0, spec.ypos or 0)
     shot:setPhysics()
@@ -28,7 +29,7 @@ function ProjectileBuilder:newAreaOfEffect(camera, spec)
     area.alpha = 0
 
     after(10, function()
-        physics.addBody(area, "dynamic", {density=1, friction=0, bounce=0, radius=spec.area, filter=Filters.playerShot})
+        physics.addBody(area, "dynamic", {density=1, friction=0, bounce=0, radius=spec.area, filter=spec.filter})
     end)
 
     area.collision = function(self, event)
@@ -46,7 +47,6 @@ function ProjectileBuilder:newAreaOfEffect(camera, spec)
 
     after(20, function() area:removeSelf() end)
 
-    print("added new area of effect")
     return area
 end
 

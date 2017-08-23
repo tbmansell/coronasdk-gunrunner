@@ -498,7 +498,8 @@ function GameObject:emit(effectName, params, attach)
         params.xpos     or self:x(), 
         params.ypos     or self:y(), 
         params.duration or 1500,
-        params.alpha    or 1
+        params.alpha    or 1,
+        params.angle
     )
 
     if self.direction == left then

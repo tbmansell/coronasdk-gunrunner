@@ -46,9 +46,11 @@ function ObstacleBuilder:newGas(camera, spec)
     object.isGas = true
     
     if spec.breadth == "big" then
-        object.hits = 4
+        object.hits   = 4
+        object.weapon = EnvironmentalWeapon.gasBig
     else
-        object.hits = 2
+        object.hits   = 2
+        object.weapon = EnvironmentalWeapon.gasSmall
     end
 
     camera:addEntity(object)

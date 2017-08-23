@@ -6,6 +6,19 @@ local Character = {
 local random = math.random
 
 
+function Character:setWeaponBones(weapon)
+    self.boneRoot = self.skeleton:getRootBone()
+    
+    if weapon.bone then
+        self.boneBarrel = self.skeleton:findBone("barrel-"..weapon.bone)
+
+        if weapon.name == "launcher" then
+            self.boneGunRear = self.skeleton:findBone("launcher-rear")
+        end
+    end
+end
+
+
 function Character:shootAmmoRof()
     self.flagShootAllowed = false
     self.ammo = self.ammo - 1
@@ -31,14 +44,17 @@ end
 
 
 function Character:shootProjectile(projectileBuilder, camera, filter)
-    local x = self:x() + self.boneBarrel.worldX
-    local y = self:y() - self.boneBarrel.worldY
+    local angle = self:getAngle()
+    local x     = self:x() + self.boneBarrel.worldX
+    local y     = self:y() - self.boneBarrel.worldY
 
     self:animate("shoot_assault")
 
-    if self.weapon.name == "shotgun" then
-        local angle = self:getAngle()
+    if self.weapon.ammoType == "bullet" then
+        self:emit(self.weapon.ammoType.."Shot", {xpos=x, ypos=y, duration=250, angle=angle-90})
+    end
 
+    if self.weapon.name == "shotgun" then
         local shot1 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=angle-10, filter=filter})
         local shot2 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=angle,    filter=filter})
         local shot3 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=angle+10, filter=filter})

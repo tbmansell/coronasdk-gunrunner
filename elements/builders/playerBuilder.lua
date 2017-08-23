@@ -28,6 +28,7 @@ function PlayerBuilder:newPlayer(camera, spec)
 
     builder:deepCopy(playerDef, player)
 
+    player.key  = "ThePlayer"
     player.gear = {}
     player:moveTo(player.xpos or 0, player.ypos or 0)
     player:setPhysics()

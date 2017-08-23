@@ -18,8 +18,12 @@ local TileEngine = {
 local function eventWallCollision(self, event)
     local other = event.other.object
 
-    if other and other.isProjectile then 
-        other:impact()
+    if other and other.isProjectile then
+        if other.ricochet then
+            other:bounce(true)
+        else
+            other:impact()
+        end
     end
 end
 

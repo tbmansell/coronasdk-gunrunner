@@ -46,8 +46,16 @@ function Obstacle:explode()
     
     if self.isCrate then
         self:emit("explosion")
+
     elseif self.isGas then
         self:emit("explosionGas")
+
+        local effect = function(target)
+            if target.hit then target:hit(self) end
+        end
+        -- enviromental damage has to hurt both player and enemies
+        projectileBuilder:newAreaOfEffect(globalCamera, {xpos=self:x(), ypos=self:y(), area=self.weapon.area, filter=Filters.playerShot, effect=effect})
+        projectileBuilder:newAreaOfEffect(globalCamera, {xpos=self:x(), ypos=self:y(), area=self.weapon.area, filter=Filters.enemyShot,  effect=effect})
     end
 
     self:destroy()

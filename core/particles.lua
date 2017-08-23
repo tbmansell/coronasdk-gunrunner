@@ -10,11 +10,13 @@ local createdEmitters = {}
 
 function Particles:preLoadEmitters()
     self:loadEmitter("bulletImpact")
+    self:loadEmitter("bulletShot")
     self:loadEmitter("explosion")
     self:loadEmitter("explosionGas")
     self:loadEmitter("smoke")
     self:loadEmitter("enemyDie1")
     self:loadEmitter("enemyDie2")
+
 end
 
 
@@ -63,7 +65,7 @@ function Particles:resume()
 end
 
 
-function Particles:showEmitter(name, x, y, duration, alpha, layer)
+function Particles:showEmitter(name, x, y, duration, alpha, angle)
     -- Typically we preload them all, but if called without pre-loading then check if loaded before calling
     if emitterData[name] == nil then
         self:loadEmitter(name)
@@ -76,6 +78,12 @@ function Particles:showEmitter(name, x, y, duration, alpha, layer)
     emitter.id    = #createdEmitters + 1
     emitter.alpha = alpha or 1
 
+    emitter.rotationStart = angle
+    --emitter.rotationStartVariance = angle
+    --emitter.rotationEnd   = angle
+    --emitter.rotationEndVariance   = angle
+
+
     createdEmitters[emitter.id] = emitter
 
     tileEngine:addParticle(emitter)
@@ -85,9 +93,7 @@ function Particles:showEmitter(name, x, y, duration, alpha, layer)
             if createdEmitters[self.id] then
                 createdEmitters[self.id] = nil
             end
-            --if camera then
-            --    camera:remove(self)
-            --end
+            
             self:removeSelf()
             self = nil
         end

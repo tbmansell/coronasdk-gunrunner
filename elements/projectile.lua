@@ -21,13 +21,23 @@ function Projectile.eventCollision(self, event)
             other:hit(self)
         end
 
-        self:impact()
+        if other.isWall then
+            self:bounce(false)
+        else
+            self:impact()
+        end
     end
 end
 
 
 function Projectile:setPhysics()
-    physics.addBody(self.image, "dynamic", {density=0, friction=0, bounce=0, filter=self.filter})
+    local bounce = 0
+
+    if self.ricochet then
+        bounce = 1
+    end
+
+    physics.addBody(self.image, "dynamic", {density=0, friction=0, bounce=bounce, filter=self.filter})
 
     self.image.collision = Projectile.eventCollision
     self.image:addEventListener("collision", self.image)
@@ -45,12 +55,23 @@ function Projectile:fire()
         end]]
         self:flipY()
         -- dont call rotate() as this changes the angle
-        self.image.rotation = self.angle + 90    
+        self.image.rotation = self.angle + 90
     end
 
     self:applyForce(forceX, forceY)
 
     sounds:projectile(weapon.shotSound)
+end
+
+
+function Projectile:bounce(fromWall)
+    if self.ricochet then
+        self.ricochet = self.ricochet - 1
+
+        if self.ricochet <= 0 then
+            self.ricochet = nil
+        end
+    end
 end
 
 
@@ -60,11 +81,10 @@ function Projectile:impact()
 
     if self.weapon.area then
         local effect = function(target)
-            print("area effect called on "..tostring(target.key))
             if target.hit then target:hit(self) end
         end
 
-        projectileBuilder:newAreaOfEffect(globalCamera, {xpos=self:x(), ypos=self:y(), area=self.weapon.area, effect=effect})
+        projectileBuilder:newAreaOfEffect(globalCamera, {xpos=self:x(), ypos=self:y(), area=self.weapon.area, filter=self.filter, effect=effect})
     end
 
     self:destroy()

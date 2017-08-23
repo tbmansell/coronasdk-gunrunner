@@ -41,13 +41,27 @@ Filters = {
 }
 
 
-Weapons = {
-    club     = {name="club",     slot="weapon", skin="weapons/weapon-club",  damage=1,  hitSound=""},
-    rifle    = {name="rifle",    slot="weapon", skin="weapons/gun_assault",  damage=1,  ammoType="bullet", speed=650, rof=250,  ammo=30, bone="rifle",    shotSound="rifleShot",  hitSound="bulletHit", hitAnim="bulletImpact"},
-    shotgun  = {name="shotgun",  slot="weapon", skin="weapons/gun_shotgun",  damage=1,  ammoType="bullet", speed=650, rof=750,  ammo=10, bone="rifle",    shotSound="rifleShot",  hitSound="bulletHit", hitAnim="bulletImpact"},
-    launcher = {name="launcher", slot="weapon", skin="weapons/gun_launcher", damage=10, ammoType="rocket", speed=500, rof=2000, ammo=4,  bone="launcher", shotSound="rocketShot", hitSound="rocketHit", hitAnim="smoke", hitAnim2nd="explosion", shieldBuster=true, area=75},
-    laserGun = {name="laserGun", slot="weapon", skin="weapons/gun_laser",    damage=5,  ammoType="laser",  speed=600, rof=400,  ammo=20, bone="launcher", shotSound="laserShot",  hitSound="laserHit",  hitAnim=nil},
+EnvironmentalWeapon = {
+    gasSmall = {damage=5, area=50},
+    gasBig   = {damage=5, area=100},
 }
+
+
+Weapons = {
+    club     = {name="club",     damage=1},
+    rifle    = {name="rifle",    damage=1,  ammoType="bullet", speed=650, rof=250,  ammo=30},
+    shotgun  = {name="shotgun",  damage=1,  ammoType="bullet", speed=650, rof=750,  ammo=10},
+    launcher = {name="launcher", damage=10, ammoType="rocket", speed=500, rof=2000, ammo=4,  shieldBuster=true, area=75},
+    laserGun = {name="laserGun", damage=5,  ammoType="laser",  speed=600, rof=400,  ammo=20, ricochet=5},
+}
+
+
+-- Load in weapon stats for spine, sound and particles:
+Weapons.club.slot     = "weapon"; Weapons.club.skin     = "weapons/weapon-club";  Weapons.club.hitSound = "";
+Weapons.rifle.slot    = "weapon"; Weapons.rifle.skin    = "weapons/gun_assault";  Weapons.rifle.bone    = "rifle";    Weapons.rifle.shotSound    = "rifleShot";  Weapons.rifle.hitSound    = "bulletHit"; Weapons.rifle.hitAnim    = "bulletImpact"
+Weapons.shotgun.slot  = "weapon"; Weapons.shotgun.skin  = "weapons/gun_shotgun";  Weapons.shotgun.bone  = "rifle";    Weapons.shotgun.shotSound  = "rifleShot";  Weapons.shotgun.hitSound  = "bulletHit"; Weapons.shotgun.hitAnim  = "bulletImpact"
+Weapons.launcher.slot = "weapon"; Weapons.launcher.skin = "weapons/gun_launcher"; Weapons.launcher.bone = "launcher"; Weapons.launcher.shotSound = "rocketShot"; Weapons.launcher.hitSound = "rocketHit"; Weapons.launcher.hitAnim = "smoke";       Weapons.launcher.hitAnim2nd="explosion"
+Weapons.laserGun.slot = "weapon"; Weapons.laserGun.skin = "weapons/gun_laser";    Weapons.laserGun.bone = "laser";    Weapons.laserGun.shotSound = "laserShot";  Weapons.laserGun.hitSound = "laserHit";  Weapons.laserGun.hitAnim = nil
 
 
 EnemyTypes = {
@@ -63,4 +77,3 @@ EnemyTypes = {
         [4] = {skin="lizard_laser",    weapon="laserGun", health=10, inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=200},
     },
 }
-

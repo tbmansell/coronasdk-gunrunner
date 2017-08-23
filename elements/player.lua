@@ -23,6 +23,9 @@ local Player = {
     flagShootAllowed = true,
 }
 
+-- Aliases:
+local random= math.random
+
 
 function Player:updateSpine(delta)
     self.state:update(delta)
@@ -235,7 +238,7 @@ function Player:die(animation, sound, stopMoving, fall, message)
         sounds:player("killed")
 
         --self.animationOverride = nil
-        self:animate(animation or "death_1")
+        self:animate(animation or "death_"..random(2))
 
         if stopMoving then
             self:stopMomentum(true)
@@ -245,10 +248,13 @@ function Player:die(animation, sound, stopMoving, fall, message)
             hud:displayMessageDied(message)
         end]]
 
-        after(1000, function()
+        local seq = anim:chainSeq("die", self.image)
+        seq:tran({time=1000, alpha=0})
+        seq.onComplete = function()
             self:hide()
             self:failedCallback() 
-        end)
+        end
+        seq:start()
     end
 end
 

@@ -1,4 +1,6 @@
 local utils = require("core.utils")
+local anim  = require("core.animations")
+
 
 -- Class
 local Enemy = {
@@ -361,13 +363,19 @@ function Enemy:die()
         sounds:enemy("killed")
 
         self:stopMomentum()
-        self:destroyEmitter()
-        self:emit("enemyDie1")
-        self:emit("enemyDie2")
         self:animate("death_"..random(2))
 
-        after(500, function()
+        local seq = anim:chainSeq("die", self.image)
+        seq:tran({time=500, alpha=0})
+        seq.onComplete = function()
             self:destroy()
+        end
+        seq:start()
+
+        after(250, function()
+            self:destroyEmitter()
+            self:emit("enemyDie1")
+            self:emit("enemyDie2")
         end)
     end
 end

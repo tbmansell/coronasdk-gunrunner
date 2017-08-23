@@ -5,8 +5,6 @@ local EnemyBuilder = {}
 
 
 function EnemyBuilder:newEnemy(camera, spec)
-    print("type="..tostring(spec.type).." rank="..tostring(spec.rank))
-
     -- Copy the enemy rank def and reference the modifyImage before spien creation
     local rankDef = builder:newClone(EnemyTypes[spec.type][spec.rank])
     spec.modifyImage = rankDef.modifyImage
@@ -36,7 +34,6 @@ function EnemyBuilder:newEnemy(camera, spec)
     builder:deepCopy(rankDef,  enemy)
 
     -- apply weapon
-    print("weapon: "..enemy.weapon)
     enemy.weapon = Weapons[enemy.weapon]
     enemy.ammo   = enemy.weapon.ammo
 

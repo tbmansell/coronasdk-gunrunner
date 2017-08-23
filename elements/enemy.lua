@@ -22,9 +22,11 @@ local Enemy = {
     ammo          = 0,
 
     flagShootAllowed  = true,
+    flagStrikeAllowed = true,
     flagMoveAllowed   = true,
     flagChargeAllowed = true,
     waitingToShoot    = false,
+    waitingToStrike   = false,
     waitingToMove     = false,
     waitingToTurn     = false,
     waitingToCharge   = false,
@@ -48,9 +50,12 @@ function Enemy.eventCollision(self, event)
     local self  = self.object
 
     if other and other.isPlayer then 
+        -- always strike on start of contact
         if event.phase == "began" then
-            sounds:enemy("melee")
-            other:hit(Melee)
+            self:strike(other)
+        -- Logic to keep striking if contact is kept 
+        elseif self:decideToStrike() then
+            self:strike(other)
         end
     end
 end
@@ -103,6 +108,11 @@ end
 
 function Enemy:canShoot()
     return self.mode ~= EnemyMode.dead and self.flagShootAllowed and self.ammo > 0
+end
+
+
+function Enemy:canStrike()
+    return self.mode ~= EnemyMode.dead and self.flagStrikeAllowed
 end
 
 
@@ -187,6 +197,21 @@ function Enemy:decideToShoot()
 end
 
 
+function Enemy:decideToStrike()
+    if self:canStrike() and not self.waitingToStrike then
+        if random(100) < self.aggression then
+            -- Go and strike, (note repeat call allow repeat true returns)
+            return true
+        else
+            -- Decide to think about it
+            self.waitingToStrike = true
+            after(self.decisionDelay, function() self.waitingToStrike = false end)
+            return false
+        end
+    end
+end
+
+
 function Enemy:decideToMove()
     if self:canMove() and not self.waitingToMove then
         -- always have to wait to decide again
@@ -227,6 +252,27 @@ function Enemy:shoot(camera)
 end
 
 
+function Enemy:strike(target)
+    self.flagStrikeAllowed = false
+    self.mode = EnemyMode.strike
+
+    local weapon = self.weapon
+
+    sounds:enemy("melee")
+    self:stopMomentum()
+    self:animate("strike_"..weapon.name)
+    target:hit(weapon)
+
+    after(weapon.time, function() 
+        self:animate("stationary_1")
+        self.legs:animate("stationary")
+
+        self.flagStrikeAllowed = true
+        self.mode = EnemyMode.ready
+    end)
+end
+
+
 function Enemy:move()
     self.flagMoveAllowed = false
     self.mode = EnemyMode.walk
@@ -237,7 +283,7 @@ function Enemy:move()
     local forceY    = self.speed * -sin(rad(direction))
 
     self:applyForce(forceX, forceY)
-    self:animate("run_assault")
+    self:loop("run_"..self.weapon.name)
     self.legs:loop("run")
 
     after(duration, function()
@@ -273,19 +319,21 @@ function Enemy:charge(player)
     local forceY    = runSpeed * -sin(rad(direction))
 
     sounds:enemy("charge")
-    self:animate("run_club")
+    self:loop("run_"..self.weapon.name)
     self.legs:loop("run")
 
     self:stopMomentum()
     self:applyForce(forceX, forceY)
 
     after(duration, function()
-        self:stopMomentum()
-        self:animate("stationary_1")
-        self.legs:animate("stationary")
+        if self.mode == EnemyMode.charge then
+            self:stopMomentum()
+            self:loop("stationary_1")
+            self.legs:animate("stationary")
 
-        self.flagChargeAllowed = true
-        self.mode = EnemyMode.ready
+            self.flagChargeAllowed = true
+            self.mode = EnemyMode.ready
+        end
     end)
 end
 
@@ -296,7 +344,7 @@ function Enemy:hit(shot)
             self.health = self.health - shot.weapon.damage
 
             sounds:enemy("hurt")
-            --self:animate("hit")
+            self:animate("hit_1")
 
             if self.health < 0 then
                 self:die()

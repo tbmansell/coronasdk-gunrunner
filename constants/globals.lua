@@ -25,7 +25,8 @@ EnemyMode = {
     ready  = 0,
     walk   = 1,
     charge = 2,
-    dead   = 3,
+    strike = 3,
+    dead   = 4,
 }
 
 
@@ -49,10 +50,10 @@ EnvironmentalWeapon = {
 
 Weapons = {
     club     = {name="club",     damage=1},
-    rifle    = {name="rifle",    damage=1,  ammoType="bullet", speed=650, rof=250,  ammo=30},
-    shotgun  = {name="shotgun",  damage=1,  ammoType="bullet", speed=650, rof=750,  ammo=10},
-    launcher = {name="launcher", damage=10, ammoType="rocket", speed=500, rof=2000, ammo=4,  shieldBuster=true, area=75},
-    laserGun = {name="laserGun", damage=5,  ammoType="laser",  speed=600, rof=400,  ammo=20, ricochet=5},
+    rifle    = {name="rifle",    damage=1,  ammoType="bullet", speed=650, rof=250,  ammo=30, reload=1000},
+    shotgun  = {name="shotgun",  damage=1,  ammoType="bullet", speed=650, rof=750,  ammo=10, reload=1000},
+    launcher = {name="launcher", damage=10, ammoType="rocket", speed=500, rof=2000, ammo=4,  reload=1000, shieldBuster=true, area=75},
+    laserGun = {name="laserGun", damage=5,  ammoType="laser",  speed=600, rof=400,  ammo=20, reload=1000, ricochet=5},
 }
 
 

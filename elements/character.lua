@@ -32,10 +32,13 @@ end
 
 function Character:shootReloadCheck(callback)
     if self.ammo <= 0 then
-        sounds:projectile("reload")
+        local weapon = self.weapon
 
-        after(1500, function()
-            self.ammo = self.weapon.ammo
+        sounds:projectile("reload")
+        self:animate("reload_"..weapon.name)
+
+        after(weapon.reload, function()
+            self.ammo = weapon.ammo
 
             if callback then callback() end
         end)
@@ -44,26 +47,29 @@ end
 
 
 function Character:shootProjectile(projectileBuilder, camera, filter)
-    local angle = self:getAngle()
-    local x     = self:x() + self.boneBarrel.worldX
-    local y     = self:y() - self.boneBarrel.worldY
+    local weapon = self.weapon
+    local name   = weapon.name
+    local ammo   = weapon.ammoType
+    local angle  = self:getAngle()
+    local x      = self:x() + self.boneBarrel.worldX
+    local y      = self:y() - self.boneBarrel.worldY
 
-    self:animate("shoot_assault")
+    self:animate("shoot_"..name)
 
-    if self.weapon.ammoType == "bullet" then
-        self:emit(self.weapon.ammoType.."Shot", {xpos=x, ypos=y, duration=250, angle=angle-90})
+    if ammo == "bullet" then
+        self:emit(ammo.."Shot", {xpos=x, ypos=y, duration=250, angle=angle-90})
     end
 
-    if self.weapon.name == "shotgun" then
-        local shot1 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=angle-10, filter=filter})
-        local shot2 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=angle,    filter=filter})
-        local shot3 = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=angle+10, filter=filter})
+    if weapon == "shotgun" then
+        local shot1 = projectileBuilder:newShot(camera, weapon, {xpos=x, ypos=y, angle=angle-10, filter=filter})
+        local shot2 = projectileBuilder:newShot(camera, weapon, {xpos=x, ypos=y, angle=angle,    filter=filter})
+        local shot3 = projectileBuilder:newShot(camera, weapon, {xpos=x, ypos=y, angle=angle+10, filter=filter})
 
         shot1:fire()
         shot2:fire()
         shot3:fire()
     else
-        local shot = projectileBuilder:newShot(camera, self.weapon, {xpos=x, ypos=y, angle=self:getAngle(), filter=filter})
+        local shot = projectileBuilder:newShot(camera, weapon, {xpos=x, ypos=y, angle=self:getAngle(), filter=filter})
         shot:fire()
     end
 end

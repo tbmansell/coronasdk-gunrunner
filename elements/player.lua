@@ -186,7 +186,7 @@ function Player:hit(shot)
             self.health = self.health - shot.weapon.damage
             
             sounds:player("hurt")
-            --self:animate("hit")
+            self:animate("hit_1")
             self:updateHudHealth()
 
             if self.health < 0 then
@@ -261,12 +261,12 @@ end
 
 function Player:setWeapon(weapon)
     self.weapon            = weapon
-    self.ammo              = weapon.ammo
     self.flagShootAllowed  = true
     self.gear["weapon"]    = {slot=weapon.slot, skin=weapon.skin}
     
     self:loadGear()
     self:setWeaponBones(weapon)
+    self:loop("run_"..weapon.name)
 end
 
 

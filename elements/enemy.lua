@@ -253,7 +253,6 @@ end
 
 
 function Enemy:strike(target)
-    print("striking")
     self.flagStrikeAllowed = false
     self.mode = EnemyMode.strike
 
@@ -264,8 +263,7 @@ function Enemy:strike(target)
     self:animate("strike_"..weapon.name)
     target:hit({weapon=weapon})
 
-    after(weapon.time, function() 
-        print("striking complete")
+    after(weapon.time, function()
         self:animate("stationary_1")
         self.legs:animate("stationary")
 
@@ -348,7 +346,7 @@ function Enemy:hit(shot)
             sounds:enemy("hurt")
             self:animate("hit_1")
 
-            if self.health < 0 then
+            if self.health <= 0 then
                 self:die()
             end
         end

@@ -253,6 +253,7 @@ end
 
 
 function Enemy:strike(target)
+    print("striking")
     self.flagStrikeAllowed = false
     self.mode = EnemyMode.strike
 
@@ -264,6 +265,7 @@ function Enemy:strike(target)
     target:hit({weapon=weapon})
 
     after(weapon.time, function() 
+        print("striking complete")
         self:animate("stationary_1")
         self.legs:animate("stationary")
 

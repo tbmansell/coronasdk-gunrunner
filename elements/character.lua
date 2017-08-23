@@ -60,7 +60,7 @@ function Character:shootProjectile(projectileBuilder, camera, filter)
         self:emit(ammo.."Shot", {xpos=x, ypos=y, duration=250, angle=angle-90})
     end
 
-    if weapon == "shotgun" then
+    if name == "shotgun" then
         local shot1 = projectileBuilder:newShot(camera, weapon, {xpos=x, ypos=y, angle=angle-10, filter=filter})
         local shot2 = projectileBuilder:newShot(camera, weapon, {xpos=x, ypos=y, angle=angle,    filter=filter})
         local shot3 = projectileBuilder:newShot(camera, weapon, {xpos=x, ypos=y, angle=angle+10, filter=filter})

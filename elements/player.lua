@@ -181,6 +181,7 @@ end
 
 
 function Player:hit(shot)
+    print("player hit")
     if not self:isDead() then
         if not self.shielded or shot.weapon.shieldBuster then
             self.health = self.health - shot.weapon.damage

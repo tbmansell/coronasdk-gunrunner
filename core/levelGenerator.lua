@@ -521,12 +521,25 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-4})
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-3})
         
+        -- hand combat swarm
+        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=2,  ypos=-11})
+        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=4,  ypos=-11})
+        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=6,  ypos=-11})
+        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=8,  ypos=-11})
+        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=10, ypos=-11})
+        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=12, ypos=-11})
+        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=14, ypos=-11})
+        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=16, ypos=-11})
+        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=18, ypos=-11})
+        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=20, ypos=-11})
+
+        -- one of each enemy type
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=5, ypos=-15})
         self:addEntity({object="enemy",  type="shooter",  rank=1, xpos=8, ypos=-15})
         self:addEntity({object="enemy",  type="shooter",  rank=2, xpos=12, ypos=-15})
         self:addEntity({object="enemy",  type="shooter",  rank=3, xpos=15, ypos=-15})
         self:addEntity({object="enemy",  type="shooter",  rank=4, xpos=10, ypos=-18})
-        
+    
     end
 
     return self.entities

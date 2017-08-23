@@ -49,11 +49,11 @@ EnvironmentalWeapon = {
 
 
 Weapons = {
-    club     = {name="club",     damage=1},
-    rifle    = {name="rifle",    damage=1,  ammoType="bullet", speed=650, rof=250,  ammo=30, reload=1000},
-    shotgun  = {name="shotgun",  damage=1,  ammoType="bullet", speed=650, rof=750,  ammo=10, reload=1000},
-    launcher = {name="launcher", damage=10, ammoType="rocket", speed=500, rof=2000, ammo=4,  reload=1000, shieldBuster=true, area=75},
-    laserGun = {name="laserGun", damage=5,  ammoType="laser",  speed=600, rof=400,  ammo=20, reload=1000, ricochet=5},
+    club     = {name="club",     damage=1, time=500},
+    rifle    = {name="rifle",    damage=1, ammoType="bullet", speed=650, rof=250,  ammo=30, reload=1000},
+    shotgun  = {name="shotgun",  damage=1, ammoType="bullet", speed=650, rof=750,  ammo=10, reload=1000},
+    launcher = {name="launcher", damage=5, ammoType="rocket", speed=500, rof=2000, ammo=4,  reload=1000, shieldBuster=true, area=75},
+    laserGun = {name="laserGun", damage=2, ammoType="laser",  speed=600, rof=400,  ammo=20, reload=1000, ricochet=5},
 }
 
 
@@ -68,13 +68,13 @@ Weapons.laserGun.slot = "weapon"; Weapons.laserGun.skin = "weapons/gun_laser";  
 EnemyTypes = {
     melee = {
         -- ranked in order of dangerousness
-        [1] = {skin="lizard_club",     weapon="club",     health=2, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150, melee=true},
+        [1] = {skin="lizard_club",     weapon="club",     health=1, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150, melee=true},
     },
     shooter = {
         -- ranked in order of dangerousness
         [1] = {skin="lizard_assault",  weapon="rifle",    health=2,  inaccuracy=50, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100},
-        [2] = {skin="lizard_shotgun",  weapon="shotgun",  health=4,  inaccuracy=40, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
-        [3] = {skin="lizard_launcher", weapon="launcher", health=8,  inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=50},
-        [4] = {skin="lizard_laser",    weapon="laserGun", health=10, inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=200},
+        [2] = {skin="lizard_shotgun",  weapon="shotgun",  health=2,  inaccuracy=40, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
+        [3] = {skin="lizard_launcher", weapon="launcher", health=3,  inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=50},
+        [4] = {skin="lizard_laser",    weapon="laserGun", health=3,  inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=200},
     },
 }

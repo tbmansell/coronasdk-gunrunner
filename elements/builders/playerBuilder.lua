@@ -4,7 +4,7 @@ local playerDef = require("elements.player")
 local PlayerBuilder = {}
 
 
-function PlayerBuilder:newPlayer(camera, spec)
+function PlayerBuilder:newPlayer(camera, spec, hud)
     local player = builder:newCharacter(spec, {
                        jsonName  = "characterBody", 
                        imagePath = "character", 
@@ -40,6 +40,7 @@ function PlayerBuilder:newPlayer(camera, spec)
 
     self:applyCharacterAbilities(player)
     self:applyPlayerOptions(player)
+    self:applyPlayerHooks(player, hud)
 
     camera:addEntity(player, true)
 	
@@ -66,6 +67,14 @@ end
 
 
 function PlayerBuilder:applyCharacterAbilities(player)
+end
+
+
+function PlayerBuilder:applyPlayerHooks(player, hud)
+    -- update hud with current ammo counter
+    function player:hookAmmoCounter() 
+        hud:setAmmoCounter(self.ammo) 
+    end
 end
 
 

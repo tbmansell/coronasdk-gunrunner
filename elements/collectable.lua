@@ -16,7 +16,7 @@ function Collectable.eventCollision(self, event)
     local other = event.other.object
     local self  = self.object
 
-    if other and other.isPlayer then 
+    if other and other.isPlayer and event.phase == "began" then 
         self:collectedBy(other)
         self:destroy()
     end

@@ -246,9 +246,8 @@ end
 
 
 function Enemy:shoot(camera)
-    self:shootAmmoRof()
-    self:shootReloadCheck()
     self:shootProjectile(projectileBuilder, camera, Filters.enemyShot)
+    self:shootReloadCheck()
 end
 
 

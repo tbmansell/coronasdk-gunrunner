@@ -19,34 +19,28 @@ function Character:setWeaponBones(weapon)
 end
 
 
-function Character:shootAmmoRof()
-    self.flagShootAllowed = false
-    self.ammo = self.ammo - 1
+function Character:getAngle(offset)
+    local a = offset or 90
 
-    -- enable more firing after ROF period ending
-    after(self.weapon.rof, function() 
-        self.flagShootAllowed = true 
-    end)
-end
+    if self.inaccuracy then
+        local r = random(100)
 
-
-function Character:shootReloadCheck(callback)
-    if self.ammo <= 0 then
-        local weapon = self.weapon
-
-        sounds:projectile("reload")
-        self:animate("reload_"..weapon.name)
-
-        after(weapon.reload, function()
-            self.ammo = weapon.ammo
-
-            if callback then callback() end
-        end)
+        if r <= self.inaccuracy then
+            if random(100) > 50 then
+                a = a - r
+            else
+                a = a + r
+            end
+        end
     end
+
+    return self.angle + a
 end
 
 
 function Character:shootProjectile(projectileBuilder, camera, filter)
+    self.flagShootAllowed = false
+
     local weapon = self.weapon
     local name   = weapon.name
     local ammo   = weapon.ammoType
@@ -72,25 +66,28 @@ function Character:shootProjectile(projectileBuilder, camera, filter)
         local shot = projectileBuilder:newShot(camera, weapon, {xpos=x, ypos=y, angle=self:getAngle(), filter=filter})
         shot:fire()
     end
+
+    after(self.weapon.rof, function() 
+        self.flagShootAllowed = true 
+    end)
 end
 
 
-function Character:getAngle(offset)
-    local a = offset or 90
+function Character:shootReloadCheck(callback)
+    self.ammo = self.ammo - 1
 
-    if self.inaccuracy then
-        local r = random(100)
+    if self.ammo <= 0 then
+        local weapon = self.weapon
 
-        if r <= self.inaccuracy then
-            if random(100) > 50 then
-                a = a - r
-            else
-                a = a + r
-            end
-        end
+        sounds:projectile("reload")
+        self:animate("reload_"..weapon.name)
+
+        after(weapon.reload, function()
+            self.ammo = weapon.ammo
+
+            if callback then callback() end
+        end)
     end
-
-    return self.angle + a
 end
 
 

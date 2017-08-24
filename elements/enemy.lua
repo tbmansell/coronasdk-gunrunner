@@ -363,10 +363,10 @@ function Enemy:die()
         sounds:enemy("killed")
 
         self:stopMomentum()
-        self:animate("death_"..random(2))
+        self:animate("death_"..random(3))
 
         local seq = anim:chainSeq("die", self.image)
-        seq:tran({time=300, alpha=0.3})
+        seq:tran({time=350, alpha=0})
         seq.onComplete = function()
             self:destroy()
         end

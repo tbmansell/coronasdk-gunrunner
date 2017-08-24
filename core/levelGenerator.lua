@@ -158,11 +158,11 @@ function LevelGenerator:newEnvironment()
     self:setEnvironmentShape(env)
     self:setEnvironmentEdges(env)
     self:setEnvironmentWalls(env)
---    self:setEnvironmentFloor(env)
+    self:setEnvironmentFloor(env)
 
     self.environments[#self.environments + 1] = env
 
-    return env--.tiles
+    return env
 end
 
 
@@ -541,7 +541,7 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="weapon", type="rifle",    xpos=10, ypos=-5})
         self:addEntity({object="weapon", type="laserGun", xpos=10, ypos=-15})
 
-        --[[
+        
         self:addEntity({object="obstacle", type="crate", breadth="small", xpos=8, ypos=-8})
         self:addEntity({object="obstacle", type="crate", breadth="small", xpos=9, ypos=-8})
         self:addEntity({object="obstacle", type="crate", breadth="small", xpos=10, ypos=-8})
@@ -567,7 +567,7 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-5})
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-4})
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-3})
-        ]]
+        
 
         -- hand combat swarm
         

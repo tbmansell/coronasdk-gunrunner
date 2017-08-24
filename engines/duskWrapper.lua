@@ -51,7 +51,6 @@ function TileEngine:create(view, tiles, levelGenerator)
     
 
     for tile in self.tileLayer.tilesInRange(1,1, self.cols, self.rows) do
-    --for tile in self.shadowLayer.tilesInRange(1,1, self.cols, self.rows) do
         local index = tile.tilesetGID
         local frame = spriteSheetInfo.sheet.frames[index]
         

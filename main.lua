@@ -17,7 +17,7 @@ globalCamera           = nil
 -- Define global objects
 track  = require("core.track")
 draw   = require("core.draw")
-sounds  = require("core.sounds")
+sounds = require("core.sounds")
 
 builder            = require("elements.builders.builder")
 playerBuilder      = require("elements.builders.playerBuilder")
@@ -48,3 +48,4 @@ print("")
 -- Fire off the start scene
 local composer = require("composer")
 composer.gotoScene("scenes.game")
+--composer:gotoScene("scenes.tiles-grid")

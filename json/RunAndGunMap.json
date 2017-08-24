@@ -15,6 +15,17 @@
          "y":0
         },
         {
+         "data":[],
+         "height":24,
+         "name":"ShadowLayer",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":20,
+         "x":0,
+         "y":0
+        },
+        {
          "draworder":"topdown",
          "name":"BelowEntityLayer",
          "type":"objectgroup",
@@ -49,17 +60,6 @@
          "x":0,
          "y":0,
          "objects":[]
-        },
-        {
-         "data":[],
-         "height":24,
-         "name":"ShadowLayer",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
-         "width":20,
-         "x":0,
-         "y":0
         }
 ],
  "nextobjectid":1,

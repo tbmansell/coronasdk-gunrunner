@@ -32,8 +32,6 @@ end
 
 
 function Collectable:collectedBy(player)
-    print(tostring(self.object).." collectedBy player")
-
     if self.object == "weapon" then
         sounds:collectable("gotWeapon")
         player:setWeapon(Weapons[self.type])

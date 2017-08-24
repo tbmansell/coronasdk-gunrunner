@@ -44,12 +44,14 @@ function TileEngine:create(view, tiles, levelGenerator)
 
     self.map          = dusk.buildMap(self.data)
     self.tileLayer    = self.map.layer["TileLayer"]
+    self.shadowLayer  = self.map.layer["ShadowLayer"]
     self.objectLayer1 = self.map.layer["BelowEntityLayer"]
     self.objectLayer2 = self.map.layer["EntityLayer"]
     self.objectLayer3 = self.map.layer["AboveEntityLayer"]
-    self.shadowLayer  = self.map.layer["ShadowLayer"]
+    
 
     for tile in self.tileLayer.tilesInRange(1,1, self.cols, self.rows) do
+    --for tile in self.shadowLayer.tilesInRange(1,1, self.cols, self.rows) do
         local index = tile.tilesetGID
         local frame = spriteSheetInfo.sheet.frames[index]
         
@@ -72,15 +74,22 @@ end
 
 
 function TileEngine:loadEnvironment(environment)
+    local envTiles   = environment.tiles
+    local envShadows = environment.shadows
+
     local tiles  = self.data.layers[1].data
-    local shadow = self.data.layers[5].data
-    local rows   = #environment
-    local cols   = #environment[1]
+    local shadow = self.data.layers[2].data
+    local rows   = #envTiles
+    local cols   = #envTiles[1]
     
     for row=1, rows do
         for col=1, cols do
-            local index = self.existingTiles + (((row-1)*cols) + col)
-            tiles[index]  = environment[row][col]
+            local index   = self.existingTiles + (((row-1)*cols) + col)
+            tiles[index]  = envTiles[row][col]
+
+            if envShadows[row][col] > 0 then
+                shadow[index] = envShadows[row][col]
+            end
         end
     end
 
@@ -96,6 +105,7 @@ end
 function TileEngine:destroy()
     self.map.destroy()
     self.tileLayer    = nil
+    self.shadowLayer  = nil
     self.objectLayer1 = nil
     self.objectLayer2 = nil
     self.objectLayer3 = nil
@@ -114,6 +124,7 @@ function TileEngine:addEntity(entity, focus)
     if focus then
         self.map.setCameraFocus(entity.image)
         self.tileLayer.setCameraOffset(1,    450)
+        self.shadowLayer.setCameraOffset(1,  450)
         self.objectLayer2.setCameraOffset(1, 450)
     end
 end

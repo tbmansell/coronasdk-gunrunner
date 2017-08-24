@@ -46,6 +46,12 @@ function LevelGenerator:setup()
     self.tiles.wallDiagTopLeft  = spriteSheetInfo:getFrameIndex("wallDiagTopLeft")
     self.tiles.wallDiagBotLeft  = spriteSheetInfo:getFrameIndex("wallDiagBotLeft")
 
+    self.tiles.shadowRightTop   = spriteSheetInfo:getFrameIndex("shadowRightTop")
+    self.tiles.shadowRight      = spriteSheetInfo:getFrameIndex("shadowRight")
+    self.tiles.shadowRightBot   = spriteSheetInfo:getFrameIndex("shadowRightBot")
+    self.tiles.shadowBotLeft    = spriteSheetInfo:getFrameIndex("shadowBotLeft")
+    self.tiles.shadowBot        = spriteSheetInfo:getFrameIndex("shadowBot")
+
     -- Random selection of plain tiles
     self.tiles.plain = {}
 
@@ -143,7 +149,8 @@ end
 
 function LevelGenerator:newEnvironment()
     local env = {
-        tiles = {}
+        tiles   = {},
+        shadows = {}
     }
 
     self:setup()
@@ -151,11 +158,11 @@ function LevelGenerator:newEnvironment()
     self:setEnvironmentShape(env)
     self:setEnvironmentEdges(env)
     self:setEnvironmentWalls(env)
-    self:setEnvironmentFloor(env)
+--    self:setEnvironmentFloor(env)
 
     self.environments[#self.environments + 1] = env
 
-    return env.tiles
+    return env--.tiles
 end
 
 
@@ -193,10 +200,12 @@ function LevelGenerator:setEnvironmentShape(env)
         -- Stick with the same direction throughout
         if env.dir == "straight" then
             for y=1, env.height do
-                env.tiles[y] = {}
+                env.tiles[y]   = {}
+                env.shadows[y] = {}
 
                 for x=1, env.width do
-                    env.tiles[y][x] = self.tiles.default
+                    env.tiles[y][x]   = self.tiles.default
+                    env.shadows[y][x] = 0
                 end
             end
         end
@@ -227,12 +236,21 @@ function LevelGenerator:setStraightEdge(env, x, y)
             local length = random(y-2)
 
             env.tiles[y][x] = self.tiles.wallBot
+            -- shadow:
+            if x==1 then
+                if y>2 then env.shadows[y-1][x+1] = self.tiles.shadowRightBot end
+                env.shadows[y][x+1] = self.tiles.shadowRight
+            end
 
             for i=1, length do
                 env.tiles[y-i][x] = self.tiles.wallVert
+                -- shadow:
+                if x==1 then env.shadows[y-i][x+1] = self.tiles.shadowRight end
             end
 
             env.tiles[y-length-1][x] = self.tiles.wallTop
+            -- shadow:
+            if x==1 then env.shadows[y-length-1][x+1] = self.tiles.shadowRightTop end
 
             -- leave a gap after a wall
             y = y - (2+length)
@@ -419,14 +437,22 @@ function LevelGenerator:makeHorizWall(env, x, y, width, randY)
     end
 
     env.tiles[y][x] = self.tiles.wallLeft
+    -- shadow:
+    env.shadows[y+1][x] = self.tiles.shadowBotLeft
 
     local middle = width - 2
 
     for i=1, middle do
         env.tiles[y][x + i] = self.tiles.wallHoriz
+        -- shadow:
+        env.shadows[y+1][x+i] = self.tiles.shadowBot
     end
 
     env.tiles[y][x + middle + 1] = self.tiles.wallRight
+    -- shadows:
+    env.shadows[y][x+middle + 2]   = self.tiles.shadowRightTop
+    env.shadows[y+1][x+middle + 1] = self.tiles.shadowBot
+    env.shadows[y+1][x+middle + 2] = self.tiles.shadowRightBot
 end
 
 
@@ -434,14 +460,22 @@ function LevelGenerator:makeVertWall(env, x, y, length)
     --print("horiz: x="..x.." y="..y.." length="..length)
 
     env.tiles[y][x] = self.tiles.wallBot
+    -- shadow:
+    env.shadows[y+1][x+1] = self.tiles.shadowRightBot
+    env.shadows[y+1][x]   = self.tiles.shadowBotLeft
+    env.shadows[y][x+1]   = self.tiles.shadowRight
 
     local middle = length - 2
 
     for i=1, middle do
-        env.tiles[y - i][x] = self.tiles.wallVert
+        env.tiles[y - i][x]   = self.tiles.wallVert
+        -- shadow:
+        env.shadows[y-i][x+1] = self.tiles.shadowRight
     end
 
     env.tiles[y - middle - 1][x] = self.tiles.wallTop
+    -- shadow:
+    env.shadows[y-middle-1][x+1] = self.tiles.shadowRightTop
 end
 
 
@@ -456,16 +490,28 @@ function LevelGenerator:makeBoxWall(env, x, y, width, height)
     env.tiles[top][x]     = self.tiles.wallTopLeft
     env.tiles[top][right] = self.tiles.wallTopRight
 
+    -- shadow:
+    env.shadows[y+1][x]       = self.tiles.shadowBotLeft
+    env.shadows[top][right+1] = self.tiles.shadowRightTop
+    env.shadows[y+1][right]   = self.tiles.shadowBot
+    env.shadows[y][right+1]   = self.tiles.shadowRight
+    env.shadows[y+1][right+1] = self.tiles.shadowRightBot
+
     for i=1, width do
         env.tiles[y][x + i]   = self.tiles.wallHoriz
         env.tiles[top][x + i] = self.tiles.wallHoriz
+        -- shadow:
+        env.shadows[y+1][x+i] = self.tiles.shadowBot
     end
 
     for i=1, height do
         env.tiles[y - i][x]     = self.tiles.wallVert
         env.tiles[y - i][right] = self.tiles.wallVert
+        -- shadow:
+        env.shadows[y-i][right+1] = self.tiles.shadowRight
     end
 
+    -- fill in center with no floor
     for i=1, height do
         for v=1, width do
             env.tiles[y - i][x + v] = self.tiles.noFloor
@@ -495,7 +541,7 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="weapon", type="rifle",    xpos=10, ypos=-5})
         self:addEntity({object="weapon", type="laserGun", xpos=10, ypos=-15})
 
-        
+        --[[
         self:addEntity({object="obstacle", type="crate", breadth="small", xpos=8, ypos=-8})
         self:addEntity({object="obstacle", type="crate", breadth="small", xpos=9, ypos=-8})
         self:addEntity({object="obstacle", type="crate", breadth="small", xpos=10, ypos=-8})
@@ -521,7 +567,7 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-5})
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-4})
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-3})
-        
+        ]]
 
         -- hand combat swarm
         

@@ -87,6 +87,12 @@ function SheetInfo:nameTiles()
     self.frameIndex["wallDiagBotRight"] = 79
     self.frameIndex["wallDiagTopLeft"]  = 81
     self.frameIndex["wallDiagBotLeft"]  = 82
+
+    self.frameIndex["shadowRightTop"]   = 156
+    self.frameIndex["shadowRight"]      = 167
+    self.frameIndex["shadowRightBot"]   = 197
+    self.frameIndex["shadowBotLeft"]    = 168
+    self.frameIndex["shadowBot"]        = 169
 end
 
 

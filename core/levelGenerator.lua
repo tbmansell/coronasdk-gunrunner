@@ -479,22 +479,10 @@ function LevelGenerator:fillEnvironment()
     self.entities = {}
 
     if index == 1 then
-        self:addEntity({object="weapon", type="shotgun",  xpos=2,  ypos=-5})
-        self:addEntity({object="weapon", type="launcher", xpos=18, ypos=-5})
-        self:addEntity({object="weapon", type="rifle",    xpos=10, ypos=-5})
-        self:addEntity({object="weapon", type="laserGun", xpos=10, ypos=-15})
-                
-        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=8, ypos=-8})
-        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=9, ypos=-8})
-        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=10, ypos=-8})
-        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=11, ypos=-8})
-        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=12, ypos=-8})
-
-        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=8, ypos=-11})
-        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=9, ypos=-11})
-        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=10, ypos=-11})
-        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=11, ypos=-11})
-        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=12, ypos=-11})
+        self:addEntity({object="weapon", type="shotgun",  xpos=5,  ypos=-15})
+        self:addEntity({object="weapon", type="launcher", xpos=8,  ypos=-15})
+        self:addEntity({object="weapon", type="rifle",    xpos=12, ypos=-15})
+        self:addEntity({object="weapon", type="laserGun", xpos=15, ypos=-15})
         
     elseif index == 2 then
 
@@ -511,8 +499,8 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-5})
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-4})
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-3})
-        --[[
-        -- hand combat swarm        
+        
+        -- hand combat swarm
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=2,  ypos=-11})
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=4,  ypos=-11})
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=6,  ypos=-11})
@@ -523,8 +511,21 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=16, ypos=-11})
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=18, ypos=-11})
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=20, ypos=-11})
-        ]]
+        
     elseif index == 3 then
+
+        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=8, ypos=-8})
+        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=9, ypos=-8})
+        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=10, ypos=-8})
+        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=11, ypos=-8})
+        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=12, ypos=-8})
+
+        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=8, ypos=-11})
+        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=9, ypos=-11})
+        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=10, ypos=-11})
+        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=11, ypos=-11})
+        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=12, ypos=-11})
+
 
         -- one of each enemy type
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=5, ypos=-15})

@@ -6,6 +6,7 @@ local particles  = require("core.particles")
 local Hud = {}
 
 -- Locals
+local forcePlayerMoveY = -2
 local movePlayerX      = nil
 local movePlayerY      = nil
 local movePlayerAllow  = false
@@ -256,6 +257,9 @@ function Hud:eventUpdateFrame(event)
         self.player:rotate(angle, event)
         self.player:shoot(self.camera)
     end
+
+
+    self.player:moveBy(0, forcePlayerMoveY)
 end
 
 

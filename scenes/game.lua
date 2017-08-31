@@ -97,7 +97,9 @@ function scene:loadLevel()
     -- Build up tile engine
     tileEngine:init("images/tiles.png")
     levelGenerator:setup()
+    level:new(tileEngine)
 
+    -- generate the level content
     for i=1,sections do
         environment[#environment+1] = levelGenerator:newEnvironment()
         entities[#entities+1]       = levelGenerator:fillEnvironment()
@@ -108,22 +110,10 @@ function scene:loadLevel()
         tileEngine:loadEnvironment(environment[i])
     end
 
-
-    --[[
-    for i=1,3 do
-        local env = levelGenerator:newEnvironment()
-        print("showing env "..env.number)
-        tileEngine:loadEnvironment(env)
-        --tileEngine:loadEnvironment(levelGenerator:newEnvironment())
-
-        entities[#entities+1] = levelGenerator:fillEnvironment()
-    end]]
-
+    -- Create the tile map
     tileEngine:buildLayers()
 
     -- Build entities into the level
-    level:new(tileEngine)
-
     for i=1, sections do
         level:createElements(entities[i])
     end

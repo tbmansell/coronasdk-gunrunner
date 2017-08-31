@@ -64,6 +64,10 @@ function SheetInfo:nameTiles()
     self.frameIndex["plain-11"]         = 38
     self.frameIndex["plain-12"]         = 39
 
+    self.frameIndex["pattern-hazzard"]  = 89
+    self.frameIndex["pattern-pipes"]    = 13
+    self.frameIndex["pattern-grill"]    = 11
+
     self.frameIndex["edgeTopLeft"]      = 1
     self.frameIndex["edgeTopRight"]     = 15
     self.frameIndex["edgeBotLeft"]      = 125

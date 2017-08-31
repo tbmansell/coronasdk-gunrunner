@@ -90,12 +90,26 @@ function scene:loadLevel()
     local bgr = display.newImage(self.view, "images/background2.jpg", globalCenterX, globalCenterY)
     bgr:scale(2,2)
 
-    local entities  = {}
+    local sections    = 3
+    local environment = {}
+    local entities    = {}
 
     -- Build up tile engine
     tileEngine:init("images/tiles.png")
     levelGenerator:setup()
 
+    for i=1,sections do
+        environment[#environment+1] = levelGenerator:newEnvironment()
+        entities[#entities+1]       = levelGenerator:fillEnvironment()
+    end
+
+    -- tile engine renders sections in reverse, so feed them in backward
+    for i=sections, 1, -1 do
+        tileEngine:loadEnvironment(environment[i])
+    end
+
+
+    --[[
     for i=1,3 do
         local env = levelGenerator:newEnvironment()
         print("showing env "..env.number)
@@ -103,14 +117,14 @@ function scene:loadLevel()
         --tileEngine:loadEnvironment(levelGenerator:newEnvironment())
 
         entities[#entities+1] = levelGenerator:fillEnvironment()
-    end
+    end]]
 
     tileEngine:buildLayers()
 
     -- Build entities into the level
     level:new(tileEngine)
 
-    for i=1, #entities do
+    for i=1, sections do
         level:createElements(entities[i])
     end
 end

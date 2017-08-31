@@ -3,15 +3,16 @@ local spriteSheetInfo = require("core.sheetInfo")
 
 -- Class
 local LevelGenerator = {
-    MaxWidth     = 25,
-    MinWidth     = 8,
-    StartWidth   = 20,
-    Height       = 24,
+    MaxWidth        = 25,
+    MinWidth        = 8,
+    StartWidth      = 20,
+    StartHeight     = 24,
 
-    environments = {},
-    tiles        = {},
+    environments    = {},
+    tiles           = {},
 
-    currentHeight = 0,
+    section         = 0,
+    currentHeight   = 0,
 }
 
 -- Aliases:
@@ -54,6 +55,10 @@ function LevelGenerator:setup()
     self.tiles.shadowBotLeft    = spriteSheetInfo:getFrameIndex("shadowBotLeft")
     self.tiles.shadowBot        = spriteSheetInfo:getFrameIndex("shadowBot")
 
+    self.tiles.patternHazzard   = spriteSheetInfo:getFrameIndex("pattern-hazzard")
+    self.tiles.patternPipes     = spriteSheetInfo:getFrameIndex("pattern-pipes")
+    self.tiles.patternGrill     = spriteSheetInfo:getFrameIndex("pattern-grill")
+
     -- Random selection of plain tiles
     self.tiles.plain = {}
 
@@ -75,16 +80,15 @@ function LevelGenerator:newEnvironment()
         shadows = {}
     }
 
+    self.section = self.section + 1
+
     self:setEnvironmentWidth(env)
     self:setEnvironmentShape(env)
     self:setEnvironmentEdges(env)
 
-    print("env # "..(#self.environments))
-
-    --if #self.environments == 0 then
-        print("show walls")
+    if self.section > 1 then
         self:setEnvironmentWalls(env)
-    --end
+    end
 
     self:setEnvironmentFloor(env)
 
@@ -112,7 +116,7 @@ function LevelGenerator:setEnvironmentWidth(env)
     else
         -- This is the first section
         env.width  = self.StartWidth
-        env.height = self.Height
+        env.height = self.StartHeight
         env.dir    = "straight" 
         env.number = 1
     end
@@ -452,7 +456,15 @@ function LevelGenerator:setEnvironmentFloor(env)
     -- Determine any special tiles, or floor patterns or random tiling patterns on plain tiles
     for y=1, env.height do
         for x=1, env.width do
-            if env.tiles[y][x] == self.tiles.default then 
+            if env.tiles[y][x] == self.tiles.default then
+                --[[if self.section == 1 then
+                    env.tiles[y][x] = self.tiles.patternHazzard
+                elseif self.section == 2 then
+                    env.tiles[y][x] = self.tiles.patternPipes
+                elseif self.section == 3 then
+                    env.tiles[y][x] = self.tiles.patternGrill 
+                end]]
+
                 env.tiles[y][x] = self.tiles.plain[random(#self.tiles.plain)]
             end
         end
@@ -499,7 +511,7 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-5})
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-4})
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-3})
-        
+        --[[
         -- hand combat swarm        
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=2,  ypos=-11})
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=4,  ypos=-11})
@@ -511,7 +523,7 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=16, ypos=-11})
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=18, ypos=-11})
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=20, ypos=-11})
-        
+        ]]
     elseif index == 3 then
 
         -- one of each enemy type

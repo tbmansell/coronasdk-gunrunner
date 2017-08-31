@@ -348,14 +348,21 @@ function Enemy:hit(shot)
             self:animate("hit_1")
 
             if self.health <= 0 then
-                self:die()
+                self:explode()
             end
         end
     end
 end
 
 
-function Enemy:die()
+function Enemy:fallToDeath(options, sound)
+    local options = options or {}
+
+    self:die()
+end
+
+
+function Enemy:explode()
     -- guard to stop multiple deaths
     if not self:isDead() then
         self.mode = EnemyMode.dead
@@ -377,6 +384,25 @@ function Enemy:die()
             self:emit("enemyDie1")
             self:emit("enemyDie2")
         end)
+    end
+end
+
+
+function Enemy:fallToDeath(hole)
+    if not self:isDead() then
+        self.mode = EnemyMode.dead
+
+        sounds:player("killed")
+
+        self:stopMomentum(true)
+        --self:animate(animation or "death_"..random(2))
+
+        local seq = anim:chainSeq("die", self.image)
+        seq:tran({time=1000, x=hole.x, y=hole.y, xScale=0.01, yScale=0.01, alpha=0})
+        seq.onComplete = function()
+            self:destroy()
+        end
+        seq:start()
     end
 end
 

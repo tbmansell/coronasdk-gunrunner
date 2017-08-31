@@ -87,20 +87,37 @@ end
 
 
 function scene:loadLevel()
-    local bgr = display.newImage(self.view, "images/background.jpg", globalCenterX, globalCenterY)
+    local bgr = display.newImage(self.view, "images/background2.jpg", globalCenterX, globalCenterY)
+    bgr:scale(2,2)
 
-    local environment = levelGenerator:newEnvironment()
-    local entities    = levelGenerator:fillEnvironment()
+    local entities  = {}
 
-    tileEngine:create(self.view, "images/tiles.png", levelGenerator)
+    -- Build up tile engine
+    tileEngine:init("images/tiles.png")
+    levelGenerator:setup()
 
+    for i=1,3 do
+        local env = levelGenerator:newEnvironment()
+        print("showing env "..env.number)
+        tileEngine:loadEnvironment(env)
+        --tileEngine:loadEnvironment(levelGenerator:newEnvironment())
+
+        entities[#entities+1] = levelGenerator:fillEnvironment()
+    end
+
+    tileEngine:buildLayers()
+
+    -- Build entities into the level
     level:new(tileEngine)
-    level:createElements(entities)
+
+    for i=1, #entities do
+        level:createElements(entities[i])
+    end
 end
 
 
 function scene:loadPlayer()
-    player = level:createPlayer({xpos=10, ypos=-1}, hud)
+    player = level:createPlayer({xpos=10, ypos=-5}, hud)
     player:setWeapon(Weapons.rifle)
     
     -- Create Game Over callback

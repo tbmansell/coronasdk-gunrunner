@@ -10,6 +10,8 @@ local LevelGenerator = {
 
     environments = {},
     tiles        = {},
+
+    currentHeight = 0,
 }
 
 -- Aliases:
@@ -57,7 +59,7 @@ function LevelGenerator:setup()
 
     for i=1, 12 do
         self.tiles.plain[i] = spriteSheetInfo:getFrameIndex("plain-"..i)
-    end 
+    end
 end
 
 
@@ -67,97 +69,23 @@ function LevelGenerator:destroy()
 end
 
 
-function LevelGenerator:newTestEnvironmentStraight()
-    self:setup()
-    
-    return {
-        {1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  15},
-        {16, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  16},
-        {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {46, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {46, 2,  2,  2,  2,  3,  4,  4,  5,  2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  31, 2,  2,  31, 2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  31, 2,  2,  31, 2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  33, 4,  4,  35, 2,  2,  2,  2,  2,  2,  31},
-        {46, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {46, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {31, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {76, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  76},
-        {125,2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  126},
-        {135,121,121,121,121,121,121,121,121,121,121,121,121,121,121,135},
-    }
-end
-
-
-function LevelGenerator:newTestEnvironmentLeft()
-    self:setup()
-
-    return {
-        {118,2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  15},
-        {135,118,2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  16},
-        {135,135,118,2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {135,135,135,118,2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {135,135,135,135,118,2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {135,135,135,135,135,118,2,  2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {135,135,135,135,135,135,118,2,  2,  2,  2,  2,  2,  2,  2,  31},
-        {135,135,135,135,135,135,135,118,2,  2,  2,  2,  2,  2,  2,  31},
-        {135,135,135,135,135,135,135,135,118,2,  2,  2,  2,  2,  2,  31},
-        {135,135,135,135,135,135,135,135,135,118,2,  2,  2,  2,  2,  31},
-        {135,135,135,135,135,135,135,135,135,135,118,2,  2,  2,  2,  31},
-        {135,135,135,135,135,135,135,135,135,135,135,118,2,  2,  2,  31},
-        {135,135,135,135,135,135,135,135,135,135,135,135,118,2,  2,  31},
-        {135,135,135,135,135,135,135,135,135,135,135,135,135,118,2,  31},
-        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
-        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
-        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
-        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
-        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
-        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
-        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
-        {135,135,135,135,135,135,135,135,135,135,135,135,135,135,118,31},
-    }
-end
-
-
-function LevelGenerator:fillTestEnvironment()
-    return {
-        {object="enemy",  xpos=2,  ypos=3,    type="melee",   rank=1},
-        {object="enemy",  xpos=10, ypos=3,    type="melee",   rank=1},
-
-        {object="enemy",  xpos=2,  ypos=5,    type="shooter", rank=1},
-        {object="enemy",  xpos=7,  ypos=7,    type="shooter", rank=1},
-        {object="enemy",  xpos=12, ypos=7,    type="shooter", rank=1},
-        {object="enemy",  xpos=7,  ypos=10,   type="shooter", rank=1},
-        
-        {object="enemy",  xpos=9,  ypos=10,   type="shooter", rank=2},
-        {object="enemy",  xpos=12, ypos=10,   type="shooter", rank=2},
-        
-        {object="enemy",  xpos=12, ypos=5,    type="shooter", rank=3},
-
-        {object="weapon", xpos=3, ypos=3,     type="launcher"},
-    }
-end
-
-
 function LevelGenerator:newEnvironment()
     local env = {
         tiles   = {},
         shadows = {}
     }
 
-    self:setup()
     self:setEnvironmentWidth(env)
     self:setEnvironmentShape(env)
     self:setEnvironmentEdges(env)
-    self:setEnvironmentWalls(env)
+
+    print("env # "..(#self.environments))
+
+    --if #self.environments == 0 then
+        print("show walls")
+        self:setEnvironmentWalls(env)
+    --end
+
     self:setEnvironmentFloor(env)
 
     self.environments[#self.environments + 1] = env
@@ -533,15 +461,17 @@ end
 
 
 function LevelGenerator:fillEnvironment()
+    local index = #self.environments
+    local env   = self.environments[index]
+
     self.entities = {}
 
-    if #self.environments == 1 then
+    if index == 1 then
         self:addEntity({object="weapon", type="shotgun",  xpos=2,  ypos=-5})
         self:addEntity({object="weapon", type="launcher", xpos=18, ypos=-5})
         self:addEntity({object="weapon", type="rifle",    xpos=10, ypos=-5})
         self:addEntity({object="weapon", type="laserGun", xpos=10, ypos=-15})
-
-        
+                
         self:addEntity({object="obstacle", type="crate", breadth="small", xpos=8, ypos=-8})
         self:addEntity({object="obstacle", type="crate", breadth="small", xpos=9, ypos=-8})
         self:addEntity({object="obstacle", type="crate", breadth="small", xpos=10, ypos=-8})
@@ -553,6 +483,8 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="obstacle", type="crate", breadth="big", xpos=10, ypos=-11})
         self:addEntity({object="obstacle", type="crate", breadth="big", xpos=11, ypos=-11})
         self:addEntity({object="obstacle", type="crate", breadth="big", xpos=12, ypos=-11})
+        
+    elseif index == 2 then
 
         self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6, ypos=-8})
         self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6, ypos=-7})
@@ -568,9 +500,7 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-4})
         self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-3})
         
-
-        -- hand combat swarm
-        
+        -- hand combat swarm        
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=2,  ypos=-11})
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=4,  ypos=-11})
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=6,  ypos=-11})
@@ -581,6 +511,8 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=16, ypos=-11})
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=18, ypos=-11})
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=20, ypos=-11})
+        
+    elseif index == 3 then
 
         -- one of each enemy type
         self:addEntity({object="enemy",  type="melee",    rank=1, xpos=5, ypos=-15})
@@ -588,14 +520,17 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="enemy",  type="shooter",  rank=2, xpos=12, ypos=-15})
         self:addEntity({object="enemy",  type="shooter",  rank=3, xpos=15, ypos=-15})
         self:addEntity({object="enemy",  type="shooter",  rank=4, xpos=10, ypos=-18})
-        
     end
+
+    self.currentHeight = self.currentHeight + env.height
 
     return self.entities
 end
 
 
 function LevelGenerator:addEntity(spec)
+    spec.ypos = spec.ypos - self.currentHeight
+
     self.entities[#self.entities+1] = spec
 end
 

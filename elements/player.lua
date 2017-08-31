@@ -7,8 +7,8 @@ local Player = {
 
     isPlayer      = true,
     class         = "Player",
-    intHeight     = 30,
-    intWidth      = 30,
+    intHeight     = 25,
+    intWidth      = 25,
     verticalSpeed = 5,
     strafeSpeed   = 5,
 
@@ -200,29 +200,7 @@ function Player:hit(shot)
 end
 
 
-function Player:fallToDeath(options, sound)
-    local options = options or {}
-
-    self:die(options.animation, sound, false, options.fall, options.message)
-end
-
-
-function Player:explode(options, sound)
-    local options = options or {}
-
-    if sound and type(sound) == "table" then
-        sound.action = sound.action or "playerDeathExplode"
-    else
-        sound = "playerDeathExplode"
-    end
-
-    self:die(options.animation, sound, true, false, options.message)
-end
-
-
--- Base function which performs the common things that happen when a player is killed
-function Player:die(animation, sound, stopMoving, fall, message)
-    -- guard to stop multiple deaths
+function Player:explode(sound, message)
     if not self:isDead() then
         self.mode = PlayerMode.dead
 
@@ -231,25 +209,44 @@ function Player:die(animation, sound, stopMoving, fall, message)
             self.runSound = nil
         end]]
 
+        sounds:player(sound or "killed")
+
         self:destroyEmitter()
-        --self:emit("deathflash")
-        --self:emit("die")
-
-        sounds:player("killed")
-
-        --self.animationOverride = nil
+        self:stopMomentum(true)
         self:animate(animation or "death_"..random(2))
-
-        if stopMoving then
-            self:stopMomentum(true)
-        end
-
-        --[[if message and self.main then
-            hud:displayMessageDied(message)
-        end]]
 
         local seq = anim:chainSeq("die", self.image)
         seq:tran({time=1000, alpha=0})
+        seq.onComplete = function()
+            self:hide()
+            self:failedCallback() 
+        end
+        seq:start()
+
+        if message then
+            hud:displayMessageDied(message)
+        end
+    end
+end
+
+
+function Player:fallToDeath(hole)
+    if not self:isDead() then
+        self.mode = PlayerMode.dead
+
+        --[[if self.runSound then
+            self:stopSound(self.runSound)
+            self.runSound = nil
+        end]]
+
+        sounds:player("killed")
+
+        self:destroyEmitter()
+        self:stopMomentum(true)
+        --self:animate(animation or "death_"..random(2))
+
+        local seq = anim:chainSeq("die", self.image)
+        seq:tran({time=1000, x=hole.x, y=hole.y, xScale=0.01, yScale=0.01, alpha=0})
         seq.onComplete = function()
             self:hide()
             self:failedCallback() 

@@ -15,10 +15,13 @@ local TileEngine = {
 }
 
 
+---- Environmental Collision Handlers
+
+
 local function eventWallCollision(self, event)
     local other = event.other.object
 
-    if other and other.isProjectile and event.phase == "began" then
+    if other and event.phase == "began" and other.isProjectile then
         if other.ricochet then
             other:bounce(true)
         else
@@ -28,47 +31,29 @@ local function eventWallCollision(self, event)
 end
 
 
-function TileEngine:eventUpdateFrame(event, player)
+local function eventHoleCollision(self, event)
+    local other = event.other.object
+    local hole  = self
+
+    if other and event.phase == "began" and (other.isPlayer or other.isEnemy) then
+        other:fallToDeath(hole)
+    end
 end
 
 
-function TileEngine:create(view, tiles, levelGenerator)
+---- Tile Engine
+
+
+function TileEngine:eventUpdateFrame(event, player)
+    -- only implement this is more needs to happen per frame than in game handler
+end
+
+
+function TileEngine:init(tiles)
     dusk.setPreference("enableTileCulling", false)
 
     self.data       = dusk.loadMap("json/RunAndGunMap.json")
     self.tileHeight = self.data.tileheight
-    
-    for i=1, 1 do
-        self:loadEnvironment(levelGenerator:newEnvironment())
-    end
-
-    self.map          = dusk.buildMap(self.data)
-    self.tileLayer    = self.map.layer["TileLayer"]
-    self.shadowLayer  = self.map.layer["ShadowLayer"]
-    self.objectLayer1 = self.map.layer["BelowEntityLayer"]
-    self.objectLayer2 = self.map.layer["EntityLayer"]
-    self.objectLayer3 = self.map.layer["AboveEntityLayer"]
-    
-
-    for tile in self.tileLayer.tilesInRange(1,1, self.cols, self.rows) do
-        local index = tile.tilesetGID
-        local frame = spriteSheetInfo.sheet.frames[index]
-        
-        if frame then
-            if frame.isWall then
-                physics.addBody(tile, "static", {density=1, friction=0, bounce=0, shape=frame.shape, filter=Filters.obstacle})
-
-                tile.collision = eventWallCollision
-                tile:addEventListener("collision", tile)
-                tile.isWall = true
-                
-            elseif frame.isHole then
-                --self:addSpecialTile(layer, frame, name, row, col, eventHoleCollision, Filters.hole)
-            end
-        end
-    end
-
-    self.map:scale(0.7, 0.7)
 end
 
 
@@ -85,6 +70,7 @@ function TileEngine:loadEnvironment(environment)
         for col=1, cols do
             local index   = self.existingTiles + (((row-1)*cols) + col)
             tiles[index]  = envTiles[row][col]
+            --print("index: "..index.." row: "..row.." col: "..col)
 
             if envShadows[row][col] > 0 then
                 shadow[index] = envShadows[row][col]
@@ -98,6 +84,51 @@ function TileEngine:loadEnvironment(environment)
     if cols > self.cols then
         self.cols = cols
     end
+end
+
+
+function TileEngine:buildLayers()
+    self.map          = dusk.buildMap(self.data)
+    self.tileLayer    = self.map.layer["TileLayer"]
+    self.shadowLayer  = self.map.layer["ShadowLayer"]
+    self.objectLayer1 = self.map.layer["BelowEntityLayer"]
+    self.objectLayer2 = self.map.layer["EntityLayer"]
+    self.objectLayer3 = self.map.layer["AboveEntityLayer"]
+    
+    for tile in self.tileLayer.tilesInRange(1,1, self.cols, self.rows) do
+        local index = tile.tilesetGID
+        local frame = spriteSheetInfo.sheet.frames[index]
+        
+        if frame then
+            if frame.isWall then
+                self:createWall(tile, frame)
+            elseif frame.isHole then
+                self:createHole(tile)
+            end
+        end
+    end
+
+    self.map:scale(0.7, 0.7)
+end
+
+
+function TileEngine:createWall(tile, frame)
+    physics.addBody(tile, "static", {density=1, friction=0, bounce=0, shape=frame.shape, filter=Filters.obstacle})
+
+    tile.collision = eventWallCollision
+    tile:addEventListener("collision", tile)
+    tile.isWall = true
+end
+
+
+function TileEngine:createHole(tile)
+    local shape = {-10,-10, 10,-10, 10,10, -10,10}
+
+    physics.addBody(tile, "static", {density=1, friction=0, bounce=0, shape=shape, filter=Filters.hole})
+
+    tile.collision = eventHoleCollision
+    tile:addEventListener("collision", tile)
+    tile.isHole = true
 end
 
 

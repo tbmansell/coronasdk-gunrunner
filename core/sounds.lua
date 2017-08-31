@@ -30,7 +30,7 @@ function Sounds:preload()
 
     self.enemySounds.hurt            = loadSound("sounds/hurt.mp3")
     self.enemySounds.killed          = loadSound("sounds/killed.mp3")
-    self.enemySounds.charge          = loadSound("sounds/charge.mp3")
+    self.enemySounds.charge          = loadSound("sounds/charge.wav")
     self.enemySounds.melee           = loadSound("sounds/melee.mp3")
 
     self.collectableSounds.gotWeapon = loadSound("sounds/collectedWeapon.wav")

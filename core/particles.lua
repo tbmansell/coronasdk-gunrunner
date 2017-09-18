@@ -16,6 +16,7 @@ function Particles:preLoadEmitters()
     self:loadEmitter("smoke")
     self:loadEmitter("enemyDie1")
     self:loadEmitter("enemyDie2")
+    self:loadEmitter("plasmaImpact")
 
 end
 

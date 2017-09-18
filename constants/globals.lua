@@ -52,7 +52,7 @@ Weapons = {
     club     = {name="club",     damage=1, time=500},
     rifle    = {name="rifle",    damage=1, ammoType="bullet", speed=650, rof=250,  ammo=30, reload=1000},
     shotgun  = {name="shotgun",  damage=1, ammoType="bullet", speed=650, rof=750,  ammo=10, reload=1000},
-    launcher = {name="launcher", damage=5, ammoType="rocket", speed=500, rof=2000, ammo=4,  reload=1000, shieldBuster=true, area=75},
+    launcher = {name="launcher", damage=5, ammoType="rocket", speed=550, rof=1500, ammo=4,  reload=1000, shieldBuster=true, area=75},
     laserGun = {name="laserGun", damage=2, ammoType="laser",  speed=600, rof=400,  ammo=20, reload=1000, ricochet=2},
 }
 
@@ -62,7 +62,7 @@ Weapons.club.slot     = "weapon"; Weapons.club.skin     = "weapons/weapon-club";
 Weapons.rifle.slot    = "weapon"; Weapons.rifle.skin    = "weapons/gun_assault";  Weapons.rifle.bone    = "rifle";    Weapons.rifle.shotSound    = "rifleShot";  Weapons.rifle.hitSound    = "bulletHit"; Weapons.rifle.hitAnim    = "bulletImpact"
 Weapons.shotgun.slot  = "weapon"; Weapons.shotgun.skin  = "weapons/gun_shotgun";  Weapons.shotgun.bone  = "rifle";    Weapons.shotgun.shotSound  = "rifleShot";  Weapons.shotgun.hitSound  = "bulletHit"; Weapons.shotgun.hitAnim  = "bulletImpact"
 Weapons.launcher.slot = "weapon"; Weapons.launcher.skin = "weapons/gun_launcher"; Weapons.launcher.bone = "launcher"; Weapons.launcher.shotSound = "rocketShot"; Weapons.launcher.hitSound = "rocketHit"; Weapons.launcher.hitAnim = "smoke";       Weapons.launcher.hitAnim2nd="explosion"
-Weapons.laserGun.slot = "weapon"; Weapons.laserGun.skin = "weapons/gun_laser";    Weapons.laserGun.bone = "laser";    Weapons.laserGun.shotSound = "laserShot";  Weapons.laserGun.hitSound = "laserHit";  Weapons.laserGun.hitAnim = nil
+Weapons.laserGun.slot = "weapon"; Weapons.laserGun.skin = "weapons/gun_laser";    Weapons.laserGun.bone = "laser";    Weapons.laserGun.shotSound = "laserShot";  Weapons.laserGun.hitSound = "laserHit";  Weapons.laserGun.hitAnim = "plasmaImpact";
 
 
 EnemyTypes = {

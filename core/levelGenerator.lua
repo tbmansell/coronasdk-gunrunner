@@ -74,8 +74,10 @@ end
 
 
 function LevelGenerator:destroy()
-    self.environments = {}
-    self.tiles = {}
+    self.environments   = {}
+    self.tiles          = {}
+    self.section        = 0
+    self.currentHeight  = 0
 end
 
 
@@ -563,7 +565,15 @@ end
 
 
 function LevelGenerator:addEnemies(index, env)
-    
+    self:addEntity({object="enemy",  type="shooter",  rank=1, xpos=6, ypos=-1})
+    self:addEntity({object="enemy",  type="shooter",  rank=1, xpos=8, ypos=-1})
+    self:addEntity({object="enemy",  type="shooter",  rank=5, xpos=7, ypos=-2})
+    self:addEntity({object="enemy",  type="shooter",  rank=9, xpos=7, ypos=-4})
+
+
+    --self:addEntity({object="enemy",  type="shooter",  rank=2, xpos=12, ypos=-1})
+    --self:addEntity({object="enemy",  type="shooter",  rank=2, xpos=14, ypos=-1})
+    --self:addEntity({object="enemy",  type="shooter",  rank=6, xpos=11, ypos=-2})
 end
 
 

@@ -9,7 +9,7 @@ local Player = {
     class         = "Player",
     intHeight     = 25,
     intWidth      = 25,
-    verticalSpeed = 3,
+    verticalSpeed = 4,
     strafeSpeed   = 4,
 
     mode          = PlayerMode.ready,

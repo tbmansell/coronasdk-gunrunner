@@ -39,7 +39,7 @@ sounds:preload()
 
 -- Global debug game logic
 if globalDebugGame then
-	--timer.performWithDelay(1000, draw.displayPerformance, 0)
+	timer.performWithDelay(1000, draw.displayPerformance, 0)
 end
 
 -- for debug spacing

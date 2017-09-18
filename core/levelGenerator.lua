@@ -10,9 +10,14 @@ local LevelGenerator = {
 
     environments    = {},
     tiles           = {},
-
     section         = 0,
     currentHeight   = 0,
+
+    enemyMaxRank     = 1,
+    enemyPoints      = 10,
+    enemyWeaponAlloc = nil,
+    enemyRankAlloc   = nil,
+    enemyFormation   = nil,
 }
 
 -- Aliases:
@@ -413,7 +418,6 @@ end
 
 function LevelGenerator:makeBoxWall(env, x, y, width, height)
     local right, top = x+width+1, y-height-1
-    --local midX, midY = width-2,   height-2
 
     --print("box: x="..x.." y="..y.." width="..width.." height="..height)
 
@@ -473,11 +477,21 @@ end
 
 
 function LevelGenerator:fillEnvironment()
-    local index = #self.environments
+    local index = self.section
     local env   = self.environments[index]
 
     self.entities = {}
 
+    -- There are no enemies on the first section
+    if index > 1 then
+        self:addEnemies(index,  env)
+    end
+
+    self:addScenery(index,  env)
+    self:addPowerups(index, env)
+    self:addPoints(index,   env)
+
+    --[[
     if index == 1 then
         self:addEntity({object="weapon", type="shotgun",  xpos=5,  ypos=-15})
         self:addEntity({object="weapon", type="launcher", xpos=8,  ypos=-15})
@@ -533,7 +547,7 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="enemy",  type="shooter",  rank=2, xpos=12, ypos=-15})
         self:addEntity({object="enemy",  type="shooter",  rank=3, xpos=15, ypos=-15})
         self:addEntity({object="enemy",  type="shooter",  rank=4, xpos=10, ypos=-18})
-    end
+    end]]
 
     self.currentHeight = self.currentHeight + env.height
 
@@ -546,6 +560,34 @@ function LevelGenerator:addEntity(spec)
 
     self.entities[#self.entities+1] = spec
 end
+
+
+function LevelGenerator:addEnemies(index, env)
+    
+end
+
+
+function LevelGenerator:addScenery(index, env)
+end
+
+
+function LevelGenerator:addPowerups(index, env)
+end
+
+
+function LevelGenerator:addPoints(index, env)
+end
+
+
+
+
+
+
+
+
+
+
+
 
 
 

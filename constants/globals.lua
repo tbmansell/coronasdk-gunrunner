@@ -67,14 +67,73 @@ Weapons.laserGun.slot = "weapon"; Weapons.laserGun.skin = "weapons/gun_laser";  
 
 EnemyTypes = {
     melee = {
-        -- ranked in order of dangerousness
-        [1] = {skin="lizard_club",     weapon="club",     health=1, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150, melee=true},
+        [1] = {skin="lizard_club",              weapon="club",     health=1, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150, melee=true},
+        [2] = {skin="lizard_club_captain",      weapon="club",     health=1, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150, melee=true},
+        [3] = {skin="lizard_club_elite",        weapon="club",     health=1, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150, melee=true},
     },
     shooter = {
-        -- ranked in order of dangerousness
-        [1] = {skin="lizard_assault",  weapon="rifle",    health=2,  inaccuracy=50, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100},
-        [2] = {skin="lizard_shotgun",  weapon="shotgun",  health=2,  inaccuracy=40, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
-        [3] = {skin="lizard_launcher", weapon="launcher", health=3,  inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=50},
-        [4] = {skin="lizard_laser",    weapon="laserGun", health=3,  inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=200},
+        -- Infantry of each weapon
+        [1]  = {skin="lizard_assault",          weapon="rifle",    health=2,  inaccuracy=50, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100},
+        [2]  = {skin="lizard_shotgun",          weapon="shotgun",  health=2,  inaccuracy=40, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
+        [3]  = {skin="lizard_launcher",         weapon="launcher", health=3,  inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=50},
+        [4]  = {skin="lizard_laser",            weapon="laserGun", health=3,  inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=200},
+        -- Captains of each weapon
+        [5]  = {skin="lizard_assault_captain",  weapon="rifle",    health=2,  inaccuracy=50, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100},
+        [6]  = {skin="lizard_shotgun_captain",  weapon="shotgun",  health=2,  inaccuracy=40, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
+        [7]  = {skin="lizard_launcher_captain", weapon="launcher", health=3,  inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=50},
+        [8]  = {skin="lizard_laser_captain",    weapon="laserGun", health=3,  inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=200},
+        -- Elites of each weapon
+        [9]  = {skin="lizard_assault_elite",    weapon="rifle",    health=2,  inaccuracy=50, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100},
+        [10] = {skin="lizard_shotgun_elite",    weapon="shotgun",  health=2,  inaccuracy=40, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
+        [11] = {skin="lizard_launcher_elite",   weapon="launcher", health=3,  inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=50},
+        [12] = {skin="lizard_laser_elite",      weapon="laserGun", health=3,  inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=20, roaming=1000, speed=200},
     },
 }
+
+
+EnemyWeaponAllocations = {
+    meleeOnly       = 1,
+    riflesOnly      = 2,
+    heavyOnly       = 3,
+    meleeAndRifles  = 4,
+    heavyAndMelee   = 5,
+    heavyAndRifles  = 6,
+    all             = 7,
+}
+
+
+EnemyRankAllocations = {
+    infantry            = 1,
+    captain             = 2,
+    infantryWithCaptain = 3,
+    elite               = 4,
+    infantryWithElite   = 5,
+    captainWithElite    = 6,
+    all                 = 7,
+}
+
+
+EnemyFormations = {
+    clusterFuck = 1,  -- spread everywhere, no connection
+    mob         = 2,  -- in one mass group, close together
+    squad       = 3,  -- in one group, spread out
+    wall        = 4,  -- sequential vertically or horiz
+    triangle    = 5,  
+    square      = 6,  
+    jagged      = 7,  -- in a jagged line horiz (1 up, 1 down, 1 up, etc)
+    circle      = 8,
+    cross       = 9,
+}
+
+--[[
+EnemyFormationMinimums = {
+    EnemyFormations.clusterFuck = 1,
+    EnemyFormations.mob         = 2,
+    EnemyFormations.squad       = 2,
+    EnemyFormations.wall        = 2,
+    EnemyFormations.triangle    = 3,  
+    EnemyFormations.square      = 4, 
+    EnemyFormations.jagged      = 4,
+    EnemyFormations.circle      = 6,
+    EnemyFormations.cross       = 6,
+}]]

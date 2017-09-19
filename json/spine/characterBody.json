@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "IHOoAmlcQcr4o7Jqw4AYFvkoM9w", "spine": "3.6.39", "width": 182.8, "height": 252.04 },
+"skeleton": { "hash": "vWsnfeTBPs96CydylkaReCl34T4", "spine": "3.6.39", "width": 187.39, "height": 284.59 },
 "bones": [
 	{ "name": "root", "rotation": -35.26 },
 	{ "name": "Body", "parent": "root", "length": 70.01, "rotation": 88.91, "x": 1 },
@@ -20,7 +20,7 @@
 	{ "name": "left_forearm", "bone": "LeftForearm", "attachment": "left_forearm" },
 	{ "name": "right_forearm", "bone": "RightForearm", "attachment": "right_forearm" },
 	{ "name": "Body", "bone": "Body", "attachment": "body" },
-	{ "name": "weapon", "bone": "weapon", "attachment": "weapons/gun_assault" },
+	{ "name": "weapon", "bone": "weapon", "attachment": "weapons/gun_laser" },
 	{ "name": "head", "bone": "Head", "attachment": "head" }
 ],
 "skins": {
@@ -55,10 +55,10 @@
 	},
 	"lizard_assault_captain": {
 		"Body": {
-			"body": { "name": "lizard_assault/body_captain", "x": 1, "y": 3, "rotation": -85.72, "width": 157, "height": 78 }
+			"body": { "name": "lizard_assault/body_captain", "x": 1, "y": 3, "rotation": -85.72, "width": 157, "height": 80 }
 		},
 		"head": {
-			"head": { "name": "lizard_assault/head", "x": 16.36, "y": 11.72, "rotation": -58.33, "width": 58, "height": 105 }
+			"head": { "name": "lizard_assault/head_captain", "x": 14.39, "y": 6.71, "rotation": -58.33, "width": 58, "height": 105 }
 		},
 		"left_arm": {
 			"left_arm": { "name": "lizard_assault/left_arm", "x": 16.49, "y": 1.63, "rotation": -90, "width": 35, "height": 47 }
@@ -78,7 +78,7 @@
 			"body": { "name": "lizard_assault/body_elite", "x": -0.58, "y": 0.17, "rotation": -88.91, "width": 163, "height": 78 }
 		},
 		"head": {
-			"head": { "name": "lizard_assault/head", "x": 14.39, "y": 6.71, "rotation": -58.33, "width": 58, "height": 105 }
+			"head": { "name": "lizard_assault/head_elite", "x": 14.39, "y": 6.71, "rotation": -58.33, "width": 58, "height": 105 }
 		},
 		"left_arm": {
 			"left_arm": { "name": "lizard_assault/left_arm", "x": 16.49, "y": 1.63, "rotation": -90, "width": 35, "height": 47 }
@@ -175,10 +175,10 @@
 	},
 	"lizard_laser_captain": {
 		"Body": {
-			"body": { "name": "lizard_laser/body", "x": -0.58, "y": 0.17, "rotation": -88.91, "width": 153, "height": 70 }
+			"body": { "name": "lizard_laser/body_captain", "x": 1, "y": 3, "rotation": -85.72, "width": 163, "height": 78 }
 		},
 		"head": {
-			"head": { "name": "lizard_laser/head", "x": -1.93, "y": -4.85, "rotation": -58.33, "width": 110, "height": 158 }
+			"head": { "name": "lizard_laser/head_captain", "x": -1.93, "y": -4.85, "rotation": -58.33, "width": 110, "height": 158 }
 		},
 		"left_arm": {
 			"left_arm": { "name": "lizard_laser/left_arm", "x": 16.49, "y": 1.63, "rotation": -90, "width": 35, "height": 47 }
@@ -195,10 +195,10 @@
 	},
 	"lizard_laser_elite": {
 		"Body": {
-			"body": { "name": "lizard_laser/body", "x": -0.58, "y": 0.17, "rotation": -88.91, "width": 153, "height": 70 }
+			"body": { "name": "lizard_laser/body_elite", "x": 1, "y": 3, "rotation": -85.72, "width": 169, "height": 78 }
 		},
 		"head": {
-			"head": { "name": "lizard_laser/head", "x": -1.93, "y": -4.85, "rotation": -58.33, "width": 110, "height": 158 }
+			"head": { "name": "lizard_laser/head_elite", "x": -1.93, "y": -4.85, "rotation": -58.33, "width": 110, "height": 158 }
 		},
 		"left_arm": {
 			"left_arm": { "name": "lizard_laser/left_arm", "x": 16.49, "y": 1.63, "rotation": -90, "width": 35, "height": 47 }
@@ -235,10 +235,10 @@
 	},
 	"lizard_launcher_captain": {
 		"Body": {
-			"body": { "name": "lizard_launcher/body", "x": 1, "y": 3, "rotation": -85.72, "width": 153, "height": 70 }
+			"body": { "name": "lizard_launcher/body_captain", "x": 1, "y": 3, "rotation": -85.72, "width": 163, "height": 78 }
 		},
 		"head": {
-			"head": { "name": "lizard_launcher/head", "x": -1.93, "y": -4.85, "rotation": -58.33, "width": 110, "height": 158 }
+			"head": { "name": "lizard_launcher/head_captain", "x": -1.93, "y": -4.85, "rotation": -58.33, "width": 110, "height": 158 }
 		},
 		"left_arm": {
 			"left_arm": { "name": "lizard_launcher/left_arm", "x": 16.49, "y": 1.63, "rotation": -90, "width": 35, "height": 47 }
@@ -255,10 +255,10 @@
 	},
 	"lizard_launcher_elite": {
 		"Body": {
-			"body": { "name": "lizard_launcher/body", "x": 1, "y": 3, "rotation": -85.72, "width": 153, "height": 70 }
+			"body": { "name": "lizard_launcher/body_elite", "x": 1, "y": 3, "rotation": -85.72, "width": 169, "height": 78 }
 		},
 		"head": {
-			"head": { "name": "lizard_launcher/head", "x": -1.93, "y": -4.85, "rotation": -58.33, "width": 110, "height": 158 }
+			"head": { "name": "lizard_launcher/head_elite", "x": -1.93, "y": -4.85, "rotation": -58.33, "width": 110, "height": 158 }
 		},
 		"left_arm": {
 			"left_arm": { "name": "lizard_launcher/left_arm", "x": 16.49, "y": 1.63, "rotation": -90, "width": 35, "height": 47 }
@@ -295,10 +295,10 @@
 	},
 	"lizard_shotgun_captain": {
 		"Body": {
-			"body": { "name": "lizard_shotgun/body", "x": 1, "y": 3, "rotation": -85.72, "width": 130, "height": 70 }
+			"body": { "name": "lizard_shotgun/body_captain", "x": 1, "y": 3, "rotation": -85.72, "width": 157, "height": 80 }
 		},
 		"head": {
-			"head": { "name": "lizard_shotgun/head", "x": 10.9, "y": 4.56, "rotation": -58.33, "width": 62, "height": 121 }
+			"head": { "name": "lizard_shotgun/head_captain", "x": 10.9, "y": 4.56, "rotation": -58.33, "width": 62, "height": 121 }
 		},
 		"left_arm": {
 			"left_arm": { "name": "lizard_shotgun/left_arm", "x": 16.49, "y": 1.63, "rotation": -90, "width": 35, "height": 47 }
@@ -315,10 +315,10 @@
 	},
 	"lizard_shotgun_elite": {
 		"Body": {
-			"body": { "name": "lizard_shotgun/body", "x": 1, "y": 3, "rotation": -85.72, "width": 130, "height": 70 }
+			"body": { "name": "lizard_shotgun/body_elite", "x": 1, "y": 3, "rotation": -85.72, "width": 163, "height": 78 }
 		},
 		"head": {
-			"head": { "name": "lizard_shotgun/head", "x": 10.9, "y": 4.56, "rotation": -58.33, "width": 62, "height": 121 }
+			"head": { "name": "lizard_shotgun/head_elite", "x": 10.9, "y": 4.56, "rotation": -58.33, "width": 62, "height": 121 }
 		},
 		"left_arm": {
 			"left_arm": { "name": "lizard_shotgun/left_arm", "x": 16.49, "y": 1.63, "rotation": -90, "width": 35, "height": 47 }
@@ -1942,15 +1942,17 @@
 			"LeftArm": {
 				"rotate": [
 					{ "time": 0, "angle": -1.61, "curve": "stepped" },
+					{ "time": 0.4, "angle": -1.61, "curve": "stepped" },
 					{ "time": 1.3333, "angle": -1.61 }
 				],
 				"translate": [
-					{ "time": 0, "x": -5.05, "y": -7.28 },
-					{ "time": 0.4, "x": -4.62, "y": -6.94 },
-					{ "time": 1.3333, "x": -5.05, "y": -7.28 }
+					{ "time": 0, "x": -5.84, "y": 3.09, "curve": "stepped" },
+					{ "time": 0.4, "x": -5.84, "y": 3.09, "curve": "stepped" },
+					{ "time": 1.3333, "x": -5.84, "y": 3.09 }
 				],
 				"scale": [
 					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
+					{ "time": 0.4, "x": 1, "y": 1, "curve": "stepped" },
 					{ "time": 1.3333, "x": 1, "y": 1 }
 				]
 			},
@@ -2449,9 +2451,9 @@
 					{ "time": 0.5, "angle": -15.44 }
 				],
 				"translate": [
-					{ "time": 0, "x": -10.89, "y": 0.66 },
-					{ "time": 0.1667, "x": -13.18, "y": 1.43 },
-					{ "time": 0.5, "x": -10.89, "y": 0.66 }
+					{ "time": 0, "x": -11.5, "y": 7.06 },
+					{ "time": 0.1667, "x": -9.58, "y": 4.19 },
+					{ "time": 0.5, "x": -11.5, "y": 7.06 }
 				],
 				"scale": [
 					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },

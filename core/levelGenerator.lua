@@ -493,7 +493,7 @@ function LevelGenerator:fillEnvironment()
     self:addPowerups(index, env)
     self:addPoints(index,   env)
 
-    --[[
+    
     if index == 1 then
         self:addEntity({object="weapon", type="shotgun",  xpos=5,  ypos=-15})
         self:addEntity({object="weapon", type="launcher", xpos=8,  ypos=-15})
@@ -549,7 +549,7 @@ function LevelGenerator:fillEnvironment()
         self:addEntity({object="enemy",  type="shooter",  rank=2, xpos=12, ypos=-15})
         self:addEntity({object="enemy",  type="shooter",  rank=3, xpos=15, ypos=-15})
         self:addEntity({object="enemy",  type="shooter",  rank=4, xpos=10, ypos=-18})
-    end]]
+    end
 
     self.currentHeight = self.currentHeight + env.height
 
@@ -565,14 +565,18 @@ end
 
 
 function LevelGenerator:addEnemies(index, env)
-    self:addEntity({object="enemy",  type="shooter",  rank=1, xpos=6, ypos=-1})
-    self:addEntity({object="enemy",  type="shooter",  rank=1, xpos=8, ypos=-1})
-    self:addEntity({object="enemy",  type="shooter",  rank=5, xpos=7, ypos=-2})
-    self:addEntity({object="enemy",  type="shooter",  rank=9, xpos=7, ypos=-4})
+  --  self:addEntity({object="enemy",  type="shooter",  rank=1, xpos=6, ypos=-1})
+    --self:addEntity({object="enemy",  type="shooter",  rank=1, xpos=8, ypos=-1})
+  --  self:addEntity({object="enemy",  type="shooter",  rank=5, xpos=7, ypos=-2})
+    self:addEntity({object="enemy",  type="shooter",  rank=1, xpos=9, ypos=-4})
+    self:addEntity({object="enemy",  type="shooter",  rank=2, xpos=10, ypos=-5})
+    self:addEntity({object="enemy",  type="shooter",  rank=5, xpos=11, ypos=-6})
+    self:addEntity({object="enemy",  type="shooter",  rank=6, xpos=12, ypos=-7})
 
 
-    --self:addEntity({object="enemy",  type="shooter",  rank=2, xpos=12, ypos=-1})
-    --self:addEntity({object="enemy",  type="shooter",  rank=2, xpos=14, ypos=-1})
+
+    self:addEntity({object="enemy",  type="shooter",  rank=9, xpos=12, ypos=-1})
+    self:addEntity({object="enemy",  type="shooter",  rank=10, xpos=14, ypos=-1})
     --self:addEntity({object="enemy",  type="shooter",  rank=6, xpos=11, ypos=-2})
 end
 

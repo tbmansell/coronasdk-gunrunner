@@ -47,23 +47,20 @@ function Loader:load(LevelGenerator)
         print("Section "..index.." enemyPoints="..self.enemyPoints.." weaponLimit="..self.enemyWeaponLimit.." rankLimit="..self.enemyRankLimit)
 
         -- There are no enemies on the first section
-        --if index > 1 then
-        if index > 0 then
+        if index > 1 then
+        --if index > 0 then
             -- define early presets here:
-            --if index == 2 then
-            if index == 1 then
-                --self.enemyPatternSet  = true  -- mark that logic doesnt change settings here
-                self.enemyWeaponAlloc = EnemyWeaponAllocations.riflesOnly--.meleeOnly
-                self.enemyRankAlloc   = EnemyRankAllocations.captain--infantry
-
-                self:addEnemies()
+            if index == 2 then
+            --if index == 1 then
+                self.enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly
+                self.enemyRankAlloc   = EnemyRankAllocations.infantry
+                --self:addEnemies()
             else
-                --self.enemyPatternSet  = false
                 self.enemyWeaponAlloc = random(self.enemyWeaponLimit)
                 self.enemyRankAlloc   = random(self.enemyRankLimit)
             end
 
-            --self:addEnemies()
+            self:addEnemies()
         end
 
         self:addScenery()
@@ -200,8 +197,16 @@ function Loader:load(LevelGenerator)
         elseif alloc == EnemyWeaponAllocations.riflesOnly or alloc == EnemyWeaponAllocations.heavyOnly then
             self:generateShooterEnemies()
         else
-            self:generateMeleeEnemies(points / 2)
-            self:generateShooterEnemies()
+            -- 50% chance of both, 25% chance of either
+            local r = random(100)
+            if r > 0 and r <= 50 then
+                self:generateMeleeEnemies(points / 2)
+                self:generateShooterEnemies()
+            elseif r > 50 and r <= 75 then
+                self:generateMeleeEnemies()
+            else
+                self:generateShooterEnemies()
+            end
         end
     end
 
@@ -269,10 +274,7 @@ function Loader:load(LevelGenerator)
         local alloc = self.enemyRankAlloc
         local rank  = 0
 
-        print("leader rank = "..alloc)
-
         if alloc == EnemyRankAllocations.captain then
-            print("Captain!")
             rank = rank + 4
         elseif alloc == EnemyRankAllocations.elite then
             rank = rank + 8

@@ -17,11 +17,10 @@ local LevelGenerator = {
 
     enemyRankLimit   = 1,
     enemyWeaponLimit = 1,
-    enemyPoints      = 10,
+    enemyPoints      = -3,
     enemyPatternSet  = true,
-    enemyWeaponAlloc = EnemyWeaponAllocations.riflesOnly,
+    enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly,
     enemyRankAlloc   = EnemyRankAllocations.infantry,
-    --enemyFormation   = EnemyFormations.mob,
 }
 
 -- Aliases:

@@ -49,14 +49,14 @@ function Projectile:fire()
     local forceX = weapon.speed * -cos(rad(self.angle))
     local forceY = weapon.speed * -sin(rad(self.angle))
 
-    if weapon.ammoType == "rocket" then
+   -- if weapon.ammoType == "rocket" then
         --[[if forceY > 0 then
             self:flipY()
         end]]
         self:flipY()
         -- dont call rotate() as this changes the angle
         self.image.rotation = self.angle + 90
-    end
+  --  end
 
     self:applyForce(forceX, forceY)
 

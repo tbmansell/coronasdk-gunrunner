@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "DvGOEMUs3V0jL3M5Lcm4CT34bT8", "spine": "3.6.39", "width": 178.49, "height": 198.78 },
+"skeleton": { "hash": "3axLBPWEZ2pf2wnbeUDH2sseGUU", "spine": "3.6.41", "width": 178.49, "height": 198.78 },
 "bones": [
 	{ "name": "root", "rotation": -35.26 },
 	{ "name": "Body", "parent": "root", "length": 70.01, "rotation": 88.91, "x": 1 },
@@ -115,7 +115,7 @@
 	},
 	"lizard_club_captain": {
 		"Body": {
-			"body": { "name": "lizard_club/body", "x": 1, "y": 3, "rotation": -85.72, "width": 153, "height": 70 }
+			"body": { "name": "lizard_club/body_captain", "x": 1, "y": 3, "rotation": -85.72, "width": 163, "height": 78 }
 		},
 		"head": {
 			"head": { "name": "lizard_club/head", "x": 12.24, "y": 5.19, "rotation": -58.33, "width": 68, "height": 80 }
@@ -135,7 +135,7 @@
 	},
 	"lizard_club_elite": {
 		"Body": {
-			"body": { "name": "lizard_club/body", "x": 1, "y": 3, "rotation": -85.72, "width": 153, "height": 70 }
+			"body": { "name": "lizard_club/body_elite", "x": 1, "y": 3, "rotation": -85.72, "width": 169, "height": 78 }
 		},
 		"head": {
 			"head": { "name": "lizard_club/head", "x": 12.24, "y": 5.19, "rotation": -58.33, "width": 68, "height": 80 }

@@ -259,7 +259,7 @@ function Hud:eventUpdateFrame(event)
     end
 
 
-    self.player:moveBy(0, forcePlayerMoveY)
+--    self.player:moveBy(0, forcePlayerMoveY)
 end
 
 

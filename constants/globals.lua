@@ -96,7 +96,7 @@ EnemyWeaponAllocations = {
     riflesOnly      = 2,
     heavyOnly       = 3,
     meleeAndRifles  = 4,
-    heavyAndMelee   = 5,
+    meleeAndHeavy   = 5,
     heavyAndRifles  = 6,
     all             = 7,
 }

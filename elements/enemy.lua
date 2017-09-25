@@ -25,8 +25,8 @@ local Enemy = {
 
     flagShootAllowed  = true,
     flagStrikeAllowed = true,
-    flagMoveAllowed   = true,
-    flagChargeAllowed = true,
+    flagMoveAllowed   = false,--true,
+    flagChargeAllowed = false,--true,
     waitingToShoot    = false,
     waitingToStrike   = false,
     waitingToMove     = false,

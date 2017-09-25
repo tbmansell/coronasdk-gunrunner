@@ -9,7 +9,7 @@ function EnemyBuilder:newEnemy(camera, spec)
     local rankDef = builder:newClone(EnemyTypes[spec.type][spec.rank])
     spec.modifyImage = rankDef.modifyImage
 
-    print("Enemy: rank="..spec.rank.." skin="..(spec.skin or rankDef.skin))
+    print("Enemy: rank="..spec.rank.." skin="..(spec.skin or rankDef.skin).." pos="..tostring(spec.xpos)..", "..tostring(spec.ypos))
 
     local enemy = builder:newCharacter(spec, {
                        jsonName  = "characterBody",

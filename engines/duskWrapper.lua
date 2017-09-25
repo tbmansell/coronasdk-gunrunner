@@ -151,6 +151,10 @@ function TileEngine:addEntity(entity, focus)
 
     entity:moveTo(xpos, ypos + moveY)
 
+    if entity.isEnemy then
+        print("Added entity at: "..entity:x()..", "..entity:y())
+    end
+
     if focus then
         self.map.setCameraFocus(entity.image)
         self.tileLayer.setCameraOffset(1,    450)

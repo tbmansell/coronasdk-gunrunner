@@ -17,9 +17,7 @@ local collectableCollection = nil
 local obstacleCollection    = nil
 
 -- Aliases
-local math_abs    = math.abs
-local math_floor  = math.floor
-local math_random = math.random
+local random = math.random
 
 -- Aliases to functions for enterframe event
 local check_background_movement  = function()end
@@ -108,7 +106,7 @@ function Level:createElementsFromData(levelElements)
 
         if     object == "enemy"    then self:createEnemy(item)
         elseif object == "weapon"   then self:createCollectable(item) 
-        elseif object == "obstacle" then self:createObstacle(item) 
+        elseif object == "obstacle" then self:createObstacle(item)
         end
     end
 end
@@ -129,6 +127,11 @@ end
 
 
 function Level:createObstacle(item)
+    -- 50% chance non rotated item will be randomly rotated
+    if item.rotation == nil and random(100) < 50 then
+        item.rotation = random(360)
+    end
+
     local obstacle = obstacleBuilder:newItem(camera, item)
 
     obstacleCollection:add(obstacle)

@@ -5,7 +5,7 @@ local Loader = {}
 -- Aliases:
 local random = math.random
 local abs    = math.abs
-local min    = math.max
+local min    = math.min
 
 -- Locals:
 local index       = 1
@@ -45,7 +45,7 @@ function Loader:load(LevelGenerator)
         envTiles    = env.tiles
         envEntities = env.entities
 
-        print("Section "..index.." enemyPoints="..self.enemyPoints.." weaponLimit="..self.enemyWeaponLimit.." rankLimit="..self.enemyRankLimit)
+        --print("Section "..index.." enemyPoints="..self.enemyPoints.." weaponLimit="..self.enemyWeaponLimit.." rankLimit="..self.enemyRankLimit.." weaponAlloc="..self.enemyWeaponAlloc.." rankAlloc="..self.enemyRankAlloc)
 
         -- There are no enemies on the first section
         if index > 1 then
@@ -61,6 +61,8 @@ function Loader:load(LevelGenerator)
                 self.enemyRankAlloc   = random(self.enemyRankLimit)
             end
 
+            print("Section "..index.." enemyPoints="..self.enemyPoints.." weaponLimit="..self.enemyWeaponLimit.." rankLimit="..self.enemyRankLimit.." weaponAlloc="..self.enemyWeaponAlloc.." rankAlloc="..self.enemyRankAlloc)
+            
             self:addEnemies()
         end
 
@@ -72,7 +74,7 @@ function Loader:load(LevelGenerator)
         self.currentHeight = self.currentHeight + env.height
 
         -- Increment the weapons that can appear by one each section
-        if index > 2 and self.enemyWeaponLimit < EnemyWeaponAllocations.all then
+        if index > 1 and self.enemyWeaponLimit < EnemyWeaponAllocations.all then
             self.enemyWeaponLimit = self.enemyWeaponLimit + 1
             print("+ WeaponLimit now "..self.enemyWeaponLimit)
         end
@@ -84,8 +86,11 @@ function Loader:load(LevelGenerator)
         end
 
         -- Increment the enemy points up or down between 20 - 50
-        if self.enemyPoints < 20 then
-            self.enemyPoints = self.enemyPoints + 5
+        if self.enemyPoints < 20  then
+            -- up the points evey 4 sections
+            if index % 4 == 0 then
+                self.enemyPoints = self.enemyPoints + 5
+            end
         elseif self.enemyPoints >= 50 then
             self.enemyPoints = self.enemyPoints - 5
         else
@@ -220,7 +225,7 @@ function Loader:load(LevelGenerator)
 
             if self.enemyRankAlloc > 1 then
                 local limit = min(self.enemyRankAlloc, 3)
-                rank = random(self.enemyRankAlloc)
+                rank = random(limit)
             end
 
             points = points - rank

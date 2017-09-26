@@ -5,7 +5,7 @@ local EnemyBuilder = {}
 
 
 function EnemyBuilder:newEnemy(camera, spec)
-    print("Enemy: rank="..tostring(spec.rank).." type="..tostring(spec.type).." pos="..tostring(spec.xpos)..", "..tostring(spec.ypos))
+    --print("Enemy: rank="..tostring(spec.rank).." type="..tostring(spec.type).." pos="..tostring(spec.xpos)..", "..tostring(spec.ypos))
 
     -- Copy the enemy rank def and reference the modifyImage before spien creation
     local rankDef = builder:newClone(EnemyTypes[spec.type][spec.rank])

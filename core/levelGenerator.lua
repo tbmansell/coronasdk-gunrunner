@@ -17,7 +17,7 @@ local LevelGenerator = {
 
     enemyRankLimit   = 1,
     enemyWeaponLimit = 1,
-    enemyPoints      = 0,
+    enemyPoints      = 10,
     enemyPatternSet  = true,
     enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly,
     enemyRankAlloc   = EnemyRankAllocations.infantry,

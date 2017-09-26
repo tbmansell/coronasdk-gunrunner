@@ -17,7 +17,7 @@ local LevelGenerator = {
 
     enemyRankLimit   = 1,
     enemyWeaponLimit = 1,
-    enemyPoints      = -3,
+    enemyPoints      = 0,
     enemyPatternSet  = true,
     enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly,
     enemyRankAlloc   = EnemyRankAllocations.infantry,
@@ -84,8 +84,7 @@ function LevelGenerator:destroy()
     self.currentHeight    = 0
     self.enemyRankLimit   = 1
     self.enemyWeaponLimit = 1
-    self.enemyPoints      = 5
-    self.enemyPatternSet  = true
+    self.enemyPoints      = 0
     self.enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly
     self.enemyRankAlloc   = EnemyRankAllocations.infantry
 end
@@ -104,11 +103,11 @@ function LevelGenerator:newEnvironment()
     self:setEnvironmentShape(env)
     self:setEnvironmentEdges(env)
 
-    --if self.section > 1 then
+    if self.section > 1 then
         self:setEnvironmentWalls(env)
-    --end
+    end
 
-    self:setEnvironmentFloor(env)
+    --self:setEnvironmentFloor(env)
 
     self.environments[#self.environments + 1] = env
 
@@ -465,8 +464,7 @@ function LevelGenerator:makeBoxWall(env, x, y, width, height)
     -- fill in center with no floor
     for i=1, height do
         for v=1, width do
-            --env.tiles[y - i][x + v] = self.tiles.noFloor
-            env.tiles[y - i][x + v] = self.tiles.patternGrill
+            env.tiles[y - i][x + v] = self.tiles.noFloor
         end
     end
 end
@@ -486,8 +484,8 @@ function LevelGenerator:setEnvironmentFloor(env)
                     env.tiles[y][x] = self.tiles.patternGrill 
                 end]]
 
-                -- NOTE: this has to run after entities have been palced so we can detect normal tiles
-                --env.tiles[y][x] = self.tiles.plain[random(#self.tiles.plain)]
+                -- NOTE: this has to run after entities have been placed so we can detect normal tiles
+                env.tiles[y][x] = self.tiles.plain[random(#self.tiles.plain)]
             end
         end
     end

@@ -5,6 +5,7 @@ local Loader = {}
 -- Aliases:
 local random = math.random
 local abs    = math.abs
+local min    = math.max
 
 -- Locals:
 local index       = 1
@@ -73,13 +74,13 @@ function Loader:load(LevelGenerator)
         -- Increment the weapons that can appear by one each section
         if index > 2 and self.enemyWeaponLimit < EnemyWeaponAllocations.all then
             self.enemyWeaponLimit = self.enemyWeaponLimit + 1
-            print("weapon alloc now "..self.enemyWeaponLimit)
+            print("+ WeaponLimit now "..self.enemyWeaponLimit)
         end
 
         -- Increment the enemy ranks that can appear by 2 every 4 sections
         if index % 4 == 0 and self.enemyRankLimit < EnemyRankAllocations.all  then
             self.enemyRankLimit = self.enemyRankLimit + 2
-            print("rank alloc now "..self.enemyRankLimit)
+            print("+ RankLimit now "..self.enemyRankLimit)
         end
 
         -- Increment the enemy points up or down between 20 - 50
@@ -188,7 +189,6 @@ function Loader:load(LevelGenerator)
 
 
     function LevelGenerator:generateEnemies()
-        print("Add Enemies Points: "..points)
         local alloc = self.enemyWeaponAlloc
 
         -- Generate the enemies weapons and ranks
@@ -219,6 +219,7 @@ function Loader:load(LevelGenerator)
             local rank = 1
 
             if self.enemyRankAlloc > 1 then
+                local limit = min(self.enemyRankAlloc, 3)
                 rank = random(self.enemyRankAlloc)
             end
 

@@ -90,7 +90,7 @@ function scene:loadLevel()
     local bgr = display.newImage(self.view, "images/background2.jpg", globalCenterX, globalCenterY)
     bgr:scale(2,2)
 
-    local sections    = 2
+    local sections    = 10
     local environment = {}
     local entities    = {}
 
@@ -103,6 +103,8 @@ function scene:loadLevel()
     for i=1,sections do
         environment[#environment+1] = levelGenerator:newEnvironment()
         entities[#entities+1]       = levelGenerator:fillEnvironment()
+
+        levelGenerator:setEnvironmentFloor(environment[#environment])
     end
 
     -- tile engine renders sections in reverse, so feed them in backward

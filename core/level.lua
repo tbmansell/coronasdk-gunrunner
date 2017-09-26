@@ -175,7 +175,7 @@ function Level:eventUpdateFrame(event)
     mainPlayer:updateSpine(delta)
 
     check_background_movement(delta)
-    check_spine_animation(spineCollection, delta, true)
+    check_spine_animation(spineCollection, delta, true, mainPlayer)
     check_moving_objects(movingCollection, delta, camera)
 end
 

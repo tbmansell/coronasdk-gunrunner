@@ -179,7 +179,7 @@ end
 function Builder:newSpineCollection()
 	local collection = self:newCollection("spineSet")
 
-	function collection:animateEach(delta, visibleOnly)
+	function collection:animateEach(delta, visibleOnly, player)
 		local items = self.items
 	    local num   = #items
 
@@ -188,16 +188,22 @@ function Builder:newSpineCollection()
 
 	        if object and object ~= -1 and object.inGame then
 	        	-- Check if image on-screen (or close to on-screen for fast movement)
-	        	local image = object.image
-	            local x, y  = image.x, image.y
+                if object:inDistance(player, 1000) then
+                    object:updateSpine(delta)
+                end
 
-	            if x and y then
-                    print(tostring(object.key).." "..x..", "..y)
+                -- this is not working because images X and Y are not being updated for some reason
+	        	--local image = object.image
+	            --local x, y  = image.x, image.y
+
+	            --if x and y then
+                    --print(tostring(object.key).." "..x..", "..y)
+                    --print(tostring(object.key).." "..object:x()..", "..object:y())
 	            	--if not visibleOnly or object.alwaysAnimate or (x >= leftBoundary and x <= rightBoundary and y >= topBoundary and y <= bottomBoundary) then
-                    if (x >= leftBoundary and x <= rightBoundary and y >= topBoundary and y <= bottomBoundary) then
-                        object:updateSpine(delta)
-		            end
-	            end
+                    --if (x >= leftBoundary and x <= rightBoundary and y >= topBoundary and y <= bottomBoundary) then
+                        --object:updateSpine(delta, player)
+		            --end
+	            --end
 	        end
 	    end
 	end

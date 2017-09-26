@@ -23,7 +23,8 @@ local GameObject = {
 }
 
 -- Aliases:
-local math_round = math.round
+local round      = math.round
+local abs        = math.abs
 local draw_point = drawMovingPathPoint
 local new_circle = display.newCircle
 
@@ -289,12 +290,12 @@ end
 
 
 function GameObject:distanceFrom(to)
-    local xdist, ydist = 0, math_round(to:jumpTop() - self:jumpTop())
+    local xdist, ydist = 0, round(to:jumpTop() - self:jumpTop())
 
     if self:x() < to:x() then
-        xdist = math_round(to:jumpLeft()  - self:jumpRight())
+        xdist = round(to:jumpLeft()  - self:jumpRight())
     else
-        xdist = math_round(to:jumpRight() - self:jumpLeft())
+        xdist = round(to:jumpRight() - self:jumpLeft())
     end
 
     return xdist, ydist
@@ -408,6 +409,19 @@ function GameObject:updateSpine(delta)
     self.state:update(delta)
     self.state:apply(self.skeleton)
     self.skeleton:updateWorldTransform()
+end
+
+
+function GameObject:inDistance(target, distance)
+    local tx, ty = target:pos()
+    local x,  y  = self:pos() 
+
+    --local distX = abs(tx - x)
+    --local distY = abs(ty - y)
+    --local close = (distX < distance and distY < distance)
+    --print("Distance X="..distX..", "..distY.." InRange="..tostring(close))
+
+    return abs(tx - x) < distance and abs(ty - y) < distance
 end
 
 

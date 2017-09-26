@@ -25,8 +25,8 @@ local Enemy = {
 
     flagShootAllowed  = true,
     flagStrikeAllowed = true,
-    flagMoveAllowed   = true,
-    flagChargeAllowed = true,
+    flagMoveAllowed   = false, --true,
+    flagChargeAllowed = false, --true,
     waitingToShoot    = false,
     waitingToStrike   = false,
     waitingToMove     = false,
@@ -67,7 +67,7 @@ function Enemy:updateSpine(delta)
     self.state:update(delta)
     self.state:apply(self.skeleton)
 
-    self.boneRoot.rotation = - (self.angle + 30)
+    self.boneRoot.rotation = -(self.angle + 30)
 
     self.skeleton:updateWorldTransform()
 
@@ -150,36 +150,39 @@ end
 
 
 function Enemy:checkBehaviour(camera, player)
-    if self:lineOfSight(player) then
-        -- Face player if not charging
-        if self.mode ~= EnemyMode.charge then
-            local angle = round(90 + atan2(player:y()- self:y(), player:x() - self:x()) * PI)
-            
-            if angle ~= self.angle then
-                self:rotate(angle)
+    -- Enemy must be in certain distance before they will do anything
+    if self:inDistance(player, 1000) then
+        if self:lineOfSight(player) then
+            -- Face player if not charging
+            if self.mode ~= EnemyMode.charge then
+                local angle = round(90 + atan2(player:y()- self:y(), player:x() - self:x()) * PI)
+                
+                if angle ~= self.angle then
+                    self:rotate(angle)
+                end
+            end
+
+            -- Check if should shoot player
+            if self.ammo then
+                if self:decideToShoot() then
+                    self:shoot(camera)
+                end
+            -- Check if should chrge and attack
+            elseif self.melee then
+                if self:decideToCharge() then
+                    self:charge(player)
+                end
+            end
+        else
+            -- if not visible randomly rotate
+            if self:decideToTurn() then
+                self:randomTurn()
             end
         end
 
-        -- Check if should shoot player
-        if self.ammo then
-            if self:decideToShoot() then
-                self:shoot(camera)
-            end
-        -- Check if should chrge and attack
-        elseif self.melee then
-            if self:decideToCharge() then
-                self:charge(player)
-            end
+        if self:decideToMove() then
+            self:move()
         end
-    else
-        -- if not visible randomly rotate
-        if self:decideToTurn() then
-            self:randomTurn()
-        end
-    end
-
-    if self:decideToMove() then
-        self:move()
     end
 end
 

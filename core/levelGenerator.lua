@@ -1,4 +1,6 @@
-local spriteSheetInfo = require("core.sheetInfo")
+local spriteSheetInfo        = require("core.sheetInfo")
+local levelGeneratorEntities = require("core.levelGeneratorEntities")
+
 
 
 -- Class
@@ -13,20 +15,22 @@ local LevelGenerator = {
     section         = 0,
     currentHeight   = 0,
 
-    enemyMaxRank     = 1,
-    enemyPoints      = 10,
-    enemyWeaponAlloc = nil,
-    enemyRankAlloc   = nil,
-    enemyFormation   = nil,
+    enemyRankLimit   = 1,
+    enemyWeaponLimit = 1,
+    enemyPoints      = -3,
+    enemyPatternSet  = true,
+    enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly,
+    enemyRankAlloc   = EnemyRankAllocations.infantry,
 }
 
 -- Aliases:
 local random = math.random
 
-
+-- Locals:
 local function percent(chance)
     return random(100) < chance
 end
+
 
 
 function LevelGenerator:setup()
@@ -74,17 +78,24 @@ end
 
 
 function LevelGenerator:destroy()
-    self.environments   = {}
-    self.tiles          = {}
-    self.section        = 0
-    self.currentHeight  = 0
+    self.environments     = {}
+    self.tiles            = {}
+    self.section          = 0
+    self.currentHeight    = 0
+    self.enemyRankLimit   = 1
+    self.enemyWeaponLimit = 1
+    self.enemyPoints      = 5
+    self.enemyPatternSet  = true
+    self.enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly
+    self.enemyRankAlloc   = EnemyRankAllocations.infantry
 end
 
 
 function LevelGenerator:newEnvironment()
     local env = {
-        tiles   = {},
-        shadows = {}
+        tiles    = {},
+        shadows  = {},
+        entities = {},
     }
 
     self.section = self.section + 1
@@ -93,9 +104,9 @@ function LevelGenerator:newEnvironment()
     self:setEnvironmentShape(env)
     self:setEnvironmentEdges(env)
 
-    if self.section > 1 then
+    --if self.section > 1 then
         self:setEnvironmentWalls(env)
-    end
+    --end
 
     self:setEnvironmentFloor(env)
 
@@ -139,12 +150,14 @@ function LevelGenerator:setEnvironmentShape(env)
         -- Stick with the same direction throughout
         if env.dir == "straight" then
             for y=1, env.height do
-                env.tiles[y]   = {}
-                env.shadows[y] = {}
+                env.tiles[y]    = {}
+                env.shadows[y]  = {}
+                env.entities[y] = {}
 
                 for x=1, env.width do
-                    env.tiles[y][x]   = self.tiles.default
-                    env.shadows[y][x] = 0
+                    env.tiles[y][x]    = self.tiles.default
+                    env.shadows[y][x]  = 0
+                    env.entities[y][x] = false
                 end
             end
         end
@@ -452,7 +465,8 @@ function LevelGenerator:makeBoxWall(env, x, y, width, height)
     -- fill in center with no floor
     for i=1, height do
         for v=1, width do
-            env.tiles[y - i][x + v] = self.tiles.noFloor
+            --env.tiles[y - i][x + v] = self.tiles.noFloor
+            env.tiles[y - i][x + v] = self.tiles.patternGrill
         end
     end
 end
@@ -463,6 +477,7 @@ function LevelGenerator:setEnvironmentFloor(env)
     for y=1, env.height do
         for x=1, env.width do
             if env.tiles[y][x] == self.tiles.default then
+
                 --[[if self.section == 1 then
                     env.tiles[y][x] = self.tiles.patternHazzard
                 elseif self.section == 2 then
@@ -471,138 +486,22 @@ function LevelGenerator:setEnvironmentFloor(env)
                     env.tiles[y][x] = self.tiles.patternGrill 
                 end]]
 
-                env.tiles[y][x] = self.tiles.plain[random(#self.tiles.plain)]
+                -- NOTE: this has to run after entities have been palced so we can detect normal tiles
+                --env.tiles[y][x] = self.tiles.plain[random(#self.tiles.plain)]
             end
         end
     end
-end
 
-
-function LevelGenerator:fillEnvironment()
-    local index = self.section
-    local env   = self.environments[index]
-
-    self.entities = {}
-
-    -- There are no enemies on the first section
-    if index > 1 then
-        self:addEnemies(index,  env)
+    -- differentiate each section
+    for x=2, env.width-1 do
+        env.tiles[1][x] = self.tiles.patternHazzard
     end
-
-    self:addScenery(index,  env)
-    self:addPowerups(index, env)
-    self:addPoints(index,   env)
-
-    
-    if index == 1 then
-        self:addEntity({object="weapon", type="shotgun",  xpos=5,  ypos=-15})
-        self:addEntity({object="weapon", type="launcher", xpos=8,  ypos=-15})
-        self:addEntity({object="weapon", type="rifle",    xpos=12, ypos=-15})
-        self:addEntity({object="weapon", type="laserGun", xpos=15, ypos=-15})
-        
-    elseif index == 2 then
-
-        self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6, ypos=-8})
-        self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6, ypos=-7})
-        self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6, ypos=-6})
-        self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6, ypos=-5})
-        self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6, ypos=-4})
-        self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6, ypos=-3})
-        
-        self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-8})
-        self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-7})
-        self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-6})
-        self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-5})
-        self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-4})
-        self:addEntity({object="obstacle", type="gas", breadth="big", xpos=14, ypos=-3})
-        
-        -- hand combat swarm
-        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=2,  ypos=-11})
-        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=4,  ypos=-11})
-        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=6,  ypos=-11})
-        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=8,  ypos=-11})
-        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=10, ypos=-11})
-        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=12, ypos=-11})
-        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=14, ypos=-11})
-        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=16, ypos=-11})
-        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=18, ypos=-11})
-        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=20, ypos=-11})
-        
-    elseif index == 3 then
-
-        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=8, ypos=-8})
-        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=9, ypos=-8})
-        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=10, ypos=-8})
-        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=11, ypos=-8})
-        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=12, ypos=-8})
-
-        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=8, ypos=-11})
-        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=9, ypos=-11})
-        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=10, ypos=-11})
-        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=11, ypos=-11})
-        self:addEntity({object="obstacle", type="crate", breadth="big", xpos=12, ypos=-11})
-
-
-        -- one of each enemy type
-        self:addEntity({object="enemy",  type="melee",    rank=1, xpos=5, ypos=-15})
-        self:addEntity({object="enemy",  type="shooter",  rank=1, xpos=8, ypos=-15})
-        self:addEntity({object="enemy",  type="shooter",  rank=2, xpos=12, ypos=-15})
-        self:addEntity({object="enemy",  type="shooter",  rank=3, xpos=15, ypos=-15})
-        self:addEntity({object="enemy",  type="shooter",  rank=4, xpos=10, ypos=-18})
-    end
-
-    self.currentHeight = self.currentHeight + env.height
-
-    return self.entities
-end
-
-
-function LevelGenerator:addEntity(spec)
-    spec.ypos = spec.ypos - self.currentHeight
-
-    self.entities[#self.entities+1] = spec
-end
-
-
-function LevelGenerator:addEnemies(index, env)
-  --  self:addEntity({object="enemy",  type="shooter",  rank=1, xpos=6, ypos=-1})
-    --self:addEntity({object="enemy",  type="shooter",  rank=1, xpos=8, ypos=-1})
-  --  self:addEntity({object="enemy",  type="shooter",  rank=5, xpos=7, ypos=-2})
-    --self:addEntity({object="enemy",  type="shooter",  rank=1, xpos=9, ypos=-4})
-    --self:addEntity({object="enemy",  type="shooter",  rank=2, xpos=10, ypos=-5})
-    --self:addEntity({object="enemy",  type="shooter",  rank=5, xpos=11, ypos=-6})
-    --self:addEntity({object="enemy",  type="shooter",  rank=6, xpos=12, ypos=-7})
-
-
-
-  --  self:addEntity({object="enemy",  type="shooter",  rank=9, xpos=12, ypos=-1})
-    -- self:addEntity({object="enemy",  type="shooter",  rank=10, xpos=14, ypos=-1})
-    --self:addEntity({object="enemy",  type="shooter",  rank=6, xpos=11, ypos=-2})
-end
-
-
-function LevelGenerator:addScenery(index, env)
-end
-
-
-function LevelGenerator:addPowerups(index, env)
-end
-
-
-function LevelGenerator:addPoints(index, env)
 end
 
 
 
-
-
-
-
-
-
-
-
-
+-- Load in from another file
+levelGeneratorEntities:load(LevelGenerator)
 
 
 

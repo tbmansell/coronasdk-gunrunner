@@ -192,9 +192,11 @@ function Builder:newSpineCollection()
 	            local x, y  = image.x, image.y
 
 	            if x and y then
+                    print(tostring(object.key).." "..x..", "..y)
 	            	--if not visibleOnly or object.alwaysAnimate or (x >= leftBoundary and x <= rightBoundary and y >= topBoundary and y <= bottomBoundary) then
+                    if (x >= leftBoundary and x <= rightBoundary and y >= topBoundary and y <= bottomBoundary) then
                         object:updateSpine(delta)
-		            --end
+		            end
 	            end
 	        end
 	    end

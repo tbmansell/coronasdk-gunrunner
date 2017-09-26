@@ -90,7 +90,7 @@ function scene:loadLevel()
     local bgr = display.newImage(self.view, "images/background2.jpg", globalCenterX, globalCenterY)
     bgr:scale(2,2)
 
-    local sections    = 3
+    local sections    = 2
     local environment = {}
     local entities    = {}
 
@@ -121,7 +121,7 @@ end
 
 
 function scene:loadPlayer()
-    player = level:createPlayer({xpos=10, ypos=-5}, hud)
+    player = level:createPlayer({xpos=10, ypos=-0.5}, hud)
     player:setWeapon(Weapons.rifle)
     
     -- Create Game Over callback

@@ -314,21 +314,35 @@ function Loader:load(LevelGenerator)
 
 
     function LevelGenerator:addScenery()
-        if percent(50) then
-            self:generateScenery(15, "crate")
+        if percent(100) then
+            local variantGenerator = function()
+                if percent(30) then return "big" else return "small" end
+            end
+            
+            self:generateScenery(15, "crate", variantGenerator)
         end
 
         if percent(30) then
-            self:generateScenery(10, "gas")
+            local variantGenerator = function()
+                if percent(30) then return "big" else return "small" end
+            end
+
+            self:generateScenery(10, "gas", variantGenerator)
         end
 
-        
+        if percent(100) then
+            local variantGenerator = function()
+                local r = random(100)
+                if r <= 35 then return "1" elseif r <= 70 then return "2" else return "3" end
+            end
+
+            self:generateScenery(10, "computer", variantGenerator)
+        end
     end
 
 
-    function LevelGenerator:generateScenery(maxAmount, type)
+    function LevelGenerator:generateScenery(maxAmount, type, variantGenerator)
         local amount = random(maxAmount)
-        print("Section "..index.." generated "..amount.." "..type)
 
         while amount > 0 do
             local batch = random(amount)
@@ -337,10 +351,7 @@ function Loader:load(LevelGenerator)
             if amount == 1 then batch = 1 end
 
             for i=1,batch do
-                local size = "small"
-                if random(30) then size = "big" end
-
-                group[#group+1] = {object="obstacle", type=type, breadth=size}
+                group[#group+1] = {object="obstacle", type=type, variant=variantGenerator()}
             end
 
             self:placeEntities(group, random(3))

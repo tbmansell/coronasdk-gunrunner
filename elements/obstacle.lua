@@ -42,13 +42,18 @@ end
 
 function Obstacle:explode()
     sounds:projectile("rocketHit")
-    self:emit("smoke")
     
     if self.isCrate then
+        self:emit("explosionCrate")
+        self:emit("smokeCrate")
+
+    elseif self.isComputer then
         self:emit("explosion")
+        self:emit("smoke")
 
     elseif self.isGas then
         self:emit("explosionGas")
+        self:emit("smoke")
 
         local effect = function(target)
             if target.hit then target:hit(self) end

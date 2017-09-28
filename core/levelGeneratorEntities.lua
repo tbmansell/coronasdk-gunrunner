@@ -330,7 +330,7 @@ function Loader:load(LevelGenerator)
             self:generateScenery(10, "gas", variantGenerator)
         end
 
-        if percent(20) then
+        if percent(100) then
             local variantGenerator = function()
                 local r = random(100)
                 if r <= 35 then return "1" elseif r <= 70 then return "2" else return "3" end
@@ -358,6 +358,41 @@ function Loader:load(LevelGenerator)
 
             amount = amount - batch
         end
+    end
+
+
+    function LevelGenerator:addPowerups()
+        local chance = 50
+
+        while chance > 0 do
+            if percent(chance) then
+                self:generateWeapon()
+                chance = chance / 2
+            else
+                chance = 0
+            end
+        end
+    end
+
+
+    function LevelGenerator:generateWeapon()
+        local weapon = "rifle"
+        local r = random(100)
+
+        if     r > 25 and r  <= 50 then weapon = "shotgun"
+        elseif r > 50 and r  <= 75 then weapon = "launcher"
+        elseif r > 75              then weapon = "laserGun" end
+
+        local startX, startY = self:getRandomPosition()
+        local xpos, ypos     = self:place(startX, startY)
+
+        if xpos and ypos then
+            self:addEntity({object="weapon", type=weapon, xpos=xpos, ypos=ypos})
+        end
+    end
+
+
+    function LevelGenerator:addPoints()
     end
 
 
@@ -424,21 +459,6 @@ function Loader:load(LevelGenerator)
                 end
             end
         end
-    end
-
-
-    function LevelGenerator:addPowerups()
-        --[[
-        if index == 1 then
-            self:addEntity({object="weapon", type="shotgun",  xpos=5,  ypos=-15})
-            self:addEntity({object="weapon", type="launcher", xpos=8,  ypos=-15})
-            self:addEntity({object="weapon", type="rifle",    xpos=12, ypos=-15})
-            self:addEntity({object="weapon", type="laserGun", xpos=15, ypos=-15})
-        end]]
-    end
-
-
-    function LevelGenerator:addPoints()
     end
 
 

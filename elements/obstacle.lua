@@ -36,6 +36,11 @@ function Obstacle:hit(shot)
         
     if self.hits <= 0 then
         self:explode()
+    else
+        self.image:setFillColor(1, 0.6, 0.6)
+        after(50, function() 
+            if self.image then self.image:setFillColor(1, 1, 1) end
+        end)
     end
 end
 

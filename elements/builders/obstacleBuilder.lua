@@ -70,7 +70,7 @@ function ObstacleBuilder:newComputer(camera, spec)
 
     object:setPhysics()
     object.isComputer = true
-    object.hits = 1
+    object.hits = 3
 
     camera:addEntity(object)
 

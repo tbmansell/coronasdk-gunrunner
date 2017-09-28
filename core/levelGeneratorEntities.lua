@@ -314,7 +314,7 @@ function Loader:load(LevelGenerator)
 
 
     function LevelGenerator:addScenery()
-        if percent(100) then
+        if percent(50) then
             local variantGenerator = function()
                 if percent(30) then return "big" else return "small" end
             end
@@ -330,13 +330,13 @@ function Loader:load(LevelGenerator)
             self:generateScenery(10, "gas", variantGenerator)
         end
 
-        if percent(100) then
+        if percent(20) then
             local variantGenerator = function()
                 local r = random(100)
                 if r <= 35 then return "1" elseif r <= 70 then return "2" else return "3" end
             end
 
-            self:generateScenery(10, "computer", variantGenerator)
+            self:generateScenery(6, "computer", variantGenerator)
         end
     end
 

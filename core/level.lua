@@ -128,9 +128,9 @@ end
 
 function Level:createObstacle(item)
     -- 50% chance non rotated item will be randomly rotated
-    if item.rotation == nil and random(100) < 50 then
+    --[[if item.rotation == nil and random(100) < 50 then
         item.rotation = random(360)
-    end
+    end]]
 
     local obstacle = obstacleBuilder:newItem(camera, item)
 

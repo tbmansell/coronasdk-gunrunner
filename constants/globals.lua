@@ -113,10 +113,10 @@ EnemyRankAllocations = {
 }
 
 
-EnemyFormations = {
+EntityFormations = {
     clusterFuck = 1,  -- spread everywhere, no connection
     mob         = 2,  -- in one mass group, close together
-    squad       = 3,  -- in one group, spread out
+    chain       = 3,  -- in one group, spread out
     wall        = 4,  -- sequential vertically or horiz
     triangle    = 5,  
     square      = 6,  
@@ -127,13 +127,13 @@ EnemyFormations = {
 
 --[[
 EnemyFormationMinimums = {
-    EnemyFormations.clusterFuck = 1,
-    EnemyFormations.mob         = 2,
-    EnemyFormations.squad       = 2,
-    EnemyFormations.wall        = 2,
-    EnemyFormations.triangle    = 3,  
-    EnemyFormations.square      = 4, 
-    EnemyFormations.jagged      = 4,
-    EnemyFormations.circle      = 6,
-    EnemyFormations.cross       = 6,
+    EntityFormations.clusterFuck = 1,
+    EntityFormations.mob         = 2,
+    EntityFormations.squad       = 2,
+    EntityFormations.wall        = 2,
+    EntityFormations.triangle    = 3,  
+    EntityFormations.square      = 4, 
+    EntityFormations.jagged      = 4,
+    EntityFormations.circle      = 6,
+    EntityFormations.cross       = 6,
 }]]

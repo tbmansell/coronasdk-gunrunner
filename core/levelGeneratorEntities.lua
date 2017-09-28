@@ -119,8 +119,14 @@ function Loader:load(LevelGenerator)
     end
 
 
-    function LevelGenerator:addEnemy(type, rank, xpos, ypos)
-        self:addEntity({object="enemy", type=type, rank=rank, xpos=xpos, ypos=ypos})
+    function LevelGenerator:createEntitySpec(xpos, ypos, otherAttributes)
+        local spec = {xpos=xpos, ypos=ypos}
+
+        for name,value in pairs(otherAttributes) do
+            spec[name] = value
+        end
+
+        self:addEntity(spec)
     end
 
 
@@ -188,8 +194,8 @@ function Loader:load(LevelGenerator)
 
         self:generateEnemies()
         -- TODO: Order them by highest rank first for better placing around higher ranks
-        self:placeEnemies(melees,   "melee")
-        self:placeEnemies(shooters, "shooter")
+        self:placeEntities(melees)
+        self:placeEntities(shooters)
     end
 
 
@@ -229,7 +235,7 @@ function Loader:load(LevelGenerator)
             end
 
             points = points - rank
-            melees[#melees+1] = rank
+            melees[#melees+1] = {object="enemy", type="melee", rank=rank}
         end
     end
 
@@ -249,7 +255,7 @@ function Loader:load(LevelGenerator)
             if rank > points then rank = points end
 
             points = points - rank
-            shooters[#shooters+1] = rank
+            shooters[#shooters+1] = {object="enemy", type="shooter", rank=rank}
         end
     end
 
@@ -307,24 +313,61 @@ function Loader:load(LevelGenerator)
     end
 
 
-    function LevelGenerator:placeEnemies(group, type)
-        local formation = random(EnemyFormations.squad)
+    function LevelGenerator:addScenery()
+        if percent(50) then
+            self:generateScenery(15, "crate")
+        end
 
-        if formation == EnemyFormations.clusterFuck then
-            -- ClusterFuck: place each one randomly anywhere
-            self:placeEnemiesClusterfuck(group, type)
-        elseif formation == EnemyFormations.mob then
-            -- Mob: generate a start point and stick everyone around it
-            self:placeEnenmiesMob(group, type, 1)
-        elseif formation == EnemyFormations.squad then
-            -- Squad: same as mob but more spaced out
-            self:placeEnenmiesSquad(group, type, 2)
+        if percent(30) then
+            self:generateScenery(10, "gas")
+        end
+
+        
+    end
+
+
+    function LevelGenerator:generateScenery(maxAmount, type)
+        local amount = random(maxAmount)
+        print("Section "..index.." generated "..amount.." "..type)
+
+        while amount > 0 do
+            local batch = random(amount)
+            local group = {}
+
+            if amount == 1 then batch = 1 end
+
+            for i=1,batch do
+                local size = "small"
+                if random(30) then size = "big" end
+
+                group[#group+1] = {object="obstacle", type=type, breadth=size}
+            end
+
+            self:placeEntities(group, random(3))
+
+            amount = amount - batch
         end
     end
 
 
-    function LevelGenerator:placeEnemiesClusterfuck(group, type)
-        for _,rank in pairs(group) do
+    function LevelGenerator:placeEntities(group, distance)
+        local formation = random(EntityFormations.chain)
+
+        if formation == EntityFormations.clusterFuck then
+            -- ClusterFuck: place each one randomly anywhere
+            self:placeClusterfuck(group)
+        elseif formation == EntityFormations.mob then
+            -- Mob: generate a start point and stick everyone around it
+            self:placeMob(group, distance or 1)
+        elseif formation == EntityFormations.chain then
+            -- Squad: same as mob but more spaced out
+            self:placeChain(group, distance or 2)
+        end
+    end
+
+
+    function LevelGenerator:placeClusterfuck(group)
+        for _,attribs in pairs(group) do
             local placed = false
             while placed == false do
                 local startX, startY = self:getRandomPosition()
@@ -332,55 +375,44 @@ function Loader:load(LevelGenerator)
 
                 if xpos and ypos then
                     placed = true
-                    self:addEnemy(type, rank, xpos, ypos)
+                    self:createEntitySpec(xpos, ypos, attribs)
                 end
             end
         end
     end
 
 
-    function LevelGenerator:placeEnenmiesMob(group, type, distance)
+    function LevelGenerator:placeMob(group, distance)
         local startX, startY = self:getRandomPosition()
 
-        for _,rank in pairs(group) do
+        for _,attribs in pairs(group) do
             local placed = false
             while placed == false do
                 local xpos, ypos = self:place(startX, startY, 20, distance)
 
                 if xpos and ypos then
                     placed = true
-                    self:addEnemy(type, rank, xpos, ypos)
+                    self:createEntitySpec(xpos, ypos, attribs)
                 end
             end
         end
     end
 
 
-    function LevelGenerator:placeEnenmiesSquad(group, type, distance)
+    function LevelGenerator:placeChain(group, distance)
         local xpos, ypos = self:getRandomPosition()
 
-        for _,rank in pairs(group) do
+        for _,attribs in pairs(group) do
             local placed = false
             while placed == false do
                 xpos, ypos = self:place(xpos, ypos, 20, distance)
 
                 if xpos and ypos then
                     placed = true
-                    self:addEnemy(type, rank, xpos, ypos)
+                    self:createEntitySpec(xpos, ypos, attribs)
                 end
             end
         end
-    end
-
-
-    function LevelGenerator:addScenery()
-        --[[
-        self:addEntity({object="obstacle", type="gas", breadth="small", xpos=6,  ypos=-3})
-        self:addEntity({object="obstacle", type="gas", breadth="big",   xpos=14, ypos=-8})
-        
-        self:addEntity({object="obstacle", type="crate", breadth="small", xpos=8,  ypos=-8})
-        self:addEntity({object="obstacle", type="crate", breadth="big",   xpos=12, ypos=-11})
-        ]]
     end
 
 

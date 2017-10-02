@@ -84,7 +84,7 @@ function Projectile:impact()
             if target.hit then target:hit(self) end
         end
 
-        projectileBuilder:newAreaOfEffect(globalCamera, {xpos=self:x(), ypos=self:y(), area=self.weapon.area, filter=self.filter, effect=effect})
+        level:createAreaOfEffect({xpos=self:x(), ypos=self:y(), area=self.weapon.area, filter=self.filter, effect=effect})
     end
 
     self:destroy()

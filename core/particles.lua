@@ -19,6 +19,7 @@ function Particles:preLoadEmitters()
     self:loadEmitter("enemyDie1")
     self:loadEmitter("enemyDie2")
     self:loadEmitter("plasmaImpact")
+    self:loadEmitter("collectable")
 
 end
 
@@ -85,7 +86,6 @@ function Particles:showEmitter(name, x, y, duration, alpha, angle)
     --emitter.rotationStartVariance = angle
     --emitter.rotationEnd   = angle
     --emitter.rotationEndVariance   = angle
-
 
     createdEmitters[emitter.id] = emitter
 

@@ -3,7 +3,6 @@ local physics        = require("physics")
 local tileEngine     = require("engines.duskWrapper")
 local anim           = require("core.animations")
 local particles      = require("core.particles")
-local level          = require("core.level")
 local levelGenerator = require("core.levelGenerator")
 local hud            = require("core.hud")
 

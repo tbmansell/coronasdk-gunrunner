@@ -55,16 +55,11 @@ function Character:shootProjectile(projectileBuilder, camera, filter)
     end
 
     if name == "shotgun" then
-        local shot1 = projectileBuilder:newShot(camera, weapon, {xpos=x, ypos=y, angle=angle-10, filter=filter})
-        local shot2 = projectileBuilder:newShot(camera, weapon, {xpos=x, ypos=y, angle=angle,    filter=filter})
-        local shot3 = projectileBuilder:newShot(camera, weapon, {xpos=x, ypos=y, angle=angle+10, filter=filter})
-
-        shot1:fire()
-        shot2:fire()
-        shot3:fire()
+        level:createProjectile({xpos=x, ypos=y, angle=angle-10, filter=filter}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle,    filter=filter}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle+10, filter=filter}, weapon)
     else
-        local shot = projectileBuilder:newShot(camera, weapon, {xpos=x, ypos=y, angle=self:getAngle(), filter=filter})
-        shot:fire()
+        level:createProjectile({xpos=x, ypos=y, angle=angle, filter=filter}, weapon)
     end
 
     after(self.weapon.rof, function() 

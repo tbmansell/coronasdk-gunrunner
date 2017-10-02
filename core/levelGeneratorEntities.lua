@@ -1,11 +1,15 @@
+local utils = require("core.utils")
+
+
 -- The main class: just a loader class
 local Loader = {}
 
 
 -- Aliases:
-local random = math.random
-local abs    = math.abs
-local min    = math.min
+local random  = math.random
+local abs     = math.abs
+local min     = math.min
+local percent = utils.percent
 
 -- Locals:
 local index       = 1
@@ -16,11 +20,6 @@ local defaultTile = nil
 local melees      = nil
 local shooters    = nil
 local points      = nil
-
-
-local function percent(chance)
-    return random(100) < chance
-end
 
 
 local function canPlace(x, y)
@@ -67,7 +66,6 @@ function Loader:load(LevelGenerator)
         end
 
         self:addScenery()
-        self:addPowerups()
         self:addPoints()
 
         -- Increment map height
@@ -361,37 +359,6 @@ function Loader:load(LevelGenerator)
     end
 
 
-    function LevelGenerator:addPowerups()
-        local chance = 50
-
-        while chance > 0 do
-            if percent(chance) then
-                self:generateWeapon()
-                chance = chance / 2
-            else
-                chance = 0
-            end
-        end
-    end
-
-
-    function LevelGenerator:generateWeapon()
-        local weapon = "rifle"
-        local r = random(100)
-
-        if     r > 25 and r  <= 50 then weapon = "shotgun"
-        elseif r > 50 and r  <= 75 then weapon = "launcher"
-        elseif r > 75              then weapon = "laserGun" end
-
-        local startX, startY = self:getRandomPosition()
-        local xpos, ypos     = self:place(startX, startY)
-
-        if xpos and ypos then
-            self:addEntity({object="weapon", type=weapon, xpos=xpos, ypos=ypos})
-        end
-    end
-
-
     function LevelGenerator:addPoints()
     end
 
@@ -463,7 +430,6 @@ function Loader:load(LevelGenerator)
 
 
 end
-
 
 
 return Loader

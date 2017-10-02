@@ -35,16 +35,17 @@ local Enemy = {
 }
 
 -- Aliases
-local PI    = 180 / math.pi
-local abs   = math.abs
-local cos   = math.cos
-local sin   = math.sin
-local rad   = math.rad
-local atan2 = math.atan2
-local round = math.round
-local random= math.random
+local PI      = 180 / math.pi
+local abs     = math.abs
+local cos     = math.cos
+local sin     = math.sin
+local rad     = math.rad
+local atan2   = math.atan2
+local round   = math.round
+local random  = math.random
+local percent = utils.percent
 
---local Melee = {weapon=Weapons.club}
+
 
 
 function Enemy.eventCollision(self, event)
@@ -100,6 +101,18 @@ function Enemy:setPhysics()
 
     self.image.collision = Enemy.eventCollision
     self.image:addEventListener("collision", self.image)
+end
+
+
+function Enemy:destroy(camera, destroyBoundItems)
+    -- % chance dead enemy drops their weapon
+    --local weapon = Weapons.shotgun --self.weapon
+
+    --if weapon.collect then--and percent(weapon.collect) then
+    --    level:createCollectable({object="weapon", type=weapon.name, xpos=self:x(), ypos=self:y()})
+    --end
+
+    self:spineObjectDestroy(camera, destroyBoundItems)
 end
 
 
@@ -358,13 +371,6 @@ function Enemy:hit(shot)
 end
 
 
-function Enemy:fallToDeath(options, sound)
-    local options = options or {}
-
-    self:die()
-end
-
-
 function Enemy:explode()
     -- guard to stop multiple deaths
     if not self:isDead() then
@@ -383,9 +389,10 @@ function Enemy:explode()
         seq:start()
 
         after(50, function()
-            self:destroyEmitter()
+            --self:destroyEmitter()
             self:emit("enemyDie1")
             self:emit("enemyDie2")
+            self:dropWeapon()
         end)
     end
 end
@@ -406,6 +413,16 @@ function Enemy:fallToDeath(hole)
             self:destroy()
         end
         seq:start()
+    end
+end
+
+
+function Enemy:dropWeapon()
+    -- % chance dead enemy drops their weapon
+    local weapon = self.weapon
+
+    if weapon.collect and percent(weapon.collect) then
+        level:createCollectable({object="weapon", type=weapon.name, xpos=self:x(), ypos=self:y()})
     end
 end
 

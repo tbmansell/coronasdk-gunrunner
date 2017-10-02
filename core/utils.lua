@@ -2,15 +2,20 @@
 local Utils = {}
 
 -- Aliases
-local math_random = math.random
-local math_abs    = math.abs
+local random = math.random
+local abs    = math.abs
+
+
+function Utils.percent(chance)
+    return random(100) <= chance
+end
 	
 
 -- returns a random element from a set with no weighting
 function Utils.randomFrom(set, default)
 	if set == nil then return default end
 
-	return set[math_random(#set)]
+	return set[random(#set)]
 end
 
 
@@ -18,7 +23,7 @@ end
 function Utils.percentFrom(set, default)
 	if set == nil then return default end
 
-	local target = math_random(100)
+	local target = random(100)
 	local num = #set
 
 	for i=1,num do
@@ -43,10 +48,10 @@ end
 
 function Utils.randomRange(low, high)
     if low < 0 and high > 0 then
-        local  value = math_random(math_abs(low), high+(high-low))
+        local  value = random(abs(low), high+(high-low))
         return value - (high-low)
     else
-        local value = math_random(math_abs(low), math_abs(high))
+        local value = random(abs(low), abs(high))
         if low < 0 and high < 0 then
             return -value
         else

@@ -1,6 +1,6 @@
 local spriteSheetInfo        = require("core.sheetInfo")
 local levelGeneratorEntities = require("core.levelGeneratorEntities")
-
+local utils                  = require("core.utils")
 
 
 -- Class
@@ -24,12 +24,8 @@ local LevelGenerator = {
 }
 
 -- Aliases:
-local random = math.random
-
--- Locals:
-local function percent(chance)
-    return random(100) < chance
-end
+local random  = math.random
+local percent = utils.percent
 
 
 

@@ -1,5 +1,12 @@
-local anim      = require("core.animations")
-local particles = require("core.particles")
+local anim               = require("core.animations")
+local particles          = require("core.particles")
+local utils              = require("core.utils")
+local builder            = require("elements.builders.builder")
+local playerBuilder      = require("elements.builders.playerBuilder")
+local enemyBuilder       = require("elements.builders.enemyBuilder")
+local collectableBuilder = require("elements.builders.collectableBuilder")
+local obstacleBuilder    = require("elements.builders.obstacleBuilder")
+local projectileBuilder  = require("elements.builders.projectileBuilder")
 
 -- Class
 local Level = {}
@@ -15,9 +22,11 @@ local enemyCollection       = nil
 local particleCollection    = nil
 local collectableCollection = nil
 local obstacleCollection    = nil
+local projectileCollection  = nil
 
 -- Aliases
-local random = math.random
+local random  = math.random
+local percent = utils.percent
 
 -- Aliases to functions for enterframe event
 local check_background_movement  = function()end
@@ -53,6 +62,7 @@ function Level:new(cameraRef)
     enemyCollection       = builder:newMasterCollection("enemySet",       spineCollection, movingCollection, particleCollection)
     collectableCollection = builder:newMasterCollection("collectableSet", spineCollection, movingCollection, particleCollection)
     obstacleCollection    = builder:newMasterCollection("obstacleSet",    spineCollection, movingCollection, particleCollection)
+    projectileCollection  = builder:newMasterCollection("projectileSet",  spineCollection, movingCollection, particleCollection)
 
     -- local aliases:
     camera = cameraRef
@@ -78,8 +88,9 @@ function Level:destroy()
     enemyCollection:destroy()
     collectableCollection:destroy()
     obstacleCollection:destroy()
+    projectileCollection:destroy()
 
-    spineCollection, movingCollection, particleCollection, enemyCollection, collectableCollection, obstacleCollection = nil, nil, nil, nil, nil, nil
+    spineCollection, movingCollection, particleCollection, enemyCollection, collectableCollection, obstacleCollection, projectileCollection = nil, nil, nil, nil, nil, nil, nil
     mainPlayer, camera = nil, nil
 end
 
@@ -114,27 +125,40 @@ end
 
 function Level:createEnemy(item)
     local enemy = enemyBuilder:newEnemy(camera, item)
-
     enemyCollection:add(enemy)
 end
 
 
 function Level:createCollectable(item)
     local collectable = collectableBuilder:newItem(camera, item)
-
     collectableCollection:add(collectable)
 end
 
 
 function Level:createObstacle(item)
     -- 50% chance non rotated item will be randomly rotated
-    --[[if item.rotation == nil and random(100) < 50 then
-        item.rotation = random(360)
-    end]]
+    if item.rotation == nil and percent(50) then
+        if percent(50) then
+            item.rotation = random(10)
+        else
+            item.rotation = 350 + random(10)
+        end
+    end
 
     local obstacle = obstacleBuilder:newItem(camera, item)
-
     obstacleCollection:add(obstacle)
+end
+
+
+function Level:createProjectile(item, weapon)
+    local shot = projectileBuilder:newShot(camera, item, weapon)
+    projectileCollection:add(shot)
+    shot:fire()
+end
+
+
+function Level:createAreaOfEffect(item)
+    projectileBuilder:newAreaOfEffect(camera, item) 
 end
 
 

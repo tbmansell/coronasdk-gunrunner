@@ -50,10 +50,10 @@ EnvironmentalWeapon = {
 
 Weapons = {
     club     = {name="club",     damage=1, time=500},
-    rifle    = {name="rifle",    damage=1, ammoType="bullet", speed=650, rof=205,  ammo=30, reload=1000},
-    shotgun  = {name="shotgun",  damage=1, ammoType="bullet", speed=650, rof=750,  ammo=10, reload=1200},
-    launcher = {name="launcher", damage=5, ammoType="rocket", speed=550, rof=1200, ammo=4,  reload=1500, shieldBuster=true, area=75},
-    laserGun = {name="laserGun", damage=2, ammoType="laser",  speed=600, rof=400,  ammo=15, reload=1300, ricochet=2},
+    rifle    = {name="rifle",    damage=1, ammoType="bullet", speed=650, rof=205,  ammo=30, reload=1000, collect=15},
+    shotgun  = {name="shotgun",  damage=1, ammoType="bullet", speed=650, rof=750,  ammo=10, reload=1200, collect=25},
+    launcher = {name="launcher", damage=5, ammoType="rocket", speed=550, rof=1200, ammo=4,  reload=1500, collect=50, shieldBuster=true, area=75},
+    laserGun = {name="laserGun", damage=2, ammoType="laser",  speed=600, rof=400,  ammo=15, reload=1300, collect=50, ricochet=2},
 }
 
 

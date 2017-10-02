@@ -39,4 +39,9 @@ function Collectable:collectedBy(player)
 end
 
 
+function Collectable:onStart()
+    self:bindEmitter("collectable")
+end
+
+
 return Collectable

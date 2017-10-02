@@ -4,7 +4,7 @@ local projectileDef = require("elements.projectile")
 local ProjectileBuilder = {}
 
 
-function ProjectileBuilder:newShot(camera, weapon, spec)
+function ProjectileBuilder:newShot(camera, spec, weapon)
     local image = display.newImage("images/projectiles/"..weapon.ammoType..".png", 0, 0)
     local shot  = builder:newGameObject(spec, image)
 

@@ -32,6 +32,10 @@ function MasterCollection:add(object)
     self:addToSpineCollection(object)
     self:addToMovementCollection(object)
     self:addToParticleEmitterCollection(object)
+
+    if object.onStart then
+        object:onStart()
+    end
 end
 
 

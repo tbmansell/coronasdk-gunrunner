@@ -165,6 +165,11 @@ function TileEngine:addProjectile(entity)
 end
 
 
+function TileEngine:addCollectable(entity)
+    self.objectLayer2:insert(entity.image or entity)
+end
+
+
 function TileEngine:addParticle(entity)
     entity.y = entity.y + 430
     self.objectLayer3:insert(entity)

@@ -39,6 +39,11 @@ function Collection:add(object)
     }
 
     self.items[newId] = object
+
+    if object.onStart then
+        object:onStart()
+    end
+    
     return true
 end
 

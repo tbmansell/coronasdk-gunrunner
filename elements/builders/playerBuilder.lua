@@ -75,6 +75,16 @@ function PlayerBuilder:applyPlayerHooks(player, hud)
     function player:hookAmmoCounter() 
         hud:setAmmoCounter(self.ammo) 
     end
+
+    -- Update hud with player health
+    function player:updateHudHealth()
+        hud:updateHealth(self)
+    end
+    
+    -- Update hud movement speed
+    function player:updateHudSpeed()
+        hud:updateSpeed(self)
+    end
 end
 
 

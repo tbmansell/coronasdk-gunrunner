@@ -115,7 +115,6 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler)
 
     self.playerIcon:addEventListener("tap",     self.eventPauseGame)
     self.controlMove:addEventListener("touch",  eventMovePlayer)
-    self.controlMove:addEventListener("tap",    self.eventJumpPlayer)
     self.controlShoot:addEventListener("touch", eventShootPlayer)
     self.controlShoot:addEventListener("tap",   eventShootPlayerTap)
 
@@ -263,11 +262,22 @@ function Hud:eventUpdateFrame(event)
 end
 
 
-function Hud:eventJumpPlayer(event)
-    self = Hud
+function Hud:updateSpeed(player)
+    movePlayerSpeedX, movePlayerSpeedY = player.strafeSpeed,  player.verticalSpeed
 
-    if self.player:canJump() then
+    if player.powerupFastMove then
+        forcePlayerMoveY = -3
+    else
+        forcePlayerMoveY = -2
+    end
+end
 
+
+function Hud:updateHealth(player)
+    if player.health <= 0 then
+        self.healthCounter.alpha = 0
+    else
+        self.healthCounter.width = self.healthCounter.widthPerHealth * player.health
     end
 end
 

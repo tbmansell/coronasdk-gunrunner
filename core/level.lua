@@ -123,6 +123,13 @@ function Level:createElementsFromData(levelElements)
 end
 
 
+function Level:createPlayer(item, hud)
+    mainPlayer = playerBuilder:newPlayer(camera, item, hud)
+    mainPlayer:visible()
+    return mainPlayer
+end
+
+
 function Level:createEnemy(item)
     local enemy = enemyBuilder:newEnemy(camera, item)
     enemyCollection:add(enemy)
@@ -132,6 +139,13 @@ end
 function Level:createCollectable(item)
     local collectable = collectableBuilder:newItem(camera, item)
     collectableCollection:add(collectable)
+end
+
+
+function Level:createPowerup(powerup, xpos, ypos)
+    after(50, function()
+        self:createCollectable({object="powerup", type=powerup, health=5, xpos=xpos, ypos=ypos})
+    end)
 end
 
 
@@ -159,13 +173,6 @@ end
 
 function Level:createAreaOfEffect(item)
     projectileBuilder:newAreaOfEffect(camera, item) 
-end
-
-
-function Level:createPlayer(item, hud)
-    mainPlayer = playerBuilder:newPlayer(camera, item, hud)
-    mainPlayer:visible()
-    return mainPlayer
 end
 
 

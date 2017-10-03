@@ -64,6 +64,15 @@ function Projectile:fire()
 end
 
 
+function Projectile:getDamage()
+    if self.powerupDamage then 
+        return self.weapon.damage * 2 
+    else
+        return self.weapon.damage
+    end
+end
+
+
 function Projectile:bounce(fromWall)
     if self.ricochet then
         self.ricochet = self.ricochet - 1

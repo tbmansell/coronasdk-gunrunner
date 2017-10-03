@@ -278,7 +278,7 @@ function Enemy:strike(target)
     sounds:enemy("melee")
     self:stopMomentum()
     self:animate("strike_"..weapon.name)
-    target:hit({weapon=weapon})
+    target:hit({weapon=weapon, getDamage=function() return weapon.damage end})
 
     after(weapon.time, function()
         self:animate("stationary_1")
@@ -358,7 +358,13 @@ end
 function Enemy:hit(shot)
     if not self:isDead() then
         if not self.shielded or shot.weapon.shieldBuster then
-            self.health = self.health - shot.weapon.damage
+            local damage = shot.weapon.damage
+
+            if shot.getDamge then
+                damage = shot:getDamage()
+            end
+            
+            self.health = self.health - damage
 
             sounds:enemy("hurt")
             self:animate("hit_1")

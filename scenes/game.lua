@@ -133,15 +133,6 @@ function scene:loadPlayer()
         sounds:general("gameOver")
         after(4000, function() composer.gotoScene("scenes.game", {effect="fade", time=3000}) end)
     end
-
-    -- Create callback to update player health
-    player.updateHudHealth = function()
-        if player.health <= 0 then
-            hud.healthCounter.alpha = 0
-        else
-            hud.healthCounter.width = hud.healthCounter.widthPerHealth * player.health
-        end
-    end
 end
 
 

@@ -9,6 +9,7 @@ local Player = {
     class         = "Player",
     intHeight     = 25,
     intWidth      = 25,
+    intMaxHealth  = 20,
     verticalSpeed = 4,
     strafeSpeed   = 4,
 
@@ -19,6 +20,10 @@ local Player = {
     weapon        = nil,
     ammo          = 0,
     boneBarrel    = nil,
+    powerupDamage    = false,
+    powerupFastMove  = false,
+    powerupFastShoot = false,
+    powerupExtraAmmo = false,
 
     flagShootAllowed = true,
 }
@@ -183,10 +188,29 @@ end
 ----------------- FUNCTIONS TO HANDLE BEING KILLED -------------------
 
 
+function Player:heal(health)
+    if not self:isDead() then
+        self.health = self.health + health
+
+        if self.health > self.intMaxHealth then
+            self.health = self.intMaxHealth
+        end
+
+        self:updateHudHealth()
+    end
+end
+
+
 function Player:hit(shot)
     if not self:isDead() then
         if not self.shielded or shot.weapon.shieldBuster then
-            self.health = self.health - shot.weapon.damage
+            local damage = shot.weapon.damage
+
+            if shot.getDamge then
+                damage = shot:getDamage()
+            end
+
+            self.health = self.health - damage
             
             sounds:player("hurt")
             self:animate("hit_1")
@@ -302,6 +326,67 @@ function Player:loadGear()
         else
             self.skeleton:setAttachment(item.slot, nil)
         end
+    end
+end
+
+
+function Player:increaseDamage()
+    if not self:isDead() then
+        self.powerupDamage = true
+        print("double damage")
+
+        after(10000, function()
+            print("restore damage")
+            self.powerupDamage = false
+        end)
+    end
+end
+
+
+function Player:increaseMove()
+    if not self:isDead() then
+        self.verticalSpeed = 6
+        self.strafeSpeed   = 6
+        self.powerupFastMove = true
+        self:updateHudSpeed(true)
+        print("double speed")
+
+        after(10000, function()
+            print("restore speed")
+            self.verticalSpeed = 4
+            self.strafeSpeed   = 4
+            self.powerupFastMove = false
+            self:updateHudSpeed(false)
+        end)
+    end
+end
+
+
+function Player:fastShoot()
+    if not self:isDead() then
+        self.powerupFastShoot = true
+        print("fast shoot")
+
+        after(10000, function()
+            print("restore shoot")
+            self.powerupFastShoot = false
+        end)
+    end
+end
+
+
+function Player:extraAmmo()
+    if not self:isDead() then
+        self.powerupExtraAmmo = true
+        print("extra ammo")
+
+        self.ammo = self.weapon.ammo * 2
+        self:hookAmmoCounter()
+
+        after(10000, function()
+            print("restore ammo")
+            self.powerupExtraAmmo = false
+        end)
     end
 end
 

@@ -56,13 +56,23 @@ Weapons = {
     laserGun = {name="laserGun", damage=2, ammoType="laser",  speed=600, rof=400,  ammo=15, reload=1300, collect=50, ricochet=2},
 }
 
-
 -- Load in weapon stats for spine, sound and particles:
 Weapons.club.slot     = "weapon"; Weapons.club.skin     = "weapons/weapon-club";  Weapons.club.hitSound = "";
 Weapons.rifle.slot    = "weapon"; Weapons.rifle.skin    = "weapons/gun_assault";  Weapons.rifle.bone    = "rifle";    Weapons.rifle.shotSound    = "rifleShot";  Weapons.rifle.hitSound    = "bulletHit"; Weapons.rifle.hitAnim    = "bulletImpact"
 Weapons.shotgun.slot  = "weapon"; Weapons.shotgun.skin  = "weapons/gun_shotgun";  Weapons.shotgun.bone  = "rifle";    Weapons.shotgun.shotSound  = "shotGunShot";  Weapons.shotgun.hitSound  = "bulletHit"; Weapons.shotgun.hitAnim  = "bulletImpact"
 Weapons.launcher.slot = "weapon"; Weapons.launcher.skin = "weapons/gun_launcher"; Weapons.launcher.bone = "launcher"; Weapons.launcher.shotSound = "rocketShot"; Weapons.launcher.hitSound = "rocketHit"; Weapons.launcher.hitAnim = "smoke";       Weapons.launcher.hitAnim2nd="explosion"
 Weapons.laserGun.slot = "weapon"; Weapons.laserGun.skin = "weapons/gun_laser";    Weapons.laserGun.bone = "laser";    Weapons.laserGun.shotSound = "laserShot";  Weapons.laserGun.hitSound = "laserHit";  Weapons.laserGun.hitAnim = "plasmaImpact";
+
+
+Powerups = {
+    health     = "health",
+    shield     = "shield",
+    damage     = "damage",
+    fastMove   = "fastMove",
+    fastShoot  = "fastShoot",
+    extraAmmo  = "extraAmmo",
+    laserSight = "laserSight",
+}
 
 
 EnemyTypes = {

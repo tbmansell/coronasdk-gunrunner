@@ -35,6 +35,26 @@ function Collectable:collectedBy(player)
     if self.object == "weapon" then
         sounds:collectable("gotWeapon")
         player:setWeapon(Weapons[self.type])
+
+    elseif self.object == "powerup" then
+        sounds:collectable("gotWeapon")
+
+        if self.type == Powerups.health then
+            player:heal(self.health)
+
+        elseif self.type == Powerups.damage then
+            player:increaseDamage()
+
+        elseif self.type == Powerups.fastMove then
+            player:increaseMove()
+
+        elseif self.type == Powerups.fastShoot then
+            player:fastShoot()
+
+        elseif self.type == Powerups.extraAmmo then
+            player:extraAmmo()
+
+        end
     end
 end
 

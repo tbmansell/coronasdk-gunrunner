@@ -55,14 +55,20 @@ function Character:shootProjectile(projectileBuilder, camera, filter)
     end
 
     if name == "shotgun" then
-        level:createProjectile({xpos=x, ypos=y, angle=angle-10, filter=filter}, weapon)
-        level:createProjectile({xpos=x, ypos=y, angle=angle,    filter=filter}, weapon)
-        level:createProjectile({xpos=x, ypos=y, angle=angle+10, filter=filter}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle-10, filter=filter, powerupDamage=self.powerupDamage}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle,    filter=filter, powerupDamage=self.powerupDamage}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle+10, filter=filter, powerupDamage=self.powerupDamage}, weapon)
     else
-        level:createProjectile({xpos=x, ypos=y, angle=angle, filter=filter}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle, filter=filter, powerupDamage=self.powerupDamage}, weapon)
     end
 
-    after(self.weapon.rof, function() 
+    local rof = self.weapon.rof
+
+    if self.powerupFastShoot then
+        rof = rof / 2
+    end
+
+    after(rof, function() 
         self.flagShootAllowed = true 
     end)
 end
@@ -79,6 +85,10 @@ function Character:shootReloadCheck(callback)
 
         after(weapon.reload, function()
             self.ammo = weapon.ammo
+
+            if self.powerupExtraAmmo then
+                self.ammo = self.ammo + weapon.ammo
+            end
 
             if callback then callback() end
         end)

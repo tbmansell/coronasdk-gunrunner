@@ -62,7 +62,7 @@ function Obstacle:explode()
     if self.isCrate then
         self:emit("explosionCrate")
         self:emit("smokeCrate")
-        self:generatePowerup(5)
+        self:generatePowerup(100)
 
     elseif self.isComputer then
         self:emit("explosion")

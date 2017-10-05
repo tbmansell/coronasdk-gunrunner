@@ -62,7 +62,7 @@ function Obstacle:explode()
     if self.isCrate then
         self:emit("explosionCrate")
         self:emit("smokeCrate")
-        self:generatePowerup(5)
+        self:generatePowerup(50)
 
     elseif self.isComputer then
         self:emit("explosion")
@@ -88,12 +88,16 @@ end
 function Obstacle:generatePowerup(chance)
     if percent(chance) then
         local r = random(100)
-
-        if     r <= 20 then level:createPowerup(Powerups.health, self:x(), self:y())
-        elseif r <= 40 then level:createPowerup(Powerups.damage, self:x(), self:y())
-        elseif r <= 60 then level:createPowerup(Powerups.fastMove, self:x(), self:y())
-        elseif r <= 80 then level:createPowerup(Powerups.fastShoot, self:x(), self:y())
-        else                level:createPowerup(Powerups.extraAmmo, self:x(), self:y())
+        local x = self:x()
+        local y = self:y()
+        
+        if     r <= 14 then level:createPowerup(Powerups.health, x, y)
+        elseif r <= 28 then level:createPowerup(Powerups.damage, x, y)
+        elseif r <= 42 then level:createPowerup(Powerups.fastMove, x, y)
+        elseif r <= 56 then level:createPowerup(Powerups.fastShoot, x, y)
+        elseif r <= 70 then level:createPowerup(Powerups.extraAmmo, x, y)
+        elseif r <= 84 then level:createPowerup(Powerups.laserSight, x, y)
+        else                level:createPowerup(Powerups.shield, x, y)
         end
     end
 end

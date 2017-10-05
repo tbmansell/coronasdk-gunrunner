@@ -54,6 +54,12 @@ function Collectable:collectedBy(player)
         elseif self.type == Powerups.extraAmmo then
             player:extraAmmo()
 
+        elseif self.type == Powerups.shield then
+            player:shield()
+
+        elseif self.type == Powerups.laserSight then
+            player:laserSight()
+
         end
     end
 end

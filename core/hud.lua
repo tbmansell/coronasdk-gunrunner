@@ -237,28 +237,36 @@ end
 
 
 function Hud:eventUpdateFrame(event)
+    local player = self.player
+
     if movePlayerAllow then
-        -- befor emoving player, check if any force has been applied and cancel it
-        self.player:stopMomentum()
+        -- before moving player, check if any force has been applied and cancel it
+        player:stopMomentum()
 
         local angle = atan2(moveControllerY - movePlayerY, moveControllerX - movePlayerX) * PI
         local dx    = movePlayerSpeedX * -cos(rad(angle))
         local dy    = movePlayerSpeedY * -sin(rad(angle))
 
-        self.player:moveBy(dx, dy)
-
+        player:moveBy(dx, dy)
         --self.player.legs:loop("strafe_left")
     end
 
     if aimPlayerAllow then
         local angle = 90 + atan2(aimPlayerY - shootControllerY, aimPlayerX - shootControllerX) * PI
         
-        self.player:rotate(angle, event)
-        self.player:shoot(self.camera)
+        player:rotate(angle, event)
+        player:shoot(self.camera)
     end
 
+    player:moveBy(0, forcePlayerMoveY)
 
-    self.player:moveBy(0, forcePlayerMoveY)
+    if player.shieldEntity then
+        player.shieldEntity:moveTo(player:x(), player:y())
+    end
+
+    if player.powerupLaserSight then
+        player:drawLaserSight()
+    end
 end
 
 

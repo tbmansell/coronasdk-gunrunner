@@ -5,38 +5,44 @@ local spine       = require("core.spine")
 -- Class
 local Player = {
 
-    isPlayer      = true,
-    class         = "Player",
-    intHeight     = 25,
-    intWidth      = 25,
-    intMaxHealth  = 20,
-    verticalSpeed = 4,
-    strafeSpeed   = 4,
+    isPlayer          = true,
+    class             = "Player",
+    intHeight         = 25,
+    intWidth          = 25,
+    intMaxHealth      = 20,
+    verticalSpeed     = 4,
+    strafeSpeed       = 4,
+    powerupDuration   = 10000,
 
-    mode          = PlayerMode.ready,
-    health        = 20,
-    gear          = {},  -- array have to be set by the builder due to deep copy problems
-    shielded      = false,
-    weapon        = nil,
-    ammo          = 0,
-    boneBarrel    = nil,
-    powerupDamage    = false,
-    powerupFastMove  = false,
-    powerupFastShoot = false,
-    powerupExtraAmmo = false,
+    mode              = PlayerMode.ready,
+    health            = 20,
+    gear              = {},  -- array have to be set by the builder due to deep copy problems
+    shielded          = false,
+    weapon            = nil,
+    ammo              = 0,
+    boneBarrel        = nil,
 
-    flagShootAllowed = true,
+    powerupDamage     = false,
+    powerupFastMove   = false,
+    powerupFastShoot  = false,
+    powerupExtraAmmo  = false,
+    powerupLaserSight = false,
+
+    flagShootAllowed  = true,
 }
 
 -- Aliases:
-local random= math.random
+local cos    = math.cos
+local sin    = math.sin
+local rad    = math.rad
+local random = math.random
 
 
 function Player:updateSpine(delta)
     self.state:update(delta)
     self.state:apply(self.skeleton)
 
-    self.boneRoot.rotation = - (self.angle + 30)
+    self.boneRoot.rotation = -(self.angle + 30)
 
     self.skeleton:updateWorldTransform()
     
@@ -335,7 +341,7 @@ function Player:increaseDamage()
         self.powerupDamage = true
         print("double damage")
 
-        after(10000, function()
+        after(self.powerupDuration, function()
             print("restore damage")
             self.powerupDamage = false
         end)
@@ -351,7 +357,7 @@ function Player:increaseMove()
         self:updateHudSpeed(true)
         print("double speed")
 
-        after(10000, function()
+        after(self.powerupDuration, function()
             print("restore speed")
             self.verticalSpeed = 4
             self.strafeSpeed   = 4
@@ -367,7 +373,7 @@ function Player:fastShoot()
         self.powerupFastShoot = true
         print("fast shoot")
 
-        after(10000, function()
+        after(self.powerupDuration, function()
             print("restore shoot")
             self.powerupFastShoot = false
         end)
@@ -383,10 +389,80 @@ function Player:extraAmmo()
         self.ammo = self.weapon.ammo * 2
         self:hookAmmoCounter()
 
-        after(10000, function()
+        after(self.powerupDuration, function()
             print("restore ammo")
             self.powerupExtraAmmo = false
         end)
+    end
+end
+
+
+function Player:shield()
+    if not self:isDead() and self.shielded ~= true then
+        self.shielded     = true
+        self.shieldEntity = level:createSpineObject({type="gearshield"}, {jsonName="shield", imagePath="collectables", animation="Rotate"})
+        self.shieldEntity.image:scale(0.5, 0.5)
+        self.shieldEntity:loop("Rotate")
+        self.shieldEntity:visible(0.6)
+
+        globalCamera:addCollectable(self.shieldEntity)
+        print("shield up")
+
+        after(self.powerupDuration, function()
+            print("shield down")
+            self.shieldEntity:destroy()
+            self.shieldEntity = nil
+            self.shielded = false
+        end)
+    end
+end
+
+
+function Player:laserSight()
+    if not self:isDead() then
+        self.powerupLaserSight = true
+        print("lasersight activated")
+
+        after(self.powerupDuration, function()
+            print("lasersight gone")
+            self.powerupLaserSight = false
+            self:removeLaserSight()
+        end)
+    end
+end
+
+
+function Player:drawLaserSight()
+    local angle  = (self.angle or 0)
+    local x      = self:x() + self.boneBarrel.worldX
+    local y      = self:y() - self.boneBarrel.worldY
+    local ex     = x + 1000 * sin(rad(angle))
+    local ey     = y + 1000 * -cos(rad(angle))
+
+    -- Check if anything in its path
+    local hits = physics.rayCast(x, y, ex, ey)
+
+    if hits then
+        for i,v in ipairs(hits) do
+            ex, ey = v.position.x, v.position.y
+        end
+    end
+
+    self:removeLaserSight()
+    
+    local sight = display.newLine(x, y, ex, ey)
+    sight.strokeWidth = 4
+    sight:setStrokeColor(1, 0, 0, 0.2)
+
+    self.laserSightEntity = sight
+    globalCamera:addCollectable(sight)
+end
+
+
+function Player:removeLaserSight()
+    if self.laserSightEntity then
+        self.laserSightEntity:removeSelf()
+        self.laserSightEntity = nil
     end
 end
 

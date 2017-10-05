@@ -176,6 +176,13 @@ function Level:createAreaOfEffect(item)
 end
 
 
+function Level:createSpineObject(item, spineParams)
+    local object = builder:newSpineObject(item, spineParams)
+    spineCollection:add(object)
+    return object
+end
+
+
 function Level:pauseElements()
 end
 

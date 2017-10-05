@@ -92,7 +92,7 @@ function Builder:newSpineObject(spec, spineParams)
     	json.scale = spineParams.scale
 	end
 
-	local skeletonData = json:readSkeletonDataFile("json/spine/"..spineParams.jsonName..".json")--, nil, spineParams.scale)
+	local skeletonData = json:readSkeletonDataFile("json/spine/"..spineParams.jsonName..".json")
     local skeleton     = spine.Skeleton.new(skeletonData, nil)
     
     if spec.modifyImage then

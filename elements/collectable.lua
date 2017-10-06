@@ -36,6 +36,10 @@ function Collectable:collectedBy(player)
         sounds:collectable("gotWeapon")
         player:setWeapon(Weapons[self.type])
 
+    elseif self.object == "jewel" then
+        sounds:collectable("gotJewel")
+        player:addPoints(self.points or 5)
+
     elseif self.object == "powerup" then
         sounds:collectable("gotWeapon")
 

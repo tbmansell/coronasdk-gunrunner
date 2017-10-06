@@ -76,7 +76,7 @@ function Loader:load(LevelGenerator)
         end
 
         self:addScenery()
-        self:addPoints()
+        self:addJewels()
 
         -- Increment map height
         self.currentHeight = self.currentHeight + env.height
@@ -369,7 +369,14 @@ function Loader:load(LevelGenerator)
     end
 
 
-    function LevelGenerator:addPoints()
+    function LevelGenerator:addJewels()
+        local group = {}
+
+        for i=1, random(7) do
+            group[#group+1] = {object="jewel", type="jewel-pink", size=1.5}
+        end
+
+        self:placeClusterfuck(group)
     end
 
 

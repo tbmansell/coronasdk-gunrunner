@@ -36,6 +36,7 @@ function Sounds:preload()
     self.enemySounds.melee           = loadSound("sounds/melee.mp3")
 
     self.collectableSounds.gotWeapon = loadSound("sounds/collectedWeapon.wav")
+    self.collectableSounds.gotJewel  = loadSound("sounds/collectedJewel.mp3")
 
     self.generalSounds.gameOver      = loadSound("sounds/gameOver.mp3")
 

@@ -135,6 +135,11 @@ function scene:loadPlayer()
             hud:displayGameOver()
         end)
     end
+
+    function player:addPoints(points)
+        stats:addPoints(points)
+        hud:updatePoints()
+    end
 end
 
 
@@ -162,8 +167,6 @@ end
 
 function scene:startMusic()
     self.musicChannel = audio.findFreeChannel()
-    --audio.setVolume(0.3, {channel=self.musicChannel})
-    --audio.setMaxVolume(0.3, {channel=self.musicChannel})
     sounds:play(sounds.music.cyborgNinja, {channel=self.musicChannel, volume=0.3, fadein=8000, loops=-1})
 end
 

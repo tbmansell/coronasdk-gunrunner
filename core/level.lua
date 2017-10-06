@@ -115,9 +115,10 @@ function Level:createElementsFromData(levelElements)
     for _,item in pairs(levelElements) do
         local object = item.object
 
-        if     object == "enemy"    then self:createEnemy(item)
-        elseif object == "weapon"   then self:createCollectable(item) 
-        elseif object == "obstacle" then self:createObstacle(item)
+        if     object == "enemy"       then self:createEnemy(item)
+        elseif object == "weapon"      then self:createCollectable(item) 
+        elseif object == "jewel"       then self:createCollectable(item) 
+        elseif object == "obstacle"    then self:createObstacle(item)
         end
     end
 end

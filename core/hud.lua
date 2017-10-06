@@ -106,11 +106,10 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler)
     
     self.debugMode         = false
     self.physicsMode       = false
-    self.score             = 0
 
     self.background        = display.newRect(self.group, globalCenterX, globalCenterY, globalWidth, globalHeight)
     self.playerIcon        = draw:newImage(self.group, "hud/pause", 45, 45, 0.5)
-    self.textScore         = draw:newText(self.group,  self.score, globalWidth-5, 25, 0.7, "green", "RIGHT")
+    self.textScore         = draw:newText(self.group,  "", globalWidth-5, 25, 0.7, "green", "RIGHT")
     self.controlMove       = draw:newImage(self.group, "hud/control-move",  100,             globalHeight-110, nil, 0.7)
     self.controlShoot      = draw:newImage(self.group, "hud/control-shoot", globalWidth-100, globalHeight-130, nil, 0.7)
     self.healthCounter     = display.newRoundedRect(self.group, globalCenterX, globalHeight-100, 200, 50, 10)
@@ -321,6 +320,11 @@ function Hud:collect(item)
 end
 
 
+function Hud:updatePoints()
+    self.textScore:setText(stats.points)
+end
+
+
 function Hud:setAmmoCounter(number)
     if self.ammoCounter then
         self.ammoCounter:setText(number or "0")
@@ -403,7 +407,7 @@ function Hud:displayGameOver()
         draw:newText(group, "game over", globalCenterX, 50, 1, "white")
         self:createButtonReplay(group, globalCenterX, globalHeight-50)
 
-        local pointsLabel   = draw:newText(group, "points:",    300, 150, 0.6, "grey", "RIGHT")
+        local pointsLabel   = draw:newText(group, "score:",    300, 150, 0.6, "grey", "RIGHT")
         local pointsValue   = draw:newText(group, stats.points, 330, 150, 0.6, "green", "LEFT")
 
         local timeLabel     = draw:newText(group, "survived:",  300, 200, 0.6, "grey", "RIGHT")

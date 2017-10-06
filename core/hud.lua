@@ -20,6 +20,7 @@ local moveControllerX  = 0
 local moveControllerY  = 0
 local shootControllerX = 0
 local shootControllerY = 0
+local lastTime         = 0
 
 -- Aliases
 local PI    = 180 / math.pi
@@ -28,6 +29,7 @@ local cos   = math.cos
 local sin   = math.sin
 local rad   = math.rad
 local atan2 = math.atan2
+local random= math.random
 
 -- Local Event Handlers
 
@@ -379,6 +381,129 @@ end
 
 function Hud:startLevelSequence(level, player)
 
+end
+
+
+function Hud:displayGameOver()
+    self = Hud
+
+    if globalGameMode == GameMode.over then
+        local group = self.group
+
+        draw:newBlocker(group, 0.9, 0,0,0)
+        draw:newText(group, "game over", globalCenterX, 50, 1, "white")
+        self:createButtonReplay(group, globalCenterX, globalHeight-50)
+
+        local pointsLabel   = draw:newText(group, "points:",      300, 150, 0.6, "grey", "RIGHT")
+        local pointsValue   = draw:newText(group, stats.points,   330, 150, 0.6, "green", "LEFT")
+
+        local timeLabel     = draw:newText(group, "survived:",    300, 200, 0.6, "grey", "RIGHT")
+        local timeValue     = draw:newText(group, stats.time,     330, 200, 0.6, "aqua", "LEFT")
+        local timeUnit      = draw:newText(group, "seconds",      timeValue.x + timeValue.width - 20, 205, 0.3, "aqua", "LEFT")
+
+        local distanceLabel = draw:newText(group, "distance:",    300, 250, 0.6, "grey", "RIGHT")
+        local distanceValue = draw:newText(group, stats.distance, 330, 250, 0.6, "yellow", "LEFT")
+        local distanceUnit  = draw:newText(group, "metres",       distanceValue.x + distanceValue.width - 20, 255, 0.3, "yellow", "LEFT")
+
+        local weaponTitles  = draw:newText(group, "shots  accuracy  kills", 250, 350, 0.4, "grey", "LEFT")
+
+        self:displayWeaponStats(group, Weapons.rifle.name,    400)
+        self:displayWeaponStats(group, Weapons.shotgun.name,  450)
+        self:displayWeaponStats(group, Weapons.launcher.name, 500)
+        self:displayWeaponStats(group, Weapons.laserGun.name, 550)
+
+        local enemies = {}
+
+        self:displayMeleeEnemiesKilled(group,   enemies, 660)
+        self:displayShooterEnemiesKilled(group, enemies, 660)
+
+        Runtime:addEventListener("enterFrame", function(event)
+            local currentTime = event.time / 1000
+            local delta       = currentTime - lastTime
+            lastTime          = currentTime
+
+            for _,item in pairs(enemies) do
+                item:updateSpine(delta)
+            end
+        end)
+    end
+end
+
+
+function Hud:displayWeaponStats(group, weaponName, ypos)
+    local weapon   = Weapons[weaponName]
+    local stats    = stats.weapons[weaponName]
+    local accuracy = math.round((stats.hits / stats.shots) * 100)
+
+    local icon  = draw:newImage(group, "collectables/"..weapon.name, 150, ypos)
+    local shots = draw:newText(group,  stats.shots,                  280, ypos, 0.4, "white",  "CENTER")
+    local acc   = draw:newText(group,  accuracy.."%",                380, ypos, 0.4, "yellow", "CENTER")
+    local kills = draw:newText(group,  stats.kills,                  480, ypos, 0.4, "red",    "CENTER")
+
+    if stats.shots == 0 then
+        icon.alpha = 0.2
+        shots:setText("-")
+        acc:setText("-")
+        kills:setText("-")
+    end
+end
+
+
+function Hud:displayMeleeEnemiesKilled(group, enemies, ypos)
+    local xpos = 100
+
+    for rank=1, 3 do
+        self:displayEnemyKills(group, enemies, "melee", rank, xpos, ypos)
+
+        ypos = ypos + 75
+    end
+end
+
+
+function Hud:displayShooterEnemiesKilled(group, enemies, ypos)
+    local xpos = 200
+
+    for rank=1, 12 do
+        self:displayEnemyKills(group, enemies, "shooter", rank, xpos, ypos)
+
+        xpos = xpos + 100
+
+        if rank % 4 == 0 then
+            xpos = 200
+            ypos = ypos + 75
+        end
+    end
+end
+
+
+function Hud:displayEnemyKills(group, enemies, enemyType, rank, xpos, ypos)
+    local enemy = self:createSpineEnemy(enemyType, rank)
+
+    enemy:moveTo(xpos, ypos)
+
+    after(random(10)*100, function()
+        enemies[#enemies+1] = enemy
+    end)
+
+    local kills = stats.enemies[enemyType][rank]
+
+    if kills > 0 then
+        draw:newText(group, kills, xpos+30, ypos, 0.45, "red", "LEFT")
+    else
+        enemy:visible(0.2)
+    end
+end
+
+
+function Hud:createSpineEnemy(enemyType, rank)
+    local spec   = EnemyTypes[enemyType][rank]
+    local weapon = Weapons[spec.weapon]
+    local enemy  = builder:newCharacter({}, {jsonName="characterBody", imagePath="character", skin=spec.skin, animation="stationary_1"})
+
+    enemy.skeleton:setAttachment(weapon.slot, weapon.skin)
+    enemy.image:scale(0.5, 0.5)
+
+    return enemy
 end
 
 

@@ -105,6 +105,8 @@ function Player:shoot(camera, ammoCounter)
         self:shootProjectile(projectileBuilder, camera, Filters.playerShot)
         self:shootReloadCheck(function() self:hookAmmoCounter() end)
         self:hookAmmoCounter()
+        
+        stats:addShot(self.weapon)
     end
 end
 

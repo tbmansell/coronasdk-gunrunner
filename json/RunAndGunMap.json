@@ -67,8 +67,7 @@
  "renderorder":"right-down",
  "tiledversion":"1.0.2",
  "tileheight":75,
- "tilesets":[
-        {
+ "tilesets":[{
          "firstgid":1,
          "columns":15,
          "image":"..\/images\/tiles.png",

@@ -357,6 +357,9 @@ end
 
 function Enemy:hit(shot)
     if not self:isDead() then
+        print("enemy hit with weapon: "..tostring(shot.weapon.name))
+        stats:addHit(shot.weapon)
+
         if not self.shielded or shot.weapon.shieldBuster then
             local damage = shot.weapon.damage
 
@@ -371,6 +374,7 @@ function Enemy:hit(shot)
 
             if self.health <= 0 then
                 self:explode()
+                stats:addKill(shot.weapon, self.type, self.rank)
             end
         end
     end

@@ -2,8 +2,8 @@
 require("constants.globals")
 
 -- Global label used for buld version
-globalBuildVersion     = "0.1"
-globalDebugGame        = true
+globalBuildVersion     = "0.3"
+globalDebugGame        = false
 globalGameMode         = GameMode.loading
 globalFPS              = 0
 globalCenterX          = display.contentCenterX
@@ -15,6 +15,7 @@ globalBackgroundHeight = 1300
 globalCamera           = nil
 
 -- Define global objects
+stats   = require("core.stats")
 track   = require("core.track")
 draw    = require("core.draw")
 sounds  = require("core.sounds")

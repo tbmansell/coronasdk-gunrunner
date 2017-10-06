@@ -30,7 +30,7 @@ local function sceneKeyEvent(event)
 end
 
 
-local function eventUpdateFrame(event)    
+local function eventUpdateFrame(event)
     tileEngine.map.updateView()
     level:eventUpdateFrame(event)
     hud:eventUpdateFrame(event)
@@ -127,11 +127,13 @@ function scene:loadPlayer()
     
     -- Create Game Over callback
     player.failedCallback = function()
-        scene:pauseLevel()
-        globalGameMode = GameMode.over
-        hud:displayMessage("game over man")
-        sounds:general("gameOver")
-        after(4000, function() composer.gotoScene("scenes.game", {effect="fade", time=3000}) end)
+        after(2000, function()
+            scene:pauseLevel()
+            sounds:general("gameOver")
+
+            globalGameMode = GameMode.over
+            hud:displayGameOver()
+        end)
     end
 end
 

@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "3axLBPWEZ2pf2wnbeUDH2sseGUU", "spine": "3.6.41", "width": 178.49, "height": 198.78 },
+"skeleton": { "hash": "bOeKdnqS4U9xYjyJUA5n2vv0svo", "spine": "3.6.41", "width": 169.93, "height": 432.86 },
 "bones": [
 	{ "name": "root", "rotation": -35.26 },
 	{ "name": "Body", "parent": "root", "length": 70.01, "rotation": 88.91, "x": 1 },
@@ -20,8 +20,10 @@
 	{ "name": "left_forearm", "bone": "LeftForearm", "attachment": "left_forearm" },
 	{ "name": "right_forearm", "bone": "RightForearm", "attachment": "right_forearm" },
 	{ "name": "Body", "bone": "Body", "attachment": "body" },
-	{ "name": "weapon", "bone": "weapon", "attachment": "weapons/weapon-club" },
-	{ "name": "head", "bone": "Head", "attachment": "head" }
+	{ "name": "weapon", "bone": "weapon", "attachment": "weapons/gun_laser" },
+	{ "name": "head", "bone": "Head", "attachment": "head" },
+	{ "name": "weapons/muzzle", "bone": "barrel-rifle", "color": "ffffff00", "attachment": "weapons/muzzle" },
+	{ "name": "weapons/laserMuzzle", "bone": "barrel-laser", "color": "ffffff00", "attachment": "weapons/laserMuzzle" }
 ],
 "skins": {
 	"default": {
@@ -31,6 +33,12 @@
 			"weapons/gun_launcher": { "scaleX": 1.036, "scaleY": 1.095, "rotation": -90.39, "width": 52, "height": 190 },
 			"weapons/gun_shotgun": { "x": 33.66, "y": 1.33, "rotation": -90.09, "width": 18, "height": 174 },
 			"weapons/weapon-club": { "x": 41.18, "y": 24.57, "rotation": -55.28, "width": 9, "height": 87 }
+		},
+		"weapons/laserMuzzle": {
+			"weapons/laserMuzzle": { "x": 23, "y": -0.03, "width": 64, "height": 64 }
+		},
+		"weapons/muzzle": {
+			"weapons/muzzle": { "x": 104.69, "y": -2.39, "scaleX": 1.345, "scaleY": 2.877, "rotation": -90.9, "width": 64, "height": 64 }
 		}
 	},
 	"lizard_assault": {
@@ -756,6 +764,18 @@
 		}
 	},
 	"hit_1": {
+		"slots": {
+			"weapons/laserMuzzle": {
+				"color": [
+					{ "time": 0, "color": "ffffff00" }
+				]
+			},
+			"weapons/muzzle": {
+				"color": [
+					{ "time": 0, "color": "ffffff00" }
+				]
+			}
+		},
 		"bones": {
 			"root": {
 				"rotate": [
@@ -2272,6 +2292,15 @@
 		}
 	},
 	"shoot_laserGun": {
+		"slots": {
+			"weapons/laserMuzzle": {
+				"color": [
+					{ "time": 0, "color": "00ffffff", "curve": "stepped" },
+					{ "time": 0.1, "color": "00ffffff" },
+					{ "time": 0.2, "color": "00ffff00" }
+				]
+			}
+		},
 		"bones": {
 			"root": {
 				"rotate": [
@@ -2394,6 +2423,20 @@
 				"scale": [
 					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
 					{ "time": 0.2, "x": 1, "y": 1 }
+				]
+			},
+			"barrel-laser": {
+				"rotate": [
+					{ "time": 0, "angle": 0, "curve": "stepped" },
+					{ "time": 0.2, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 },
+					{ "time": 0.2, "x": -21.08, "y": 0 }
+				],
+				"scale": [
+					{ "time": 0, "x": 0.588, "y": 0.588 },
+					{ "time": 0.2, "x": 1.8, "y": 1.8 }
 				]
 			}
 		}
@@ -2522,6 +2565,15 @@
 		}
 	},
 	"shoot_rifle": {
+		"slots": {
+			"weapons/muzzle": {
+				"color": [
+					{ "time": 0, "color": "e7fc00ff" },
+					{ "time": 0.0667, "color": "f6ff00a6" },
+					{ "time": 0.1333, "color": "ff000000" }
+				]
+			}
+		},
 		"bones": {
 			"root": {
 				"rotate": [
@@ -2641,10 +2693,35 @@
 					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
 					{ "time": 0.1333, "x": 1, "y": 1 }
 				]
+			},
+			"barrel-rifle": {
+				"rotate": [
+					{ "time": 0, "angle": 0, "curve": "stepped" },
+					{ "time": 0.0667, "angle": 0, "curve": "stepped" },
+					{ "time": 0.1333, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.0667, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.1333, "x": 0, "y": 0 }
+				],
+				"scale": [
+					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
+					{ "time": 0.0667, "x": 1, "y": 1, "curve": "stepped" },
+					{ "time": 0.1333, "x": 1, "y": 1 }
+				]
 			}
 		}
 	},
 	"shoot_shotgun": {
+		"slots": {
+			"weapons/muzzle": {
+				"color": [
+					{ "time": 0, "color": "ff3200ff" },
+					{ "time": 0.1667, "color": "ff020204" }
+				]
+			}
+		},
 		"bones": {
 			"root": {
 				"rotate": [
@@ -2813,6 +2890,23 @@
 					{ "time": 0.2, "x": 1, "y": 1, "curve": "stepped" },
 					{ "time": 0.3333, "x": 1, "y": 1, "curve": "stepped" },
 					{ "time": 0.5333, "x": 1, "y": 1 }
+				]
+			},
+			"barrel-rifle": {
+				"rotate": [
+					{ "time": 0, "angle": 0, "curve": "stepped" },
+					{ "time": 0.0667, "angle": 0, "curve": "stepped" },
+					{ "time": 0.1667, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.0667, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.1667, "x": 0, "y": 0 }
+				],
+				"scale": [
+					{ "time": 0, "x": 1, "y": 1.782 },
+					{ "time": 0.1, "x": 1, "y": 1, "curve": "stepped" },
+					{ "time": 0.1667, "x": 1, "y": 1 }
 				]
 			}
 		}

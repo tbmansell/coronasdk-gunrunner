@@ -38,6 +38,8 @@ function Sounds:preload()
     self.collectableSounds.gotWeapon = loadSound("sounds/collectedWeapon.wav")
 
     self.generalSounds.gameOver      = loadSound("sounds/gameOver.mp3")
+
+    self.music.cyborgNinja           = loadSound("sounds/music-cyborgNinja.mp3")
 end
 
 

@@ -152,10 +152,34 @@ end
 function scene:startLevelSequence()
     globalGameMode = GameMode.started
 
+    self:startMusic()
     hud:startLevelSequence(level, player)
     player:startLevelSequence()
 
     after(500, function() scene:startPlaying() end)
+end
+
+
+function scene:startMusic()
+    self.musicChannel = audio.findFreeChannel()
+    --audio.setVolume(0.3, {channel=self.musicChannel})
+    --audio.setMaxVolume(0.3, {channel=self.musicChannel})
+    sounds:play(sounds.music.cyborgNinja, {channel=self.musicChannel, volume=0.3, fadein=8000, loops=-1})
+end
+
+
+function scene:pauseMusic()
+    audio.pause(self.musicChannel)
+end
+
+
+function scene:resumeMusic()
+    audio.resume(self.musicChannel)
+end
+
+
+function scene:endMusic()
+    audio.fadeOut({channel=self.musicChannel, time=1000})
 end
 
 
@@ -176,6 +200,7 @@ function scene:pauseLevel()
 
     Runtime:removeEventListener("enterFrame", eventUpdateFrame)
 
+    scene:pauseMusic()
     track:pauseEventHandles()
     level:pauseElements()
 
@@ -189,6 +214,7 @@ function scene:resumeLevel(resumeGameState)
     globalGameMode = resumeGameState or GameMode.playing
     Runtime:addEventListener("enterFrame", eventUpdateFrame)
 
+    scene:resumeMusic()
     particles:resume()
     anim:resume()
     physics:start()
@@ -201,6 +227,7 @@ end
 function scene:unloadLevel()
     Runtime:removeEventListener("enterFrame", eventUpdateFrame)
 
+    self:endMusic()
     timer.cancel(scene.gameLoopHandle)
     track:cancelEventHandles()
 

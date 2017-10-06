@@ -388,22 +388,26 @@ function Hud:displayGameOver()
     self = Hud
 
     if globalGameMode == GameMode.over then
-        local group = self.group
+        local group      = self.group
+        local distance   = stats:getDistance()
+        local mins, secs = stats:getTime()
 
         draw:newBlocker(group, 0.9, 0,0,0)
         draw:newText(group, "game over", globalCenterX, 50, 1, "white")
         self:createButtonReplay(group, globalCenterX, globalHeight-50)
 
-        local pointsLabel   = draw:newText(group, "points:",      300, 150, 0.6, "grey", "RIGHT")
-        local pointsValue   = draw:newText(group, stats.points,   330, 150, 0.6, "green", "LEFT")
+        local pointsLabel   = draw:newText(group, "points:",    300, 150, 0.6, "grey", "RIGHT")
+        local pointsValue   = draw:newText(group, stats.points, 330, 150, 0.6, "green", "LEFT")
 
-        local timeLabel     = draw:newText(group, "survived:",    300, 200, 0.6, "grey", "RIGHT")
-        local timeValue     = draw:newText(group, stats.time,     330, 200, 0.6, "aqua", "LEFT")
-        local timeUnit      = draw:newText(group, "seconds",      timeValue.x + timeValue.width - 20, 205, 0.3, "aqua", "LEFT")
+        local timeLabel     = draw:newText(group, "survived:",  300, 200, 0.6, "grey", "RIGHT")
+        local minValue      = draw:newText(group, mins,         330, 200, 0.6, "aqua", "LEFT")
+        local minUnit       = draw:newText(group, "mins",       minValue.x + minValue.width - 20, 205, 0.3, "aqua", "LEFT")
+        local secValue      = draw:newText(group, secs,         minUnit.x  + minUnit.width  - 95, 200, 0.6, "aqua", "LEFT")
+        local secUnit       = draw:newText(group, "secs",       secValue.x + secValue.width - 20, 205, 0.3, "aqua", "LEFT")
 
-        local distanceLabel = draw:newText(group, "distance:",    300, 250, 0.6, "grey", "RIGHT")
-        local distanceValue = draw:newText(group, stats.distance, 330, 250, 0.6, "yellow", "LEFT")
-        local distanceUnit  = draw:newText(group, "metres",       distanceValue.x + distanceValue.width - 20, 255, 0.3, "yellow", "LEFT")
+        local distanceLabel = draw:newText(group, "distance:",  300, 250, 0.6, "grey", "RIGHT")
+        local distanceValue = draw:newText(group, distance,     330, 250, 0.6, "yellow", "LEFT")
+        local distanceUnit  = draw:newText(group, "metres",     distanceValue.x + distanceValue.width - 20, 255, 0.3, "yellow", "LEFT")
 
         local weaponTitles  = draw:newText(group, "shots  accuracy  kills", 250, 350, 0.4, "grey", "LEFT")
 

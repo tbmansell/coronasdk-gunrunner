@@ -4,8 +4,13 @@ local Stats = {
     -- number of jewels collected
     jewels = 0,
 
-    -- time in seconds player survived
-    time = 0,
+    -- time when game started
+    startingTime = nil,
+    -- time when game ended
+    endingTime = nil,
+
+    -- as we are moving negatively upscreen, we need to mark the start point
+    startingDistance = 0,
     -- distance in tiles (1 tile = 1 metre)
     distance = 0,
 
@@ -25,6 +30,13 @@ local Stats = {
 }
 
 
+function Stats:init(startDistance)
+    self.startingTime     = os.time()
+    self.startingDistance = startDistance
+    self.distance         = startDistance
+end
+
+
 function Stats:addPoints(points)
     self.points = self.points + points
 end
@@ -36,9 +48,28 @@ end
 
 
 function Stats:setDistance(currentDistance)
-    if currentDistance > self.distance then
+    if currentDistance < self.distance then
         self.distance = currentDistance
     end
+end
+
+
+function Stats:getDistance()
+    local tileSize = 72
+    local start    = self.startingDistance / tileSize
+    local finish   = self.distance / tileSize
+
+    return math.round(start - finish)
+end
+
+
+function Stats:getTime()
+    self.endingTime = os.time()
+
+    local seconds = os.difftime(self.endingTime, self.startingTime)
+
+    -- Return minutes and seconds
+    return math.round(seconds / 60), math.round(seconds % 60)
 end
 
 

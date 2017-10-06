@@ -49,10 +49,6 @@ function LevelGenerator:setup()
     self.tiles.wallTopRight     = spriteSheetInfo:getFrameIndex("wallTopRight")
     self.tiles.wallBotLeft      = spriteSheetInfo:getFrameIndex("wallBotLeft")
     self.tiles.wallBotRight     = spriteSheetInfo:getFrameIndex("wallBotRight")
-    self.tiles.wallDiagTopRight = spriteSheetInfo:getFrameIndex("wallDiagTopRight")
-    self.tiles.wallDiagBotRight = spriteSheetInfo:getFrameIndex("wallDiagBotRight")
-    self.tiles.wallDiagTopLeft  = spriteSheetInfo:getFrameIndex("wallDiagTopLeft")
-    self.tiles.wallDiagBotLeft  = spriteSheetInfo:getFrameIndex("wallDiagBotLeft")
 
     self.tiles.shadowRightTop   = spriteSheetInfo:getFrameIndex("shadowRightTop")
     self.tiles.shadowRight      = spriteSheetInfo:getFrameIndex("shadowRight")
@@ -63,6 +59,20 @@ function LevelGenerator:setup()
     self.tiles.patternHazzard   = spriteSheetInfo:getFrameIndex("pattern-hazzard")
     self.tiles.patternPipes     = spriteSheetInfo:getFrameIndex("pattern-pipes")
     self.tiles.patternGrill     = spriteSheetInfo:getFrameIndex("pattern-grill")
+
+    self.tiles.paintRedTopLeft  = spriteSheetInfo:getFrameIndex("paintRedTopLeft")
+    self.tiles.paintRedTopRight = spriteSheetInfo:getFrameIndex("paintRedTopRight")
+    self.tiles.paintRedBotLeft  = spriteSheetInfo:getFrameIndex("paintRedBotLeft")
+    self.tiles.paintRedBotRight = spriteSheetInfo:getFrameIndex("paintRedBotRight")
+    self.tiles.paintRedHoriz    = spriteSheetInfo:getFrameIndex("paintRedHoriz")
+    self.tiles.paintRedVert     = spriteSheetInfo:getFrameIndex("paintRedVert")
+
+    self.tiles.paintBlueTopLeft  = spriteSheetInfo:getFrameIndex("paintBlueTopLeft")
+    self.tiles.paintBlueTopRight = spriteSheetInfo:getFrameIndex("paintBlueTopRight")
+    self.tiles.paintBlueBotLeft  = spriteSheetInfo:getFrameIndex("paintBlueBotLeft")
+    self.tiles.paintBlueBotRight = spriteSheetInfo:getFrameIndex("paintBlueBotRight")
+    self.tiles.paintBlueHoriz    = spriteSheetInfo:getFrameIndex("paintBlueHoriz")
+    self.tiles.paintBlueVert     = spriteSheetInfo:getFrameIndex("paintBlueVert")
 
     -- Random selection of plain tiles
     self.tiles.plain = {}
@@ -80,9 +90,11 @@ function LevelGenerator:destroy()
     self.currentHeight    = 0
     self.enemyRankLimit   = 1
     self.enemyWeaponLimit = 1
-    self.enemyPoints      = 0
+    self.enemyPoints      = 10
     self.enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly
     self.enemyRankAlloc   = EnemyRankAllocations.infantry
+
+    self:destroyEntities()
 end
 
 
@@ -99,11 +111,11 @@ function LevelGenerator:newEnvironment()
     self:setEnvironmentShape(env)
     self:setEnvironmentEdges(env)
 
-    if self.section > 1 then
+    if self.section == 1 then
+        self:setStartEdge(env, env.width-1, env.height)
+    else
         self:setEnvironmentWalls(env)
     end
-
-    --self:setEnvironmentFloor(env)
 
     self.environments[#self.environments + 1] = env
 
@@ -215,6 +227,16 @@ function LevelGenerator:setStraightEdge(env, x, y)
 
             y = y - gap                
         end
+    end
+end
+
+
+function LevelGenerator:setStartEdge(env, x, y)
+    env.tiles[y][2] = self.tiles.wallLeft
+    env.tiles[y][x] = self.tiles.wallRight
+
+    for i=3, x-1 do
+        env.tiles[y][i] = self.tiles.wallHoriz
     end
 end
 
@@ -489,6 +511,37 @@ function LevelGenerator:setEnvironmentFloor(env)
     -- differentiate each section
     for x=2, env.width-1 do
         env.tiles[1][x] = self.tiles.patternHazzard
+    end
+
+    -- customise first section
+    if self.section == 1 then
+        -- inner ring
+        env.tiles[18][9]  = self.tiles.paintRedTopLeft
+        env.tiles[18][10] = self.tiles.paintRedHoriz
+        env.tiles[18][11] = self.tiles.paintRedTopRight
+        env.tiles[19][9]  = self.tiles.paintRedVert
+        env.tiles[19][11] = self.tiles.paintRedVert
+        env.tiles[20][9]  = self.tiles.paintRedBotLeft
+        env.tiles[20][10] = self.tiles.paintRedHoriz
+        env.tiles[20][11] = self.tiles.paintRedBotRight
+
+        -- outer ring
+        env.tiles[16][7]  = self.tiles.paintBlueTopLeft
+        for i=8,12 do 
+            env.tiles[16][i] = self.tiles.paintBlueHoriz
+        end
+        env.tiles[16][13] = self.tiles.paintBlueTopRight
+
+        for i=17, 21 do
+            env.tiles[i][7]  = self.tiles.paintBlueVert
+            env.tiles[i][13] = self.tiles.paintBlueVert
+        end
+
+        env.tiles[22][7]  = self.tiles.paintBlueBotLeft
+        for i=8,12 do 
+            env.tiles[22][i] = self.tiles.paintBlueHoriz
+        end
+        env.tiles[22][13] = self.tiles.paintBlueBotRight
     end
 end
 

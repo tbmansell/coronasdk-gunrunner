@@ -87,16 +87,26 @@ function SheetInfo:nameTiles()
     self.frameIndex["wallTopRight"]     = 5
     self.frameIndex["wallBotLeft"]      = 33
     self.frameIndex["wallBotRight"]     = 35
-    self.frameIndex["wallDiagTopRight"] = 80
-    self.frameIndex["wallDiagBotRight"] = 79
-    self.frameIndex["wallDiagTopLeft"]  = 81
-    self.frameIndex["wallDiagBotLeft"]  = 82
 
     self.frameIndex["shadowRightTop"]   = 156
     self.frameIndex["shadowRight"]      = 167
     self.frameIndex["shadowRightBot"]   = 197
     self.frameIndex["shadowBotLeft"]    = 168
     self.frameIndex["shadowBot"]        = 169
+
+    self.frameIndex["paintRedTopLeft"]  = 52
+    self.frameIndex["paintRedTopRight"] = 54
+    self.frameIndex["paintRedHoriz"]    = 53
+    self.frameIndex["paintRedVert"]     = 82
+    self.frameIndex["paintRedBotLeft"]  = 67
+    self.frameIndex["paintRedBotRight"] = 69
+
+    self.frameIndex["paintBlueTopLeft"]  = 262
+    self.frameIndex["paintBlueTopRight"] = 264
+    self.frameIndex["paintBlueHoriz"]    = 263
+    self.frameIndex["paintBlueVert"]     = 292
+    self.frameIndex["paintBlueBotLeft"]  = 277
+    self.frameIndex["paintBlueBotRight"] = 279
 end
 
 
@@ -104,15 +114,11 @@ function SheetInfo:setupSpecialTiles()
     local size, half = self.tileSize, self.tileSize / 2
 
     -- Setup walls
-    local walls = {"wallTop", "wallBot", "wallRight", "wallLeft", "wallHoriz", "wallVert", "wallVertPattern", "wallTopLeft", "wallTopRight", "wallBotLeft", "wallBotRight", "wallPyramid", "wallDiagTopRight", "wallDiagBotRight", "wallDiagTopLeft", "wallDiagBotLeft"}
+    local walls = {"wallTop", "wallBot", "wallRight", "wallLeft", "wallHoriz", "wallVert", "wallVertPattern", "wallTopLeft", "wallTopRight", "wallBotLeft", "wallBotRight", "wallPyramid"}
 
     for _,name in pairs(walls) do
         self:getFrame(name).isWall = true
     end
-
-    -- Setup diagonal wall shapes:
-    self:getFrame("wallDiagTopRight").shape = {-half,-half, half,-half, -half,half}
-    self:getFrame("wallDiagBotRight").shape = {half,-half,  half,half,  -half,half}
 
     -- Setup holes:
     local holes = {"edgeTopLeft", "edgeTopRight", "edgeBotLeft", "edgeBotRight", "edgeBot", "noFloor"}

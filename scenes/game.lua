@@ -43,7 +43,7 @@ function scene:create(event)
     self:loadLevel()
     self:loadPlayer()
     self:loadInterface()
-    self:createEventHandlers()
+    --self:createEventHandlers()
     particles:preLoadEmitters()
 
     -- these top and bottom borders ensure that devices where the length is greater than 960 (ipad retina) the game doesnt show under or above the background size limits
@@ -122,7 +122,7 @@ end
 
 
 function scene:loadPlayer()
-    player = level:createPlayer({xpos=9.5, ypos=-0.5}, hud)
+    player = level:createPlayer({xpos=9.5, ypos=-5.5}, hud)
     player:setWeapon(Weapons.rifle)
     
     -- Create Game Over callback
@@ -155,7 +155,7 @@ function scene:startLevelSequence()
     hud:startLevelSequence(level, player)
     player:startLevelSequence()
 
-    after(2000, function() scene:startPlaying() end)
+    after(500, function() scene:startPlaying() end)
 end
 
 
@@ -166,6 +166,8 @@ function scene:startPlaying()
 
     stats:init(player:y())
     physics:start()
+    -- runs the game loop and allows it to start. We allow some delay before this to allow everything to load
+    self:createEventHandlers()
 end
 
 

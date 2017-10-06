@@ -357,7 +357,6 @@ end
 
 function Enemy:hit(shot)
     if not self:isDead() then
-        print("enemy hit with weapon: "..tostring(shot.weapon.name))
         stats:addHit(shot.weapon)
 
         if not self.shielded or shot.weapon.shieldBuster then

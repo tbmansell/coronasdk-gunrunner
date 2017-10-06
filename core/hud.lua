@@ -80,6 +80,20 @@ local function eventShootPlayerTap(event)
 end
 
 
+-- Triggered only when game over occurs
+local function eventUpdateFrameGameOver(event)
+    if Hud.gameOverSprites then
+        local currentTime = event.time / 1000
+        local delta       = currentTime - lastTime
+        lastTime          = currentTime
+
+        for _,item in pairs(Hud.gameOverSprites) do
+            item:updateSpine(delta)
+        end
+    end
+end
+
+
 
 -- Class Members
 
@@ -92,11 +106,10 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler)
     
     self.debugMode         = false
     self.physicsMode       = false
-    self.time              = os.date('*t')
     self.score             = 0
 
     self.background        = display.newRect(self.group, globalCenterX, globalCenterY, globalWidth, globalHeight)
-    self.playerIcon        = draw:newImage(self.group, "hud/player-icon", 45, 45, 0.5)
+    self.playerIcon        = draw:newImage(self.group, "hud/pause", 45, 45, 0.5)
     self.textScore         = draw:newText(self.group,  self.score, globalWidth-5, 25, 0.7, "green", "RIGHT")
     self.controlMove       = draw:newImage(self.group, "hud/control-move",  100,             globalHeight-110, nil, 0.7)
     self.controlShoot      = draw:newImage(self.group, "hud/control-shoot", globalWidth-100, globalHeight-130, nil, 0.7)
@@ -104,6 +117,7 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler)
     self.ammoCounter       = draw:newText(self.group,  player.weapon.ammo,  globalWidth-100, globalHeight-40,  0.8, "red")
 
     self.background:setFillColor(0.5, 0.2, 0.5, 0.2)
+    self.playerIcon:scale(4, 4)
     self.healthCounter:setFillColor(0.5,   1,   0.5, 0.5)
     self.healthCounter:setStrokeColor(0.2, 0.5, 0.2, 0.9)
     self.healthCounter.strokeWidth    = 3
@@ -131,6 +145,8 @@ end
 
 
 function Hud:destroy()
+    Runtime:removeEventListener("enterFrame", eventUpdateFrameGameOver)
+
     if self.pauseMenu then 
         self.pauseMenu:removeSelf()
         self.pauseMenu = nil 
@@ -139,6 +155,14 @@ function Hud:destroy()
     if self.splash then
         self.splash:removeSelf()
         self.splash = nil
+    end
+
+    if self.gameOverSprites then
+        for _,item in pairs(self.gameOverSprites) do
+            item:destroy()
+            item = nil
+        end
+        self.gameOverSprites = nil
     end
 
     self.group:removeSelf()
@@ -217,8 +241,7 @@ function Hud:eventPauseGame()
         seq:add("pulse", {time=2000, scale=0.03})
         seq:start()
 
-        self:createButtonExit(self.pauseMenu,   globalCenterX-100, 230)
-        self:createButtonReplay(self.pauseMenu, globalCenterX+100, 230)
+        self:createButtonReplay(self.pauseMenu, globalCenterX, 270)
     end
     return true
 end
@@ -350,37 +373,21 @@ end
 
 
 function Hud:createButtonExit(group, x, y)
-    return draw:newButton(group, x, y, "menu", function() hud:exitZone(); end)
+    return draw:newButton(group, x, y, "menu", function() composer.gotoScene("scenes.game") end)
 end
 
 
 function Hud:createButtonReplay(group, x, y)
-    return draw:newButton(group, x, y, "replay", function() hud:replayLevel() end)
-end
-
-
-function Hud:createButtonShop(group, x, y)
-    return draw:newButton(group, x, y, "shop", function() hud:exitToShop() end)
-end
-
-
-function Hud:createButtonSkipZone(group, x, y)
-    return draw:newButton(group, x, y, "playvideo", function() hud:playVideoToSkipZone() end)
-end
-
-
-function Hud:createButtonPlayerSelect(group, x, y)
-    return draw:newButton(group, x, y, "charselect", function() hud:exitToPlayerSelect() end)
+    return draw:newButton(group, x, y, "replay", function() composer.gotoScene("scenes.game") end)
 end
 
 
 function Hud:createButtonNext(group, x, y)
-    return draw:newButton(group, x, y, "next", function() hud:nextLevel() end)
+    return draw:newButton(group, x, y, "next", function() composer.gotoScene("scenes.game") end)
 end
 
 
 function Hud:startLevelSequence(level, player)
-
 end
 
 
@@ -416,20 +423,12 @@ function Hud:displayGameOver()
         self:displayWeaponStats(group, Weapons.launcher.name, 500)
         self:displayWeaponStats(group, Weapons.laserGun.name, 550)
 
-        local enemies = {}
+        self.gameOverSprites = {}
 
-        self:displayMeleeEnemiesKilled(group,   enemies, 660)
-        self:displayShooterEnemiesKilled(group, enemies, 660)
+        self:displayMeleeEnemiesKilled(group,   self.gameOverSprites, 660)
+        self:displayShooterEnemiesKilled(group, self.gameOverSprites, 660)
 
-        Runtime:addEventListener("enterFrame", function(event)
-            local currentTime = event.time / 1000
-            local delta       = currentTime - lastTime
-            lastTime          = currentTime
-
-            for _,item in pairs(enemies) do
-                item:updateSpine(delta)
-            end
-        end)
+        Runtime:addEventListener("enterFrame", eventUpdateFrameGameOver)
     end
 end
 

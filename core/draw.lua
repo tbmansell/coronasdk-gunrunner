@@ -149,7 +149,7 @@ function Draw:newButton(group, x, y, image, callback, multiClick, clickSound, si
             end
 
             if not clickSound or clicksound ~= "no" then
-                play(clickSound or sounds.sceneEnter)
+                sounds:play(clickSound or sounds.sceneEnter)
             end
 
             btn.alpha, btnOverlay.alpha = 0, 1

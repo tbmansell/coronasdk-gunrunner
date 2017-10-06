@@ -34,6 +34,19 @@ end
 
 function Loader:load(LevelGenerator)
 
+
+    function LevelGenerator:destroyEntities()
+        index       = 1
+        env         = nil
+        envTiles    = nil
+        envEntities = nil
+        defaultTile = nil
+        melees      = nil
+        shooters    = nil
+        points      = nil
+    end
+
+
     -- The start logic for placing al entities in a section
     function LevelGenerator:fillEnvironment()
         self.entities = {}
@@ -48,13 +61,10 @@ function Loader:load(LevelGenerator)
 
         -- There are no enemies on the first section
         if index > 1 then
-        --if index > 0 then
             -- define early presets here:
             if index == 2 then
-            --if index == 1 then
                 self.enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly
                 self.enemyRankAlloc   = EnemyRankAllocations.infantry
-                --self:addEnemies()
             else
                 self.enemyWeaponAlloc = random(self.enemyWeaponLimit)
                 self.enemyRankAlloc   = random(self.enemyRankLimit)

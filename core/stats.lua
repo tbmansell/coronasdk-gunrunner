@@ -31,9 +31,22 @@ local Stats = {
 
 
 function Stats:init(startDistance)
+    self.points           = 0
+    self.jewels           = 0
     self.startingTime     = os.time()
+    self.endingTime       = nil
     self.startingDistance = startDistance
     self.distance         = startDistance
+
+    self.weapons[Weapons.rifle.name]    = { shots=0, hits=0, kills=0 }
+    self.weapons[Weapons.shotgun.name]  = { shots=0, hits=0, kills=0 }
+    self.weapons[Weapons.launcher.name] = { shots=0, hits=0, kills=0 }
+    self.weapons[Weapons.laserGun.name] = { shots=0, hits=0, kills=0 }
+
+    self.enemies = {
+        ["melee"]   = {[1]=0, [2]=0, [3]=0},
+        ["shooter"] = {[1]=0, [2]=0, [3]=0, [4]=0, [5]=0, [6]=0, [7]=0, [8]=0, [9]=0, [10]=0, [11]=0, [12]=0},
+    }
 end
 
 

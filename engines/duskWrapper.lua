@@ -3,14 +3,19 @@ local spriteSheetInfo = require("core.sheetInfo")
 
 
 local TileEngine = {
-    map          = nil,
-    tileLayer    = nil,
-    objectLayer1 = nil,
-    objectLayer2 = nil,
-    objectLayer3 = nil,
+    --cameraFocusOffsetY = 450,
+    cameraFocusOffsetY = 0,
 
-    rows = 0,
-    cols = 0,
+    data          = nil,
+    map           = nil,
+    tileLayer     = nil,
+    objectLayer1  = nil,
+    objectLayer2  = nil,
+    objectLayer3  = nil,
+
+    tileHeight    = 0,
+    rows          = 0,
+    cols          = 0,
     existingTiles = 0,
 }
 
@@ -54,6 +59,22 @@ function TileEngine:init(tiles)
 
     self.data       = dusk.loadMap("json/RunAndGunMap.json")
     self.tileHeight = self.data.tileheight
+end
+
+
+function TileEngine:destroy()
+    self.map.destroy()
+    self.map           = nil
+    self.data          = nil
+    self.tileLayer     = nil
+    self.shadowLayer   = nil
+    self.objectLayer1  = nil
+    self.objectLayer2  = nil
+    self.objectLayer3  = nil
+    self.tileHeight    = 0
+    self.rows          = 0
+    self.cols          = 0
+    self.existingTiles = 0
 end
 
 
@@ -109,6 +130,7 @@ function TileEngine:buildLayers()
     end
 
     self.map:scale(0.7, 0.7)
+    self.map.y = 250
 end
 
 
@@ -132,16 +154,6 @@ function TileEngine:createHole(tile)
 end
 
 
-function TileEngine:destroy()
-    self.map.destroy()
-    self.tileLayer    = nil
-    self.shadowLayer  = nil
-    self.objectLayer1 = nil
-    self.objectLayer2 = nil
-    self.objectLayer3 = nil
-end
-
-
 function TileEngine:addEntity(entity, focus)
     self.objectLayer2:insert(entity.image)
 
@@ -153,9 +165,9 @@ function TileEngine:addEntity(entity, focus)
 
     if focus then
         self.map.setCameraFocus(entity.image)
-        self.tileLayer.setCameraOffset(1,    450)
-        self.shadowLayer.setCameraOffset(1,  450)
-        self.objectLayer2.setCameraOffset(1, 450)
+        self.tileLayer.setCameraOffset(1,    self.cameraFocusOffsetY)
+        self.shadowLayer.setCameraOffset(1,  self.cameraFocusOffsetY)
+        self.objectLayer2.setCameraOffset(1, self.cameraFocusOffsetY)
     end
 end
 
@@ -171,7 +183,7 @@ end
 
 
 function TileEngine:addParticle(entity)
-    entity.y = entity.y + 430
+    entity.y = entity.y + (self.cameraFocusOffsetY - 20)
     self.objectLayer3:insert(entity)
 end
 

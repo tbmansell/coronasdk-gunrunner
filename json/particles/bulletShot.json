@@ -22,7 +22,7 @@
 "speedVariance":0,
 "particleLifespan":0.1,
 "finishColorVarianceAlpha":0,
-"startColorAlpha":1,
+"startColorAlpha":0,
 "angle":0,
 "rotationStartVariance":0,
 "rotatePerSecondVariance":0,
@@ -48,4 +48,4 @@
 "rotationStart":0,
 "sourcePositionVariancex":0,
 "startColorGreen":0.98,
-"finishColorAlpha":0.7}
+"finishColorAlpha":0.0}

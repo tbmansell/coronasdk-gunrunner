@@ -49,25 +49,19 @@ function Projectile:fire()
     local forceX = weapon.speed * -cos(rad(self.angle))
     local forceY = weapon.speed * -sin(rad(self.angle))
 
-   -- if weapon.ammoType == "rocket" then
-        --[[if forceY > 0 then
-            self:flipY()
-        end]]
-        self:flipY()
-        -- dont call rotate() as this changes the angle
-        self.image.rotation = self.angle + 90
-  --  end
+    self:flipY()
+    -- dont call rotate() as this changes the angle
+    self.image.rotation = self.angle + 90
 
     self:applyForce(forceX, forceY)
 
     sounds:projectile(weapon.shotSound)
 
     if weapon.ammoType == "rocket" then
-        --self:emit("rocketBlast")
-        --self:bindEmitter("rocketBlast")
-        --self.boundEmitter.rotation = self.angle - 90
-
-        --self.image.insert(self.boundEmitter.image)
+        self:bindEmitter("rocketBlast")
+        self.image:insert(self.boundEmitter)
+        self.boundEmitter.x = 0
+        self.boundEmitter.y = 0
     end
 end
 

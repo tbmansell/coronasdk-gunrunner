@@ -60,7 +60,7 @@ function Builder:newClone(orig, debug)
 end
 
 
-function Builder:newGameObject(spec, image)
+function Builder:newGameObject(spec, image, makeGroup)
 	-- an object is at its foundation a copy of the table spec passed in where we can override specifics
 	local object = self:newClone(spec)
 
@@ -74,11 +74,15 @@ function Builder:newGameObject(spec, image)
 	object.collections = {}
 	object.bindQueue   = {}
 
-	-- simple assignment of an image passed in as a property of this object, and allow the image to have a ref to the object for event handlers
-	object.image 		= image
-	object.image.object = object
-	-- for infinite level generation, mark the stage an element is in
-	object.stage 		= globalInfiniteStage
+    if makeGroup then
+        object.image        = display.newGroup()
+        object.image.object = object
+        object.image:insert(image)
+    else
+    	-- simple assignment of an image passed in as a property of this object, and allow the image to have a ref to the object for event handlers
+    	object.image 		= image
+    	object.image.object = object
+    end
 
 	return object
 end

@@ -61,6 +61,14 @@ function Projectile:fire()
     self:applyForce(forceX, forceY)
 
     sounds:projectile(weapon.shotSound)
+
+    if weapon.ammoType == "rocket" then
+        --self:emit("rocketBlast")
+        --self:bindEmitter("rocketBlast")
+        --self.boundEmitter.rotation = self.angle - 90
+
+        --self.image.insert(self.boundEmitter.image)
+    end
 end
 
 

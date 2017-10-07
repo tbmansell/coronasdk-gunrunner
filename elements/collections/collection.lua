@@ -18,6 +18,21 @@ function Collection:size()
 end
 
 
+function Collection:sizeInGame()
+    local items = self.items
+    local num   = #items
+    local count = 0
+
+    for i=1,num do
+        local object = items[i]
+        if object and object ~= -1 then--and object.inGame then
+            count = count + 1
+        end
+    end
+    return count
+end
+
+
 -- Add an object to this collection: let the collection do the object linkage to save functions on every object
 -- This function is to allow objects to belong to multiple collections, so it does not modify the objects id
 -- @param object to add

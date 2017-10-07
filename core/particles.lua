@@ -11,6 +11,7 @@ local createdEmitters = {}
 function Particles:preLoadEmitters()
     self:loadEmitter("bulletImpact")
     self:loadEmitter("bulletShot")
+    self:loadEmitter("rocketBlast")
     self:loadEmitter("explosion")
     self:loadEmitter("explosionCrate")
     self:loadEmitter("explosionGas")
@@ -66,6 +67,16 @@ function Particles:resume()
             data:start()
         end
     end
+end
+
+
+function Particles:size()
+    local count = 0
+
+    for _,item in pairs(createdEmitters) do
+        if item then count = count + 1 end
+    end
+    return count
 end
 
 

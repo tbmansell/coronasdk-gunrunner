@@ -37,6 +37,15 @@ local function eventUpdateFrame(event)
 end
 
 
+local function eventUpdateGameLogic()
+    level:updateBehaviours()
+
+    if globalDebugGame then
+        hud:updateDebugData()
+    end
+end
+
+
 -- Called when the scene's view does not exist:
 function scene:create(event)
     self:initPhysics()
@@ -150,7 +159,7 @@ end
 
 function scene:createEventHandlers()
     Runtime:addEventListener("enterFrame", eventUpdateFrame)
-    scene.gameLoopHandle = timer.performWithDelay(250, level.updateBehaviours, 0)
+    scene.gameLoopHandle = timer.performWithDelay(250, eventUpdateGameLogic, 0)
 end
 
 

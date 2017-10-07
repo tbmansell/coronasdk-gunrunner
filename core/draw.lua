@@ -261,11 +261,11 @@ end
 
 function Draw:displayPerformance()
     local self = Draw
-    local data = "mem usage: "..math_round(collectgarbage("count")/1024).." mb|texture mem: "..math_round(system.getInfo("textureMemoryUsed") / 1024/1024).." mb|fps: "..globalFPS
+    local data = " mem: "..math_round(collectgarbage("count")/1024).."mb text: "..math_round(system.getInfo("textureMemoryUsed") / 1024/1024).."mb fps: "..globalFPS
     globalFPS  = 0
 
     if self.performanceLabel == nil then
-        self.performanceLabel = self:newText(nil, data, 0, 150, 0.4, "white", "LEFT", 1000)
+        self.performanceLabel = self:newText(nil, data, globalCenterX, 10, 0.4, "white", "CENTER")
     else
         self.performanceLabel:setText(data)
     end

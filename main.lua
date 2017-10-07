@@ -3,7 +3,7 @@ require("constants.globals")
 
 -- Global label used for buld version
 globalBuildVersion     = "0.4"
-globalDebugGame        = false
+globalDebugGame        = true
 globalGameMode         = GameMode.loading
 globalFPS              = 0
 globalCenterX          = display.contentCenterX
@@ -35,7 +35,7 @@ sounds:preload()
 
 -- Global debug game logic
 if globalDebugGame then
-	timer.performWithDelay(1000, draw.displayPerformance, 0)
+    timer.performWithDelay(1000, draw.displayPerformance, 0)
 end
 
 -- for debug spacing

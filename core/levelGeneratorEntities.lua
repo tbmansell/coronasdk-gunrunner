@@ -219,8 +219,8 @@ function Loader:load(LevelGenerator)
             -- 50% chance of both, 25% chance of either
             local r = random(100)
             if r > 0 and r <= 50 then
-                self:generateMeleeEnemies(points / 2)
-                self:generateShooterEnemies()
+                self:generateShooterEnemies(points / 2)
+                self:generateMeleeEnemies()
             elseif r > 50 and r <= 75 then
                 self:generateMeleeEnemies()
             else

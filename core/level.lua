@@ -95,8 +95,40 @@ function Level:destroy()
 end
 
 
-function Level:reset(player)
+function Level:getNumberEntities()
+    return enemyCollection:sizeInGame() + obstacleCollection:sizeInGame() + collectableCollection:sizeInGame() + projectileCollection:sizeInGame()
 end
+
+
+function Level:getSizeEntities()
+    return enemyCollection:size() + obstacleCollection:size() + collectableCollection:size() + projectileCollection:size()
+end
+
+
+function Level:getNumberEnemies()
+    return enemyCollection:sizeInGame()
+end
+
+
+function Level:getNumberObstacles()
+    return obstacleCollection:sizeInGame()
+end
+
+
+function Level:getNumberCollectables()
+    return collectableCollection:sizeInGame()
+end
+
+
+function Level:getNumberProjectiles()
+    return projectileCollection:sizeInGame()
+end
+
+
+function Level:getNumberParticles()
+    return particles:size()
+end
+
 
 
 function Level:createElements(levelElements)
@@ -217,7 +249,7 @@ function Level:eventUpdateFrame(event)
 
     check_background_movement(delta)
     check_spine_animation(spineCollection, delta, true, mainPlayer)
-    check_moving_objects(movingCollection, delta, camera)
+    --check_moving_objects(movingCollection, delta, camera)
 end
 
 

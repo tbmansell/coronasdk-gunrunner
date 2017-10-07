@@ -134,9 +134,22 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler)
     self.controlShoot:addEventListener("tap",   eventShootPlayerTap)
 
     if globalDebugGame then
-        self.textDebugMode   = draw:newText(self.group, "game mode",    globalCenterX, 25,  0.4, "green")
-        self.textPhysicsMode = draw:newText(self.group, "hide physics", globalCenterX, 65,  0.4, "blue")
+        self.debugPanel = display.newGroup()
+        self.group:insert(self.debugPanel)
 
+        local panelBack = display.newRect(self.debugPanel, 0,0, 350, globalHeight)
+        panelBack:setFillColor(0.3, 0.3, 0.3, 0.6)
+
+        self.textDebugMode        = draw:newText(self.debugPanel, "game mode",    5, 100, 0.4, "green", "LEFT")
+        self.textPhysicsMode      = draw:newText(self.debugPanel, "hide physics", 5, 140, 0.4, "blue",  "LEFT")
+        self.debugSizeEntites     = draw:newText(self.debugPanel, "",   5, 180, 0.4, "aqua",  "LEFT")
+        self.debugNumEntites      = draw:newText(self.debugPanel, "",   5, 220, 0.4, "white", "LEFT")
+        self.debugNumEnemies      = draw:newText(self.debugPanel, "",   5, 260, 0.4, "white", "LEFT")
+        self.debugNumObstacles    = draw:newText(self.debugPanel, "",   5, 300, 0.4, "white", "LEFT")
+        self.debugNumCollectables = draw:newText(self.debugPanel, "",   5, 340, 0.4, "white", "LEFT")
+        self.debugNumProjectiles  = draw:newText(self.debugPanel, "",   5, 380, 0.4, "white", "LEFT")
+        self.debugNumParticles    = draw:newText(self.debugPanel, "",   5, 420, 0.4, "white", "LEFT")
+        
         self.textDebugMode:addEventListener("tap",   self.switchDebugMode)
         self.textPhysicsMode:addEventListener("tap", self.switchPhysicsMode)
     end
@@ -291,6 +304,17 @@ function Hud:eventUpdateFrame(event)
     if player.powerupLaserSight then
         player:drawLaserSight()
     end
+end
+
+
+function Hud:updateDebugData()
+    self.debugSizeEntites:setText("size: "..level:getSizeEntities())
+    self.debugNumEntites:setText("entities: "..level:getNumberEntities())
+    self.debugNumEnemies:setText("enemies: "..level:getNumberEnemies())
+    self.debugNumObstacles:setText("obstacles: "..level:getNumberObstacles())
+    self.debugNumCollectables:setText("collect: "..level:getNumberCollectables())
+    self.debugNumProjectiles:setText("shots: "..level:getNumberProjectiles())
+    self.debugNumParticles:setText("particles: "..level:getNumberParticles())
 end
 
 

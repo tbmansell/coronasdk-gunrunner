@@ -50,10 +50,6 @@ function Character:shootProjectile(projectileBuilder, camera, filter)
 
     self:animate("shoot_"..name)
 
-    if ammo == "bullet" then
-        self:emit(ammo.."Shot", {xpos=x, ypos=y, duration=250, angle=angle-90})
-    end
-
     if name == "shotgun" then
         level:createProjectile({xpos=x, ypos=y, angle=angle-10, filter=filter, powerupDamage=self.powerupDamage}, weapon)
         level:createProjectile({xpos=x, ypos=y, angle=angle,    filter=filter, powerupDamage=self.powerupDamage}, weapon)

@@ -2,9 +2,11 @@ local SheetInfo = {
 
     sheetContentWidth  = 1190,
     sheetContentHeight = 1190,
+    tilesInSet         = 210,
     tileSize           = 75,
     tilesAccross       = 15,
-    tilesDown          = 15,
+    tilesDown          = 25,
+    --tilesDown          = 15,
 
     sheet = {
         frames = {}
@@ -80,15 +82,24 @@ function SheetInfo:nameTiles()
     self.frameIndex["wallLeft"]         = 47
     self.frameIndex["wallRight"]        = 51
     self.frameIndex["wallHoriz"]        = 48
+    self.frameIndex["wallHoriz2"]       = 49
+    self.frameIndex["wallHoriz3"]       = 50
+    self.frameIndex["wallHoriz4"]       = 4
     self.frameIndex["wallVert"]         = 31
-    self.frameIndex["wallVertPattern"]  = 46
-    self.frameIndex["wallPyramid"]      = 107
+    self.frameIndex["wallVert2"]        = 46
+    self.frameIndex["wallVert3"]        = 61
+    self.frameIndex["wallVert4"]        = 20
     self.frameIndex["wallTopLeft"]      = 3
     self.frameIndex["wallTopRight"]     = 5
     self.frameIndex["wallBotLeft"]      = 33
     self.frameIndex["wallBotRight"]     = 35
+    -- different style wall block
+    self.frameIndex["wallBlock"]        = 188
+    self.frameIndex["wallBlock2"]       = 189
+    self.frameIndex["wallBlock3"]       = 190
+    self.frameIndex["wallBlock4"]       = 191
 
-    self.frameIndex["shadowRightTop"]   = 156
+    self.frameIndex["shadowRightTop"]   = 152
     self.frameIndex["shadowRight"]      = 167
     self.frameIndex["shadowRightBot"]   = 197
     self.frameIndex["shadowBotLeft"]    = 168
@@ -112,12 +123,24 @@ end
 
 function SheetInfo:setupSpecialTiles()
     local size, half = self.tileSize, self.tileSize / 2
+    local numTiles   = #self.sheet.frames
 
     -- Setup walls
-    local walls = {"wallTop", "wallBot", "wallRight", "wallLeft", "wallHoriz", "wallVert", "wallVertPattern", "wallTopLeft", "wallTopRight", "wallBotLeft", "wallBotRight", "wallPyramid"}
+    local walls = {"wallTop", "wallBot", "wallRight", "wallLeft", "wallHoriz", "wallHoriz2", "wallHoriz3", "wallHoriz4", "wallVert", "wallVert2", "wallVert3", "wallVert4", 
+                   "wallTopLeft", "wallTopRight", "wallBotLeft", "wallBotRight", "wallBlock", "wallBlock2", "wallBlock3", "wallBlock4"}
 
     for _,name in pairs(walls) do
-        self:getFrame(name).isWall = true
+        local index = self:getFrameIndex(name)
+        self.sheet.frames[index].isWall = true
+        
+        -- update for second tileset underneath
+        local index2 = index + self.tilesInSet
+
+        if index2 <= numTiles then
+            self.sheet.frames[index2].isWall = true
+        end
+
+        --self:getFrame(name).isWall = true
     end
 
     -- Setup holes:

@@ -105,13 +105,6 @@ end
 
 
 function Enemy:destroy(camera, destroyBoundItems)
-    -- % chance dead enemy drops their weapon
-    --local weapon = Weapons.shotgun --self.weapon
-
-    --if weapon.collect then--and percent(weapon.collect) then
-    --    level:createCollectable({object="weapon", type=weapon.name, xpos=self:x(), ypos=self:y()})
-    --end
-
     self:spineObjectDestroy(camera, destroyBoundItems)
 end
 
@@ -431,7 +424,7 @@ function Enemy:dropWeapon()
     local weapon = self.weapon
 
     if weapon.collect and percent(weapon.collect) then
-        level:createCollectable({object="weapon", type=weapon.name, xpos=self:x(), ypos=self:y()})
+        level:createCollectable({object="weapon", type=weapon.name, xpos=self:x(), ypos=self:y(), dontReposition=true})
     end
 end
 

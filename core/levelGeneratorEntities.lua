@@ -21,6 +21,43 @@ local melees      = nil
 local shooters    = nil
 local points      = nil
 
+-- entity definitions for own maps
+local entityDefs = {
+    [361] = {object="enemy",    type="melee",   rank=1},
+    [362] = {object="enemy",    type="shooter", rank=1},
+    [363] = {object="enemy",    type="shooter", rank=2},
+    [364] = {object="enemy",    type="shooter", rank=3},
+    [365] = {object="enemy",    type="shooter", rank=4},
+    [366] = {object="enemy",    type="melee",   rank=2},
+    [367] = {object="enemy",    type="shooter", rank=5},
+    [368] = {object="enemy",    type="shooter", rank=6},
+    [369] = {object="enemy",    type="shooter", rank=7},
+    [370] = {object="enemy",    type="shooter", rank=8},
+    [371] = {object="enemy",    type="melee",   rank=3},
+    [372] = {object="enemy",    type="shooter", rank=9},
+    [373] = {object="enemy",    type="shooter", rank=10},
+    [374] = {object="enemy",    type="shooter", rank=11},
+    [370] = {object="enemy",    type="shooter", rank=12},
+    [391] = {object="weapon",   type=Weapons.rifle.name},
+    [392] = {object="weapon",   type=Weapons.shotgun.name},
+    [393] = {object="weapon",   type=Weapons.launcher.name},
+    [394] = {object="weapon",   type=Weapons.laserGun.name},
+    [406] = {object="powerup",  type=Powerups.damage},
+    [407] = {object="powerup",  type=Powerups.extraAmmo},
+    [408] = {object="powerup",  type=Powerups.fastMove},
+    [409] = {object="powerup",  type=Powerups.fastShoot},
+    [410] = {object="powerup",  type=Powerups.health, health=5},
+    [411] = {object="powerup",  type=Powerups.laserSight},
+    [412] = {object="powerup",  type=Powerups.shield},
+    [421] = {object="obstacle", type="crate",    variant="small"},
+    [422] = {object="obstacle", type="crate",    variant="big"},
+    [425] = {object="obstacle", type="gas",      variant="small"},
+    [426] = {object="obstacle", type="gas",      variant="big"},
+    [429] = {object="obstacle", type="computer", variant="1"},
+    [430] = {object="obstacle", type="computer", variant="2"},
+    [431] = {object="obstacle", type="computer", variant="3"},
+}
+
 
 local function canPlace(x, y)
     return x > 1 and 
@@ -59,6 +96,33 @@ function Loader:load(LevelGenerator)
 
         --print("Section "..index.." enemyPoints="..self.enemyPoints.." weaponLimit="..self.enemyWeaponLimit.." rankLimit="..self.enemyRankLimit.." weaponAlloc="..self.enemyWeaponAlloc.." rankAlloc="..self.enemyRankAlloc)
 
+        if env.ownMap then
+            self:loadEntitiesFromMap()
+        else
+            self:generateEntities()
+        end
+
+        return self.entities
+    end
+
+
+    function LevelGenerator:loadEntitiesFromMap()
+        local entityData = env.entityData
+
+        for y=1, env.height do
+            for x=1, env.width do
+                local gridIndex   = ((y-1)*env.height) + x
+                local entityIndex = entityData[gridIndex]
+
+                if entityDefs[entityIndex] then
+                    self:createEntitySpec(x, y, entityDefs[entityIndex])
+                end
+            end
+        end
+    end
+
+
+    function LevelGenerator:generateEntities()
         -- There are no enemies on the first section
         if index > 1 then
             -- define early presets here:
@@ -108,8 +172,6 @@ function Loader:load(LevelGenerator)
                 self.enemyPoints = self.enemyPoints - 5
             end
         end
-
-        return self.entities
     end
 
 

@@ -148,9 +148,8 @@ function Level:createElementsFromData(levelElements)
         local object = item.object
 
         if     object == "enemy"       then self:createEnemy(item)
-        elseif object == "weapon"      then self:createCollectable(item) 
-        elseif object == "jewel"       then self:createCollectable(item) 
         elseif object == "obstacle"    then self:createObstacle(item)
+        elseif object == "weapon" or object == "jewel" or object == "powerup" then self:createCollectable(item)
         end
     end
 end
@@ -177,7 +176,7 @@ end
 
 function Level:createPowerup(powerup, xpos, ypos)
     after(50, function()
-        self:createCollectable({object="powerup", type=powerup, health=5, xpos=xpos, ypos=ypos})
+        self:createCollectable({object="powerup", type=powerup, health=5, xpos=xpos, ypos=ypos, dontReposition=true})
     end)
 end
 

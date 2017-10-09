@@ -17,10 +17,10 @@ function CollectableBuilder:newItem(camera, spec)
     collectable:moveTo(spec.xpos or 0, spec.ypos or 0)
     collectable:setPhysics()
 
-    if collectable.object == "jewel" then
-        camera:addEntity(collectable)
-    else
+    if collectable.dontReposition then
         camera:addCollectable(collectable)
+    else
+        camera:addEntity(collectable)
     end
 
     return collectable

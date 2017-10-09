@@ -274,6 +274,17 @@ function Draw:displayPerformance()
 end
 
 
+function Draw:toggleDebugPerformance()
+    if self.performanceLabel then
+        if globalDebugGame then
+            self.performanceLabel.alpha = 1
+        else
+            self.performanceLabel.alpha = 0
+        end
+    end
+end
+
+
 function Draw:displayDebugPanel(text, x, y, width, height)
     if globalDebugStatus then
         x      = x      or globalCenterX

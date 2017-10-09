@@ -246,7 +246,23 @@ function Hud:eventPauseGame()
         
         local heading = draw:newText(self.pauseMenu, "game paused", globalCenterX, 100, 0.1, "white")
         local info    = draw:newText(self.pauseMenu, "(tap background to resume)", globalCenterX, 400, 0.5, "green", "CENTER")
+        local debug   = draw:newImage(self.pauseMenu, "hud/settings", globalCenterX, 600)
+
         heading.alpha = 0
+
+        debug:addEventListener("tap", function()
+            globalDebugGame = not globalDebugGame
+            
+            draw:toggleDebugPerformance()
+    
+            if globalDebugGame then
+                self.debugPanel.alpha = 1
+            else
+                self.debugPanel.alpha = 0
+            end
+        
+            return true
+        end)
 
         local seq = anim:chainSeq("pauseMenu", heading)
         seq:tran({time=150, scale=1.5, alpha=1})
@@ -295,7 +311,7 @@ function Hud:eventUpdateFrame(event)
         player:shoot(self.camera)
     end
 
-    player:moveBy(0, forcePlayerMoveY)
+--    player:moveBy(0, forcePlayerMoveY)
 
     if player.shieldEntity then
         player.shieldEntity:moveTo(player:x(), player:y())

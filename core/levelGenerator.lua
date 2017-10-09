@@ -1,3 +1,4 @@
+local json                   = require( "json" )
 local spriteSheetInfo        = require("core.sheetInfo")
 local levelGeneratorEntities = require("core.levelGeneratorEntities")
 local utils                  = require("core.utils")
@@ -5,15 +6,15 @@ local utils                  = require("core.utils")
 
 -- Class
 local LevelGenerator = {
-    MaxWidth        = 25,
-    MinWidth        = 8,
-    StartWidth      = 20,
-    StartHeight     = 24,
+    MaxWidth         = 25,
+    MinWidth         = 8,
+    StartWidth       = 20,
+    StartHeight      = 24,
 
-    environments    = {},
-    tiles           = {},
-    section         = 0,
-    currentHeight   = 0,
+    environments     = {},
+    tiles            = {},
+    section          = 0,
+    currentHeight    = 0,
 
     enemyRankLimit   = 1,
     enemyWeaponLimit = 1,
@@ -103,18 +104,25 @@ function LevelGenerator:newEnvironment()
         tiles    = {},
         shadows  = {},
         entities = {},
+        ownMap   = false,
     }
 
     self.section = self.section + 1
 
-    self:setEnvironmentWidth(env)
-    self:setEnvironmentShape(env)
-    self:setEnvironmentEdges(env)
-
-    if self.section == 1 then
-        self:setStartEdge(env, env.width-1, env.height)
+    if self:shouldLoadOwnMap() then
+        -- Load one of our own pre-built maps
+        self:loadOwnMap(env)
     else
-        self:setEnvironmentWalls(env)
+        -- Generate a map dynamically
+        self:setEnvironmentWidth(env)
+        self:setEnvironmentShape(env)
+        self:setEnvironmentEdges(env)
+
+        if self.section == 1 then
+            self:setStartEdge(env, env.width-1, env.height)
+        else
+            self:setEnvironmentWalls(env)
+        end
     end
 
     self.environments[#self.environments + 1] = env
@@ -123,9 +131,52 @@ function LevelGenerator:newEnvironment()
 end
 
 
-function LevelGenerator:nextEnvironment()
-    return self.environments[1]
+----- LOADING EXTERNAL MAP -----
+
+
+function LevelGenerator:shouldLoadOwnMap()
+    return (self.section == 1)
 end
+
+
+function LevelGenerator:loadOwnMap(env)
+    local file     = "json/maps/testmap1.json"
+    local filepath = system.pathForFile(file, system.ResourceDirectory )
+    local map, pos, msg = json.decodeFile(filepath)
+
+    if not map then
+        print("JSON Load failed for ["..file.."] at "..tostring(pos)..": "..tostring(msg))
+    end
+
+    env.ownMap = true
+    env.width  = map.width
+    env.height = map.height
+    env.dir    = "straight" 
+    env.number = #self.environments + 1
+
+    local floorLayer = map.layers[1].data
+
+    env.entityData = map.layers[2].data
+
+    for y=1, env.height do
+        env.tiles[y]    = {}
+        env.shadows[y]  = {}
+        env.entities[y] = {}
+
+        for x=1, env.width do
+            local index = ((y-1)*env.height)  + x
+            --print("Y["..y.."] X["..x.."] = "..tostring(floorLayer[index]))
+
+            env.tiles[y][x]    = floorLayer[index]
+            env.shadows[y][x]  = 0
+            env.entities[y][x] = false
+        end
+    end
+end
+
+
+
+----- GENERATING A MAP DYNAMICALLY -----
 
 
 function LevelGenerator:setEnvironmentWidth(env)

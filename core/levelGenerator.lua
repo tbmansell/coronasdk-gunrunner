@@ -10,6 +10,7 @@ local LevelGenerator = {
     MinWidth         = 8,
     StartWidth       = 24,
     StartHeight      = 24,
+    TileSize         = spriteSheetInfo.tileSize,
 
     environments     = {},
     tiles            = {},
@@ -131,11 +132,26 @@ function LevelGenerator:newEnvironment()
 end
 
 
+-- Gets current section based on ypos, but as sections are generated from top down, we flip this, so we call the bottom section #1
+function LevelGenerator:getSection(ypos)
+    local section = 1
+    for i=#self.environments, 1, -1 do
+        local env = self.environments[i] 
+        local top = env.height * self.TileSize * (env.number-1)
+
+        if ypos > top then
+            return env.number
+        end
+    end
+    return 0
+end
+
+
 ----- LOADING EXTERNAL MAP -----
 
 
 function LevelGenerator:shouldLoadOwnMap()
-    return (self.section == 2)
+    return (self.section == 10)
 end
 
 
@@ -151,7 +167,7 @@ function LevelGenerator:loadOwnMap(env)
     env.ownMap = true
     env.width  = map.width
     env.height = map.height
-    env.dir    = "straight" 
+    env.dir    = "straight"
     env.number = #self.environments + 1
 
     local floorLayer = map.layers[1].data
@@ -276,7 +292,7 @@ function LevelGenerator:setStraightEdge(env, x, y)
                 env.tiles[y-i][x] = self.tiles.noFloor
             end
 
-            y = y - gap                
+            y = y - gap
         end
     end
 end

@@ -38,6 +38,8 @@ end
 
 
 local function eventUpdateGameLogic()
+    player.currentSection = levelGenerator:getSection(player:y())
+
     level:updateBehaviours()
 
     if globalDebugGame then

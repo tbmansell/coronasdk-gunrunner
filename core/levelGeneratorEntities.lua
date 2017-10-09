@@ -136,7 +136,7 @@ function Loader:load(LevelGenerator)
                 self.enemyRankAlloc   = random(self.enemyRankLimit)
             end
 
-            print("Section "..index.." enemyPoints="..self.enemyPoints.." weaponLimit="..self.enemyWeaponLimit.." rankLimit="..self.enemyRankLimit.." weaponAlloc="..self.enemyWeaponAlloc.." rankAlloc="..self.enemyRankAlloc)
+            --print("Section "..index.." enemyPoints="..self.enemyPoints.." weaponLimit="..self.enemyWeaponLimit.." rankLimit="..self.enemyRankLimit.." weaponAlloc="..self.enemyWeaponAlloc.." rankAlloc="..self.enemyRankAlloc)
             
             self:addEnemies()
         end
@@ -150,16 +150,18 @@ function Loader:load(LevelGenerator)
         -- Increment map height
         self.currentHeight = self.currentHeight + env.height
 
+        print("Section "..index.." height="..self.currentHeight.." heightPixels="..(self.currentHeight*self.TileSize))
+
         -- Increment the weapons that can appear by one each section
         if index > 1 and self.enemyWeaponLimit < EnemyWeaponAllocations.all then
             self.enemyWeaponLimit = self.enemyWeaponLimit + 1
-            print("+ WeaponLimit now "..self.enemyWeaponLimit)
+            --print("+ WeaponLimit now "..self.enemyWeaponLimit)
         end
 
         -- Increment the enemy ranks that can appear by 2 every 4 sections
         if index % 4 == 0 and self.enemyRankLimit < EnemyRankAllocations.all  then
             self.enemyRankLimit = self.enemyRankLimit + 2
-            print("+ RankLimit now "..self.enemyRankLimit)
+            --print("+ RankLimit now "..self.enemyRankLimit)
         end
 
         -- Increment the enemy points up or down between 20 - 50

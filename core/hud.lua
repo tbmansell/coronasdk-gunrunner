@@ -23,13 +23,14 @@ local shootControllerY = 0
 local lastTime         = 0
 
 -- Aliases
-local PI    = 180 / math.pi
-local abs   = math.abs
-local cos   = math.cos
-local sin   = math.sin
-local rad   = math.rad
-local atan2 = math.atan2
-local random= math.random
+local PI     = 180 / math.pi
+local abs    = math.abs
+local cos    = math.cos
+local sin    = math.sin
+local rad    = math.rad
+local atan2  = math.atan2
+local random = math.random
+local round  = math.round
 
 -- Local Event Handlers
 
@@ -137,7 +138,7 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler)
         self.debugPanel = display.newGroup()
         self.group:insert(self.debugPanel)
 
-        local panelBack = display.newRect(self.debugPanel, 0,0, 350, globalHeight)
+        local panelBack = display.newRect(self.debugPanel, 0, 200, 350, globalHeight)
         panelBack:setFillColor(0.3, 0.3, 0.3, 0.6)
 
         self.textDebugMode        = draw:newText(self.debugPanel, "game mode",    5, 100, 0.4, "green", "LEFT")
@@ -149,6 +150,8 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler)
         self.debugNumCollectables = draw:newText(self.debugPanel, "",   5, 340, 0.4, "white", "LEFT")
         self.debugNumProjectiles  = draw:newText(self.debugPanel, "",   5, 380, 0.4, "white", "LEFT")
         self.debugNumParticles    = draw:newText(self.debugPanel, "",   5, 420, 0.4, "white", "LEFT")
+        self.debugSection         = draw:newText(self.debugPanel, "",   5, 460, 0.4, "white", "LEFT")
+        self.debugYPos            = draw:newText(self.debugPanel, "",   5, 500, 0.4, "white", "LEFT")
         
         self.textDebugMode:addEventListener("tap",   self.switchDebugMode)
         self.textPhysicsMode:addEventListener("tap", self.switchPhysicsMode)
@@ -331,6 +334,8 @@ function Hud:updateDebugData()
     self.debugNumCollectables:setText("collect: "..level:getNumberCollectables())
     self.debugNumProjectiles:setText("shots: "..level:getNumberProjectiles())
     self.debugNumParticles:setText("particles: "..level:getNumberParticles())
+    self.debugSection:setText("section: "..self.player.currentSection)
+    self.debugYPos:setText("ypos: "..round(self.player:y()))
 end
 
 

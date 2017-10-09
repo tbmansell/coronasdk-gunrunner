@@ -102,6 +102,8 @@ function Loader:load(LevelGenerator)
             self:generateEntities()
         end
 
+        self:updateProgression()
+
         return self.entities
     end
 
@@ -141,7 +143,10 @@ function Loader:load(LevelGenerator)
 
         self:addScenery()
         self:addJewels()
+    end
 
+
+    function LevelGenerator:updateProgression()
         -- Increment map height
         self.currentHeight = self.currentHeight + env.height
 

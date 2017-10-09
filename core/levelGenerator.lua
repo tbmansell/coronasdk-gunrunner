@@ -6,9 +6,9 @@ local utils                  = require("core.utils")
 
 -- Class
 local LevelGenerator = {
-    MaxWidth         = 25,
+    MaxWidth         = 24,
     MinWidth         = 8,
-    StartWidth       = 20,
+    StartWidth       = 24,
     StartHeight      = 24,
 
     environments     = {},
@@ -135,7 +135,7 @@ end
 
 
 function LevelGenerator:shouldLoadOwnMap()
-    return (self.section == 1)
+    return (self.section == 2)
 end
 
 

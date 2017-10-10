@@ -437,7 +437,7 @@ function Loader:load(LevelGenerator)
             self:generateScenery(10, "gas", variantGenerator)
         end
 
-        if percent(50) then
+        if index > 1 and percent(50) then
             local variantGenerator = function()
                 local r = random(100)
                 if r <= 35 then return "1" elseif r <= 70 then return "2" else return "3" end
@@ -506,6 +506,8 @@ function Loader:load(LevelGenerator)
 
 
     function LevelGenerator:placeClusterfuck(group)
+        local safety = 0
+
         for _,attribs in pairs(group) do
             local placed = false
             while placed == false do
@@ -516,6 +518,12 @@ function Loader:load(LevelGenerator)
                     placed = true
                     self:createEntitySpec(xpos, ypos, attribs)
                 end
+
+                safety = safety + 1
+                if safety > 1000 then
+                    print("Unable to placeClusterFuck for "..attribs.object)
+                    break
+                end
             end
         end
     end
@@ -523,6 +531,7 @@ function Loader:load(LevelGenerator)
 
     function LevelGenerator:placeMob(group, distance)
         local startX, startY = self:getRandomPosition()
+        local safety = 0
 
         for _,attribs in pairs(group) do
             local placed = false
@@ -533,6 +542,12 @@ function Loader:load(LevelGenerator)
                     placed = true
                     self:createEntitySpec(xpos, ypos, attribs)
                 end
+
+                safety = safety + 1
+                if safety > 1000 then
+                    print("Unable to placeMob for "..attribs.object)
+                    break
+                end
             end
         end
     end
@@ -540,6 +555,7 @@ function Loader:load(LevelGenerator)
 
     function LevelGenerator:placeChain(group, distance)
         local xpos, ypos = self:getRandomPosition()
+        local safety = 0
 
         for _,attribs in pairs(group) do
             local placed = false
@@ -549,6 +565,15 @@ function Loader:load(LevelGenerator)
                 if xpos ~= nil and ypos ~= nil then
                     placed = true
                     self:createEntitySpec(xpos, ypos, attribs)
+                else
+                    -- generate a new x/y otherwise the chain will crash
+                    xpos, ypos = self:getRandomPosition()
+                end
+
+                safety = safety + 1
+                if safety > 1000 then
+                    print("Unable to placeChain for "..attribs.object)
+                    break
                 end
             end
         end

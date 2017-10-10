@@ -92,10 +92,11 @@ function TileEngine:loadEnvironment(environment)
             local index   = self.existingTiles + (((row-1)*cols) + col)
             tiles[index]  = envTiles[row][col]
             --print("index: "..index.." row: "..row.." col: "..col.." tile="..tostring(tiles[index]))
-
+--            print("shadows: "..row..", "..col)
             if envShadows[row][col] > 0 then
                 shadow[index] = envShadows[row][col]
             end
+
         end
     end
 

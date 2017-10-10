@@ -8,7 +8,8 @@ local utils                  = require("core.utils")
 local LevelGenerator = {
     MaxWidth         = 24,
     MinWidth         = 8,
-    StartWidth       = 24,
+    StartWidth       = 13,
+    StartXpos        = 6,
     StartHeight      = 24,
     TileSize         = spriteSheetInfo.tileSize,
 
@@ -115,14 +116,14 @@ function LevelGenerator:newEnvironment()
         self:loadOwnMap(env)
     else
         -- Generate a map dynamically
-        self:setEnvironmentWidth(env)
-        self:setEnvironmentShape(env)
+        self:setEnvironmentSize(env)
+        self:setEnvironmentTiles(env)
         self:setEnvironmentEdges(env)
 
         if self.section == 1 then
-            self:setStartEdge(env, env.width-1, env.height)
+            self:setStartEdge(env)
         else
-            self:setEnvironmentWalls(env)
+            --self:setEnvironmentWalls(env)
         end
     end
 
@@ -195,44 +196,52 @@ end
 ----- GENERATING A MAP DYNAMICALLY -----
 
 
-function LevelGenerator:setEnvironmentWidth(env)
+function LevelGenerator:setEnvironmentSize(env)
     local number = #self.environments
 
     -- First determine if there is a previous environment, if so we must start at that width:
     if number > 0 then
-        local prev = self.environments[number]
-        env.width  = prev.width
-        env.height = prev.height
-        env.dir    = prev.dir
+        --local prev = self.environments[number]
+        env.height = self.StartHeight
         env.number = number + 1
+
+        -- make width variable: 24, 20, 16, 12
+        local r = random(100)
+        if     r <= 25  then env.width = self.MaxWidth
+        elseif r <= 50  then env.width = self.MaxWidth - 4
+        elseif r <= 75  then env.width = self.MaxWidth - 8
+        elseif r <= 100 then env.width = self.MaxWidth - 12 end
+
+        if env.width < self.MaxWidth then
+            env.startX = random(self.MaxWidth - env.width)
+        else
+            env.startX = 1
+        end
     else
         -- This is the first section
         env.width  = self.StartWidth
         env.height = self.StartHeight
-        env.dir    = "straight" 
+        env.startX = self.StartXpos
         env.number = 1
     end
 end
 
 
-function LevelGenerator:setEnvironmentShape(env)
-    -- Determine if we are going to change shape in this env
-    if percent(0) then
-        -- 1. Determine what direction it will change to
-        -- 2. Determine where the direction change will occur
-    else
-        -- Stick with the same direction throughout
-        if env.dir == "straight" then
-            for y=1, env.height do
-                env.tiles[y]    = {}
-                env.shadows[y]  = {}
-                env.entities[y] = {}
+function LevelGenerator:setEnvironmentTiles(env)    
+    for y=1, env.height do
+        env.tiles[y]    = {}
+        env.shadows[y]  = {}
+        env.entities[y] = {}
 
-                for x=1, env.width do
-                    env.tiles[y][x]    = self.tiles.default
-                    env.shadows[y][x]  = 0
-                    env.entities[y][x] = false
-                end
+        -- load ALL tiles up to max width with the empty one and all those within 
+        for x=1, self.MaxWidth do
+            env.shadows[y][x]  = 0
+            env.entities[y][x] = false
+
+            if x < env.startX or x >= env.startX + env.width then
+                env.tiles[y][x] = self.tiles.noFloor
+            else
+                env.tiles[y][x] = self.tiles.default
             end
         end
     end
@@ -240,21 +249,12 @@ end
 
 
 function LevelGenerator:setEnvironmentEdges(env)
-    -- Go along each edge and determine where walls and gaps appear
-    if env.dir == "straight" then
-        -- strting from bottom, left go up side and work out presence of wall or gap with length until reaching the end
-        -- restrictions: wall have minimum width of 3 tiles (top, middle, bottom)
-
-        local x = 1
-        local y = env.height
-
-        self:setStraightEdge(env, 1,         env.height)
-        self:setStraightEdge(env, env.width, env.height)
-    end
+    self:setStraightEdge(env, env.startX, env.height, true)
+    self:setStraightEdge(env, env.startX + env.width - 1, env.height)
 end
 
 
-function LevelGenerator:setStraightEdge(env, x, y)
+function LevelGenerator:setStraightEdge(env, x, y, shadow)
     while y > 1 do
         -- 75% chance of wall each time
         if y > 3 and percent(75) then
@@ -263,7 +263,7 @@ function LevelGenerator:setStraightEdge(env, x, y)
 
             env.tiles[y][x] = self.tiles.wallBot
             -- shadow:
-            if x==1 then
+            if shadow then
                 if y>2 then env.shadows[y-1][x+1] = self.tiles.shadowRightBot end
                 env.shadows[y][x+1] = self.tiles.shadowRight
             end
@@ -271,12 +271,12 @@ function LevelGenerator:setStraightEdge(env, x, y)
             for i=1, length do
                 env.tiles[y-i][x] = self.tiles.wallVert
                 -- shadow:
-                if x==1 then env.shadows[y-i][x+1] = self.tiles.shadowRight end
+                if shadow then env.shadows[y-i][x+1] = self.tiles.shadowRight end
             end
 
             env.tiles[y-length-1][x] = self.tiles.wallTop
             -- shadow:
-            if x==1 then env.shadows[y-length-1][x+1] = self.tiles.shadowRightTop end
+            if shadow then env.shadows[y-length-1][x+1] = self.tiles.shadowRightTop end
 
             -- leave a gap after a wall
             y = y - (2+length)
@@ -298,12 +298,16 @@ function LevelGenerator:setStraightEdge(env, x, y)
 end
 
 
-function LevelGenerator:setStartEdge(env, x, y)
-    env.tiles[y][2] = self.tiles.wallLeft
-    env.tiles[y][x] = self.tiles.wallRight
+function LevelGenerator:setStartEdge(env)
+    local y      = env.height
+    local startX = env.startX + 1
+    local endX   = env.startX + env.width - 2
 
-    for i=3, x-1 do
-        env.tiles[y][i] = self.tiles.wallHoriz
+    env.tiles[y][startX] = self.tiles.wallLeft
+    env.tiles[y][endX]   = self.tiles.wallRight
+
+    for x=startX+1, endX-1 do 
+        env.tiles[y][x] = self.tiles.wallHoriz
     end
 end
 
@@ -339,7 +343,7 @@ function LevelGenerator:setEnvironmentWalls(env)
         end
 
         --print(pattern.." "..spaceY)
-
+        
         if pattern == "horiz" then
             self:makeStripHorizWalls(env, spaceY)
             spaceY = spaceY - 6
@@ -352,7 +356,7 @@ function LevelGenerator:setEnvironmentWalls(env)
             local length = self:makeStripBoxWalls(env, spaceY)
             spaceY = spaceY - length
         end
-
+        
     end
 end
 
@@ -576,39 +580,40 @@ function LevelGenerator:setEnvironmentFloor(env)
     end
 
     -- differentiate each section
-    for x=2, env.width-1 do
-        env.tiles[1][x] = self.tiles.patternHazzard
+    --for x=2, env.width-1 do
+    for x=1, env.width-2 do
+        env.tiles[1][env.startX + x] = self.tiles.patternHazzard
     end
 
     -- customise first section
     if self.section == 1 then
         -- inner ring
-        env.tiles[18][9]  = self.tiles.paintRedTopLeft
-        env.tiles[18][10] = self.tiles.paintRedHoriz
-        env.tiles[18][11] = self.tiles.paintRedTopRight
-        env.tiles[19][9]  = self.tiles.paintRedVert
+        env.tiles[18][11] = self.tiles.paintRedTopLeft
+        env.tiles[18][12] = self.tiles.paintRedHoriz
+        env.tiles[18][13] = self.tiles.paintRedTopRight
         env.tiles[19][11] = self.tiles.paintRedVert
-        env.tiles[20][9]  = self.tiles.paintRedBotLeft
-        env.tiles[20][10] = self.tiles.paintRedHoriz
-        env.tiles[20][11] = self.tiles.paintRedBotRight
+        env.tiles[19][13] = self.tiles.paintRedVert
+        env.tiles[20][11] = self.tiles.paintRedBotLeft
+        env.tiles[20][12] = self.tiles.paintRedHoriz
+        env.tiles[20][13] = self.tiles.paintRedBotRight
 
         -- outer ring
-        env.tiles[16][7]  = self.tiles.paintBlueTopLeft
-        for i=8,12 do 
+        env.tiles[16][9]  = self.tiles.paintBlueTopLeft
+        for i=10,14 do 
             env.tiles[16][i] = self.tiles.paintBlueHoriz
         end
-        env.tiles[16][13] = self.tiles.paintBlueTopRight
+        env.tiles[16][15] = self.tiles.paintBlueTopRight
 
         for i=17, 21 do
-            env.tiles[i][7]  = self.tiles.paintBlueVert
-            env.tiles[i][13] = self.tiles.paintBlueVert
+            env.tiles[i][9]  = self.tiles.paintBlueVert
+            env.tiles[i][15] = self.tiles.paintBlueVert
         end
 
-        env.tiles[22][7]  = self.tiles.paintBlueBotLeft
-        for i=8,12 do 
+        env.tiles[22][9]  = self.tiles.paintBlueBotLeft
+        for i=10,14 do 
             env.tiles[22][i] = self.tiles.paintBlueHoriz
         end
-        env.tiles[22][13] = self.tiles.paintBlueBotRight
+        env.tiles[22][15] = self.tiles.paintBlueBotRight
     end
 end
 

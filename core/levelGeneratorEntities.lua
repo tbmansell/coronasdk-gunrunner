@@ -59,13 +59,40 @@ local entityDefs = {
 }
 
 
-local function canPlace(x, y)
+
+local function canPlaceAt(x, y)
     return x > 1 and 
            x < env.width and 
            y > 0 and 
            y <= env.height and 
            envEntities[y][x] == false and 
            envTiles[y][x]    == defaultTile
+end
+
+
+-- width is to the right of x, height is above y
+local function canPlace(x, y, width, height)
+    if not width and not height then
+        return canPlaceAt(x, y)
+    end
+
+    if width then
+        for w=1, width do
+            if not canPlaceAt(x+w-1, y) then
+                return false
+            end
+        end
+    end
+
+    if height then
+        for h=1, height do
+            if not canPlaceAt(x, y-h+1) then
+                return false
+            end
+        end
+    end
+
+    return true
 end
 
 
@@ -150,7 +177,7 @@ function Loader:load(LevelGenerator)
         -- Increment map height
         self.currentHeight = self.currentHeight + env.height
 
-        print("Section "..index.." height="..self.currentHeight.." heightPixels="..(self.currentHeight*self.TileSize))
+        --print("Section "..index.." height="..self.currentHeight.." heightPixels="..(self.currentHeight*self.TileSize))
 
         -- Increment the weapons that can appear by one each section
         if index > 1 and self.enemyWeaponLimit < EnemyWeaponAllocations.all then
@@ -188,9 +215,29 @@ function Loader:load(LevelGenerator)
     function LevelGenerator:addEntity(spec)
         envEntities[spec.ypos][spec.xpos] = true
 
+        if spec.tileWidth then
+            for w=1, spec.tileWidth-1 do
+                envEntities[spec.ypos][spec.xpos+w] = true
+            end
+        end
+
+        if spec.tileHeight then
+            for y=1, spec.tileHeight-1 do
+                envEntities[spec.ypos-y][spec.xpos] = true
+            end
+        end
+
         -- Map the ypos for tile coordinates (start top) to the level system (top bottom)
         spec.ypos = (-(env.height - (spec.ypos - 1))) + 0.5 - self.currentHeight
         spec.xpos = spec.xpos - 0.5
+
+        if spec.tileWidth then
+            spec.xpos = spec.xpos + 0.5
+        end
+
+        if spec.tileHeight then
+            spec.ypos = spec.ypos + 0.5
+        end
 
         self.entities[#self.entities+1] = spec
     end
@@ -207,13 +254,13 @@ function Loader:load(LevelGenerator)
     end
 
 
-    function LevelGenerator:place(x, y, n, min)
-        if canPlace(x, y) then
+    function LevelGenerator:place(x, y, w, h, n, min)
+        if canPlace(x, y, w, h) then
             return x, y
         else
             -- loop through looking for next closest tile to the one we wanted
             for i=(min or 1), (n or 10) do 
-                local newx, newy = self:placeAround(x, y, i)
+                local newx, newy = self:placeAround(x, y, w, h, i)
 
                 if newx ~= nil and newy ~= nil then
                     return newx, newy
@@ -224,33 +271,16 @@ function Loader:load(LevelGenerator)
     end
 
 
-    function LevelGenerator:placeUp(x, y, n)
-        return self:place(x, y - (n or 1))
-    end
-
-    function LevelGenerator:placeDown(x, y, n)
-        return self:place(x, y + (n or 1))
-    end
-
-    function LevelGenerator:placeLeft(x, y, n)
-        return self:place(x - (n or 1), y)
-    end
-
-    function LevelGenerator:placeRight(x, y, n)
-        return self:place(x + (n or 1), y)
-    end
-
-
-    function LevelGenerator:placeAround(x, y, n)
-        if      canPlace(x-n, y)   then return x-n, y
-        elseif  canPlace(x+n, y)   then return x+n, y
-        elseif  canPlace(x,   y-n) then return x,   y-n
-        elseif  canPlace(x,   y+n) then return x,   y+n
-        elseif  canPlace(x-n, y-n) then return x-n, y-n
-        elseif  canPlace(x+n, y-n) then return x+n, y-n
-        elseif  canPlace(x-n, y+n) then return x-n, y+n
-        elseif  canPlace(x+n, y+n) then return x+n, y+n
-        else                            return nil, nil
+    function LevelGenerator:placeAround(x, y, w, h, n)
+        if      canPlace(x-n, y,   w, h) then return x-n, y
+        elseif  canPlace(x+n, y,   w, h) then return x+n, y
+        elseif  canPlace(x,   y-n, w, h) then return x,   y-n
+        elseif  canPlace(x,   y+n, w, h) then return x,   y+n
+        elseif  canPlace(x-n, y-n, w, h) then return x-n, y-n
+        elseif  canPlace(x+n, y-n, w, h) then return x+n, y-n
+        elseif  canPlace(x-n, y+n, w, h) then return x-n, y+n
+        elseif  canPlace(x+n, y+n, w, h) then return x+n, y+n
+        else                             return nil, nil
         end
     end
 
@@ -393,7 +423,7 @@ function Loader:load(LevelGenerator)
     function LevelGenerator:addScenery()
         if percent(50) then
             local variantGenerator = function()
-                if percent(30) then return "big" else return "small" end
+                if percent(20) then return "big" else return "small" end
             end
             
             self:generateScenery(15, "crate", variantGenerator)
@@ -407,18 +437,18 @@ function Loader:load(LevelGenerator)
             self:generateScenery(10, "gas", variantGenerator)
         end
 
-        if percent(100) then
+        if percent(50) then
             local variantGenerator = function()
                 local r = random(100)
                 if r <= 35 then return "1" elseif r <= 70 then return "2" else return "3" end
             end
 
-            self:generateScenery(6, "computer", variantGenerator)
+            self:generateScenery(8, "computer", variantGenerator, 2)
         end
     end
 
 
-    function LevelGenerator:generateScenery(maxAmount, type, variantGenerator)
+    function LevelGenerator:generateScenery(maxAmount, type, variantGenerator, tileWidth, tileHeight)
         local amount = random(maxAmount)
 
         while amount > 0 do
@@ -428,7 +458,17 @@ function Loader:load(LevelGenerator)
             if amount == 1 then batch = 1 end
 
             for i=1,batch do
-                group[#group+1] = {object="obstacle", type=type, variant=variantGenerator()}
+                local spec = {object="obstacle", type=type, variant=variantGenerator()}
+
+                if tileWidth then 
+                    spec.tileWidth = tileWidth
+                end
+
+                if tileHeight then
+                    spec.tileHeight = tileHeight
+                end
+
+                group[#group+1] = spec
             end
 
             self:placeEntities(group, random(3))
@@ -470,9 +510,9 @@ function Loader:load(LevelGenerator)
             local placed = false
             while placed == false do
                 local startX, startY = self:getRandomPosition()
-                local xpos, ypos     = self:place(startX, startY)
+                local xpos, ypos     = self:place(startX, startY, attribs.tileWidth, attribs.tileHeight)
 
-                if xpos and ypos then
+                if xpos ~= nil and ypos ~= nil then
                     placed = true
                     self:createEntitySpec(xpos, ypos, attribs)
                 end
@@ -487,9 +527,9 @@ function Loader:load(LevelGenerator)
         for _,attribs in pairs(group) do
             local placed = false
             while placed == false do
-                local xpos, ypos = self:place(startX, startY, 20, distance)
+                local xpos, ypos = self:place(startX, startY, attribs.tileWidth, attribs.tileHeight, 20, distance)
 
-                if xpos and ypos then
+                if xpos ~= nil and ypos ~= nil then
                     placed = true
                     self:createEntitySpec(xpos, ypos, attribs)
                 end
@@ -504,9 +544,9 @@ function Loader:load(LevelGenerator)
         for _,attribs in pairs(group) do
             local placed = false
             while placed == false do
-                xpos, ypos = self:place(xpos, ypos, 20, distance)
+                xpos, ypos = self:place(xpos, ypos, attribs.tileWidth, attribs.tileHeight, 20, distance)
 
-                if xpos and ypos then
+                if xpos ~= nil and ypos ~= nil then
                     placed = true
                     self:createEntitySpec(xpos, ypos, attribs)
                 end

@@ -189,6 +189,16 @@ function TileEngine:addParticle(entity)
 end
 
 
+function TileEngine:setCameraOffset(offsetX, offsetY)
+    local x = offsetX or 1
+    local y = offsetY or self.cameraFocusOffsetY
+
+    self.tileLayer.setCameraOffset(x, y)
+    self.shadowLayer.setCameraOffset(x, y)
+    self.objectLayer2.setCameraOffset(x, y)
+end
+
+
 function TileEngine:moveBy(x, y)
     self.map.x = self.map.x + x
     self.map.y = self.map.y + y

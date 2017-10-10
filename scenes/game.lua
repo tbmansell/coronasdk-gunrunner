@@ -128,6 +128,8 @@ function scene:loadLevel()
 
     -- Create the tile map
     tileEngine:buildLayers()
+    --tileEngine.map.setCameraBounds({xMin=400, xMax=1200, yMin=false, yMax=false})
+    tileEngine.map.setTrackingLevel(0.1)
 
     -- Build entities into the level
     for i=1, sections do

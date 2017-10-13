@@ -3,7 +3,6 @@ local spriteSheetInfo = require("core.sheetInfo")
 
 
 local TileEngine = {
-    --cameraFocusOffsetY = 450,
     cameraFocusOffsetY = 0,
 
     data          = nil,
@@ -190,12 +189,32 @@ end
 
 
 function TileEngine:setCameraOffset(offsetX, offsetY)
-    local x = offsetX or 1
+    local x = offsetX or 0
     local y = offsetY or self.cameraFocusOffsetY
 
     self.tileLayer.setCameraOffset(x, y)
     self.shadowLayer.setCameraOffset(x, y)
     self.objectLayer2.setCameraOffset(x, y)
+end
+
+
+function TileEngine:setAngleOffset(angle)
+    local offsetX, offsetY = nil, nil
+
+    if angle > -90 and angle < 90 then
+        offsetX = -angle / 3
+        -- default Y to normal offset
+
+    elseif angle >= 90 and angle < 180 then
+        offsetX = -(180-angle) / 3
+        offsetY = -(angle-90) / 5
+
+    elseif angle <= 270 then
+        offsetX = (angle-180) / 3
+        offsetY = (angle-270) / 5
+    end
+
+    self:setCameraOffset(offsetX, offsetY)
 end
 
 

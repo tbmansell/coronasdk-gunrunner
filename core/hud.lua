@@ -312,29 +312,7 @@ function Hud:eventUpdateFrame(event)
         
         player:rotate(angle, event)
         player:shoot(self.camera)
-
-
-        --------------------------------------------
-        --local x, y = self.camera.map.getViewpoint()
-        --print("angle: "..angle.." camera at "..tostring(x)..", "..tostring(y))
-
-        
-        if angle > -90 and angle < 90 then
-            --self.camera.map.setViewpoint(x + angle, y)
-            self.camera:setCameraOffset(-angle / 3)
-
-        elseif angle >= 90 and angle < 180 then
-            --self.camera.map.setViewpoint(x + angle, y)
-            self.camera:setCameraOffset(-(180-angle) / 3)
-
-        elseif angle >= 270 then
-            --self.camera.map.setViewpoint(x + angle, y)
-            self.camera:setCameraOffset((360-angle) / 3)
-        end
-
-        --x, y = self.camera.map.getViewpoint()
-        --print("angle: "..angle.." camera AFTER "..tostring(x)..", "..tostring(y))
-        --------------------------------------------
+        self.camera:setAngleOffset(angle)
     end
 
     player:moveBy(0, forcePlayerMoveY)

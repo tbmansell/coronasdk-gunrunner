@@ -10,9 +10,9 @@ local Player = {
     intHeight         = 25,
     intWidth          = 25,
     intMaxHealth      = 20,
-    verticalSpeed     = 8,--4,
-    strafeSpeed       = 8,--4,
-    powerupDuration   = 10000,
+    verticalSpeed     = 4,
+    strafeSpeed       = 4,
+    powerupDuration   = 25000,
 
     mode              = PlayerMode.ready,
     health            = 20,

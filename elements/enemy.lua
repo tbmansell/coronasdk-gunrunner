@@ -157,7 +157,7 @@ end
 
 function Enemy:checkBehaviour(camera, player)
     -- Enemy must be in certain distance before they will do anything
-    if self:inDistance(player, 1000) then
+    if self.mode ~= EnemyMode.dead and self:inDistance(player, 1000) then
         if self:lineOfSight(player) then
             -- Face player if not charging
             if self.mode ~= EnemyMode.charge then

@@ -88,15 +88,12 @@ function Particles:showEmitter(name, x, y, duration, alpha, angle)
 
     -- Create the emitter with the decoded parameters
     local emitter = display.newEmitter(emitterData[name])
-    emitter.x     = x
-    emitter.y     = y
-    emitter.id    = #createdEmitters + 1
-    emitter.alpha = alpha or 1
-
-    emitter.rotationStart = angle
-    --emitter.rotationStartVariance = angle
-    --emitter.rotationEnd   = angle
-    --emitter.rotationEndVariance   = angle
+    emitter.x                = x
+    emitter.y                = y
+    emitter.id               = #createdEmitters + 1
+    emitter.alpha            = alpha or 1
+    emitter.rotationStart    = angle
+    emitter.absolutePosition = false
 
     createdEmitters[emitter.id] = emitter
 

@@ -38,6 +38,7 @@ end
 
 
 local function eventUpdateGameLogic()
+    print("eventUpdateGameLogic")
     player.currentSection = levelGenerator:getSection(player:y())
 
     level:updateBehaviours()
@@ -219,6 +220,7 @@ function scene:pauseLevel()
     globalGameMode = GameMode.paused
 
     Runtime:removeEventListener("enterFrame", eventUpdateFrame)
+    timer.pause(scene.gameLoopHandle)
 
     scene:pauseMusic()
     track:pauseEventHandles()
@@ -232,7 +234,9 @@ end
 
 function scene:resumeLevel(resumeGameState)
     globalGameMode = resumeGameState or GameMode.playing
+
     Runtime:addEventListener("enterFrame", eventUpdateFrame)
+    timer.resume(scene.gameLoopHandle)
 
     scene:resumeMusic()
     particles:resume()

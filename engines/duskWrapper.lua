@@ -165,9 +165,7 @@ function TileEngine:addEntity(entity, focus)
 
     if focus then
         self.map.setCameraFocus(entity.image)
-        self.tileLayer.setCameraOffset(1,    self.cameraFocusOffsetY)
-        self.shadowLayer.setCameraOffset(1,  self.cameraFocusOffsetY)
-        self.objectLayer2.setCameraOffset(1, self.cameraFocusOffsetY)
+        self:setCameraOffset()
     end
 end
 
@@ -195,6 +193,7 @@ function TileEngine:setCameraOffset(offsetX, offsetY)
     self.tileLayer.setCameraOffset(x, y)
     self.shadowLayer.setCameraOffset(x, y)
     self.objectLayer2.setCameraOffset(x, y)
+    self.objectLayer3.setCameraOffset(x, y)
 end
 
 

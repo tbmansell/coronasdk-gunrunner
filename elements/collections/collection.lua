@@ -164,7 +164,7 @@ function Collection:checkBehaviour(camera, player)
 
     for i=1,num do
         local object = items[i]
-        if object and object ~= -1 and object.checkBehaviour then
+        if object and object ~= -1 and object.inGame and object.checkBehaviour then
             object:checkBehaviour(camera, player)
         end
     end

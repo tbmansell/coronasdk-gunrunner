@@ -9,7 +9,7 @@ function PlayerBuilder:newPlayer(camera, spec, hud)
                        jsonName  = "characterBody", 
                        imagePath = "character", 
                        skin      = spec.skin      or "player_basic",
-                       scale     = spec.scale     or 0.5,  
+                       scale     = spec.scale     or 0.5,
                        animation = spec.animation or "run_rifle"
                    })
     
@@ -17,7 +17,7 @@ function PlayerBuilder:newPlayer(camera, spec, hud)
                       jsonName  = "characterLegs", 
                       imagePath = "character", 
                       skin      = "player_basic", 
-                      scale     = spec.scale or 0.5, 
+                      scale     = spec.scale or 0.5,
                       animation = "run"
                   })
   

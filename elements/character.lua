@@ -44,6 +44,7 @@ function Character:shootProjectile(projectileBuilder, camera, filter)
     local weapon = self.weapon
     local name   = weapon.name
     local ammo   = weapon.ammoType
+    local damage = self:hasExtraDamage()
     local angle  = self:getAngle()
     local x      = self:x() + self.boneBarrel.worldX
     local y      = self:y() - self.boneBarrel.worldY
@@ -51,16 +52,17 @@ function Character:shootProjectile(projectileBuilder, camera, filter)
     self:animate("shoot_"..name)
 
     if name == "shotgun" then
-        level:createProjectile({xpos=x, ypos=y, angle=angle-10, filter=filter, powerupDamage=self.powerupDamage}, weapon)
-        level:createProjectile({xpos=x, ypos=y, angle=angle,    filter=filter, powerupDamage=self.powerupDamage}, weapon)
-        level:createProjectile({xpos=x, ypos=y, angle=angle+10, filter=filter, powerupDamage=self.powerupDamage}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle-10, filter=filter, powerupDamage=damage}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle,    filter=filter, powerupDamage=damage}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle+10, filter=filter, powerupDamage=damage}, weapon)
     else
-        level:createProjectile({xpos=x, ypos=y, angle=angle, filter=filter, powerupDamage=self.powerupDamage}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle, filter=filter, powerupDamage=damage}, weapon)
     end
 
     local rof = self.weapon.rof
 
-    if self.powerupFastShoot then
+    if self:hasFastShoot() then
+        print("fast shoot")
         rof = rof / 2
     end
 
@@ -82,13 +84,28 @@ function Character:shootReloadCheck(callback)
         after(weapon.reload, function()
             self.ammo = weapon.ammo
 
-            if self.powerupExtraAmmo then
+            if self:hasExtraAmmo() then
                 self.ammo = self.ammo + weapon.ammo
             end
 
             if callback then callback() end
         end)
     end
+end
+
+
+function Character:hasFastShoot()
+    return false
+end
+
+
+function Character:hasExtraDamage()
+    return false
+end
+
+
+function Character:hasExtraAmmo()
+    return false
 end
 
 

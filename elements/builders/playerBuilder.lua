@@ -28,8 +28,9 @@ function PlayerBuilder:newPlayer(camera, spec, hud)
 
     builder:deepCopy(playerDef, player)
 
-    player.key  = "ThePlayer"
-    player.gear = {}
+    player.key      = "ThePlayer"
+    player.gear     = {}
+    player.powerups = {}
     player:moveTo(player.xpos or 0, player.ypos or 0)
     player:setPhysics()
     player:visible()

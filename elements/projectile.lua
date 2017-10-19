@@ -67,8 +67,9 @@ end
 
 
 function Projectile:getDamage()
-    if self.powerupDamage then 
-        return self.weapon.damage * 2 
+    if self.powerupDamage then
+        print("extra damage")
+        return self.weapon.damage * self.powerupDamage
     else
         return self.weapon.damage
     end

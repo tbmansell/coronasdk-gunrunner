@@ -47,10 +47,10 @@ function Collectable:collectedBy(player)
             player:heal(self.health)
 
         elseif self.type == Powerups.damage then
-            player:increaseDamage()
+            player:extraDamage()
 
         elseif self.type == Powerups.fastMove then
-            player:increaseMove()
+            player:fastMove()
 
         elseif self.type == Powerups.fastShoot then
             player:fastShoot()

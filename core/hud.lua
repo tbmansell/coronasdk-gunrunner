@@ -315,13 +315,13 @@ function Hud:eventUpdateFrame(event)
         self.camera:setAngleOffset(angle)
     end
 
-    player:moveBy(0, forcePlayerMoveY)
+--    player:moveBy(0, forcePlayerMoveY)
 
     if player.shieldEntity then
         player.shieldEntity:moveTo(player:x(), player:y())
     end
 
-    if player.powerupLaserSight then
+    if player:hasLaserSight() then
         player:drawLaserSight()
     end
 end
@@ -343,7 +343,7 @@ end
 function Hud:updateSpeed(player)
     movePlayerSpeedX, movePlayerSpeedY = player.strafeSpeed,  player.verticalSpeed
 
-    if player.powerupFastMove then
+    if player:hasFastMove() then
         forcePlayerMoveY = -3
     else
         forcePlayerMoveY = -2

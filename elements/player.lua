@@ -12,22 +12,17 @@ local Player = {
     intMaxHealth      = 20,
     verticalSpeed     = 4,
     strafeSpeed       = 4,
-    powerupDuration   = 25000,
+    powerupDuration   = 10000,
 
     mode              = PlayerMode.ready,
     health            = 20,
-    gear              = {},  -- array have to be set by the builder due to deep copy problems
-    shielded          = false,
+    shieldHealth      = 0,
     weapon            = nil,
     ammo              = 0,
     boneBarrel        = nil,
-
-    powerupDamage     = false,
-    powerupFastMove   = false,
-    powerupFastShoot  = false,
-    powerupExtraAmmo  = false,
-    powerupLaserSight = false,
-
+    gear              = {},  -- array have to be set by the builder due to deep copy problems
+    powerups          = {},  -- collection of timer handles per powerup active or nil if one is not active
+    
     flagShootAllowed  = true,
 }
 
@@ -170,13 +165,13 @@ function Player:selectFilter(action)
             return Filters.player
         end
     elseif action == "jump" then
-        if self.shielded then
+        if self:hasShield() then
             return Filters.playerShielded
         else
             return Filters.playerJumping
         end
     elseif action == "land" then
-        if self.shielded then
+        if self:hasShield() then
             return Filters.playerShielded
         else 
             return Filters.player
@@ -211,13 +206,21 @@ end
 
 function Player:hit(shot)
     if not self:isDead() then
-        if not self.shielded or shot.weapon.shieldBuster then
-            local damage = shot.weapon.damage
+        local damage = shot.weapon.damage
 
-            if shot.getDamge then
-                damage = shot:getDamage()
+        if shot.getDamge then
+            damage = shot:getDamage()
+        end
+
+        if self.shieldEntity then
+            self.shieldEntity.health = self.shieldEntity.health - damage
+            sounds:projectile("laserHit")
+
+            if self.shieldEntity.health <= 0 then
+                self.shieldEntity:destroy()
+                self.shieldEntity = nil
             end
-
+        else
             self.health = self.health - damage
             
             sounds:player("hurt")
@@ -290,10 +293,17 @@ end
 
 function Player:destroy(camera, destroyBoundItems)
     self:spineObjectDestroy(camera, destroyBoundItems)
+
+    for _,handle in pairs(self.powerups) do
+        if handle then 
+            timer.cancel(handle) 
+            handle = nil
+        end
+    end
 end
 
 
------------------ FUNCTIONS TO HANDLE GEAR ------------------- 
+----------------- FUNCTIONS TO HANDLE GEAR & POWERUPS ------------------- 
 
 
 function Player:setWeapon(weapon)
@@ -338,32 +348,87 @@ function Player:loadGear()
 end
 
 
-function Player:increaseDamage()
-    if not self:isDead() then
-        self.powerupDamage = true
-        print("double damage")
-
-        after(self.powerupDuration, function()
-            print("restore damage")
-            self.powerupDamage = false
-        end)
+function Player:pause()
+    for _,handle in pairs(self.powerups) do
+        if handle then timer.pause(handle) end
     end
 end
 
 
-function Player:increaseMove()
+
+function Player:resume()
+    for _,handle in pairs(self.powerups) do
+        if handle then timer.resume(handle) end
+    end
+end
+
+
+function Player:startPowerup(power, onComplete)
+    local existing = self.powerups[power]
+
+    if existing then
+        timer.cancel(existing)
+    end
+
+    local action = function()
+        onComplete(self)
+        self.powerups[power] = nil
+    end
+
+    self.powerups[power] = timer.performWithDelay(self.powerupDuration, action)
+end
+
+
+function Player:hasPowerup(power)
+    return (self.powerups[power] ~= nil)
+end
+
+
+function Player:hasExtraDamage()
+    if self.powerups[Powerups.damage] then
+        return 2
+    else
+        return nil
+    end
+end
+
+
+function Player:hasExtraAmmo()
+    return (self.powerups[Powerups.extraAmmo] ~= nil)
+end
+
+
+function Player:hasFastMove()
+    return (self.powerups[Powerups.fastMove] ~= nil)
+end
+
+
+function Player:hasFastShoot()
+    return (self.powerups[Powerups.fastShoot] ~= nil)
+end
+
+
+function Player:hasLaserSight()
+    return (self.powerups[Powerups.laserSight] ~= nil)
+end
+
+
+function Player:extraDamage()
+    if not self:isDead() then
+        self:startPowerup(Powerups.damage, function()end)
+    end
+end
+
+
+function Player:fastMove()
     if not self:isDead() then
         self.verticalSpeed = 6
         self.strafeSpeed   = 6
-        self.powerupFastMove = true
         self:updateHudSpeed(true)
-        print("double speed")
 
-        after(self.powerupDuration, function()
-            print("restore speed")
-            self.verticalSpeed = 4
-            self.strafeSpeed   = 4
-            self.powerupFastMove = false
+        self:startPowerup(Powerups.fastMove, function()
+            self.verticalSpeed   = 4
+            self.strafeSpeed     = 4
             self:updateHudSpeed(false)
         end)
     end
@@ -372,62 +437,41 @@ end
 
 function Player:fastShoot()
     if not self:isDead() then
-        self.powerupFastShoot = true
-        print("fast shoot")
-
-        after(self.powerupDuration, function()
-            print("restore shoot")
-            self.powerupFastShoot = false
-        end)
+        self:startPowerup(Powerups.fastShoot, function()end)
     end
 end
 
 
 function Player:extraAmmo()
     if not self:isDead() then
-        self.powerupExtraAmmo = true
-        print("extra ammo")
-
         self.ammo = self.weapon.ammo * 2
-        self:hookAmmoCounter()
-
-        after(self.powerupDuration, function()
-            print("restore ammo")
-            self.powerupExtraAmmo = false
-        end)
+        self:startPowerup(Powerups.extraAmmo, function()end)
     end
 end
 
 
 function Player:shield()
-    if not self:isDead() and self.shielded ~= true then
-        self.shielded     = true
-        self.shieldEntity = level:createSpineObject({type="gearshield"}, {jsonName="shield", imagePath="collectables", animation="Rotate"})
-        self.shieldEntity.image:scale(0.5, 0.5)
-        self.shieldEntity:loop("Rotate")
-        self.shieldEntity:visible(0.6)
+    if not self:isDead() then
+        if self.shieldEntity then
+            self.shieldEntity.health = 10
+        else
+            local shield = level:createSpineObject({type="gearshield"}, {jsonName="shield", imagePath="collectables", animation="Rotate"})
+            shield.image:scale(0.5, 0.5)
+            shield.health = 10
 
-        globalCamera:addCollectable(self.shieldEntity)
-        print("shield up")
-
-        after(self.powerupDuration, function()
-            print("shield down")
-            self.shieldEntity:destroy()
-            self.shieldEntity = nil
-            self.shielded = false
-        end)
+            shield:loop("Rotate")
+            shield:visible(0.6)
+            
+            globalCamera:addCollectable(shield)
+            self.shieldEntity = shield
+        end
     end
 end
 
 
 function Player:laserSight()
     if not self:isDead() then
-        self.powerupLaserSight = true
-        print("lasersight activated")
-
-        after(self.powerupDuration, function()
-            print("lasersight gone")
-            self.powerupLaserSight = false
+        self:startPowerup(Powerups.laserSight, function()
             self:removeLaserSight()
         end)
     end

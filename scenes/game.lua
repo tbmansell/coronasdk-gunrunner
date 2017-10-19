@@ -38,7 +38,6 @@ end
 
 
 local function eventUpdateGameLogic()
-    print("eventUpdateGameLogic")
     player.currentSection = levelGenerator:getSection(player:y())
 
     level:updateBehaviours()
@@ -225,6 +224,7 @@ function scene:pauseLevel()
     scene:pauseMusic()
     track:pauseEventHandles()
     level:pauseElements()
+    player:pause()
 
     physics:pause()
     anim:pause()
@@ -243,6 +243,7 @@ function scene:resumeLevel(resumeGameState)
     anim:resume()
     physics:start()
 
+    player:resume()
     level:resumeElements()
     track:resumeEventHandles()
 end

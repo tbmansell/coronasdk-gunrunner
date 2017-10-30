@@ -28,6 +28,8 @@ local LevelGenerator = {
 
 -- Aliases:
 local random  = math.random
+local min     = math.min
+local floor   = math.floor
 local percent = utils.percent
 
 
@@ -120,10 +122,12 @@ function LevelGenerator:newEnvironment()
         self:setEnvironmentTiles(env)
         self:setEnvironmentEdges(env)
 
+        print(self.section..". width="..env.width)
+
         if self.section == 1 then
             self:setStartEdge(env)
         else
-            --self:setEnvironmentWalls(env)
+            self:setEnvironmentWalls(env)
         end
     end
 
@@ -158,7 +162,7 @@ end
 
 function LevelGenerator:loadOwnMap(env)
     local file     = "json/maps/testmap1.json"
-    local filepath = system.pathForFile(file, system.ResourceDirectory )
+    local filepath = system.pathForFile(file, system.ResourceDirectory)
     local map, pos, msg = json.decodeFile(filepath)
 
     if not map then
@@ -332,25 +336,25 @@ function LevelGenerator:setEnvironmentWalls(env)
     local spaceY = env.height - 2
 
     while spaceY >= 4 do
-        local pattern = "horiz"
-
+        local pattern = "vertical"
+        --[[
         if spaceY >= 10 then
             local r = random(100)
 
-            if     r <= 33 then pattern = "horiz"
-            elseif r <= 66 then pattern = "vert"
+            if     r <= 33 then pattern = "horizontal"
+            elseif r <= 66 then pattern = "vertical"
             else                pattern = "box" end
-        end
+        end]]
 
         --print(pattern.." "..spaceY)
-        
-        if pattern == "horiz" then
-            self:makeStripHorizWalls(env, spaceY)
-            spaceY = spaceY - 6
 
-        elseif pattern == "vert" then
+        if pattern == "vertical" then
             self:makeStripVertWalls(env, spaceY)
             spaceY = spaceY - 12
+        
+        elseif pattern == "horizontal" then
+            self:makeStripHorizWalls(env, spaceY)
+            spaceY = spaceY - 6
 
         elseif pattern == "box" then
             local length = self:makeStripBoxWalls(env, spaceY)
@@ -361,10 +365,67 @@ function LevelGenerator:setEnvironmentWalls(env)
 end
 
 
+function LevelGenerator:makeStripVertWalls(env, y)
+    --[[
+        1. Work out available width in section, taking off 2 spaces next to each edge: spaceX = env.width - 6
+        2. determine max width per vertical wall, including spacing: wallSpaceX = 3 (wall itself + 1 space either side)
+        3. based on spaceX and wallSpaceX, work out max number of walls section can handle and generate random number up to that amount
+        4. work out where each wall can be placed to keep the spacing intact and randomise each wall within it's spacing
+    ]]
+    local spaceX    = env.width - 6
+    local spaceY    = 2 + random(7)
+    local start     = env.startX + 2
+    local spaceWall = 3
+    local maxWalls  = floor(spaceX / spaceWall)
+    local walls     = random(maxWalls)
+
+    if maxWalls == 1 then walls = 1 end
+
+    --print("spaceX="..spaceX.." maxWalls="..maxWalls.." walls="..walls)
+
+    --[[
+    width=16 maxwalls=6
+    1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8
+      1     2     3     4     5     6
+
+    width=10 maxwalls=3
+    1 2 3 4 5 6 7 8 9 0
+      1     2     3
+
+    width=6 maxwalls=2
+    1 2 3 4 5 6
+      1     2
+    ]]
+
+    if walls == 1 then
+        self:makeVertWall(env, start+random(spaceX-1), y, spaceY)
+
+    elseif walls == 2 then
+        local half = spaceX / 2
+        self:makeVertWall(env, start+random(half-1),      y, spaceY)
+        self:makeVertWall(env, start+half+random(half-1), y, spaceY)
+    else
+        local distance = floor(spaceX / walls)
+
+        for i=1, walls do
+            --print("vertWall "..i.." at "..start+(distance*i))
+            self:makeVertWall(env, start+(distance*i), y, 2+random(spaceY-2))
+        end
+    end
+
+    return spaceY + 2
+end
+
+
 function LevelGenerator:makeStripHorizWalls(env, y)
+    --[[
+        
+    ]]
     local spaceX = env.width - 6
     local walls  = random(4)
     local randY  = percent(50)
+
+    print("makeStripHorizWalls: spaceX="..spaceX)
 
     if walls == 1 then
         local width = 2 + random(9)
@@ -400,55 +461,20 @@ function LevelGenerator:makeStripHorizWalls(env, y)
 end
 
 
-function LevelGenerator:makeStripVertWalls(env, y)
-    local spaceX = env.width - 6
-    local walls  = random(4)
-    local length = 2 + random(7)
-
-    if walls == 1 then
-        local x = 3 + random(spaceX - 1)
-
-        self:makeVertWall(env, x, y, length)
-
-    elseif walls == 2 then
-        local x1 = 3  + random((spaceX/2)-1)
-        local x2 = 11 + random((spaceX/2)-1)
-
-        self:makeVertWall(env, x1, y, length)
-        self:makeVertWall(env, x2, y, length)
-
-    elseif walls == 3 then
-        local x1 = 3  + random(3)
-        local x2 = 8  + random(3)
-        local x3 = 13 + random(3)
-
-        self:makeVertWall(env, x1, y, length)
-        self:makeVertWall(env, x2, y, length)
-        self:makeVertWall(env, x3, y, length)
-
-    elseif walls == 4 then
-        local x1 = 4
-        local x2 = 7  + random(2)
-        local x3 = 12 + random(2)
-        local x4 = 17
-
-        self:makeVertWall(env, x1, y, length)
-        self:makeVertWall(env, x2, y, length)
-        self:makeVertWall(env, x3, y, length)
-        self:makeVertWall(env, x4, y, length)
-    end
-
-    return length + 2
-end
-
-
 function LevelGenerator:makeStripBoxWalls(env, y)
     local spaceX = env.width - 6
     local walls  = random(2)
 
+    if env.width < 20 then walls = 1 end
+
+    print("makeStripBoxWalls: spaceX="..spaceX)
+
     if walls == 1 then
-        local width  = 2 + random(5)
-        local height = 2 + random(5)
+        local width  = 1 + random(min(5,spaceX))
+        local height = 1 + random(min(5,spaceX))
+
+        print("makeStripBoxWalls: width="..width)
+
         local x      = 3 + random(spaceX - width)
 
         self:makeBoxWall(env, x, y, width, height)
@@ -580,7 +606,6 @@ function LevelGenerator:setEnvironmentFloor(env)
     end
 
     -- differentiate each section
-    --for x=2, env.width-1 do
     for x=1, env.width-2 do
         env.tiles[1][env.startX + x] = self.tiles.patternHazzard
     end

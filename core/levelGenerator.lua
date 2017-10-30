@@ -56,6 +56,7 @@ function LevelGenerator:setup()
     self.tiles.wallBotLeft      = spriteSheetInfo:getFrameIndex("wallBotLeft")
     self.tiles.wallBotRight     = spriteSheetInfo:getFrameIndex("wallBotRight")
 
+    self.tiles.edgeBot          = spriteSheetInfo:getFrameIndex("edgeBot")
     self.tiles.boxEdgeTop       = spriteSheetInfo:getFrameIndex("boxEdgeTop")
 
     self.tiles.shadowRightTop   = spriteSheetInfo:getFrameIndex("shadowRightTop")
@@ -130,6 +131,7 @@ function LevelGenerator:newEnvironment()
         if self.section == 1 then
             self:setStartEdge(env)
         else
+            self:setPrevBottomEdge(env, self.environments[#self.environments])
             self:setEnvironmentWalls(env)
         end
     end
@@ -143,6 +145,7 @@ end
 -- Gets current section based on ypos, but as sections are generated from top down, we flip this, so we call the bottom section #1
 function LevelGenerator:getSection(ypos)
     local section = 1
+    
     for i=#self.environments, 1, -1 do
         local env = self.environments[i] 
         local top = env.height * self.TileSize * (env.number-1)
@@ -188,8 +191,7 @@ function LevelGenerator:loadOwnMap(env)
         env.entities[y] = {}
 
         for x=1, env.width do
-            local index = ((y-1)*env.height)  + x
-            --print("Y["..y.."] X["..x.."] = "..tostring(floorLayer[index]))
+            local index = ((y-1)*env.height) + x
 
             env.tiles[y][x]    = floorLayer[index]
             env.shadows[y][x]  = 0
@@ -197,7 +199,6 @@ function LevelGenerator:loadOwnMap(env)
         end
     end
 end
-
 
 
 ----- GENERATING A MAP DYNAMICALLY -----
@@ -208,12 +209,12 @@ function LevelGenerator:setEnvironmentSize(env)
 
     -- First determine if there is a previous environment, if so we must start at that width:
     if number > 0 then
-        --local prev = self.environments[number]
+        local prev = self.environments[number]
         env.height = self.StartHeight
         env.number = number + 1
 
         -- make width variable: 24, 20, 16, 12
-        local r = random(100)
+        local  r = random(100)
         if     r <= 25  then env.width = self.MaxWidth
         elseif r <= 50  then env.width = self.MaxWidth - 4
         elseif r <= 75  then env.width = self.MaxWidth - 8
@@ -221,6 +222,10 @@ function LevelGenerator:setEnvironmentSize(env)
 
         if env.width < self.MaxWidth then
             env.startX = random(self.MaxWidth - env.width)
+            -- make sure at least 3 tiles conncet the sections
+            if env.startX > prev.width - 3 then
+                env.startX = prev.width - 3
+            end
         else
             env.startX = 1
         end
@@ -319,6 +324,15 @@ function LevelGenerator:setStartEdge(env)
 end
 
 
+function LevelGenerator:setPrevBottomEdge(env, prev)
+    for x=1, self.MaxWidth do
+        if prev.tiles[1][x] == self.tiles.noFloor and env.tiles[env.height][x] ~= self.tiles.noFloor then
+            prev.tiles[1][x] = self.tiles.edgeBot
+        end
+    end
+end
+
+
 function LevelGenerator:setEnvironmentWalls(env)
     -- Generate each wall as we go and place it, from bottom left to bottom right and going up,
     -- so we can work out how much space we have widthwise and then going up
@@ -352,15 +366,12 @@ function LevelGenerator:setEnvironmentWalls(env)
 
         if pattern == "vertical" then
             spaceY = spaceY - self:makeStripVertWalls(env, spaceY)
-            --spaceY = spaceY - 12
         
         elseif pattern == "horizontal" then
             spaceY = spaceY - self:makeStripHorizWalls(env, spaceY)
-            --spaceY = spaceY - 6
 
         elseif pattern == "box" then
             spaceY = spaceY -  self:makeStripBoxWalls(env, spaceY)
-            --spaceY = spaceY - length
         end
         
     end
@@ -565,7 +576,7 @@ function LevelGenerator:setEnvironmentFloor(env)
                 elseif self.section == 2 then
                     env.tiles[y][x] = self.tiles.patternPipes
                 elseif self.section == 3 then
-                    env.tiles[y][x] = self.tiles.patternGrill 
+                    env.tiles[y][x] = self.tiles.patternGrill
                 end]]
 
                 -- NOTE: this has to run after entities have been placed so we can detect normal tiles

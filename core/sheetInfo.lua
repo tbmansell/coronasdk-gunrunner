@@ -73,9 +73,12 @@ function SheetInfo:nameTiles()
     self.frameIndex["edgeTopLeft"]      = 1
     self.frameIndex["edgeTopRight"]     = 15
     self.frameIndex["edgeBotLeft"]      = 125
-    self.frameIndex["edgeBot"]          = 121
+    self.frameIndex["edgeBot"]          = 140
     self.frameIndex["edgeBotRight"]     = 126
     self.frameIndex["noFloor"]          = 183
+
+    -- same as edgeBot BUT not marked as edge so we dont add needless physcics shape (for inside box)
+    self.frameIndex["boxEdgeTop"]       = 140
 
     self.frameIndex["wallTop"]          = 16
     self.frameIndex["wallBot"]          = 76

@@ -29,6 +29,7 @@ local LevelGenerator = {
 -- Aliases:
 local random  = math.random
 local min     = math.min
+local max     = math.max
 local floor   = math.floor
 local percent = utils.percent
 
@@ -54,6 +55,8 @@ function LevelGenerator:setup()
     self.tiles.wallTopRight     = spriteSheetInfo:getFrameIndex("wallTopRight")
     self.tiles.wallBotLeft      = spriteSheetInfo:getFrameIndex("wallBotLeft")
     self.tiles.wallBotRight     = spriteSheetInfo:getFrameIndex("wallBotRight")
+
+    self.tiles.boxEdgeTop       = spriteSheetInfo:getFrameIndex("boxEdgeTop")
 
     self.tiles.shadowRightTop   = spriteSheetInfo:getFrameIndex("shadowRightTop")
     self.tiles.shadowRight      = spriteSheetInfo:getFrameIndex("shadowRight")
@@ -336,29 +339,28 @@ function LevelGenerator:setEnvironmentWalls(env)
     local spaceY = env.height - 2
 
     while spaceY >= 4 do
-        local pattern = "vertical"
-        --[[
+        local pattern = "horizontal"
+        
         if spaceY >= 10 then
-            local r = random(100)
-
+            local  r = random(100)
             if     r <= 33 then pattern = "horizontal"
             elseif r <= 66 then pattern = "vertical"
             else                pattern = "box" end
-        end]]
+        end
 
         --print(pattern.." "..spaceY)
 
         if pattern == "vertical" then
-            self:makeStripVertWalls(env, spaceY)
-            spaceY = spaceY - 12
+            spaceY = spaceY - self:makeStripVertWalls(env, spaceY)
+            --spaceY = spaceY - 12
         
         elseif pattern == "horizontal" then
-            self:makeStripHorizWalls(env, spaceY)
-            spaceY = spaceY - 6
+            spaceY = spaceY - self:makeStripHorizWalls(env, spaceY)
+            --spaceY = spaceY - 6
 
         elseif pattern == "box" then
-            local length = self:makeStripBoxWalls(env, spaceY)
-            spaceY = spaceY - length
+            spaceY = spaceY -  self:makeStripBoxWalls(env, spaceY)
+            --spaceY = spaceY - length
         end
         
     end
@@ -366,12 +368,6 @@ end
 
 
 function LevelGenerator:makeStripVertWalls(env, y)
-    --[[
-        1. Work out available width in section, taking off 2 spaces next to each edge: spaceX = env.width - 6
-        2. determine max width per vertical wall, including spacing: wallSpaceX = 3 (wall itself + 1 space either side)
-        3. based on spaceX and wallSpaceX, work out max number of walls section can handle and generate random number up to that amount
-        4. work out where each wall can be placed to keep the spacing intact and randomise each wall within it's spacing
-    ]]
     local spaceX    = env.width - 6
     local spaceY    = 2 + random(7)
     local start     = env.startX + 2
@@ -380,22 +376,6 @@ function LevelGenerator:makeStripVertWalls(env, y)
     local walls     = random(maxWalls)
 
     if maxWalls == 1 then walls = 1 end
-
-    --print("spaceX="..spaceX.." maxWalls="..maxWalls.." walls="..walls)
-
-    --[[
-    width=16 maxwalls=6
-    1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8
-      1     2     3     4     5     6
-
-    width=10 maxwalls=3
-    1 2 3 4 5 6 7 8 9 0
-      1     2     3
-
-    width=6 maxwalls=2
-    1 2 3 4 5 6
-      1     2
-    ]]
 
     if walls == 1 then
         self:makeVertWall(env, start+random(spaceX-1), y, spaceY)
@@ -408,7 +388,6 @@ function LevelGenerator:makeStripVertWalls(env, y)
         local distance = floor(spaceX / walls)
 
         for i=1, walls do
-            --print("vertWall "..i.." at "..start+(distance*i))
             self:makeVertWall(env, start+(distance*i), y, 2+random(spaceY-2))
         end
     end
@@ -418,77 +397,63 @@ end
 
 
 function LevelGenerator:makeStripHorizWalls(env, y)
-    --[[
-        
-    ]]
-    local spaceX = env.width - 6
-    local walls  = random(4)
-    local randY  = percent(50)
+    local spaceX    = env.width - 6
+    local spaceY    = 2 + random(7)
+    local start     = env.startX + 2
+    local spaceWall = 5
+    local maxWalls  = floor(spaceX / spaceWall)
+    local walls     = random(maxWalls)
 
-    print("makeStripHorizWalls: spaceX="..spaceX)
+    if maxWalls == 1 then walls = 1 end
 
     if walls == 1 then
-        local width = 2 + random(9)
-        local x     = 3 + random(spaceX - width)
-
-        self:makeHorizWall(env, x, y, width, randY)
+        local width = 2 + random(spaceX-4)
+        self:makeHorizWall(env, start+random(spaceX - width), y, width, false)
 
     elseif walls == 2 then
-        local width1 = 1  + random(4)
-        local width2 = 1  + random(4)
-        local x1     = 3  + random((spaceX/2) - width1)
-        local x2     = 11 + random((spaceX/2) - width2)
+        local half = spaceX/2
+        local width1 = 1 + random(half-2)
+        local width2 = 1 + random(half-2)
 
-        self:makeHorizWall(env, x1, y, width1, randY)
-        self:makeHorizWall(env, x2, y, width2, randY)
+        self:makeHorizWall(env, start+random(half-width1),        y, width1, false)
+        self:makeHorizWall(env, 1+start+half+random(half-width2), y, width2, false)
 
     elseif walls == 3 then
-        local width1 = 1 + random(2)
-        local width2 = 1 + random(2)
-        local width3 = 1 + random(2)
-        local x2     = 8 + random(2)
+        local third  = spaceX/3
+        local width1 = 1 + random(third-2)
+        local width2 = 1 + random(third-2)
+        local width3 = 1 + random(third-2)
 
-        self:makeHorizWall(env, 4,  y, width1, randY)
-        self:makeHorizWall(env, x2, y, width2, randY)
-        self:makeHorizWall(env, 15, y, width3, randY)
-
-    elseif walls == 4 then
-        self:makeHorizWall(env, 4,  y, 2, randY)
-        self:makeHorizWall(env, 8,  y, 2, randY)
-        self:makeHorizWall(env, 12, y, 2, randY)
-        self:makeHorizWall(env, 16, y, 2, randY)
+        self:makeHorizWall(env, start+random(third-width1),               y, width1, percent(50))
+        self:makeHorizWall(env, 1+start+third+random(third-width2),       y, width2, percent(50))
+        self:makeHorizWall(env, 1+start+third+third+random(third-width3), y, width3, percent(50))
     end
+
+    return 6
 end
 
 
 function LevelGenerator:makeStripBoxWalls(env, y)
-    local spaceX = env.width - 6
-    local walls  = random(2)
+    local spaceX    = env.width - 6
+    local spaceY    = 2 + random(7)
+    local start     = env.startX + 1
+    local spaceWall = 5
+    local maxWalls  = floor(spaceX / spaceWall)
+    local walls     = random(maxWalls)
 
-    if env.width < 20 then walls = 1 end
-
-    print("makeStripBoxWalls: spaceX="..spaceX)
-
+    if maxWalls == 1 then walls = 1 end 
+    
     if walls == 1 then
-        local width  = 1 + random(min(5,spaceX))
-        local height = 1 + random(min(5,spaceX))
+        local width = 2 + random(spaceX-4)
+        self:makeBoxWall(env, start+random(spaceX - width), y, width, random(5))
 
-        print("makeStripBoxWalls: width="..width)
+    else
+        local half   = spaceX/2
+        local width1 = random(max(3, half-3))
+        local width2 = random(max(3, half-3))
 
-        local x      = 3 + random(spaceX - width)
-
-        self:makeBoxWall(env, x, y, width, height)
-
-    elseif walls == 2 then
-        local width1  = 1 + random(3)
-        local width2  = 1 + random(3)
-        local height1 = 1 + random(3)
-        local height2 = 1 + random(3)
-        local x1      = 3  + random((spaceX/2) - width1 - 2)
-        local x2      = 11 + random((spaceX/2) - width2 - 2)
-
-        self:makeBoxWall(env, x1, y, width1, height1)
-        self:makeBoxWall(env, x2, y, width2, height2)
+        self:makeBoxWall(env, start+half-(width1)-1,      y, width1, random(5))
+        self:makeBoxWall(env, start+half+half-(width2), y, width2, random(5))
     end
 
     return 12
@@ -579,7 +544,11 @@ function LevelGenerator:makeBoxWall(env, x, y, width, height)
     -- fill in center with no floor
     for i=1, height do
         for v=1, width do
-            env.tiles[y - i][x + v] = self.tiles.noFloor
+            local tile = self.tiles.noFloor
+
+            if i == height then tile = self.tiles.boxEdgeTop end
+
+            env.tiles[y - i][x + v] = tile
         end
     end
 end

@@ -86,8 +86,6 @@ end
 
 
 function Obstacle:generatePowerup(chance)
-    level:createPowerup(Powerups.shield, self:x(), self:y())
-    --[[
     if percent(chance) then
         local r = random(100)
         local x = self:x()
@@ -101,7 +99,7 @@ function Obstacle:generatePowerup(chance)
         elseif r <= 84 then level:createPowerup(Powerups.laserSight, x, y)
         else                level:createPowerup(Powerups.shield, x, y)
         end
-    end]]
+    end
 end
 
 

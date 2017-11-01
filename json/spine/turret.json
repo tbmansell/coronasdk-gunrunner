@@ -1,35 +1,38 @@
 {
-"skeleton": { "hash": "O5zw8+G5mMFoCvHX6JRCpR38AGU", "spine": "3.6.43", "width": 300, "height": 300 },
+"skeleton": { "hash": "4yMeZX/o8jd21jBUdYyY3MT/MpQ", "spine": "3.6.43", "width": 300, "height": 300 },
 "bones": [
 	{ "name": "root" },
-	{ "name": "base", "parent": "root", "length": 130.02, "rotation": -90, "x": 0.5, "y": 63 },
 	{ "name": "platform", "parent": "root", "length": 41.01, "rotation": -90, "x": -0.04 },
 	{ "name": "weapon", "parent": "platform", "length": 41.01 },
-	{ "name": "turret-barrelLC", "parent": "weapon", "length": 19.93, "x": 148.46, "y": 0.1 }
+	{ "name": "LaserCannon", "parent": "weapon", "length": 19.93, "x": 148.46, "y": 0.1 },
+	{ "name": "base", "parent": "root", "length": 130.02, "rotation": -90, "x": 0.5, "y": 63 },
+	{ "name": "chainGun", "parent": "weapon", "length": 19.93, "x": 148.46, "y": 0.1 }
 ],
 "slots": [
 	{ "name": "turret-base", "bone": "base", "attachment": "turrets/turret-base" },
 	{ "name": "turret-platform", "bone": "platform", "attachment": "turrets/platform" },
-	{ "name": "weapon", "bone": "weapon", "attachment": "turrets/laserCannon" }
+	{ "name": "turret-weapon", "bone": "weapon", "attachment": "weapon" }
 ],
 "skins": {
 	"default": {
 		"turret-base": {
-			"turrets/turret-base": { "x": 63.33, "y": 0.74, "rotation": 90, "width": 300, "height": 300 }
-		},
-		"weapon": {
-			"turrets/chainGun": { "rotation": 90, "width": 60, "height": 248 },
-			"turrets/laserCannon": { "x": 18.51, "rotation": 90, "width": 60, "height": 248 }
+			"turret-base": { "x": 63.33, "y": 0.74, "rotation": 90, "width": 300, "height": 300 }
 		}
 	},
 	"chainGun": {
 		"turret-platform": {
 			"platform": { "name": "turrets/turret-platformCG", "rotation": 90, "width": 150, "height": 150 }
+		},
+		"turret-weapon": {
+			"weapon": { "name": "turrets/turret-chainGun", "x": 18.51, "rotation": 90, "width": 60, "height": 248 }
 		}
 	},
 	"laserCannon": {
 		"turret-platform": {
 			"platform": { "name": "turrets/turret-platformLC", "rotation": 90, "width": 150, "height": 150 }
+		},
+		"turret-weapon": {
+			"weapon": { "name": "turrets/turret-laserCannon", "x": 18.51, "rotation": 90, "width": 60, "height": 248 }
 		}
 	}
 },

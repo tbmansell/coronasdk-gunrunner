@@ -47,7 +47,6 @@ local percent = utils.percent
 
 
 
-
 function Enemy.eventCollision(self, event)
     local other = event.other.object
     local self  = self.object
@@ -81,6 +80,13 @@ function Enemy:rotate(rotation)
         self.angle = rotation
 
         --self.legs:rotate(rotation)
+    end
+end
+
+
+function Enemy:animateRotate(rotation)
+    if self.image then
+        transition.to(self.image, {rotation=rotation, time=250})
     end
 end
 
@@ -164,7 +170,7 @@ function Enemy:checkBehaviour(camera, player)
                 local angle = round(90 + atan2(player:y()- self:y(), player:x() - self:x()) * PI)
                 
                 if angle ~= self.angle then
-                    self:rotate(angle)
+                    self:animateRotate(angle)
                 end
             end
 
@@ -314,7 +320,7 @@ function Enemy:randomTurn()
         turn = -turn
     end
 
-    self:rotate(self.angle + turn)
+    self:animateRotate(self.angle + turn)
 end
 
 

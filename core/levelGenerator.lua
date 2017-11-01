@@ -56,6 +56,8 @@ function LevelGenerator:setup()
     self.tiles.wallBotLeft      = spriteSheetInfo:getFrameIndex("wallBotLeft")
     self.tiles.wallBotRight     = spriteSheetInfo:getFrameIndex("wallBotRight")
 
+    self.tiles.wallBlock        = spriteSheetInfo:getFrameIndex("wallBlock")
+
     self.tiles.edgeBot          = spriteSheetInfo:getFrameIndex("edgeBot")
     self.tiles.boxEdgeTop       = spriteSheetInfo:getFrameIndex("boxEdgeTop")
 
@@ -354,6 +356,7 @@ function LevelGenerator:setEnvironmentWalls(env)
 
     while spaceY >= 4 do
         local pattern = "horizontal"
+        --local pattern = "snake"
         
         if spaceY >= 10 then
             local  r = random(100)
@@ -362,18 +365,11 @@ function LevelGenerator:setEnvironmentWalls(env)
             else                pattern = "box" end
         end
 
-        --print(pattern.." "..spaceY)
-
-        if pattern == "vertical" then
-            spaceY = spaceY - self:makeStripVertWalls(env, spaceY)
-        
-        elseif pattern == "horizontal" then
-            spaceY = spaceY - self:makeStripHorizWalls(env, spaceY)
-
-        elseif pattern == "box" then
-            spaceY = spaceY -  self:makeStripBoxWalls(env, spaceY)
+        if     pattern == "vertical"   then spaceY = spaceY - self:makeStripVertWalls(env, spaceY)
+        elseif pattern == "horizontal" then spaceY = spaceY - self:makeStripHorizWalls(env, spaceY)
+        elseif pattern == "box"        then spaceY = spaceY - self:makeStripBoxWalls(env, spaceY)
+        elseif pattern == "snake"      then spaceY = spaceY - self:makeSnakeWall(env, spaceY)
         end
-        
     end
 end
 
@@ -562,6 +558,46 @@ function LevelGenerator:makeBoxWall(env, x, y, width, height)
             env.tiles[y - i][x + v] = tile
         end
     end
+end
+
+
+function LevelGenerator:makeSnakeWall(env, y)
+    local spaceX  = env.width  - 6
+    local start   = env.startX + 2
+    local spaceY  = y - 6
+    local curY    = y
+    local curX    = start + random(spaceX)
+    --local length  = 0
+    local prevDir = nil
+    local accept  = false
+
+    for i=1, 10 do
+        local dir = nil
+
+        accept = false
+        while not accept do
+            local  r = random(100)
+            if     r <= 25 then dir  = "up"
+            elseif r <= 50 then dir  = "left"
+            elseif r <= 75 then dir  = "right"
+            else   dir = "down" end
+
+            if curY > y or curY < spaceY or curX < 1 or curX > spaceX then
+                accept = false
+            else
+                accept = true
+            end
+        end
+
+        if     dir == "up"    then curY = curY - 1
+        elseif dir == "left"  then curX = curX - 1
+        elseif dir == "right" then curX = curX + 1
+        elseif dir == "down"  then curY = curY + 1 end
+
+        env.tiles[curY][start + curX] = self.tiles.wallBlock
+    end
+
+    return 6
 end
 
 

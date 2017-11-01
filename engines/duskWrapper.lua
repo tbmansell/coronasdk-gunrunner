@@ -154,8 +154,12 @@ function TileEngine:createHole(tile)
 end
 
 
-function TileEngine:addEntity(entity, focus)
-    self.objectLayer2:insert(entity.image)
+function TileEngine:addEntity(entity, focus, layer)
+    if layer and layer == 1 then
+        self.objectLayer1:insert(entity.image)
+    else
+        self.objectLayer2:insert(entity.image)
+    end
 
     local moveY = self.rows   * self.tileHeight
     local xpos  = entity.xpos * self.tileHeight
@@ -176,13 +180,13 @@ end
 
 
 function TileEngine:addCollectable(entity)
-    self.objectLayer2:insert(entity.image or entity)
+    self.objectLayer1:insert(entity.image or entity)
 end
 
 
 function TileEngine:addParticle(entity)
     entity.y = entity.y + (self.cameraFocusOffsetY - 20)
-    self.objectLayer3:insert(entity)
+    self.objectLayer1:insert(entity)
 end
 
 
@@ -192,6 +196,7 @@ function TileEngine:setCameraOffset(offsetX, offsetY)
 
     self.tileLayer.setCameraOffset(x, y)
     self.shadowLayer.setCameraOffset(x, y)
+    self.objectLayer1.setCameraOffset(x, y)
     self.objectLayer2.setCameraOffset(x, y)
     self.objectLayer3.setCameraOffset(x, y)
 end

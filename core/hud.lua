@@ -134,27 +134,34 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler)
     self.controlShoot:addEventListener("touch", eventShootPlayer)
     self.controlShoot:addEventListener("tap",   eventShootPlayerTap)
 
-    if globalDebugGame then
-        self.debugPanel = display.newGroup()
-        self.group:insert(self.debugPanel)
+    self:drawDebug()
+end
 
-        local panelBack = display.newRect(self.debugPanel, 0, 200, 350, globalHeight)
-        panelBack:setFillColor(0.3, 0.3, 0.3, 0.6)
 
-        self.textDebugMode        = draw:newText(self.debugPanel, "game mode",    5, 100, 0.4, "green", "LEFT")
-        self.textPhysicsMode      = draw:newText(self.debugPanel, "hide physics", 5, 140, 0.4, "blue",  "LEFT")
-        self.debugSizeEntites     = draw:newText(self.debugPanel, "",   5, 180, 0.4, "aqua",  "LEFT")
-        self.debugNumEntites      = draw:newText(self.debugPanel, "",   5, 220, 0.4, "white", "LEFT")
-        self.debugNumEnemies      = draw:newText(self.debugPanel, "",   5, 260, 0.4, "white", "LEFT")
-        self.debugNumObstacles    = draw:newText(self.debugPanel, "",   5, 300, 0.4, "white", "LEFT")
-        self.debugNumCollectables = draw:newText(self.debugPanel, "",   5, 340, 0.4, "white", "LEFT")
-        self.debugNumProjectiles  = draw:newText(self.debugPanel, "",   5, 380, 0.4, "white", "LEFT")
-        self.debugNumParticles    = draw:newText(self.debugPanel, "",   5, 420, 0.4, "white", "LEFT")
-        self.debugSection         = draw:newText(self.debugPanel, "",   5, 460, 0.4, "white", "LEFT")
-        self.debugYPos            = draw:newText(self.debugPanel, "",   5, 500, 0.4, "white", "LEFT")
-        
-        self.textDebugMode:addEventListener("tap",   self.switchDebugMode)
-        self.textPhysicsMode:addEventListener("tap", self.switchPhysicsMode)
+function Hud:drawDebug()
+    self.debugPanel = display.newGroup()
+    self.group:insert(self.debugPanel)
+
+    local panelBack = display.newRect(self.debugPanel, 0, 200, 350, globalHeight)
+    panelBack:setFillColor(0.3, 0.3, 0.3, 0.6)
+
+    self.textDebugMode        = draw:newText(self.debugPanel, "game mode",    5, 100, 0.4, "green", "LEFT")
+    self.textPhysicsMode      = draw:newText(self.debugPanel, "hide physics", 5, 140, 0.4, "blue",  "LEFT")
+    self.debugSizeEntites     = draw:newText(self.debugPanel, "",   5, 180, 0.4, "aqua",  "LEFT")
+    self.debugNumEntites      = draw:newText(self.debugPanel, "",   5, 220, 0.4, "white", "LEFT")
+    self.debugNumEnemies      = draw:newText(self.debugPanel, "",   5, 260, 0.4, "white", "LEFT")
+    self.debugNumObstacles    = draw:newText(self.debugPanel, "",   5, 300, 0.4, "white", "LEFT")
+    self.debugNumCollectables = draw:newText(self.debugPanel, "",   5, 340, 0.4, "white", "LEFT")
+    self.debugNumProjectiles  = draw:newText(self.debugPanel, "",   5, 380, 0.4, "white", "LEFT")
+    self.debugNumParticles    = draw:newText(self.debugPanel, "",   5, 420, 0.4, "white", "LEFT")
+    self.debugSection         = draw:newText(self.debugPanel, "",   5, 460, 0.4, "white", "LEFT")
+    self.debugYPos            = draw:newText(self.debugPanel, "",   5, 500, 0.4, "white", "LEFT")
+    
+    self.textDebugMode:addEventListener("tap",   self.switchDebugMode)
+    self.textPhysicsMode:addEventListener("tap", self.switchPhysicsMode)
+    
+    if globalDebugGame == false then
+        self.debugPanel.alpha = 0
     end
 end
 

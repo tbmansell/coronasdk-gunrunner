@@ -20,7 +20,7 @@ function CollectableBuilder:newItem(camera, spec)
     if collectable.dontReposition then
         camera:addCollectable(collectable)
     else
-        camera:addEntity(collectable)
+        camera:addEntity(collectable, false, 1)
     end
 
     return collectable

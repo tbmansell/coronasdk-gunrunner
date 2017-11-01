@@ -19,6 +19,7 @@ local envEntities = nil
 local defaultTile = nil
 local melees      = nil
 local shooters    = nil
+local turrets     = nil
 local points      = nil
 
 -- entity definitions for own maps
@@ -37,7 +38,7 @@ local entityDefs = {
     [372] = {object="enemy",    type="shooter", rank=9},
     [373] = {object="enemy",    type="shooter", rank=10},
     [374] = {object="enemy",    type="shooter", rank=11},
-    [370] = {object="enemy",    type="shooter", rank=12},
+    [375] = {object="enemy",    type="shooter", rank=12},
     [391] = {object="weapon",   type=Weapons.rifle.name},
     [392] = {object="weapon",   type=Weapons.shotgun.name},
     [393] = {object="weapon",   type=Weapons.launcher.name},
@@ -297,12 +298,14 @@ function Loader:load(LevelGenerator)
         -- we must generate the enemies and then place them
         melees   = {}
         shooters = {}
+        turrets  = {}
         points   = self.enemyPoints
 
         self:generateEnemies()
         -- TODO: Order them by highest rank first for better placing around higher ranks
         self:placeEntities(melees)
         self:placeEntities(shooters)
+        self:placeEntities(turrets)
     end
 
 
@@ -325,6 +328,12 @@ function Loader:load(LevelGenerator)
             else
                 self:generateShooterEnemies()
             end
+        end
+
+        -- TODO: determine turret logic and how it fits into progression
+        if percent(100) then
+            print("adding turret")
+            turrets[#turrets+1] = {object="enemy", type="turret", rank=1, tileWidth=2, tileHeight=2}
         end
     end
 
@@ -380,7 +389,7 @@ function Loader:load(LevelGenerator)
             if percent(30) then rank = rank + 1 end
         elseif weapon == EnemyWeaponAllocations.all then
             -- if all, 25% chance of each
-            local r = random(100)
+            local  r = random(100)
             if     r > 25 and r <= 50 then rank = rank + 1     -- shotgun
             elseif r > 50 and r <= 50 then rank = rank + 2     -- launcher
             elseif r > 75             then rank = rank + 3 end -- laser

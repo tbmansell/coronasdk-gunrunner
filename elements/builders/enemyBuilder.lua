@@ -5,6 +5,15 @@ local EnemyBuilder = {}
 
 
 function EnemyBuilder:newEnemy(camera, spec)
+    if spec.type == "turret" then
+        return self:newTurret(camera, spec)
+    else
+        return self:newMovingEnemy(camera, spec)
+    end
+end
+
+
+function EnemyBuilder:newMovingEnemy(camera, spec)
     --print("Enemy: rank="..tostring(spec.rank).." type="..tostring(spec.type).." pos="..tostring(spec.xpos)..", "..tostring(spec.ypos))
 
     -- Copy the enemy rank def and reference the modifyImage before spien creation
@@ -36,6 +45,45 @@ function EnemyBuilder:newEnemy(camera, spec)
     builder:deepCopy(enemyDef, enemy)
     builder:deepCopy(rankDef,  enemy)
 
+      enemy.image:insert(enemy.legs.image)
+    enemy.legs:moveTo(0, -5)
+    enemy.legs:visible()
+
+    self:setupEnemyCommon(camera, enemy, spec)
+        
+    return enemy
+end
+
+
+function EnemyBuilder:newTurret(camera, spec)
+    -- Copy the enemy rank def and reference the modifyImage before spien creation
+    local rankDef = builder:newClone(EnemyTypes[spec.type][spec.rank])
+    spec.modifyImage = rankDef.modifyImage
+
+    local enemy = builder:newCharacter(spec, {
+                       jsonName  = "turret",
+                       imagePath = "character",
+                       skin      = spec.skin      or rankDef.skin,
+                       scale     = spec.scale     or 0.5, 
+                       animation = spec.animation or "scanningTargets"
+                   })
+    
+    -- Allow override of destroy()
+    enemy.spineObjectDestroy = enemy.destroy
+
+    -- Copy basic enemy definition and then specific rank definition ontop
+    builder:deepCopy(enemyDef, enemy)
+    builder:deepCopy(rankDef,  enemy)
+
+    self:setupEnemyCommon(camera, enemy, spec)
+
+    enemy.flagMoveAllowed = false
+    
+    return enemy
+end
+
+
+function EnemyBuilder:setupEnemyCommon(camera, enemy, spec)
     -- apply weapon
     enemy.weapon = Weapons[enemy.weapon]
     enemy.ammo   = enemy.weapon.ammo
@@ -43,10 +91,6 @@ function EnemyBuilder:newEnemy(camera, spec)
     enemy:setWeapon(enemy.weapon)
     enemy:setPhysics()
     enemy:visible()
-
-    enemy.image:insert(enemy.legs.image)
-    enemy.legs:moveTo(0, -5)
-    enemy.legs:visible()
     
     -- apply animation after reset as that makes enemys stand:
     if spec.animation then
@@ -62,8 +106,6 @@ function EnemyBuilder:newEnemy(camera, spec)
     end
 
     camera:addEntity(enemy)
-    
-   return enemy
 end
 
 

@@ -71,7 +71,9 @@ function Enemy:updateSpine(delta)
 
     self.skeleton:updateWorldTransform()
 
-    self.legs:updateSpine(delta)
+    if self.legs then
+        self.legs:updateSpine(delta)
+    end
 end
 
 

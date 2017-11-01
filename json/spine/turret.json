@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "crorDyd1ot/edtFHuOy0QU13sy0", "spine": "3.6.43", "width": 300, "height": 300 },
+"skeleton": { "hash": "nUoi3A00ab7Xrw54SOzjvvUfD98", "spine": "3.6.43", "width": 300, "height": 300 },
 "bones": [
 	{ "name": "root" },
 	{ "name": "platform", "parent": "root", "length": 41.01, "rotation": -90, "x": -0.04 },
@@ -99,7 +99,7 @@
 			}
 		}
 	},
-	"shoot-chainGun": {
+	"shoot_chainGun": {
 		"bones": {
 			"root": {
 				"rotate": [
@@ -160,7 +160,7 @@
 			}
 		}
 	},
-	"shoot-laserCannon": {
+	"shoot_laserCannon": {
 		"bones": {
 			"root": {
 				"rotate": [

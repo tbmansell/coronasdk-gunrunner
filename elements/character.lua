@@ -10,11 +10,14 @@ function Character:setWeaponBones(weapon)
     self.boneRoot = self.skeleton:getRootBone()
     
     if weapon.bone then
+        print("Looking for bone: barrel-"..weapon.bone.." for weapon "..weapon.name)
         self.boneBarrel = self.skeleton:findBone("barrel-"..weapon.bone)
 
-        if weapon.name == "launcher" then
+        print("found? "..tostring(self.boneBarrel))
+
+        --[[if weapon.name == "launcher" then
             self.boneGunRear = self.skeleton:findBone("launcher-rear")
-        end
+        end]]
     end
 end
 

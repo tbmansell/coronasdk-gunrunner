@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "u0fu9vTjUF3VNWKknp8qVuDIk6w", "spine": "3.6.43", "width": 300, "height": 300 },
+"skeleton": { "hash": "crorDyd1ot/edtFHuOy0QU13sy0", "spine": "3.6.43", "width": 300, "height": 300 },
 "bones": [
 	{ "name": "root" },
 	{ "name": "platform", "parent": "root", "length": 41.01, "rotation": -90, "x": -0.04 },
@@ -11,16 +11,16 @@
 "slots": [
 	{ "name": "turret-base", "bone": "base", "attachment": "turrets/turret-base" },
 	{ "name": "turret-platform", "bone": "platform", "attachment": "platform" },
-	{ "name": "weapon", "bone": "weapon", "attachment": "turrets/turret-chainGun" }
+	{ "name": "weapon", "bone": "weapon", "attachment": "turrets/laserCannon" }
 ],
 "skins": {
 	"default": {
 		"turret-base": {
-			"turret-base": { "x": 63.33, "y": 0.74, "rotation": 90, "width": 300, "height": 300 }
+			"turrets/turret-base": { "x": 63.33, "y": 0.74, "rotation": 90, "width": 300, "height": 300 }
 		},
 		"weapon": {
-			"turrets/turret-chainGun": { "rotation": 90, "width": 60, "height": 248 },
-			"turrets/turret-laserCannon": { "rotation": 90, "width": 60, "height": 248 }
+			"turrets/chainGun": { "rotation": 90, "width": 60, "height": 248 },
+			"turrets/laserCannon": { "rotation": 90, "width": 60, "height": 248 }
 		}
 	},
 	"chainGun": {

@@ -64,8 +64,8 @@ Weapons.rifle.slot       = "weapon"; Weapons.rifle.skin       = "weapons/gun_ass
 Weapons.shotgun.slot     = "weapon"; Weapons.shotgun.skin     = "weapons/gun_shotgun";  Weapons.shotgun.bone     = "rifle";       Weapons.shotgun.shotSound  = "shotGunShot"; Weapons.shotgun.hitSound  = "bulletHit"; Weapons.shotgun.hitAnim  = "bulletImpact"
 Weapons.launcher.slot    = "weapon"; Weapons.launcher.skin    = "weapons/gun_launcher"; Weapons.launcher.bone    = "launcher";    Weapons.launcher.shotSound = "rocketShot";  Weapons.launcher.hitSound = "rocketHit"; Weapons.launcher.hitAnim = "smoke";       Weapons.launcher.hitAnim2nd="explosion"
 Weapons.laserGun.slot    = "weapon"; Weapons.laserGun.skin    = "weapons/gun_laser";    Weapons.laserGun.bone    = "laser";       Weapons.laserGun.shotSound = "laserShot";   Weapons.laserGun.hitSound = "laserHit";  Weapons.laserGun.hitAnim = "plasmaImpact";
-Weapons.chainGun.slot    = "weapon"; Weapons.chainGun.skin    = "weapons/gun_assault";  Weapons.chainGun.bone    = "chainGun";    Weapons.chainGun.shotSound    = "rifleShot";   Weapons.chainGun.hitSound    = "bulletHit"; Weapons.chainGun.hitAnim    = "bulletImpact"
-Weapons.laserCannon.slot = "weapon"; Weapons.laserCannon.skin = "weapons/gun_laser";    Weapons.laserCannon.bone = "laserCannon"; Weapons.laserCannon.shotSound = "laserShot";   Weapons.laserCannon.hitSound = "laserHit";  Weapons.laserCannon.hitAnim = "plasmaImpact";
+Weapons.chainGun.slot    = "weapon"; Weapons.chainGun.skin    = "turrets/chainGun";  Weapons.chainGun.bone    = "chainGun";    Weapons.chainGun.shotSound    = "rifleShot";   Weapons.chainGun.hitSound    = "bulletHit"; Weapons.chainGun.hitAnim    = "bulletImpact"
+Weapons.laserCannon.slot = "weapon"; Weapons.laserCannon.skin = "turrets/laserCannon";    Weapons.laserCannon.bone = "laserCannon"; Weapons.laserCannon.shotSound = "laserShot";   Weapons.laserCannon.hitSound = "laserHit";  Weapons.laserCannon.hitAnim = "plasmaImpact";
 
 
 

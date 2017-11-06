@@ -1,8 +1,8 @@
 {
-"skeleton": { "hash": "GeAhutZoA5erZgeEkkbRGlQKhnk", "spine": "3.6.43", "width": 150, "height": 398.42 },
+"skeleton": { "hash": "0pyluz+nKiKwbBlbtRrO0jfA5oc", "spine": "3.6.43", "width": 150, "height": 398.42 },
 "bones": [
-	{ "name": "root", "rotation": 180 },
-	{ "name": "platform", "parent": "root", "length": 41.01, "rotation": -90, "x": -0.04 },
+	{ "name": "root" },
+	{ "name": "platform", "parent": "root", "length": 41.01, "rotation": 90, "x": -0.04 },
 	{ "name": "weapon", "parent": "platform", "length": 41.01 },
 	{ "name": "barrel-chainGun", "parent": "weapon", "length": 19.93, "x": 148.46, "y": 0.1 },
 	{ "name": "barrel-laserCannon", "parent": "weapon", "length": 19.93, "x": 156.26, "y": 0.1 }
@@ -343,8 +343,7 @@
 		"slots": {
 			"turrets/chainGun-muzzle": {
 				"color": [
-					{ "time": 0, "color": "ffffff00" },
-					{ "time": 4, "color": "ffffffff" }
+					{ "time": 0, "color": "ffffff00" }
 				]
 			},
 			"turrets/laserCannon-muzzle": {

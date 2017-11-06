@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "l/k6/iS4UN50bijFDbqw/gNzoso", "spine": "3.6.43", "width": 300, "height": 300 },
+"skeleton": { "hash": "3IaXaOX2f/cJC0UwMVHkgQdOiGo", "spine": "3.6.43", "width": 300, "height": 300 },
 "bones": [
 	{ "name": "root" },
 	{ "name": "platform", "parent": "root", "length": 41.01, "rotation": -90, "x": -0.04 },
@@ -346,6 +346,70 @@
 			}
 		}
 	},
+	"scanningTargets": {
+		"bones": {
+			"root": {
+				"rotate": [
+					{ "time": 0, "angle": 0, "curve": "stepped" },
+					{ "time": 4, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 4, "x": 0, "y": 0 }
+				],
+				"scale": [
+					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
+					{ "time": 4, "x": 1, "y": 1 }
+				]
+			},
+			"base": {
+				"rotate": [
+					{ "time": 0, "angle": 0, "curve": "stepped" },
+					{ "time": 4, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 4, "x": 0, "y": 0 }
+				],
+				"scale": [
+					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
+					{ "time": 4, "x": 1, "y": 1 }
+				]
+			},
+			"platform": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 1, "angle": -40, "curve": "stepped" },
+					{ "time": 1.0667, "angle": -40 },
+					{ "time": 3, "angle": 40, "curve": "stepped" },
+					{ "time": 3.0667, "angle": 40 },
+					{ "time": 4, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 4, "x": 0, "y": 0 }
+				],
+				"scale": [
+					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
+					{ "time": 4, "x": 1, "y": 1 }
+				]
+			},
+			"weapon": {
+				"rotate": [
+					{ "time": 0, "angle": 0, "curve": "stepped" },
+					{ "time": 4, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 4, "x": 0, "y": 0 }
+				],
+				"scale": [
+					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
+					{ "time": 4, "x": 1, "y": 1 }
+				]
+			}
+		}
+	},
 	"shoot_chainGun": {
 		"bones": {
 			"root": {
@@ -524,70 +588,6 @@
 				],
 				"scale": [
 					{ "time": 0, "x": 1, "y": 1 }
-				]
-			}
-		}
-	},
-	"stationary_2": {
-		"bones": {
-			"root": {
-				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 4, "angle": 0 }
-				],
-				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 4, "x": 0, "y": 0 }
-				],
-				"scale": [
-					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
-					{ "time": 4, "x": 1, "y": 1 }
-				]
-			},
-			"base": {
-				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 4, "angle": 0 }
-				],
-				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 4, "x": 0, "y": 0 }
-				],
-				"scale": [
-					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
-					{ "time": 4, "x": 1, "y": 1 }
-				]
-			},
-			"platform": {
-				"rotate": [
-					{ "time": 0, "angle": 0 },
-					{ "time": 1, "angle": -40, "curve": "stepped" },
-					{ "time": 1.0667, "angle": -40 },
-					{ "time": 3, "angle": 40, "curve": "stepped" },
-					{ "time": 3.0667, "angle": 40 },
-					{ "time": 4, "angle": 0 }
-				],
-				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 4, "x": 0, "y": 0 }
-				],
-				"scale": [
-					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
-					{ "time": 4, "x": 1, "y": 1 }
-				]
-			},
-			"weapon": {
-				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 4, "angle": 0 }
-				],
-				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 4, "x": 0, "y": 0 }
-				],
-				"scale": [
-					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
-					{ "time": 4, "x": 1, "y": 1 }
 				]
 			}
 		}

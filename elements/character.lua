@@ -38,7 +38,7 @@ function Character:getAngle(offset)
 end
 
 
-function Character:shootProjectile(projectileBuilder, camera, filter)
+function Character:shootProjectile(projectileBuilder, camera, filter, reloadCallback)
     self.flagShootAllowed = false
 
     local weapon = self.weapon
@@ -46,12 +46,8 @@ function Character:shootProjectile(projectileBuilder, camera, filter)
     local ammo   = weapon.ammoType
     local damage = self:hasExtraDamage()
     local angle  = self:getAngle()
-
     local x      = self:x() + self.boneBarrel.worldX
     local y      = self:y() - self.boneBarrel.worldY
-
-    --print("")
-    --print("shoot angle: "..tostring(angle).." boneBarrel: "..tostring(x)..", "..tostring(y))
 
     self:animate("shoot_"..name)
 
@@ -72,6 +68,21 @@ function Character:shootProjectile(projectileBuilder, camera, filter)
     after(rof, function()
         self.flagShootAllowed = true
         self:loop(self.stationaryAnim)
+
+        local reload = self:shootReloadCheck(reloadCallback)
+
+        if weapon.burst and not reload then
+            if self.burst then 
+                self.burst = self.burst - 1
+                if self.burst == 1 then self.burst = nil end
+            else
+                self.burst = weapon.burst
+            end 
+
+            if self.burst then
+                self:shootProjectile(projectileBuilder, camera, filter, reloadCallback)
+            end           
+        end
     end)
 end
 
@@ -86,6 +97,8 @@ function Character:shootReloadCheck(callback)
         sounds:projectile("reload")
         self:animate("reload_"..weapon.name)
 
+        if callback then callback() end
+
         after(weapon.reload, function()
             self.ammo = weapon.ammo
 
@@ -95,7 +108,9 @@ function Character:shootReloadCheck(callback)
 
             if callback then callback() end
         end)
+        return true
     end
+    return false
 end
 
 

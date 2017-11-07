@@ -261,7 +261,6 @@ end
 
 function Enemy:shoot(camera)
     self:shootProjectile(projectileBuilder, camera, Filters.enemyShot)
-    self:shootReloadCheck()
 end
 
 
@@ -395,9 +394,15 @@ function Enemy:explode()
 
         after(50, function()
             --self:destroyEmitter()
-            self:emit("enemyDie1")
-            self:emit("enemyDie2")
-            self:dropWeapon()
+            if self.isTurret then
+                self:emit("explosionLarge")
+                self:emit("smokeLarge")
+            else
+                self:emit("enemyDie1")
+                self:emit("enemyDie2")
+
+                self:dropWeapon()
+            end
         end)
     end
 end

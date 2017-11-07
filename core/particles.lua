@@ -23,7 +23,8 @@ function Particles:preLoadEmitters()
     self:loadEmitter("enemyDie2")
     self:loadEmitter("plasmaImpact")
     self:loadEmitter("collectable")
-
+    self:loadEmitter("collectFlash-left")
+    self:loadEmitter("collectFlash-right")
 end
 
 

@@ -66,6 +66,9 @@ function Collectable:collectedBy(player)
 
         end
     end
+
+    self:emit("collectFlash-left")
+    self:emit("collectFlash-right")
 end
 
 

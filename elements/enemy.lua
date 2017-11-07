@@ -51,7 +51,7 @@ function Enemy.eventCollision(self, event)
     local other = event.other.object
     local self  = self.object
 
-    if other and other.isPlayer then 
+    if other and other.isPlayer and not self.isTurret then 
         -- always strike on start of contact
         if event.phase == "began" then
             self:strike(other)
@@ -66,29 +66,24 @@ end
 function Enemy:updateSpine(delta)
     self.state:update(delta)
     self.state:apply(self.skeleton)
-
+    
     self.boneRoot.rotation = -(self.angle + 30)
-
+    
     self.skeleton:updateWorldTransform()
-
-    if self.legs then
-        self.legs:updateSpine(delta)
-    end
+    self.legs:updateSpine(delta)
 end
 
 
 function Enemy:rotate(rotation)
     if self.image then
         self.angle = rotation
-
-        --self.legs:rotate(rotation)
     end
 end
 
 
 function Enemy:animateRotate(rotation)
     if self.image then
-        transition.to(self.image, {rotation=rotation, time=250})
+        transition.to(self, {angle=rotation, time=250})
     end
 end
 
@@ -282,7 +277,7 @@ function Enemy:strike(target)
     target:hit({weapon=weapon, getDamage=function() return weapon.damage end})
 
     after(weapon.time, function()
-        self:animate("stationary_1")
+        self:animate(self.stationaryAnim)
         self.legs:animate("stationary")
 
         self.flagStrikeAllowed = true
@@ -306,7 +301,7 @@ function Enemy:move()
 
     after(duration, function()
         self:stopMomentum()
-        self:animate("stationary_1")
+        self:animate(self.stationaryAnim)
         self.legs:animate("stationary")
 
         self.flagMoveAllowed = true
@@ -346,7 +341,7 @@ function Enemy:charge(player)
     after(duration, function()
         if self.mode == EnemyMode.charge then
             self:stopMomentum()
-            self:loop("stationary_1")
+            self:loop(self.stationaryAnim)
             self.legs:animate("stationary")
 
             self.flagChargeAllowed = true

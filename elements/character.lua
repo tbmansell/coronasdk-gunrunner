@@ -10,10 +10,7 @@ function Character:setWeaponBones(weapon)
     self.boneRoot = self.skeleton:getRootBone()
     
     if weapon.bone then
-        print("Looking for bone: barrel-"..weapon.bone.." for weapon "..weapon.name)
         self.boneBarrel = self.skeleton:findBone("barrel-"..weapon.bone)
-
-        print("found? "..tostring(self.boneBarrel))
 
         --[[if weapon.name == "launcher" then
             self.boneGunRear = self.skeleton:findBone("launcher-rear")
@@ -49,8 +46,12 @@ function Character:shootProjectile(projectileBuilder, camera, filter)
     local ammo   = weapon.ammoType
     local damage = self:hasExtraDamage()
     local angle  = self:getAngle()
+
     local x      = self:x() + self.boneBarrel.worldX
     local y      = self:y() - self.boneBarrel.worldY
+
+    --print("")
+    --print("shoot angle: "..tostring(angle).." boneBarrel: "..tostring(x)..", "..tostring(y))
 
     self:animate("shoot_"..name)
 
@@ -65,12 +66,12 @@ function Character:shootProjectile(projectileBuilder, camera, filter)
     local rof = self.weapon.rof
 
     if self:hasFastShoot() then
-        print("fast shoot")
         rof = rof / 2
     end
 
-    after(rof, function() 
-        self.flagShootAllowed = true 
+    after(rof, function()
+        self.flagShootAllowed = true
+        self:loop(self.stationaryAnim)
     end)
 end
 
@@ -79,6 +80,7 @@ function Character:shootReloadCheck(callback)
     self.ammo = self.ammo - 1
 
     if self.ammo <= 0 then
+        -- reload
         local weapon = self.weapon
 
         sounds:projectile("reload")

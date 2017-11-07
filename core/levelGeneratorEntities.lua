@@ -332,7 +332,6 @@ function Loader:load(LevelGenerator)
 
         -- TODO: determine turret logic and how it fits into progression
         if percent(100) then
-            print("adding turret")
             turrets[#turrets+1] = {object="enemy", type="turret", rank=1, tileWidth=2, tileHeight=2}
         end
     end

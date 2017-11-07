@@ -322,7 +322,7 @@ function Hud:eventUpdateFrame(event)
         self.camera:setAngleOffset(angle)
     end
 
-    player:moveBy(0, forcePlayerMoveY)
+--    player:moveBy(0, forcePlayerMoveY)
 
     if player.shieldEntity then
         player.shieldEntity:moveTo(player:x(), player:y())

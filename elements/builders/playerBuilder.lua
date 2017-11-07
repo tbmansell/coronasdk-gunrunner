@@ -5,12 +5,14 @@ local PlayerBuilder = {}
 
 
 function PlayerBuilder:newPlayer(camera, spec, hud)
+    local anim = spec.animation or "run_rifle"
+
     local player = builder:newCharacter(spec, {
                        jsonName  = "characterBody", 
                        imagePath = "character", 
                        skin      = spec.skin      or "player_basic",
                        scale     = spec.scale     or 0.5,
-                       animation = spec.animation or "run_rifle"
+                       animation = anim
                    })
     
     player.legs = builder:newSpineObject(spec, {
@@ -28,9 +30,10 @@ function PlayerBuilder:newPlayer(camera, spec, hud)
 
     builder:deepCopy(playerDef, player)
 
-    player.key      = "ThePlayer"
-    player.gear     = {}
-    player.powerups = {}
+    player.key            = "ThePlayer"
+    player.gear           = {}
+    player.powerups       = {}
+    player.stationaryAnim = anim
     player:moveTo(player.xpos or 0, player.ypos or 0)
     player:setPhysics()
     player:visible()

@@ -50,6 +50,7 @@ EnvironmentalWeapon = {
 
 Weapons = {
     club        = {name="club",        damage=1, time=500},
+    claws       = {name="claw",        damage=1, time=500},
     rifle       = {name="rifle",       damage=1, ammoType="bullet",    speed=650, rof=205,  ammo=30, reload=1000, collect=15},
     shotgun     = {name="shotgun",     damage=1, ammoType="shell",     speed=650, rof=750,  ammo=10, reload=1200, collect=25},
     launcher    = {name="launcher",    damage=5, ammoType="rocket",    speed=550, rof=1200, ammo=4,  reload=1500, collect=50, area=75},
@@ -82,6 +83,7 @@ Powerups = {
 
 EnemyTypes = {
     melee = {
+        -- lizard men
         [1] = {skin="lizard_club",              weapon="club",     health=1, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150, melee=true},
         [2] = {skin="lizard_club_captain",      weapon="club",     health=2, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150, melee=true},
         [3] = {skin="lizard_club_elite",        weapon="club",     health=3, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150, melee=true},
@@ -102,6 +104,10 @@ EnemyTypes = {
         [10] = {skin="lizard_shotgun_elite",    weapon="shotgun",  health=6,  inaccuracy=10, decisionDelay=1000, aggression=90, fidgit=70, roaming=1000, speed=200},
         [11] = {skin="lizard_launcher_elite",   weapon="launcher", health=8,  inaccuracy=10, decisionDelay=1000, aggression=80, fidgit=40, roaming=1000, speed=150},
         [12] = {skin="lizard_laser_elite",      weapon="laserGun", health=8,  inaccuracy=0,  decisionDelay=1000, aggression=90, fidgit=60, roaming=1000, speed=250},
+    },
+    reptile = {
+        [1] = {skin="reptile_runner",           weapon="claws",    health=1, decisionDelay=400, aggression=50, fidgit=90, roaming=2500, speed=250, melee=true, scale=0.2},
+        [2] = {skin="reptile_runner_captain",   weapon="claws",    health=5, decisionDelay=400, aggression=50, fidgit=90, roaming=2000, speed=200, melee=true, scale=0.4, json="reptiles-captain"},
     },
     turret = {
         [1] = {skin="chainGun",                 weapon="chainGun",    health=10, inaccuracy=20, decisionDelay=1000, aggression=50},

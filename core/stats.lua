@@ -26,6 +26,7 @@ local Stats = {
     enemies = {
         ["melee"]   = {[1]=0, [2]=0, [3]=0},
         ["shooter"] = {[1]=0, [2]=0, [3]=0, [4]=0, [5]=0, [6]=0, [7]=0, [8]=0, [9]=0, [10]=0, [11]=0, [12]=0},
+        ["reptile"] = {[1]=0, [2]=0, [3]=0},
         ["turret"]  = {[1]=0, [2]=0, [3]=0},
     }
 }
@@ -47,6 +48,7 @@ function Stats:init(startDistance)
     self.enemies = {
         ["melee"]   = {[1]=0, [2]=0, [3]=0},
         ["shooter"] = {[1]=0, [2]=0, [3]=0, [4]=0, [5]=0, [6]=0, [7]=0, [8]=0, [9]=0, [10]=0, [11]=0, [12]=0},
+        ["reptile"] = {[1]=0, [2]=0, [3]=0},
         ["turret"]  = {[1]=0, [2]=0, [3]=0},
     }
 end
@@ -112,6 +114,8 @@ function Stats:addKill(weapon, type, rank)
     if stat then
         stat.kills = stat.kills + 1
     end
+
+    print("killed type="..tostring(type).." rank="..tostring(rank))
 
     self.enemies[type][rank] = self.enemies[type][rank] + 1
 end 

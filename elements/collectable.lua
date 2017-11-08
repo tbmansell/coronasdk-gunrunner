@@ -43,27 +43,13 @@ function Collectable:collectedBy(player)
     elseif self.object == "powerup" then
         sounds:collectable("gotWeapon")
 
-        if self.type == Powerups.health then
-            player:heal(self.health)
-
-        elseif self.type == Powerups.damage then
-            player:extraDamage()
-
-        elseif self.type == Powerups.fastMove then
-            player:fastMove()
-
-        elseif self.type == Powerups.fastShoot then
-            player:fastShoot()
-
-        elseif self.type == Powerups.extraAmmo then
-            player:extraAmmo()
-
-        elseif self.type == Powerups.shield then
-            player:shield()
-
-        elseif self.type == Powerups.laserSight then
-            player:laserSight()
-
+        if     self.type == Powerups.health     then player:heal(self.health)
+        elseif self.type == Powerups.damage     then player:extraDamage()
+        elseif self.type == Powerups.fastMove   then player:fastMove()
+        elseif self.type == Powerups.fastShoot  then player:fastShoot()
+        elseif self.type == Powerups.extraAmmo  then player:extraAmmo()
+        elseif self.type == Powerups.shield     then player:shield()
+        elseif self.type == Powerups.laserSight then player:laserSight()
         end
     end
 

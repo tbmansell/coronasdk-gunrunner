@@ -19,6 +19,7 @@ local envEntities = nil
 local defaultTile = nil
 local melees      = nil
 local shooters    = nil
+local reptiles    = nil
 local turrets     = nil
 local points      = nil
 
@@ -298,14 +299,16 @@ function Loader:load(LevelGenerator)
         -- we must generate the enemies and then place them
         melees   = {}
         shooters = {}
+        reptiles = {}
         turrets  = {}
         points   = self.enemyPoints
 
         self:generateEnemies()
         -- TODO: Order them by highest rank first for better placing around higher ranks
+        self:placeEntities(turrets)
         self:placeEntities(melees)
         self:placeEntities(shooters)
-        self:placeEntities(turrets)
+        self:placeEntities(reptiles)
     end
 
 
@@ -315,24 +318,24 @@ function Loader:load(LevelGenerator)
         -- Generate the enemies weapons and ranks
         if alloc == EnemyWeaponAllocations.meleeOnly then
             self:generateMeleeEnemies()
+            self:generateReptiles()
+
         elseif alloc == EnemyWeaponAllocations.riflesOnly or alloc == EnemyWeaponAllocations.heavyOnly then
             self:generateShooterEnemies()
+            self:generateTurrets()
         else
-            -- 50% chance of both, 25% chance of either
             local r = random(100)
-            if r > 0 and r <= 50 then
+            if r <= 50 then
                 self:generateShooterEnemies(points / 2)
                 self:generateMeleeEnemies()
-            elseif r > 50 and r <= 75 then
+
+            elseif r <= 75 then
                 self:generateMeleeEnemies()
+                self:generateTurrets()
             else
                 self:generateShooterEnemies()
+                self:generateReptiles()
             end
-        end
-
-        -- TODO: determine turret logic and how it fits into progression
-        if percent(100) then
-            turrets[#turrets+1] = {object="enemy", type="turret", rank=1, tileWidth=2, tileHeight=2}
         end
     end
 
@@ -371,6 +374,40 @@ function Loader:load(LevelGenerator)
 
             points = points - rank
             shooters[#shooters+1] = {object="enemy", type="shooter", rank=rank}
+        end
+    end
+
+
+    function LevelGenerator:generateReptiles(pointsToSpend)
+        if percent(50) then
+            local r = random(100)
+            
+            if r <= 50 then
+                for i=1, random(10) do
+                    reptiles[#reptiles+1] = {object="enemy", type="reptile", rank=1, tileWidth=1, tileHeight=1}
+                end
+            elseif r <= 75 then
+                reptiles[#reptiles+1] = {object="enemy", type="reptile", rank=2, tileWidth=1, tileHeight=1}
+            else
+                for i=1, random(5) do
+                    reptiles[#reptiles+1] = {object="enemy", type="reptile", rank=1, tileWidth=1, tileHeight=1}
+                end
+
+                reptiles[#reptiles+1] = {object="enemy", type="reptile", rank=2, tileWidth=1, tileHeight=1}
+            end
+        end
+    end
+
+
+    function LevelGenerator:generateTurrets(pointsToSpend)
+        local num = 0
+        local r   = random(100)
+        
+        if     r <= 40 then num = 1
+        elseif r <= 50 then num = 2 end
+
+        for i=1, num do 
+            turrets[#turrets+1] = {object="enemy", type="turret", rank=1, tileWidth=2, tileHeight=2}
         end
     end
 

@@ -70,7 +70,10 @@ function Enemy:updateSpine(delta)
     self.boneRoot.rotation = -(self.angle + 30)
     
     self.skeleton:updateWorldTransform()
-    self.legs:updateSpine(delta)
+
+    if self.legs then
+        self.legs:updateSpine(delta)
+    end
 end
 
 
@@ -153,7 +156,10 @@ end
 
 
 function Enemy:setWeapon(weapon)
-    self.skeleton:setAttachment(weapon.slot, weapon.skin)
+    if weapon.slot then
+        self.skeleton:setAttachment(weapon.slot, weapon.skin)
+    end
+
     self:setWeaponBones(weapon)
 end
 
@@ -272,12 +278,15 @@ function Enemy:strike(target)
 
     sounds:enemy("melee")
     self:stopMomentum()
-    self:animate("strike_"..weapon.name)
+    self:loop("strike_"..weapon.name)
     target:hit({weapon=weapon, getDamage=function() return weapon.damage end})
 
     after(weapon.time, function()
-        self:animate(self.stationaryAnim)
-        self.legs:animate("stationary")
+        self:loop(self.stationaryAnim)
+
+        if self.legs then
+            self.legs:loop("stationary")
+        end
 
         self.flagStrikeAllowed = true
         self.mode = EnemyMode.ready
@@ -296,12 +305,18 @@ function Enemy:move()
 
     self:applyForce(forceX, forceY)
     self:loop("run_"..self.weapon.name)
-    self.legs:loop("run")
+
+    if self.legs then
+        self.legs:loop("run")
+    end
 
     after(duration, function()
         self:stopMomentum()
-        self:animate(self.stationaryAnim)
-        self.legs:animate("stationary")
+        self:loop(self.stationaryAnim)
+        
+        if self.legs then
+            self.legs:loop("stationary")
+        end
 
         self.flagMoveAllowed = true
         self.mode = EnemyMode.ready
@@ -332,7 +347,10 @@ function Enemy:charge(player)
 
     sounds:enemy("charge")
     self:loop("run_"..self.weapon.name)
-    self.legs:loop("run")
+
+    if self.legs then
+        self.legs:loop("run")
+    end
 
     self:stopMomentum()
     self:applyForce(forceX, forceY)
@@ -341,7 +359,10 @@ function Enemy:charge(player)
         if self.mode == EnemyMode.charge then
             self:stopMomentum()
             self:loop(self.stationaryAnim)
-            self.legs:animate("stationary")
+
+            if self.legs then
+                self.legs:loop("stationary")
+            end
 
             self.flagChargeAllowed = true
             self.mode = EnemyMode.ready

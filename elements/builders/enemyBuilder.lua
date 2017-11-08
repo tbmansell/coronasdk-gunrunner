@@ -10,22 +10,21 @@ local random = math.random
 function EnemyBuilder:newEnemy(camera, spec)
     if spec.type == "turret" then
         return self:newTurret(camera, spec)
+    
+    elseif spec.type == "reptile" then
+        return self:newReptile(camera, spec)
     else
-        return self:newMovingEnemy(camera, spec)
+        return self:newEnemySoldier(camera, spec)
     end
 end
 
 
-function EnemyBuilder:newMovingEnemy(camera, spec)
-    --print("Enemy: rank="..tostring(spec.rank).." type="..tostring(spec.type).." pos="..tostring(spec.xpos)..", "..tostring(spec.ypos))
-
-    -- Copy the enemy rank def and reference the modifyImage before spien creation
+function EnemyBuilder:newEnemySoldier(camera, spec)
+    -- Copy the enemy rank def and reference the modifyImage before spine creation
     local rankDef = builder:newClone(EnemyTypes[spec.type][spec.rank])
     local anim    = spec.animation or "stationary_1"
 
     spec.modifyImage = rankDef.modifyImage
-
-    --print("Enemy: rank="..spec.rank.." skin="..(spec.skin or rankDef.skin).." pos="..tostring(spec.xpos)..", "..tostring(spec.ypos))
 
     local enemy = builder:newCharacter(spec, {
                        jsonName  = "characterBody",
@@ -62,8 +61,38 @@ function EnemyBuilder:newMovingEnemy(camera, spec)
 end
 
 
+function EnemyBuilder:newReptile(camera, spec)
+    -- Copy the enemy rank def and reference the modifyImage before spine creation
+    local rankDef = builder:newClone(EnemyTypes[spec.type][spec.rank])
+    local anim    = spec.animation or "walk"
+
+    spec.modifyImage = rankDef.modifyImage
+
+    local enemy = builder:newCharacter(spec, {
+                       jsonName  = rankDef.json or "reptiles",
+                       imagePath = "character",
+                       skin      = spec.skin  or rankDef.skin,
+                       scale     = spec.scale or rankDef.scale, 
+                       animation = anim
+                   })
+    
+    -- Allow override of destroy()
+    enemy.spineObjectDestroy = enemy.destroy
+
+    -- Copy basic enemy definition and then specific rank definition ontop
+    builder:deepCopy(enemyDef, enemy)
+    builder:deepCopy(rankDef,  enemy)
+
+    self:setupEnemyCommon(camera, enemy, spec)
+
+    enemy.stationaryAnim = anim
+        
+    return enemy
+end
+
+
 function EnemyBuilder:newTurret(camera, spec)
-    -- Copy the enemy rank def and reference the modifyImage before spien creation
+    -- Copy the enemy rank def and reference the modifyImage before spine creation
     local rankDef = builder:newClone(EnemyTypes[spec.type][spec.rank])
     local scale   = spec.scale     or 0.5
     local anim    = spec.animation or "scanningTargets"

@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "0pyluz+nKiKwbBlbtRrO0jfA5oc", "spine": "3.6.43", "width": 150, "height": 398.42 },
+"skeleton": { "hash": "35nrjIYZfBkcRlU66ISY/l2SQKA", "spine": "3.6.43", "width": 150, "height": 398.42 },
 "bones": [
 	{ "name": "root" },
 	{ "name": "platform", "parent": "root", "length": 41.01, "rotation": 90, "x": -0.04 },
@@ -40,6 +40,11 @@
 "animations": {
 	"death_1": {
 		"slots": {
+			"turret-platform": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
+				]
+			},
 			"turrets/chainGun-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
@@ -48,6 +53,11 @@
 			"turrets/laserCannon-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
+				]
+			},
+			"weapon": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
 				]
 			}
 		},
@@ -101,6 +111,11 @@
 	},
 	"death_2": {
 		"slots": {
+			"turret-platform": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
+				]
+			},
 			"turrets/chainGun-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
@@ -109,6 +124,11 @@
 			"turrets/laserCannon-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
+				]
+			},
+			"weapon": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
 				]
 			}
 		},
@@ -162,6 +182,11 @@
 	},
 	"death_3": {
 		"slots": {
+			"turret-platform": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
+				]
+			},
 			"turrets/chainGun-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
@@ -170,6 +195,11 @@
 			"turrets/laserCannon-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
+				]
+			},
+			"weapon": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
 				]
 			}
 		},
@@ -223,6 +253,12 @@
 	},
 	"hit_1": {
 		"slots": {
+			"turret-platform": {
+				"color": [
+					{ "time": 0, "color": "fc0000ff" },
+					{ "time": 0.1667, "color": "ffffffff" }
+				]
+			},
 			"turrets/chainGun-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
@@ -231,6 +267,12 @@
 			"turrets/laserCannon-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
+				]
+			},
+			"weapon": {
+				"color": [
+					{ "time": 0, "color": "fc0000ff" },
+					{ "time": 0.1667, "color": "ffffffff" }
 				]
 			}
 		},
@@ -282,6 +324,12 @@
 	},
 	"hit_2": {
 		"slots": {
+			"turret-platform": {
+				"color": [
+					{ "time": 0, "color": "fc0000ff" },
+					{ "time": 0.1667, "color": "ffffffff" }
+				]
+			},
 			"turrets/chainGun-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
@@ -290,6 +338,12 @@
 			"turrets/laserCannon-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
+				]
+			},
+			"weapon": {
+				"color": [
+					{ "time": 0, "color": "fc0000ff" },
+					{ "time": 0.1667, "color": "ffffffff" }
 				]
 			}
 		},
@@ -341,6 +395,11 @@
 	},
 	"scanningTargets": {
 		"slots": {
+			"turret-platform": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
+				]
+			},
 			"turrets/chainGun-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
@@ -349,6 +408,11 @@
 			"turrets/laserCannon-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff02" }
+				]
+			},
+			"weapon": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
 				]
 			}
 		},
@@ -403,6 +467,11 @@
 	},
 	"shoot_chainGun": {
 		"slots": {
+			"turret-platform": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
+				]
+			},
 			"turrets/chainGun-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffffff" },
@@ -412,6 +481,11 @@
 			"turrets/laserCannon-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
+				]
+			},
+			"weapon": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
 				]
 			}
 		},
@@ -477,6 +551,11 @@
 	},
 	"shoot_laserCannon": {
 		"slots": {
+			"turret-platform": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
+				]
+			},
 			"turrets/chainGun-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
@@ -488,6 +567,11 @@
 					{ "time": 0.0667, "color": "ffffffff" },
 					{ "time": 0.3333, "color": "ffffff00", "curve": "stepped" },
 					{ "time": 1, "color": "ffffff00" }
+				]
+			},
+			"weapon": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
 				]
 			}
 		},
@@ -562,6 +646,11 @@
 	},
 	"stationary_1": {
 		"slots": {
+			"turret-platform": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
+				]
+			},
 			"turrets/chainGun-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
@@ -570,6 +659,11 @@
 			"turrets/laserCannon-muzzle": {
 				"color": [
 					{ "time": 0, "color": "ffffff00" }
+				]
+			},
+			"weapon": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
 				]
 			}
 		},

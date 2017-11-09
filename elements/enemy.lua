@@ -51,13 +51,18 @@ function Enemy.eventCollision(self, event)
     local other = event.other.object
     local self  = self.object
 
-    if other and other.isPlayer and not self.isTurret then 
-        -- always strike on start of contact
-        if event.phase == "began" then
-            self:strike(other)
-        -- Logic to keep striking if contact is kept 
-        elseif self:decideToStrike() then
-            self:strike(other)
+    if other then
+        if other.isPlayer and not self.isTurret then 
+            -- always strike on start of contact
+            if event.phase == "began" then
+                self:strike(other)
+            -- Logic to keep striking if contact is kept 
+            elseif self:decideToStrike() then
+                self:strike(other)
+            end
+        elseif self.turnsOnMove then
+            self:stopMomentum()
+            self:loop(self.stationaryAnim)
         end
     end
 end
@@ -86,7 +91,18 @@ end
 
 function Enemy:animateRotate(rotation)
     if self.image then
-        transition.to(self, {angle=rotation, time=250})
+        if self.turnsOnMove then
+            self:loop("turn_left")
+        end
+
+        transition.to(self, {angle=rotation, time=self.turnSpeed})
+    end
+end
+
+
+function Enemy:animateLegs(anim)
+    if self.legs then
+        self.legs:loop(anim)
     end
 end
 
@@ -140,6 +156,11 @@ function Enemy:canCharge()
 end
 
 
+function Enemy:canTurn()
+    return not (self.turnsOnMove and (self.mode == EnemyMode.walk or self.mode == EnemyMode.charge))
+end
+
+
 function Enemy:lineOfSight(player)
     local hits = physics.rayCast(self:x(), self:y(), player:x(), player:y(), "sorted")
 
@@ -169,7 +190,7 @@ function Enemy:checkBehaviour(camera, player)
     if self.mode ~= EnemyMode.dead and self:inDistance(player, 1000) then
         if self:lineOfSight(player) then
             -- Face player if not charging
-            if self.mode ~= EnemyMode.charge then
+            if self:canTurn() and self.mode ~= EnemyMode.charge  then
                 local angle = round(90 + atan2(player:y()- self:y(), player:x() - self:x()) * PI)
                 
                 if angle ~= self.angle then
@@ -244,7 +265,7 @@ end
 
 
 function Enemy:decideToTurn()
-    if not self.waitingToTurn then
+    if not self.waitingToTurn and self:canTurn() then
         -- always have to wait to decide again
         self.waitingToTurn = true
         after(self.decisionDelay, function() self.waitingToTurn = false end)
@@ -272,7 +293,7 @@ end
 
 function Enemy:strike(target)
     self.flagStrikeAllowed = false
-    self.mode = EnemyMode.strike
+    self:setMode(EnemyMode.strike)
 
     local weapon = self.weapon
 
@@ -283,43 +304,48 @@ function Enemy:strike(target)
 
     after(weapon.time, function()
         self:loop(self.stationaryAnim)
-
-        if self.legs then
-            self.legs:loop("stationary")
-        end
+        self:animateLegs("stationary")
 
         self.flagStrikeAllowed = true
-        self.mode = EnemyMode.ready
+        self:setMode(EnemyMode.ready)
     end)
 end
 
 
 function Enemy:move()
     self.flagMoveAllowed = false
-    self.mode = EnemyMode.walk
+    self:setMode(EnemyMode.walk)
 
-    local duration  = utils.randomRange(250, self.roaming)
     local direction = utils.randomRange(1, 360)
-    local forceX    = self.speed * -cos(rad(direction))
-    local forceY    = self.speed * -sin(rad(direction))
+
+    if self.turnsOnMove then
+        self:animateRotate(direction)
+        
+        after(self.turnSpeed, function() 
+            direction = direction + 135
+            self:doMove(direction) 
+        end)
+    else
+        self:doMove(direction)
+    end
+end
+
+
+function Enemy:doMove(direction)
+    local duration = utils.randomRange(250, self.roaming)
+    local forceX   = self.speed * -cos(rad(direction))
+    local forceY   = self.speed * -sin(rad(direction))
 
     self:applyForce(forceX, forceY)
     self:loop("run_"..self.weapon.name)
-
-    if self.legs then
-        self.legs:loop("run")
-    end
+    self:animateLegs("run")
 
     after(duration, function()
         self:stopMomentum()
         self:loop(self.stationaryAnim)
-        
-        if self.legs then
-            self.legs:loop("stationary")
-        end
-
+        self:animateLegs("stationary")
+        self:setMode(EnemyMode.ready)
         self.flagMoveAllowed = true
-        self.mode = EnemyMode.ready
     end)
 end
 
@@ -337,21 +363,33 @@ end
 
 function Enemy:charge(player)
     self.flagChargeAllowed = false
-    self.mode = EnemyMode.charge
+    self:setMode(EnemyMode.charge)
 
+    local direction = atan2(self:y() - player:y(), self:x() - player:x()) * PI
+
+    if self.turnsOnMove then
+        self:animateRotate(direction)
+        
+        after(self.turnSpeed, function()
+            direction = direction + 135
+            self:doCharge(direction) 
+        end)
+    else
+        self:animateRotate(direction)
+        self:doCharge(direction)
+    end
+end
+
+
+function Enemy:doCharge(direction)
     local runSpeed  = self.speed * 2
     local duration  = 2000
-    local direction = atan2(self:y() - player:y(), self:x() - player:x()) * PI
     local forceX    = runSpeed * -cos(rad(direction))
     local forceY    = runSpeed * -sin(rad(direction))
 
     sounds:enemy("charge")
     self:loop("run_"..self.weapon.name)
-
-    if self.legs then
-        self.legs:loop("run")
-    end
-
+    self:animateLegs("run")
     self:stopMomentum()
     self:applyForce(forceX, forceY)
 
@@ -359,13 +397,9 @@ function Enemy:charge(player)
         if self.mode == EnemyMode.charge then
             self:stopMomentum()
             self:loop(self.stationaryAnim)
-
-            if self.legs then
-                self.legs:loop("stationary")
-            end
-
+            self:animateLegs("stationary")
+            self:setMode(EnemyMode.ready)
             self.flagChargeAllowed = true
-            self.mode = EnemyMode.ready
         end
     end)
 end

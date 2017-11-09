@@ -56,6 +56,7 @@ function EnemyBuilder:newEnemySoldier(camera, spec)
     self:setupEnemyCommon(camera, enemy, spec)
 
     enemy.stationaryAnim = anim
+    enemy.turnSpeed      = 250
         
     return enemy
 end
@@ -64,7 +65,7 @@ end
 function EnemyBuilder:newReptile(camera, spec)
     -- Copy the enemy rank def and reference the modifyImage before spine creation
     local rankDef = builder:newClone(EnemyTypes[spec.type][spec.rank])
-    local anim    = spec.animation or "walk"
+    local anim    = spec.animation or "stationary_1"
 
     spec.modifyImage = rankDef.modifyImage
 
@@ -86,6 +87,8 @@ function EnemyBuilder:newReptile(camera, spec)
     self:setupEnemyCommon(camera, enemy, spec)
 
     enemy.stationaryAnim = anim
+    enemy.turnsOnMove    = true
+    enemy.turnSpeed      = 250
         
     return enemy
 end
@@ -124,6 +127,7 @@ function EnemyBuilder:newTurret(camera, spec)
     enemy.isTurret        = true
     enemy.flagMoveAllowed = false
     enemy.stationaryAnim  = anim
+    enemy.turnSpeed       = 500
 
     function enemy:updateSpine(delta)
         self.state:update(delta)

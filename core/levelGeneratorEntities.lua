@@ -381,7 +381,7 @@ function Loader:load(LevelGenerator)
     function LevelGenerator:generateReptiles(pointsToSpend)
         if percent(50) then
             local r = random(100)
-            
+
             if r <= 50 then
                 for i=1, random(10) do
                     reptiles[#reptiles+1] = {object="enemy", type="reptile", rank=1, tileWidth=1, tileHeight=1}

@@ -115,8 +115,6 @@ function Stats:addKill(weapon, type, rank)
         stat.kills = stat.kills + 1
     end
 
-    print("killed type="..tostring(type).." rank="..tostring(rank))
-
     self.enemies[type][rank] = self.enemies[type][rank] + 1
 end 
 

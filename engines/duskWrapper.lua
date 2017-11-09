@@ -32,6 +32,11 @@ local function eventWallCollision(self, event)
             other:impact()
         end
     end
+
+    if other and other.isEnemy and other.turnsOnMove then
+        other:stopMomentum()
+        other:loop(other.stationaryAnim)
+    end
 end
 
 

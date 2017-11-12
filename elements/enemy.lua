@@ -319,10 +319,9 @@ function Enemy:move()
     local direction = utils.randomRange(1, 360)
 
     if self.turnsOnMove then
-        self:animateRotate(direction)
+        self:animateRotate(direction-120)
         
-        after(self.turnSpeed, function() 
-            direction = direction + 135
+        after(self.turnSpeed, function()
             self:doMove(direction) 
         end)
     else
@@ -366,13 +365,11 @@ function Enemy:charge(player)
     self:setMode(EnemyMode.charge)
 
     local direction = atan2(self:y() - player:y(), self:x() - player:x()) * PI
-    print("charge direction: "..direction)
-
+    
     if self.turnsOnMove then
-        self:animateRotate(direction)
+        self:animateRotate(direction-120)
         
         after(self.turnSpeed, function()
-            direction = direction + 135
             self:doCharge(direction) 
         end)
     else
@@ -396,7 +393,7 @@ function Enemy:doCharge(direction)
 
     after(duration, function()
         self.flagChargeAllowed = true
-        
+
         if self.mode == EnemyMode.charge then
             self:stopMomentum()
             self:loop(self.stationaryAnim)

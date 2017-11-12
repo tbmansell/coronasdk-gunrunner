@@ -84,30 +84,30 @@ Powerups = {
 EnemyTypes = {
     melee = {
         -- lizard men
-        [1] = {skin="lizard_club",              weapon="club",     health=1, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150, melee=true},
-        [2] = {skin="lizard_club_captain",      weapon="club",     health=2, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150, melee=true},
-        [3] = {skin="lizard_club_elite",        weapon="club",     health=3, decisionDelay=1000, aggression=30, fidgit=50, roaming=1000, speed=150, melee=true},
-    },
-    shooter = {
-        -- Infantry of each weapon
-        [1]  = {skin="lizard_assault",          weapon="rifle",    health=2,  inaccuracy=50, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100},
-        [2]  = {skin="lizard_shotgun",          weapon="shotgun",  health=2,  inaccuracy=40, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100},
-        [3]  = {skin="lizard_launcher",         weapon="launcher", health=3,  inaccuracy=50, decisionDelay=1000, aggression=40, fidgit=20, roaming=1000, speed=50},
-        [4]  = {skin="lizard_laser",            weapon="laserGun", health=3,  inaccuracy=40, decisionDelay=1000, aggression=50, fidgit=40, roaming=1000, speed=150},
-        -- Captains of each weapon
-        [5]  = {skin="lizard_assault_captain",  weapon="rifle",    health=4,  inaccuracy=30, decisionDelay=1000, aggression=50, fidgit=40, roaming=1000, speed=150},
-        [6]  = {skin="lizard_shotgun_captain",  weapon="shotgun",  health=4,  inaccuracy=25, decisionDelay=1000, aggression=70, fidgit=60, roaming=1000, speed=150},
-        [7]  = {skin="lizard_launcher_captain", weapon="launcher", health=6,  inaccuracy=30, decisionDelay=1000, aggression=60, fidgit=30, roaming=1000, speed=100},
-        [8]  = {skin="lizard_laser_captain",    weapon="laserGun", health=6,  inaccuracy=20, decisionDelay=1000, aggression=70, fidgit=50, roaming=1000, speed=200},
-        -- Elites of each weapon
-        [9]  = {skin="lizard_assault_elite",    weapon="rifle",    health=6,  inaccuracy=10, decisionDelay=1000, aggression=70, fidgit=50, roaming=1000, speed=200},
-        [10] = {skin="lizard_shotgun_elite",    weapon="shotgun",  health=6,  inaccuracy=10, decisionDelay=1000, aggression=90, fidgit=70, roaming=1000, speed=200},
-        [11] = {skin="lizard_launcher_elite",   weapon="launcher", health=8,  inaccuracy=10, decisionDelay=1000, aggression=80, fidgit=40, roaming=1000, speed=150},
-        [12] = {skin="lizard_laser_elite",      weapon="laserGun", health=8,  inaccuracy=0,  decisionDelay=1000, aggression=90, fidgit=60, roaming=1000, speed=250},
+        [1] = {skin="lizard_club",              weapon="club",     health=1, decisionDelay=1000, aggression=70, fidgit=50, roaming=1000, speed=150, melee=true},
+        [2] = {skin="lizard_club_captain",      weapon="club",     health=2, decisionDelay=750,  aggression=80, fidgit=50, roaming=1000, speed=150, melee=true},
+        [3] = {skin="lizard_club_elite",        weapon="club",     health=3, decisionDelay=500,  aggression=90, fidgit=50, roaming=1000, speed=150, melee=true},
     },
     reptile = {
         [1] = {skin="reptile_runner",           weapon="claws",    health=1, decisionDelay=400, aggression=50, fidgit=90, roaming=2500, speed=250, melee=true, scale=0.2},
         [2] = {skin="reptile_runner_captain",   weapon="claws",    health=5, decisionDelay=400, aggression=50, fidgit=90, roaming=2000, speed=200, melee=true, scale=0.4, json="reptiles-captain"},
+    },
+    shooter = {
+        -- Infantry of each weapon
+        [1]  = {skin="lizard_assault",          weapon="rifle",    health=2, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100, inaccuracy=50},
+        [2]  = {skin="lizard_shotgun",          weapon="shotgun",  health=2, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100, inaccuracy=40},
+        [3]  = {skin="lizard_launcher",         weapon="launcher", health=3, decisionDelay=1000, aggression=40, fidgit=20, roaming=1000, speed=50,  inaccuracy=50},
+        [4]  = {skin="lizard_laser",            weapon="laserGun", health=3, decisionDelay=1000, aggression=50, fidgit=40, roaming=1000, speed=150, inaccuracy=40},
+        -- Captains of each weapon
+        [5]  = {skin="lizard_assault_captain",  weapon="rifle",    health=4, decisionDelay=750, aggression=50, fidgit=40, roaming=1000, speed=150,  inaccuracy=30},
+        [6]  = {skin="lizard_shotgun_captain",  weapon="shotgun",  health=4, decisionDelay=750, aggression=70, fidgit=60, roaming=1000, speed=150,  inaccuracy=25},
+        [7]  = {skin="lizard_launcher_captain", weapon="launcher", health=6, decisionDelay=750, aggression=60, fidgit=30, roaming=1000, speed=100,  inaccuracy=30},
+        [8]  = {skin="lizard_laser_captain",    weapon="laserGun", health=6, decisionDelay=750, aggression=70, fidgit=50, roaming=1000, speed=200,  inaccuracy=20},
+        -- Elites of each weapon
+        [9]  = {skin="lizard_assault_elite",    weapon="rifle",    health=6, decisionDelay=500, aggression=70, fidgit=50, roaming=1000, speed=200,  inaccuracy=10},
+        [10] = {skin="lizard_shotgun_elite",    weapon="shotgun",  health=6, decisionDelay=500, aggression=90, fidgit=70, roaming=1000, speed=200,  inaccuracy=10},
+        [11] = {skin="lizard_launcher_elite",   weapon="launcher", health=8, decisionDelay=500, aggression=80, fidgit=40, roaming=1000, speed=150,  inaccuracy=10},
+        [12] = {skin="lizard_laser_elite",      weapon="laserGun", health=8, decisionDelay=500, aggression=90, fidgit=60, roaming=1000, speed=250,  inaccuracy=10},
     },
     turret = {
         [1] = {skin="chainGun",                 weapon="chainGun",    health=10, inaccuracy=20, decisionDelay=1000, aggression=50},

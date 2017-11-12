@@ -89,8 +89,8 @@ EnemyTypes = {
         [3] = {skin="lizard_club_elite",        weapon="club",     health=3, decisionDelay=500,  aggression=90, fidgit=50, roaming=1000, speed=150, melee=true},
     },
     reptile = {
-        [1] = {skin="reptile_runner",           weapon="claws",    health=1, decisionDelay=400, aggression=50, fidgit=90, roaming=2500, speed=250, melee=true, scale=0.2},
-        [2] = {skin="reptile_runner_captain",   weapon="claws",    health=5, decisionDelay=400, aggression=50, fidgit=90, roaming=2000, speed=200, melee=true, scale=0.4, json="reptiles-captain"},
+        [1] = {skin="reptile_runner",           weapon="claws",    health=1, decisionDelay=500, aggression=50, fidgit=90, roaming=2500, speed=250, melee=true, scale=0.2},
+        [2] = {skin="reptile_runner_captain",   weapon="claws",    health=5, decisionDelay=500, aggression=50, fidgit=90, roaming=2000, speed=200, melee=true, scale=0.4, json="reptiles-captain"},
     },
     shooter = {
         -- Infantry of each weapon

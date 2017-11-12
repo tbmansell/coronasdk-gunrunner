@@ -22,16 +22,10 @@ sounds  = require("core.sounds")
 level   = require("core.level")
 builder = require("elements.builders.builder")
 
--- Generate the random number seed
 math.randomseed(os.time())
--- activate multitouch
 system.activate("multitouch")
-
--- turn off phone display status
 display.setStatusBar(display.HiddenStatusBar)
--- load sounds
 sounds:preload()
-
 
 -- Global debug game logic
 if globalDebugGame then

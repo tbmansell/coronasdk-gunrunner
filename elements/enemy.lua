@@ -90,12 +90,26 @@ end
 
 
 function Enemy:animateRotate(rotation)
-    if self.image then
-        if self.turnsOnMove then
-            self:loop("turn_left")
-        end
+    if self.image and self.angle ~= rotation then
+        local diff = self.angle - rotation
 
-        transition.to(self, {angle=rotation, time=self.turnSpeed})
+        if diff ~= 0 and diff % 360 ~= 0 then
+            if self.turnsOnMove then
+                self:loop("turn_left")
+            end
+ 
+            if diff > 180 then
+                rotation = rotation + 360
+            elseif diff < -180 then
+                rotation = rotation - 360
+            end
+
+            transition.to(self, {angle=rotation, time=self.turnSpeed, onComplete=function()
+                if self.mode == EnemyMode.ready then
+                    self:loop(self.stationaryAnim)
+                end
+            end})
+        end
     end
 end
 
@@ -192,6 +206,8 @@ function Enemy:checkBehaviour(camera, player)
             -- Face player if not charging
             if self:canTurn() and self.mode ~= EnemyMode.charge  then
                 local angle = round(90 + atan2(player:y()- self:y(), player:x() - self:x()) * PI)
+
+                if self.turnsOnMove then angle = angle - 30 end
                 
                 if angle ~= self.angle then
                     self:animateRotate(angle)
@@ -199,25 +215,21 @@ function Enemy:checkBehaviour(camera, player)
             end
 
             -- Check if should shoot player
-            if self.ammo then
-                if self:decideToShoot() then
-                    self:shoot(camera)
-                end
-            -- Check if should chrge and attack
-            elseif self.melee then
-                if self:decideToCharge() then
-                    self:charge(player)
-                end
+            if self.ammo and self:decideToShoot() then
+                self:shoot(camera)
+            -- Check if should charge and attack
+            elseif self.melee and self:decideToCharge() then
+                self:charge(player)
+            elseif self:decideToMove() then
+                self:move()
             end
         else
             -- if not visible randomly rotate
-            if self:decideToTurn() then
+            if self:decideToMove() then
+                self:move()
+            elseif self:decideToTurn() then
                 self:randomTurn()
             end
-        end
-
-        if self:decideToMove() then
-            self:move()
         end
     end
 end

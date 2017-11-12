@@ -152,7 +152,7 @@ end
 
 
 function Enemy:canCharge()
-    return self.mode ~= EnemyMode.dead and self.mode ~= EnemyMode.walk and self.flagChargeAllowed
+    return self.mode ~= EnemyMode.dead and --[[self.mode ~= EnemyMode.walk and]] self.flagChargeAllowed
 end
 
 
@@ -366,6 +366,7 @@ function Enemy:charge(player)
     self:setMode(EnemyMode.charge)
 
     local direction = atan2(self:y() - player:y(), self:x() - player:x()) * PI
+    print("charge direction: "..direction)
 
     if self.turnsOnMove then
         self:animateRotate(direction)
@@ -375,7 +376,7 @@ function Enemy:charge(player)
             self:doCharge(direction) 
         end)
     else
-        self:animateRotate(direction)
+        self:animateRotate(direction-90)
         self:doCharge(direction)
     end
 end
@@ -394,12 +395,13 @@ function Enemy:doCharge(direction)
     self:applyForce(forceX, forceY)
 
     after(duration, function()
+        self.flagChargeAllowed = true
+        
         if self.mode == EnemyMode.charge then
             self:stopMomentum()
             self:loop(self.stationaryAnim)
             self:animateLegs("stationary")
             self:setMode(EnemyMode.ready)
-            self.flagChargeAllowed = true
         end
     end)
 end

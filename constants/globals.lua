@@ -18,6 +18,7 @@ PlayerMode = {
     land        = 6,
     hit         = 7,
     dead        = 8,
+    resetAim    = 9,
 }
 
 

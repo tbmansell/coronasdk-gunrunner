@@ -21,6 +21,8 @@ local moveControllerY  = 0
 local shootControllerX = 0
 local shootControllerY = 0
 local lastTime         = 0
+local resetAimHandle   = nil
+local resettingAim     = false
 
 -- Aliases
 local PI     = 180 / math.pi
@@ -56,6 +58,7 @@ end
 
 local function eventShootPlayer(event)
     if event.phase == "began" then
+        Hud:clearResetAim()
         display.getCurrentStage():setFocus(event.target, event.id)
         aimPlayerAllow = Hud.player:canAim()
         aimPlayerX     = event.x
@@ -66,6 +69,7 @@ local function eventShootPlayer(event)
     elseif event.phase == "ended" or event.phase == "cancelled" then
         display.getCurrentStage():setFocus(event.target, nil)
         aimPlayerAllow = false
+        Hud:resetAim()
     end
     return true
 end
@@ -77,6 +81,7 @@ local function eventShootPlayerTap(event)
 
         Hud.player:rotate(angle)
         Hud.player:shoot(Hud.camera)
+        Hud:resetAim()
     end
 end
 
@@ -314,7 +319,11 @@ function Hud:eventUpdateFrame(event)
         --self.player.legs:loop("strafe_left")
     end
 
-    if aimPlayerAllow then
+    if resettingAim then
+        -- allow camera to follow player transition
+        self.camera:setAngleOffset(player.angle)
+
+    elseif aimPlayerAllow then
         local angle = 90 + atan2(aimPlayerY - shootControllerY, aimPlayerX - shootControllerX) * PI
         
         player:rotate(angle, event)
@@ -330,6 +339,23 @@ function Hud:eventUpdateFrame(event)
 
     if player:hasLaserSight() then
         player:drawLaserSight()
+    end
+end
+
+
+function Hud:resetAim()
+    self:clearResetAim()
+    resetAimHandle = transition.to(self.player, {angle=0, time=1000, delay=5000, 
+                                                onStart=function() resettingAim=true end, 
+                                                onComplete=function() resettingAim=false; resetAimHandle=nil end})
+end
+
+
+function Hud:clearResetAim()
+    if resetAimHandle then 
+        transition.cancel(resetAimHandle)
+        resetAimHandle = nil
+        resettingAim   = false
     end
 end
 

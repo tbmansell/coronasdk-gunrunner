@@ -17,18 +17,19 @@ local play        = audio.play
 
 
 function Sounds:preload()
-    self.playerSounds.hurt           = loadSound("sounds/hurt.mp3")
-    self.playerSounds.killed         = loadSound("sounds/killed.mp3")
+    self.playerSounds.hurt              = loadSound("sounds/hurt.mp3")
+    self.playerSounds.killed            = loadSound("sounds/killed.mp3")
 
-    self.projectileSounds.rifleShot  = loadSound("sounds/rifleShot.wav")
-    self.projectileSounds.shotGunShot  = loadSound("sounds/shotGunShot.mp3")
-
-    self.projectileSounds.bulletHit  = loadSound("sounds/bulletHit.mp3")
-    self.projectileSounds.rocketShot = loadSound("sounds/rocketShot.mp3")
-    self.projectileSounds.rocketHit  = loadSound("sounds/rocketHit.mp3")
-    self.projectileSounds.laserShot  = loadSound("sounds/laserShot.mp3")
-    self.projectileSounds.laserHit   = loadSound("sounds/laserHit.mp3")
-    self.projectileSounds.reload     = loadSound("sounds/reload.mp3")
+    self.projectileSounds.rifleShot     = loadSound("sounds/rifleShot.wav")
+    self.projectileSounds.shotGunShot   = loadSound("sounds/shotGunShot.mp3")
+    self.projectileSounds.rocketShot    = loadSound("sounds/rocketShot.mp3")
+    self.projectileSounds.laserShot     = loadSound("sounds/laserShot.mp3")
+    self.projectileSounds.chainGunShot  = loadSound("sounds/chainGunShot.mp3")
+    
+    self.projectileSounds.bulletHit     = loadSound("sounds/bulletHit.mp3")
+    self.projectileSounds.rocketHit     = loadSound("sounds/rocketHit.mp3")
+    self.projectileSounds.laserHit      = loadSound("sounds/laserHit.mp3")
+    self.projectileSounds.reload        = loadSound("sounds/reload.mp3")
 
     self.enemySounds.hurt            = loadSound("sounds/hurt.mp3")
     self.enemySounds.killed          = loadSound("sounds/killed.mp3")

@@ -466,9 +466,9 @@ function Enemy:explode()
             else
                 self:emit("enemyDie1")
                 self:emit("enemyDie2")
-
-                self:dropWeapon()
             end
+
+            self:dropWeapon()
         end)
     end
 end

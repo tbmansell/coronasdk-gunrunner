@@ -107,7 +107,7 @@ function EnemyBuilder:newTurret(camera, spec)
                        jsonName  = "turret",
                        imagePath = "character",
                        skin      = spec.skin or rankDef.skin,
-                       scale     = scale, 
+                       scale     = scale,
                        animation = anim
                    })
 

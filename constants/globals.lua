@@ -18,6 +18,7 @@ PlayerMode = {
     land        = 6,
     hit         = 7,
     dead        = 8,
+    resetAim    = 9,
 }
 
 
@@ -49,25 +50,29 @@ EnvironmentalWeapon = {
 
 
 Weapons = {
-    club        = {name="club",        damage=1, time=500},
-    claws       = {name="claw",        damage=1, time=500},
-    rifle       = {name="rifle",       damage=1, ammoType="bullet",    speed=650, rof=205,  ammo=30, reload=1000, collect=15},
-    shotgun     = {name="shotgun",     damage=1, ammoType="shell",     speed=650, rof=750,  ammo=10, reload=1200, collect=25},
-    launcher    = {name="launcher",    damage=5, ammoType="rocket",    speed=550, rof=1200, ammo=4,  reload=1500, collect=50, area=75},
-    laserGun    = {name="laserGun",    damage=2, ammoType="laser",     speed=600, rof=400,  ammo=15, reload=1300, collect=50, ricochet=2},
-    chainGun    = {name="chainGun",    damage=1, ammoType="bullet",    speed=700, rof=150,  ammo=50, reload=2000, burst=3},
-    laserCannon = {name="laserCannon", damage=4, ammoType="laserBolt", speed=600, rof=400,  ammo=20, reload=2000},
+    club              = {name="club",              damage=1, time=500},
+    claws             = {name="claw",              damage=1, time=500},
+    rifle             = {name="rifle",             damage=1, ammoType="bullet",    speed=650, rof=205,  ammo=30, reload=1000, collect=15},
+    shotgun           = {name="shotgun",           damage=1, ammoType="shell",     speed=650, rof=750,  ammo=10, reload=1200, collect=25},
+    launcher          = {name="launcher",          damage=5, ammoType="rocket",    speed=550, rof=1200, ammo=4,  reload=1500, collect=50, area=75},
+    laserGun          = {name="laserGun",          damage=2, ammoType="laser",     speed=600, rof=400,  ammo=15, reload=1300, collect=50, ricochet=2},
+    chainGun          = {name="chainGun",          damage=1, ammoType="bullet",    speed=700, rof=150,  ammo=50, reload=2000, collect=50, burst=3},
+    chainGunTurret    = {name="chainGun",          damage=1, ammoType="bullet",    speed=700, rof=150,  ammo=50, reload=2000, collect=50, burst=3},
+    laserCannon       = {name="laserCannon",       damage=4, ammoType="laserBolt", speed=600, rof=400,  ammo=20, reload=2000, collect=50},
+    laserCannonTurret = {name="laserCannonTurret", damage=4, ammoType="laserBolt", speed=600, rof=400,  ammo=20, reload=2000, collect=50},
 }
 
 -- Load in weapon stats for spine, sound and particles:
 Weapons.club.slot        = "weapon"; Weapons.club.skin        = "weapons/weapon-club";  Weapons.club.hitSound    = "";
-Weapons.rifle.slot       = "weapon"; Weapons.rifle.skin       = "weapons/gun_assault";  Weapons.rifle.bone       = "rifle";       Weapons.rifle.shotSound    = "rifleShot";   Weapons.rifle.hitSound    = "bulletHit"; Weapons.rifle.hitAnim    = "bulletImpact"
-Weapons.shotgun.slot     = "weapon"; Weapons.shotgun.skin     = "weapons/gun_shotgun";  Weapons.shotgun.bone     = "rifle";       Weapons.shotgun.shotSound  = "shotGunShot"; Weapons.shotgun.hitSound  = "bulletHit"; Weapons.shotgun.hitAnim  = "bulletImpact"
-Weapons.launcher.slot    = "weapon"; Weapons.launcher.skin    = "weapons/gun_launcher"; Weapons.launcher.bone    = "launcher";    Weapons.launcher.shotSound = "rocketShot";  Weapons.launcher.hitSound = "rocketHit"; Weapons.launcher.hitAnim = "smoke";       Weapons.launcher.hitAnim2nd="explosion"
-Weapons.laserGun.slot    = "weapon"; Weapons.laserGun.skin    = "weapons/gun_laser";    Weapons.laserGun.bone    = "laser";       Weapons.laserGun.shotSound = "laserShot";   Weapons.laserGun.hitSound = "laserHit";  Weapons.laserGun.hitAnim = "plasmaImpact";
-Weapons.chainGun.slot    = "weapon"; Weapons.chainGun.skin    = "turrets/chainGun";     Weapons.chainGun.bone    = "chainGun";    Weapons.chainGun.shotSound    = "rifleShot";   Weapons.chainGun.hitSound    = "bulletHit"; Weapons.chainGun.hitAnim    = "bulletImpact"
-Weapons.laserCannon.slot = "weapon"; Weapons.laserCannon.skin = "turrets/laserCannon";  Weapons.laserCannon.bone = "laserCannon"; Weapons.laserCannon.shotSound = "laserShot";   Weapons.laserCannon.hitSound = "laserHit";  Weapons.laserCannon.hitAnim = "plasmaImpact";
+Weapons.rifle.slot       = "weapon"; Weapons.rifle.skin       = "weapons/gun_assault";  Weapons.rifle.bone       = "rifle";       Weapons.rifle.shotSound       = "rifleShot";    Weapons.rifle.hitSound    = "bulletHit"; Weapons.rifle.hitAnim    = "bulletImpact"
+Weapons.shotgun.slot     = "weapon"; Weapons.shotgun.skin     = "weapons/gun_shotgun";  Weapons.shotgun.bone     = "rifle";       Weapons.shotgun.shotSound     = "shotGunShot";  Weapons.shotgun.hitSound  = "bulletHit"; Weapons.shotgun.hitAnim  = "bulletImpact"
+Weapons.launcher.slot    = "weapon"; Weapons.launcher.skin    = "weapons/gun_launcher"; Weapons.launcher.bone    = "launcher";    Weapons.launcher.shotSound    = "rocketShot";   Weapons.launcher.hitSound = "rocketHit"; Weapons.launcher.hitAnim = "smoke";       Weapons.launcher.hitAnim2nd="explosion"
+Weapons.laserGun.slot    = "weapon"; Weapons.laserGun.skin    = "weapons/gun_laser";    Weapons.laserGun.bone    = "laser";       Weapons.laserGun.shotSound    = "laserShot";    Weapons.laserGun.hitSound = "laserHit";  Weapons.laserGun.hitAnim = "plasmaImpact";
+Weapons.chainGun.slot    = "weapon"; Weapons.chainGun.skin    = "weapons/chainGun";     Weapons.chainGun.bone    = "chainGun";    Weapons.chainGun.shotSound    = "chainGunShot"; Weapons.chainGun.hitSound    = "bulletHit"; Weapons.chainGun.hitAnim    = "bulletImpact"
+Weapons.laserCannon.slot = "weapon"; Weapons.laserCannon.skin = "weapons/laserCannon";  Weapons.laserCannon.bone = "laserCannon"; Weapons.laserCannon.shotSound = "laserShot";    Weapons.laserCannon.hitSound = "laserHit";  Weapons.laserCannon.hitAnim = "plasmaImpact";
 
+Weapons.chainGunTurret.slot    = "weapon"; Weapons.chainGunTurret.skin    = "turrets/chainGun";     Weapons.chainGunTurret.bone    = "chainGun";    Weapons.chainGunTurret.shotSound    = "chainGunShot"; Weapons.chainGunTurret.hitSound    = "bulletHit"; Weapons.chainGunTurret.hitAnim    = "bulletImpact"
+Weapons.laserCannonTurret.slot = "weapon"; Weapons.laserCannonTurret.skin = "turrets/laserCannon";  Weapons.laserCannonTurret.bone = "laserCannon"; Weapons.laserCannonTurret.shotSound = "laserShot";    Weapons.laserCannonTurret.hitSound = "laserHit";  Weapons.laserCannonTurret.hitAnim = "plasmaImpact";
 
 
 Powerups = {
@@ -110,8 +115,8 @@ EnemyTypes = {
         [12] = {skin="lizard_laser_elite",      weapon="laserGun", health=8, decisionDelay=500, aggression=90, fidgit=60, roaming=1000, speed=250,  inaccuracy=10},
     },
     turret = {
-        [1] = {skin="chainGun",                 weapon="chainGun",    health=10, inaccuracy=20, decisionDelay=1000, aggression=50},
-        [2] = {skin="lasercannon",              weapon="laserCannon", health=10, inaccuracy=20, decisionDelay=1000, aggression=50},
+        [1] = {skin="chainGun",                 weapon="chainGunTurret",    health=10, inaccuracy=20, decisionDelay=1000, aggression=50},
+        [2] = {skin="lasercannon",              weapon="laserCannonTurret", health=10, inaccuracy=20, decisionDelay=1000, aggression=50},
     }
 }
 

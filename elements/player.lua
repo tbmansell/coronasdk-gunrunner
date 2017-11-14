@@ -95,9 +95,6 @@ function Player:canShoot()
 end
 
 
-
-
-
 function Player:shoot(camera, ammoCounter)
     if self:canShoot() then
         self:shootProjectile(projectileBuilder, camera, Filters.playerShot, function() self:hookAmmoCounter() end)

@@ -401,15 +401,15 @@ function Loader:load(LevelGenerator)
 
 
     function LevelGenerator:generateTurrets(pointsToSpend)
-        --[[local num = 0
+        local num = 0
         local r   = random(100)
         
         if     r <= 40 then num = 1
         elseif r <= 50 then num = 2 end
 
         for i=1, num do 
-            ]]turrets[#turrets+1] = {object="enemy", type="turret", rank=1, tileWidth=2, tileHeight=2}
-        --end
+            turrets[#turrets+1] = {object="enemy", type="turret", rank=random(2), tileWidth=2, tileHeight=2}
+        end
     end
 
 

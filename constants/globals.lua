@@ -58,8 +58,8 @@ Weapons = {
     laserGun          = {name="laserGun",          damage=2, ammoType="laser",     speed=600, rof=400,  ammo=15, reload=1300, collect=50, ricochet=2},
     chainGun          = {name="chainGun",          damage=1, ammoType="bullet",    speed=700, rof=150,  ammo=50, reload=2000, collect=50, burst=3},
     chainGunTurret    = {name="chainGun",          damage=1, ammoType="bullet",    speed=700, rof=150,  ammo=50, reload=2000, collect=50, burst=3},
-    laserCannon       = {name="laserCannon",       damage=4, ammoType="laserBolt", speed=600, rof=400,  ammo=20, reload=2000, collect=50},
-    laserCannonTurret = {name="laserCannonTurret", damage=4, ammoType="laserBolt", speed=600, rof=400,  ammo=20, reload=2000, collect=50},
+    laserCannon       = {name="laserCannon",       damage=4, ammoType="laserBolt", speed=600, rof=1200, ammo=20, reload=2000, collect=50, shootThrough=true},
+    laserCannonTurret = {name="laserCannonTurret", damage=4, ammoType="laserBolt", speed=600, rof=1200, ammo=20, reload=2000, collect=50, shootThrough=true},
 }
 
 -- Load in weapon stats for spine, sound and particles:
@@ -116,7 +116,7 @@ EnemyTypes = {
     },
     turret = {
         [1] = {skin="chainGun",                 weapon="chainGunTurret",    health=10, inaccuracy=20, decisionDelay=1000, aggression=50},
-        [2] = {skin="lasercannon",              weapon="laserCannonTurret", health=10, inaccuracy=20, decisionDelay=1000, aggression=50},
+        [2] = {skin="laserCannon",              weapon="laserCannonTurret", health=10, inaccuracy=20, decisionDelay=1000, aggression=50},
     }
 }
 

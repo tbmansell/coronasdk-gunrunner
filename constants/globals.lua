@@ -44,8 +44,8 @@ Filters = {
 
 
 EnvironmentalWeapon = {
-    gasSmall = {damage=5, area=75},
-    gasBig   = {damage=5, area=125},
+    gasSmall = {damage=5, area=125},
+    gasBig   = {damage=5, area=175},
 }
 
 

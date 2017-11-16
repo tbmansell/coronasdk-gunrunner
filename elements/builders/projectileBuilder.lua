@@ -28,6 +28,10 @@ function ProjectileBuilder:newShot(camera, spec, weapon)
     shot:moveTo(spec.xpos or 0, spec.ypos or 0)
     shot:setPhysics(isSensor)
 
+    if weapon.ammoType == "laserBolt" then
+        image.alpha = 0
+    end
+
     camera:addProjectile(shot)
 
     return shot

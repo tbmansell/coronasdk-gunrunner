@@ -304,7 +304,6 @@ function Loader:load(LevelGenerator)
         points   = self.enemyPoints
 
         self:generateEnemies()
-            self:generateTurrets()
         -- TODO: Order them by highest rank first for better placing around higher ranks
         self:placeEntities(turrets)
         self:placeEntities(melees)
@@ -406,7 +405,7 @@ function Loader:load(LevelGenerator)
         
         if     r <= 40 then num = 1
         elseif r <= 50 then num = 2 end
-
+        
         for i=1, num do 
             turrets[#turrets+1] = {object="enemy", type="turret", rank=random(2), tileWidth=2, tileHeight=2}
         end

@@ -34,7 +34,7 @@ function Character:getAngle(offset)
         end
     end
 
-    return self.angle + a
+    return self.angle - 5 + a
 end
 
 

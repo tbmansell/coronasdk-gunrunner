@@ -29,7 +29,7 @@ local function eventWallCollision(self, event)
         if other.ricochet then
             other:bounce(true)
         else
-            other:impact()
+            other:impact(true)
         end
     end
 

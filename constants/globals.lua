@@ -50,16 +50,16 @@ EnvironmentalWeapon = {
 
 
 Weapons = {
-    club              = {name="club",              damage=1, time=500},
-    claws             = {name="claw",              damage=1, time=500},
-    rifle             = {name="rifle",             damage=1, ammoType="bullet",    speed=650, rof=205,  ammo=30, reload=1000, collect=15},
-    shotgun           = {name="shotgun",           damage=1, ammoType="shell",     speed=650, rof=750,  ammo=10, reload=1200, collect=25},
-    launcher          = {name="launcher",          damage=5, ammoType="rocket",    speed=550, rof=1200, ammo=4,  reload=1500, collect=50, area=75},
-    laserGun          = {name="laserGun",          damage=2, ammoType="laser",     speed=600, rof=400,  ammo=15, reload=1300, collect=50, ricochet=2},
-    chainGun          = {name="chainGun",          damage=1, ammoType="chainShot",    speed=700, rof=150,  ammo=50, reload=2000, collect=50, burst=3},
-    chainGunTurret    = {name="chainGun",          damage=1, ammoType="chainShot",    speed=700, rof=150,  ammo=50, reload=2000, collect=50, burst=3},
-    laserCannon       = {name="laserCannon",       damage=4, ammoType="laserBolt", speed=600, rof=400,  ammo=20, reload=2000, collect=50},
-    laserCannonTurret = {name="laserCannonTurret", damage=4, ammoType="laserBolt", speed=600, rof=400,  ammo=20, reload=2000, collect=50},
+    club              = {name="club",        damage=1, time=500},
+    claws             = {name="claw",        damage=1, time=500},
+    rifle             = {name="rifle",       damage=1, ammoType="bullet",    speed=650, rof=205,  ammo=30, reload=1000, collect=15},
+    shotgun           = {name="shotgun",     damage=1, ammoType="shell",     speed=650, rof=750,  ammo=10, reload=1200, collect=25},
+    launcher          = {name="launcher",    damage=5, ammoType="rocket",    speed=550, rof=1200, ammo=4,  reload=1500, collect=50, area=75},
+    laserGun          = {name="laserGun",    damage=2, ammoType="laser",     speed=600, rof=400,  ammo=15, reload=1300, collect=50, ricochet=2},
+    chainGun          = {name="chainGun",    damage=1, ammoType="chainShot", speed=700, rof=150,  ammo=50, reload=2000, collect=50, burst=3},
+    chainGunTurret    = {name="chainGun",    damage=1, ammoType="chainShot", speed=700, rof=150,  ammo=50, reload=2000, collect=50, burst=3},
+    laserCannon       = {name="laserCannon", damage=4, ammoType="laserBolt", speed=600, rof=1200, ammo=20, reload=2000, collect=50, shootThrough=true},
+    laserCannonTurret = {name="laserCannon", damage=4, ammoType="laserBolt", speed=600, rof=1200, ammo=20, reload=2000, collect=50, shootThrough=true},
 }
 
 -- Load in weapon stats for spine, sound and particles:
@@ -116,7 +116,7 @@ EnemyTypes = {
     },
     turret = {
         [1] = {skin="chainGun",                 weapon="chainGunTurret",    health=10, inaccuracy=20, decisionDelay=1000, aggression=50},
-        [2] = {skin="lasercannon",              weapon="laserCannonTurret", health=10, inaccuracy=20, decisionDelay=1000, aggression=50},
+        [2] = {skin="laserCannon",              weapon="laserCannonTurret", health=10, inaccuracy=20, decisionDelay=1000, aggression=50},
     }
 }
 

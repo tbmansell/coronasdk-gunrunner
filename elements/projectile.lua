@@ -21,23 +21,23 @@ function Projectile.eventCollision(self, event)
             other:hit(self)
         end
 
-        if other.isWall then
+        if self.ricochet and other.isWall then
             self:bounce(false)
         else
-            self:impact()
+            self:impact(other.isWall)
         end
     end
 end
 
 
-function Projectile:setPhysics()
+function Projectile:setPhysics(isSensor)
     local bounce = 0
 
     if self.ricochet then
         bounce = 1
     end
 
-    physics.addBody(self.image, "dynamic", {density=0, friction=0, bounce=bounce, filter=self.filter})
+    physics.addBody(self.image, "dynamic", {isSensor=isSensor, density=0, friction=0, bounce=bounce, filter=self.filter})
 
     self.image.collision = Projectile.eventCollision
     self.image:addEventListener("collision", self.image)
@@ -62,13 +62,18 @@ function Projectile:fire()
         self.image:insert(self.boundEmitter)
         self.boundEmitter.x = 0
         self.boundEmitter.y = 0
+
+    elseif weapon.ammoType == "laserBolt" then
+        self:bindEmitter("laserBolt", {angle=self.image.rotation})
+        self.image:insert(self.boundEmitter)
+        self.boundEmitter.x = 0
+        self.boundEmitter.y = 0
     end
 end
 
 
 function Projectile:getDamage()
     if self.powerupDamage then
-        print("extra damage")
         return self.weapon.damage * self.powerupDamage
     else
         return self.weapon.damage
@@ -87,7 +92,7 @@ function Projectile:bounce(fromWall)
 end
 
 
-function Projectile:impact()
+function Projectile:impact(isWall)
     sounds:projectile(self.weapon.hitSound)
     self:displayImpact()
 
@@ -99,7 +104,9 @@ function Projectile:impact()
         level:createAreaOfEffect({xpos=self:x(), ypos=self:y(), area=self.weapon.area, filter=self.filter, effect=effect})
     end
 
-    self:destroy()
+    if self.shootThrough == nil or isWall then
+        self:destroy()
+    end
 end
 
 

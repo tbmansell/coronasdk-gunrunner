@@ -5,18 +5,28 @@ local ProjectileBuilder = {}
 
 
 function ProjectileBuilder:newShot(camera, spec, weapon)
-    local image = display.newImage("images/projectiles/"..weapon.ammoType..".png", 0, 0)
-    local shot  = builder:newGameObject(spec, image, (weapon.name == "launcher"))
+    local isSensor, makeGroup
 
+    if weapon.ammoType == "rocket" then
+        makeGroup = true
+    elseif weapon.ammoType == "laserBolt" then
+        makeGroup = true
+        isSensor  = true
+    end
+
+    local image = display.newImage("images/projectiles/"..weapon.ammoType..".png", 0, 0)
+    local shot  = builder:newGameObject(spec, image, makeGroup)
+    
     builder:deepCopy(projectileDef, shot)
 
-    shot.weapon   = weapon
-    shot.filter   = spec.filter
-    shot.angle    = spec.angle
-    shot.ricochet = weapon.ricochet
+    shot.weapon       = weapon
+    shot.filter       = spec.filter
+    shot.angle        = spec.angle
+    shot.ricochet     = weapon.ricochet
+    shot.shootThrough = weapon.shootThrough
 
     shot:moveTo(spec.xpos or 0, spec.ypos or 0)
-    shot:setPhysics()
+    shot:setPhysics(isSensor)
 
     camera:addProjectile(shot)
 

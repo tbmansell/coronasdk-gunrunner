@@ -238,11 +238,6 @@ function Player:explode(sound, message)
     if not self:isDead() then
         self.mode = PlayerMode.dead
 
-        --[[if self.runSound then
-            self:stopSound(self.runSound)
-            self.runSound = nil
-        end]]
-
         sounds:player(sound or "killed")
 
         self:destroyEmitter()
@@ -267,11 +262,6 @@ end
 function Player:fallToDeath(hole)
     if not self:isDead() then
         self.mode = PlayerMode.dead
-
-        --[[if self.runSound then
-            self:stopSound(self.runSound)
-            self.runSound = nil
-        end]]
 
         sounds:player("killed")
 
@@ -511,33 +501,6 @@ function Player:removeLaserSight()
     end
 end
 
-
--- Replaces gameObject:sound()
--- @param string action - name of the sound (under global sounds) which also double as the action name for a managed sound
--- @param table  param  - optional list of sound properties
-----
-function Player:sound(action, params)
-    local params = params or {}
-
-    -- The following are special actions that get a random sound to play
-    if     action == "randomJump"        then params.sound = soundEngine:getPlayerJump(self.model)
-    elseif action == "randomWorry"       then params.sound = soundEngine:getPlayerWorry(self.model)
-    elseif action == "randomCelebrate"   then params.sound = soundEngine:getPlayerCelebrate(self.model)
-    elseif action == "randomImpactVoice" then params.sound = soundEngine:getPlayerImpact(self.model)
-    elseif action == "randomFall"        then params.sound = soundEngine:getRandomPlayerFall()
-    elseif action == "randomImpact"      then params.sound = soundEngine:getRandomImpact()
-    elseif action == "randomRing"        then params.sound = soundEngine:getRandomRing()
-    else
-        params.sound = params.sound or sounds[action]
-    end
-
-    if self.main and not params.manage then
-        -- Sound should be in full and not in sound engine as its the main player
-        --sounds:play(params.sound, params)
-    else
-        --sounds:play(action, params)
-    end
-end
 
 
 return Player

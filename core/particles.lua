@@ -12,6 +12,7 @@ function Particles:preLoadEmitters()
     self:loadEmitter("bulletImpact")
     self:loadEmitter("bulletShot")
     self:loadEmitter("rocketBlast")
+    self:loadEmitter("laserBolt")
     self:loadEmitter("explosion")
     self:loadEmitter("explosionLarge")
     self:loadEmitter("explosionCrate")
@@ -96,6 +97,7 @@ function Particles:showEmitter(name, x, y, duration, alpha, angle)
     emitter.id               = #createdEmitters + 1
     emitter.alpha            = alpha or 1
     emitter.rotationStart    = angle
+    emitter.rotationEnd      = angle
     emitter.absolutePosition = false
 
     createdEmitters[emitter.id] = emitter

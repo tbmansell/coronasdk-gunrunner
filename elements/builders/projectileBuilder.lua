@@ -5,25 +5,18 @@ local ProjectileBuilder = {}
 
 
 function ProjectileBuilder:newShot(camera, spec, weapon)
-    local image, shot, isSensor
+    local isSensor, makeGroup
 
-    if weapon.ammoType == "laserBolt" then
-        --[[
-        shot = builder:newSpineObject(spec, {
-                    jsonName  = "characterLegs", 
-                    imagePath = "character", 
-                    skin      = "lizard_assault", 
-                    scale     = spec.scale or 0.5, 
-                    animation = "stationary"
-               })]]
-        image = display.newImage("images/projectiles/"..weapon.ammoType..".png", 0, 0)
-        shot  = builder:newGameObject(spec, image)
-        isSensor = true
-    else
-        image = display.newImage("images/projectiles/"..weapon.ammoType..".png", 0, 0)
-        shot  = builder:newGameObject(spec, image, (weapon.name == "launcher"))
+    if weapon.ammoType == "rocket" then
+        makeGroup = true
+    elseif weapon.ammoType == "laserBolt" then
+        makeGroup = true
+        isSensor  = true
     end
 
+    local image = display.newImage("images/projectiles/"..weapon.ammoType..".png", 0, 0)
+    local shot  = builder:newGameObject(spec, image, makeGroup)
+    
     builder:deepCopy(projectileDef, shot)
 
     shot.weapon       = weapon

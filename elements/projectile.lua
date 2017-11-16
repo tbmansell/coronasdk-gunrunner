@@ -62,6 +62,12 @@ function Projectile:fire()
         self.image:insert(self.boundEmitter)
         self.boundEmitter.x = 0
         self.boundEmitter.y = 0
+
+    elseif weapon.ammoType == "laserBolt" then
+        self:bindEmitter("laserBolt", {angle=self.image.rotation})
+        self.image:insert(self.boundEmitter)
+        self.boundEmitter.x = 0
+        self.boundEmitter.y = 0
     end
 end
 

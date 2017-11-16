@@ -102,6 +102,7 @@ function EnemyBuilder:newTurret(camera, spec)
 
     spec.modifyImage = rankDef.modifyImage
     spec.physicsBody = "static"
+    spec.layer       = 1
 
     local enemy = builder:newCharacter(spec, {
                        jsonName  = "turret",
@@ -162,7 +163,7 @@ function EnemyBuilder:setupEnemyCommon(camera, enemy, spec)
         enemy:rotate(spec.angle)
     end
 
-    camera:addEntity(enemy)
+    camera:addEntity(enemy, false, spec.layer)
 end
 
 

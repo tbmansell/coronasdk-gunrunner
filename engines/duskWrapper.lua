@@ -87,7 +87,7 @@ function TileEngine:loadEnvironment(environment)
     local envShadows = environment.shadows
 
     local tiles  = self.data.layers[1].data
-    local shadow = self.data.layers[2].data
+    local shadow = self.data.layers[3].data
     local rows   = #envTiles
     local cols   = #envTiles[1]
     

@@ -303,8 +303,7 @@ function Loader:load(LevelGenerator)
         turrets  = {}
         points   = self.enemyPoints
 
-        --self:generateEnemies()
-        self:generateTurrets()
+        self:generateEnemies()
         -- TODO: Order them by highest rank first for better placing around higher ranks
         self:placeEntities(turrets)
         self:placeEntities(melees)

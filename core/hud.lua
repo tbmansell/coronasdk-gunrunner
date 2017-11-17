@@ -359,7 +359,7 @@ end
 
 function Hud:resetAim()
     self:clearResetAim()
-    resetAimHandle = transition.to(self.player, {angle=0, time=1000, delay=5000, 
+    resetAimHandle = transition.to(self.player, {angle=0, time=1000, delay=4000, 
                                                 onStart=function() resettingAim=true end, 
                                                 onComplete=function() resettingAim=false; resetAimHandle=nil end})
 end

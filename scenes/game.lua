@@ -140,7 +140,7 @@ end
 
 function scene:loadPlayer()
     player = level:createPlayer({xpos=11.5, ypos=-5.5}, hud)
-    player:setWeapon(Weapons.laserCannon)
+    player:setWeapon(Weapons.rifle)
     
     -- Create Game Over callback
     player.failedCallback = function()
@@ -210,6 +210,7 @@ function scene:startPlaying()
 
     stats:init(player:y())
     physics:start()
+    --player:applyForce(0, -50)
     -- runs the game loop and allows it to start. We allow some delay before this to allow everything to load
     self:createEventHandlers()
 end

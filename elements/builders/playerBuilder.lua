@@ -21,6 +21,11 @@ function PlayerBuilder:newPlayer(camera, spec, hud)
                       skin      = "player_basic", 
                       scale     = spec.scale or 0.5,
                       animation = "run"
+                      --run_fast
+                      --run_slow
+                      --strafe_left
+                      --strafe_right
+                      --stationary
                   })
   
     -- Allow override of destroy()

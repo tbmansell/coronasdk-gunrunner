@@ -238,7 +238,7 @@ function Loader:load(LevelGenerator)
         end
 
         if spec.tileHeight then
-            spec.ypos = spec.ypos + 0.5
+            spec.ypos = spec.ypos - 0.5
         end
 
         self.entities[#self.entities+1] = spec
@@ -303,7 +303,8 @@ function Loader:load(LevelGenerator)
         turrets  = {}
         points   = self.enemyPoints
 
-        self:generateEnemies()
+        --self:generateEnemies()
+        self:generateTurrets()
         -- TODO: Order them by highest rank first for better placing around higher ranks
         self:placeEntities(turrets)
         self:placeEntities(melees)

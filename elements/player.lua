@@ -10,8 +10,8 @@ local Player = {
     intHeight         = 25,
     intWidth          = 25,
     intMaxHealth      = 20,
-    verticalSpeed     = 7, --4,
-    strafeSpeed       = 7, --4,
+    verticalSpeed     = 4,
+    strafeSpeed       = 4,
     powerupDuration   = 10000,
 
     mode              = PlayerMode.ready,
@@ -24,6 +24,8 @@ local Player = {
     powerups          = {},  -- collection of timer handles per powerup active or nil if one is not active
     
     flagShootAllowed  = true,
+    prevX             = 0,
+    prevY             = 0,
 }
 
 -- Aliases:
@@ -31,6 +33,7 @@ local cos    = math.cos
 local sin    = math.sin
 local rad    = math.rad
 local random = math.random
+local round  = math.round
 
 
 function Player:updateSpine(delta)
@@ -42,6 +45,33 @@ function Player:updateSpine(delta)
     self.skeleton:updateWorldTransform()
     
     self.legs:updateSpine(delta)
+end
+
+
+function Player:updateLegs(anim)
+    local y  = self:y()
+    local dy = round(self.prevY - y)
+
+    if dy == 0 then 
+        if not self.hudMovement and self.legAnimation ~= "stationary" then
+            self:loopLegs("stationary")
+        end
+    elseif anim and self.legAnimation ~= anim then
+        self:loopLegs(anim)
+    end
+
+    self.prevY = y
+end
+
+
+function Player:verticalMovement()
+    return round(self.prevY - self:y())
+end
+
+
+function Player:loopLegs(anim)
+    self.legAnimation = anim
+    self.legs:loop(anim)
 end
 
 

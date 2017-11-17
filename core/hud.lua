@@ -42,6 +42,9 @@ local function eventMovePlayer(event)
         movePlayerAllow = Hud.player:canMove()
         movePlayerX     = event.x
         movePlayerY     = event.y
+
+        player.hudMovement = true
+
     elseif event.phase == "moved" and movePlayerAllow then
         -- NOTE: as we have to keep the player moving while the touch is in progress, even if their finger does not move,
         -- All we do in this event is update the x and y
@@ -51,6 +54,9 @@ local function eventMovePlayer(event)
     elseif event.phase == "ended" or event.phase == "cancelled" then
         display.getCurrentStage():setFocus(event.target, nil)
         movePlayerAllow = false
+
+        player.hudMovement = false
+        player:updateLegs("run")
     end
     return true
 end
@@ -308,15 +314,23 @@ function Hud:eventUpdateFrame(event)
     local player = self.player
 
     if movePlayerAllow then
-        -- before moving player, check if any force has been applied and cancel it
-        player:stopMomentum()
-
         local angle = atan2(moveControllerY - movePlayerY, moveControllerX - movePlayerX) * PI
         local dx    = movePlayerSpeedX * -cos(rad(angle))
         local dy    = movePlayerSpeedY * -sin(rad(angle))
+        local legs  = "run"
 
+        player:stopMomentum()
         player:moveBy(dx, dy)
-        --self.player.legs:loop("strafe_left")
+
+        if player:verticalMovement() <= 0 or dy > 0 then 
+            legs = "run_slow" 
+        elseif dy < 0 then 
+            legs = "run_fast"
+        end
+
+        if legs ~= player.legAnimation then
+            player:loopLegs(legs)
+        end
     end
 
     if resettingAim then
@@ -331,7 +345,7 @@ function Hud:eventUpdateFrame(event)
         self.camera:setAngleOffset(angle)
     end
 
---    player:moveBy(0, forcePlayerMoveY)
+    player:moveBy(0, forcePlayerMoveY)
 
     if player.shieldEntity then
         player.shieldEntity:moveTo(player:x(), player:y())

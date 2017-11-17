@@ -104,12 +104,10 @@ function Enemy:animateRotate(rotation)
                 rotation = rotation - 360
             end
 
-            print("animateRotate angle="..rotation..", time="..self.turnSpeed)
             transition.to(self, {angle=rotation, time=self.turnSpeed, onComplete=function()
                 if self.mode == EnemyMode.ready and not self.isTurret then
                     self:loop(self.stationaryAnim)
                 end
-                print("animateRotate [done]")
             end})
         end
     end
@@ -212,7 +210,6 @@ function Enemy:checkBehaviour(camera, player)
                 if self.turnsOnMove then angle = angle - 30 end
                 
                 if angle ~= self.angle then
-                    print("turn to player: "..angle)
                     self:animateRotate(angle)
                 end
             end
@@ -231,7 +228,6 @@ function Enemy:checkBehaviour(camera, player)
             if self:decideToMove() then
                 self:move()
             elseif self:decideToTurn() then
-                print("random turn")
                 self:randomTurn()
             end
         end

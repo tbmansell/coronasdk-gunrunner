@@ -227,12 +227,8 @@ function Level:updateBehaviours()
     particleCollection:checkEach()
     enemyCollection:checkBehaviour(camera, mainPlayer)
 
+    mainPlayer:updateLegs()
     stats:setDistance(mainPlayer:y())
-
-    --[[
-    -- Might as well be done here, as it's the only non-level thing needing updating
-    soundEngine:updateSounds()
-    ]]
 end
 
 

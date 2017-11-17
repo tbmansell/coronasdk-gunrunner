@@ -24,6 +24,7 @@ function Sounds:preload()
     self.projectileSounds.shotGunShot   = loadSound("sounds/shotGunShot.mp3")
     self.projectileSounds.rocketShot    = loadSound("sounds/rocketShot.mp3")
     self.projectileSounds.laserShot     = loadSound("sounds/laserShot.mp3")
+    self.projectileSounds.laserBolt     = loadSound("sounds/laserBolt.mp3")
     self.projectileSounds.chainGunShot  = loadSound("sounds/chainGunShot.mp3")
     
     self.projectileSounds.bulletHit     = loadSound("sounds/bulletHit.mp3")

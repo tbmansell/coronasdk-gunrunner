@@ -41,6 +41,7 @@ local function eventUpdateGameLogic()
     player.currentSection = levelGenerator:getSection(player:y())
 
     level:updateBehaviours()
+    hud:updateMapSection()
 
     if globalDebugGame then
         hud:updateDebugData()
@@ -161,7 +162,7 @@ end
 
 
 function scene:loadInterface()
-    hud:create(tileEngine, player, scene.pauseLevel, scene.resumeLevel)
+    hud:create(tileEngine, player, scene.pauseLevel, scene.resumeLevel, scene.changeMusic)
 end
 
 
@@ -183,8 +184,16 @@ end
 
 
 function scene:startMusic()
-    self.musicChannel = audio.findFreeChannel()
-    sounds:play(sounds.music.cyborgNinja, {channel=self.musicChannel, volume=0.3, fadein=8000, loops=-1})
+    audio.reserveChannels(1)
+    sounds:play(sounds.music.rollingGame, {channel=1, volume=0.3, fadein=8000, loops=-1})
+end
+
+
+function scene:changeMusic(newMusic, fadeIn)
+    audio.fadeOut({channel=1, time=1000})
+    after(1000, function()
+        sounds:play(newMusic, {channel=1, volume=0.3, fadein=(fadeIn or 2000), loops=-1})
+    end)
 end
 
 

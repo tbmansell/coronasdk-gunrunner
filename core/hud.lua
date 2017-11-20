@@ -6,6 +6,7 @@ local particles  = require("core.particles")
 local Hud = {}
 
 -- Locals
+local localPlayer      = nil
 local forcePlayerMoveY = -2
 local movePlayerX      = nil
 local movePlayerY      = nil
@@ -15,6 +16,7 @@ local movePlayerSppedY = 0
 local aimPlayerAllow   = false
 local aimPlayerX       = nil
 local aimPlayerY       = nil
+local forceScroll      = true
 
 local moveControllerX  = 0
 local moveControllerY  = 0
@@ -23,6 +25,7 @@ local shootControllerY = 0
 local lastTime         = 0
 local resetAimHandle   = nil
 local resettingAim     = false
+local transitionMapType= false
 
 -- Aliases
 local PI     = 180 / math.pi
@@ -109,11 +112,12 @@ end
 
 -- Class Members
 
-function Hud:create(camera, player, pauseGameHandler, resumeGameHandler)
+function Hud:create(camera, player, pauseGameHandler, resumeGameHandler, changeMusicHandler)
     self.camera            = camera
     self.player            = player
     self.pauseGameHandler  = pauseGameHandler
     self.resumeGameHandler = resumeGameHandler
+    self.changeMusicHandler= changeMusicHandler
     self.group             = display.newGroup()
     
     self.debugMode         = false
@@ -136,6 +140,8 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler)
     self.healthCounter.widthPerHealth = self.healthCounter.width / player.health
 
     -- assign shortcuts variables
+    localPlayer = player
+    forceScroll = true
     movePlayerSpeedX, movePlayerSpeedY = player.strafeSpeed,  player.verticalSpeed
     moveControllerX,  moveControllerY  = self.controlMove.x,  self.controlMove.y
     shootControllerX, shootControllerY = self.controlShoot.x, self.controlShoot.y + (self.controlShoot.height/2)
@@ -167,6 +173,8 @@ function Hud:drawDebug()
     self.debugNumParticles    = draw:newText(self.debugPanel, "",   5, 420, 0.4, "white", "LEFT")
     self.debugSection         = draw:newText(self.debugPanel, "",   5, 460, 0.4, "white", "LEFT")
     self.debugYPos            = draw:newText(self.debugPanel, "",   5, 500, 0.4, "white", "LEFT")
+    self.debugCustomMap       = draw:newText(self.debugPanel, "",   5, 540, 0.4, "white", "LEFT")
+    self.debugSectionEnemies  = draw:newText(self.debugPanel, "",   5, 580, 0.4, "white", "LEFT")
     
     self.textDebugMode:addEventListener("tap",   self.switchDebugMode)
     self.textPhysicsMode:addEventListener("tap", self.switchPhysicsMode)
@@ -204,6 +212,7 @@ function Hud:destroy()
     self.resumeGameHandler  = nil
     self.camera             = nil
     self.player             = nil
+    localPlayer             = nil
     self.playerIcon         = nil
     self.textScore          = nil
     self.ammoCounter        = nil
@@ -311,49 +320,60 @@ end
 
 
 function Hud:eventUpdateFrame(event)
-    local player = self.player
-
     if movePlayerAllow then
-        local angle = atan2(moveControllerY - movePlayerY, moveControllerX - movePlayerX) * PI
-        local dx    = movePlayerSpeedX * -cos(rad(angle))
-        local dy    = movePlayerSpeedY * -sin(rad(angle))
-        local legs  = "run"
-
-        player:stopMomentum()
-        player:moveBy(dx, dy)
-
-        if player:verticalMovement() <= 0 or dy > 0 then 
-            legs = "run_slow" 
-        elseif dy < 0 then 
-            legs = "run_fast"
-        end
-
-        if legs ~= player.legAnimation then
-            player:loopLegs(legs)
-        end
+        self:updateFrameUserMovement(event)
     end
 
     if resettingAim then
         -- allow camera to follow player transition
-        self.camera:setAngleOffset(player.angle)
-
+        self.camera:setAngleOffset(localPlayer.angle)
     elseif aimPlayerAllow then
-        local angle = 90 + atan2(aimPlayerY - shootControllerY, aimPlayerX - shootControllerX) * PI
-        
-        player:rotate(angle, event)
-        player:shoot(self.camera)
-        self.camera:setAngleOffset(angle)
+        self:updateFrameShooting(event)
     end
 
-    player:moveBy(0, forcePlayerMoveY)
-
-    if player.shieldEntity then
-        player.shieldEntity:moveTo(player:x(), player:y())
+    if forceScroll then
+        localPlayer:moveBy(0, forcePlayerMoveY)
     end
 
-    if player:hasLaserSight() then
-        player:drawLaserSight()
+    if localPlayer.shieldEntity then
+        localPlayer.shieldEntity:moveTo(localPlayer:x(), localPlayer:y())
     end
+
+    if localPlayer.laserSightEntity then
+        localPlayer:drawLaserSight()
+    end
+end
+
+
+function Hud:updateFrameUserMovement(event)
+    local angle = atan2(moveControllerY - movePlayerY, moveControllerX - movePlayerX) * PI
+    local dx    = movePlayerSpeedX * -cos(rad(angle))
+    local dy    = movePlayerSpeedY * -sin(rad(angle))
+    local legs  = "run"
+
+    localPlayer:stopMomentum()
+    localPlayer:moveBy(dx, dy)
+
+    if forceScroll then
+        if localPlayer:verticalMovement() <= 0 or dy > 0 then
+            legs = "run_slow" 
+        elseif dy < 0 then 
+            legs = "run_fast"
+        end
+    end
+
+    if legs ~= localPlayer.legAnimation then
+        localPlayer:loopLegs(legs)
+    end
+end
+
+
+function Hud:updateFrameShooting(event)
+    local angle = 90 + atan2(aimPlayerY - shootControllerY, aimPlayerX - shootControllerX) * PI
+    
+    localPlayer:rotate(angle, event)
+    localPlayer:shoot(self.camera)
+    self.camera:setAngleOffset(angle)
 end
 
 
@@ -374,7 +394,40 @@ function Hud:clearResetAim()
 end
 
 
+function Hud:updateMapSection()
+    local ownMap = localPlayer.currentSection.ownMap
+
+    if not transitionMapType and ownMap then
+        local enemies = level:getNumberEnemies(localPlayer.currentSection.number)
+        
+        if forceScroll and enemies > 0 then
+            transitionMapType = true
+            self.changeMusicHandler(nil, sounds.music.customScene)
+
+            after(1000, function() 
+                transitionMapType = false
+                forceScroll       = false
+            end)
+
+        elseif not forceScroll and enemies == 0 then
+            transitionMapType = true
+            sounds:general("mapComplete")
+            self.changeMusicHandler(nil, sounds.music.rollingGame, 20000)
+
+            after(2000, function()
+                transitionMapType = false
+                forceScroll       = true
+                localPlayer:loopLegs("run")
+            end)
+        end            
+    end
+end
+
+
 function Hud:updateDebugData()
+    local section        = self.player.currentSection
+    local sectionEnemies = level:getNumberEnemies(section.number)
+
     self.debugSizeEntites:setText("size: "..level:getSizeEntities())
     self.debugNumEntites:setText("entities: "..level:getNumberEntities())
     self.debugNumEnemies:setText("enemies: "..level:getNumberEnemies())
@@ -382,8 +435,10 @@ function Hud:updateDebugData()
     self.debugNumCollectables:setText("collect: "..level:getNumberCollectables())
     self.debugNumProjectiles:setText("shots: "..level:getNumberProjectiles())
     self.debugNumParticles:setText("particles: "..level:getNumberParticles())
-    self.debugSection:setText("section: "..self.player.currentSection)
+    self.debugSection:setText("section: "..section.number)
     self.debugYPos:setText("ypos: "..round(self.player:y()))
+    self.debugCustomMap:setText("custom: "..tostring(section.ownMap))
+    self.debugSectionEnemies:setText("enemies at: "..sectionEnemies)
 end
 
 

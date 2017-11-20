@@ -33,6 +33,22 @@ function Collection:sizeInGame()
 end
 
 
+function Collection:sizeInSection(section)
+    local items = self.items
+    local num   = #items
+    local count = 0
+
+    for i=1,num do
+        local object = items[i]
+        if object and object ~= -1 and object.inGame and object.mapSection and object.mapSection == section then
+            count = count + 1
+        end
+    end
+    return count
+end
+
+
+
 -- Add an object to this collection: let the collection do the object linkage to save functions on every object
 -- This function is to allow objects to belong to multiple collections, so it does not modify the objects id
 -- @param object to add

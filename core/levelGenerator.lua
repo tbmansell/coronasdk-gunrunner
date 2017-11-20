@@ -146,17 +146,16 @@ end
 
 -- Gets current section based on ypos, but as sections are generated from top down, we flip this, so we call the bottom section #1
 function LevelGenerator:getSection(ypos)
-    local section = 1
+    local sections = #self.environments
     
-    for i=#self.environments, 1, -1 do
-        local env = self.environments[i] 
+    for i=sections, 1, -1 do
+        local env = self.environments[i]
         local top = env.height * self.TileSize * (env.number-1)
 
         if ypos > top then
-            return env.number
+            return self.environments[sections - i + 1]
         end
     end
-    return 0
 end
 
 
@@ -164,7 +163,8 @@ end
 
 
 function LevelGenerator:shouldLoadOwnMap()
-    return (self.section == 10)
+    --return (self.section == 10)
+    return (self.section == 2)
 end
 
 

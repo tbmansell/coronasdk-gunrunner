@@ -105,8 +105,12 @@ function Level:getSizeEntities()
 end
 
 
-function Level:getNumberEnemies()
-    return enemyCollection:sizeInGame()
+function Level:getNumberEnemies(section)
+    if section then
+        return enemyCollection:sizeInSection(section)
+    else
+        return enemyCollection:sizeInGame()
+    end
 end
 
 

@@ -41,8 +41,10 @@ function Sounds:preload()
     self.collectableSounds.gotJewel  = loadSound("sounds/collectedJewel.mp3")
 
     self.generalSounds.gameOver      = loadSound("sounds/gameOver.mp3")
+    self.generalSounds.mapComplete   = loadSound("sounds/mapComplete.wav")
 
-    self.music.cyborgNinja           = loadSound("sounds/music-cyborgNinja.mp3")
+    self.music.rollingGame           = loadSound("sounds/music-cyborgNinja.mp3")
+    self.music.customScene           = loadSound("sounds/music-powerBotsLoop.wav")
 end
 
 

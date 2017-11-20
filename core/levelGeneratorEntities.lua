@@ -27,6 +27,40 @@ local points      = nil
 local entityDefs = {
     [361] = {object="enemy",    type="melee",   rank=1},
     [362] = {object="enemy",    type="shooter", rank=1},
+    [363] = {object="enemy",    type="shooter", rank=1},
+    [364] = {object="enemy",    type="shooter", rank=1},
+    [365] = {object="enemy",    type="shooter", rank=1},
+    [366] = {object="enemy",    type="melee",   rank=1},
+    [367] = {object="enemy",    type="shooter", rank=1},
+    [368] = {object="enemy",    type="shooter", rank=1},
+    [369] = {object="enemy",    type="shooter", rank=1},
+    [370] = {object="enemy",    type="shooter", rank=1},
+    [371] = {object="enemy",    type="melee",   rank=1},
+    [372] = {object="enemy",    type="shooter", rank=1},
+    [373] = {object="enemy",    type="shooter", rank=1},
+    [374] = {object="enemy",    type="shooter", rank=1},
+    [375] = {object="enemy",    type="shooter", rank=1},
+    [391] = {object="weapon",   type=Weapons.rifle.name},
+    [392] = {object="weapon",   type=Weapons.shotgun.name},
+    [393] = {object="weapon",   type=Weapons.launcher.name},
+    [394] = {object="weapon",   type=Weapons.laserGun.name},
+    [406] = {object="powerup",  type=Powerups.damage},
+    [407] = {object="powerup",  type=Powerups.extraAmmo},
+    [408] = {object="powerup",  type=Powerups.fastMove},
+    [409] = {object="powerup",  type=Powerups.fastShoot},
+    [410] = {object="powerup",  type=Powerups.health, health=5},
+    [411] = {object="powerup",  type=Powerups.laserSight},
+    [412] = {object="powerup",  type=Powerups.shield},
+    [421] = {object="obstacle", type="crate",    variant="small"},
+    [422] = {object="obstacle", type="crate",    variant="big"},
+    [425] = {object="obstacle", type="gas",      variant="small"},
+    [426] = {object="obstacle", type="gas",      variant="big"},
+    [429] = {object="obstacle", type="computer", variant="1"},
+    [430] = {object="obstacle", type="computer", variant="2"},
+    [431] = {object="obstacle", type="computer", variant="3"},
+    --[[
+    [361] = {object="enemy",    type="melee",   rank=1},
+    [362] = {object="enemy",    type="shooter", rank=1},
     [363] = {object="enemy",    type="shooter", rank=2},
     [364] = {object="enemy",    type="shooter", rank=3},
     [365] = {object="enemy",    type="shooter", rank=4},
@@ -58,6 +92,7 @@ local entityDefs = {
     [429] = {object="obstacle", type="computer", variant="1"},
     [430] = {object="obstacle", type="computer", variant="2"},
     [431] = {object="obstacle", type="computer", variant="3"},
+    ]]
 }
 
 
@@ -146,7 +181,10 @@ function Loader:load(LevelGenerator)
                 local entityIndex = entityData[gridIndex]
 
                 if entityDefs[entityIndex] then
-                    self:createEntitySpec(x, y, entityDefs[entityIndex])
+                    local attributes = entityDefs[entityIndex]
+                    attributes.mapSection = env.number
+
+                    self:createEntitySpec(x, y, attributes)
                 end
             end
         end

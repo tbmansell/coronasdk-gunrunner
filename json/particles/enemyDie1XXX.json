@@ -13,7 +13,7 @@
 "angleVariance":0,
 "particleLifespan":0.15,
 "startColorBlue":0,
-"textureFileName":"enemydie_1.png",
+"textureFileName":"enemyDie_1.png",
 "startColorRed":0.10,
 "finishColorVarianceRed":0,
 "gravityy":29,

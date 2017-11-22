@@ -36,6 +36,16 @@ local random = math.random
 local round  = math.round
 
 
+function Player.eventCollision(self, event)
+    local other = event.other.object or event.other
+    local self  = self.object
+
+    if other and other.isHole and event.phase == "began" then
+        self:fallToDeath(other)
+    end
+end
+
+
 function Player:updateSpine(delta)
     self.state:update(delta)
     self.state:apply(self.skeleton)
@@ -157,10 +167,13 @@ function Player:setPhysics()
    
     self.image.isFixedRotation   = true
     self.image.isSleepingAllowed = false
+
+    self.image.collision = Player.eventCollision
+    self.image:addEventListener("collision", self.image)
 end
 
 
-function Player:setPhysicsFilter(action)
+--[[function Player:setPhysicsFilter(action)
     local filter = self:selectFilter(action)
 
     if self.physicsFilterPrev ~= filter then
@@ -208,7 +221,7 @@ function Player:selectFilter(action)
     else
         return Filters.player
     end
-end
+end]]
 
 
 function Player:startLevelSequence()
@@ -530,7 +543,6 @@ function Player:removeLaserSight()
         self.laserSightEntity = nil
     end
 end
-
 
 
 return Player

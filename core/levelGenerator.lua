@@ -616,7 +616,7 @@ function LevelGenerator:setEnvironmentFloor(env)
                 end]]
 
                 -- NOTE: this has to run after entities have been placed so we can detect normal tiles
-                env.tiles[y][x] = self.tiles.plain[random(#self.tiles.plain)]
+                --env.tiles[y][x] = self.tiles.plain[random(#self.tiles.plain)]
             end
         end
     end

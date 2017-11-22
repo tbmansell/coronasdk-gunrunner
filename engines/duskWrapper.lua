@@ -59,7 +59,8 @@ end
 
 
 function TileEngine:init(tiles)
-    dusk.setPreference("enableTileCulling", false)
+    --dusk.setPreference("enableTileCulling", false)
+    --dusk.setPreference("autoGenerateObjectPhysicsShapes", true)
 
     self.data       = dusk.loadMap("json/RunAndGunMap.json")
     self.tileHeight = self.data.tileheight
@@ -82,6 +83,11 @@ function TileEngine:destroy()
 end
 
 
+function TileEngine:rebuild()
+    self.map.destroy()
+end
+
+
 function TileEngine:loadEnvironment(environment)
     local envTiles   = environment.tiles
     local envShadows = environment.shadows
@@ -93,14 +99,12 @@ function TileEngine:loadEnvironment(environment)
     
     for row=1, rows do
         for col=1, cols do
-            local index   = self.existingTiles + (((row-1)*cols) + col)
-            tiles[index]  = envTiles[row][col]
-            --print("index: "..index.." row: "..row.." col: "..col.." tile="..tostring(tiles[index]))
---            print("shadows: "..row..", "..col)
+            local index  = self.existingTiles + (((row-1)*cols) + col)
+            tiles[index] = envTiles[row][col]
+
             if envShadows[row][col] > 0 then
                 shadow[index] = envShadows[row][col]
             end
-
         end
     end
 
@@ -121,18 +125,18 @@ function TileEngine:buildLayers()
     self.objectLayer2 = self.map.layer["EntityLayer"]
     self.objectLayer3 = self.map.layer["AboveEntityLayer"]
     
-    for tile in self.tileLayer.tilesInRange(1,1, self.cols, self.rows) do
+    --[[for tile in self.tileLayer.tilesInRange(1,1, self.cols, self.rows) do
         local index = tile.tilesetGID
         local frame = spriteSheetInfo.sheet.frames[index]
         
         if frame then
             if frame.isWall then
-                self:createWall(tile, frame)
+                --self:createWall(tile, frame)
             elseif frame.isHole then
                 self:createHole(tile)
             end
         end
-    end
+    end]]
 
     self.map:scale(0.7, 0.7)
     self.map.y = 250

@@ -101,7 +101,7 @@ function scene:loadLevel()
     local bgr = display.newImage(self.view, "images/background2.jpg", globalCenterX, globalCenterY)
     bgr:scale(2,2)
 
-    local sections    = 10
+    local sections    = 3
     local environment = {}
     local entities    = {}
 
@@ -191,7 +191,7 @@ end
 
 function scene:changeMusic(newMusic, fadeIn)
     audio.fadeOut({channel=1, time=1000})
-    after(1000, function()
+    after(1100, function()
         sounds:play(newMusic, {channel=1, volume=0.3, fadein=(fadeIn or 2000), loops=-1})
     end)
 end

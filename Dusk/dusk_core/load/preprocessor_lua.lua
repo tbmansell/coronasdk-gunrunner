@@ -17,6 +17,7 @@ local tostring = tostring
 -- Get Map Data
 --------------------------------------------------------------------------------
 function lib_preprocessor.process(data)
+    print("PREPROCESSOR")
 	for i = 1, #data.tilesets do
 		local t = data.tilesets[i]
 		t.tileproperties = {}

@@ -102,6 +102,7 @@ function lib_tilesets.get(data, dirTree)
 			
 				if data.tilesets[i].tileproperties[strGID] then
 					tilesetProperties[gid] = getProperties(data.tilesets[i].tileproperties[strGID], "tile", false)
+
 					if tilesetProperties[gid].object["!tileID!"] then
 						tileIDs[tilesetProperties[gid].object["!tileID!"] ] = gid
 					end

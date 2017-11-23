@@ -13,7 +13,7 @@ local abs = math.abs
 
 
 function Projectile.eventCollision(self, event)
-    local other = event.other.object
+    local other = event.other.object or event.other
     local self  = self.object
 
     if other and event.phase == "began" then

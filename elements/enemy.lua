@@ -48,11 +48,14 @@ local percent = utils.percent
 
 
 function Enemy.eventCollision(self, event)
-    local other = event.other.object
+    local other = event.other.object or event.other
     local self  = self.object
 
     if other then
-        if other.isPlayer and not self.isTurret then 
+        if event.phase == "began" and other.isHole then
+            self:fallToDeath(other)
+
+        elseif other.isPlayer and not self.isTurret then 
             -- always strike on start of contact
             if event.phase == "began" then
                 self:strike(other)
@@ -334,7 +337,7 @@ function Enemy:move()
         self:animateRotate(direction-120)
         
         after(self.turnSpeed, function()
-            self:doMove(direction) 
+            if not self:isDead() then self:doMove(direction) end
         end)
     else
         self:doMove(direction)
@@ -352,11 +355,13 @@ function Enemy:doMove(direction)
     self:animateLegs("run")
 
     after(duration, function()
-        self:stopMomentum()
-        self:loop(self.stationaryAnim)
-        self:animateLegs("stationary")
-        self:setMode(EnemyMode.ready)
-        self.flagMoveAllowed = true
+        if not self:isDead() then
+            self:stopMomentum()
+            self:loop(self.stationaryAnim)
+            self:animateLegs("stationary")
+            self:setMode(EnemyMode.ready)
+            self.flagMoveAllowed = true
+        end
     end)
 end
 
@@ -382,7 +387,7 @@ function Enemy:charge(player)
         self:animateRotate(direction-120)
         
         after(self.turnSpeed, function()
-            self:doCharge(direction) 
+            if not self:isDead() then self:doCharge(direction) end
         end)
     else
         self:animateRotate(direction-90)
@@ -406,7 +411,7 @@ function Enemy:doCharge(direction)
     after(duration, function()
         self.flagChargeAllowed = true
 
-        if self.mode == EnemyMode.charge then
+        if not self:isDead() and self.mode == EnemyMode.charge then
             self:stopMomentum()
             self:loop(self.stationaryAnim)
             self:animateLegs("stationary")
@@ -454,6 +459,7 @@ function Enemy:explode()
         local seq = anim:chainSeq("die", self.image)
         seq:tran({time=350, alpha=0})
         seq.onComplete = function()
+            print("*** explode "..self.key)
             self:destroy()
         end
         seq:start()
@@ -486,6 +492,7 @@ function Enemy:fallToDeath(hole)
         local seq = anim:chainSeq("die", self.image)
         seq:tran({time=1000, x=hole.x, y=hole.y, xScale=0.01, yScale=0.01, alpha=0})
         seq.onComplete = function()
+            print("*** fallToDeath "..self.key)
             self:destroy()
         end
         seq:start()

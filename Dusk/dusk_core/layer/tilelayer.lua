@@ -400,8 +400,24 @@ function lib_tilelayer.createLayer(map, mapData, data, dataIndex, tileIndex, ima
 
 						if tilePhysics and layerPhysics then
 							for k, v in pairs(physicsKeys) do
-								physicsParameters[i][k] = tilePhysics[k]
-								if physicsParameters[i][k] == nil then physicsParameters[i][k] = layerPhysics[k] end
+								if k == "filter" then
+									if tilePhysics[k] == "obstacle" then
+										physicsParameters[i][k] = Filters.obstacle
+
+									elseif tilePhysics[k] == "hole" then
+										physicsParameters[i][k] = Filters.hole
+									end
+								elseif k == "shape" then
+									if tilePhysics[k] == "hole" then
+										physicsParameters[i]["shape"] = {-10,-10, 10,-10, 10,10, -10,10}
+									end
+								else
+									physicsParameters[i][k] = tilePhysics[k]
+								end
+
+								if physicsParameters[i][k] == nil then 
+									physicsParameters[i][k] = layerPhysics[k] 
+								end
 							end
 						elseif tilePhysics then
 							physicsParameters[i] = tilePhysics

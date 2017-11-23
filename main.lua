@@ -3,7 +3,7 @@ require("constants.globals")
 
 -- Global label used for buld version
 globalBuildVersion     = "0.5"
-globalDebugGame        = false
+globalDebugGame        = true
 globalGameMode         = GameMode.loading
 globalFPS              = 0
 globalCenterX          = display.contentCenterX

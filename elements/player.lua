@@ -10,8 +10,8 @@ local Player = {
     intHeight         = 25,
     intWidth          = 25,
     intMaxHealth      = 20,
-    verticalSpeed     = 4,
-    strafeSpeed       = 4,
+    verticalSpeed     = 8,
+    strafeSpeed       = 8,
     powerupDuration   = 10000,
 
     mode              = PlayerMode.ready,
@@ -171,57 +171,6 @@ function Player:setPhysics()
     self.image.collision = Player.eventCollision
     self.image:addEventListener("collision", self.image)
 end
-
-
---[[function Player:setPhysicsFilter(action)
-    local filter = self:selectFilter(action)
-
-    if self.physicsFilterPrev ~= filter then
-        self.physicsFilterPrev = filter
-
-        local xvel, yvel = self:getForce()
-        physics.removeBody(self.image)
-
-        self:setPhysics(self:getCamera().scaleImage, filter)
-
-        if xvel ~= 0 or yvel ~= 0 then
-            self:applyForce(xvel, yvel)
-        end
-
-        -- if on an obstable then keep player from falling off
-        if self.attachedObstacle then
-            self.image.gravityScale = 0
-        end
-    end
-end
-
-
-function Player:selectFilter(action)
-    if action == "addShield" then
-        return Filters.playerShielded
-    
-    elseif action == "removeShield" then
-        if self.mode == PlayerMode.jump then
-            return Filters.playerJumping
-        else 
-            return Filters.player
-        end
-    elseif action == "jump" then
-        if self:hasShield() then
-            return Filters.playerShielded
-        else
-            return Filters.playerJumping
-        end
-    elseif action == "land" then
-        if self:hasShield() then
-            return Filters.playerShielded
-        else 
-            return Filters.player
-        end
-    else
-        return Filters.player
-    end
-end]]
 
 
 function Player:startLevelSequence()

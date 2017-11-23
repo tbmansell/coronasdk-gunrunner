@@ -1,5 +1,4 @@
 local json                   = require( "json" )
-local spriteSheetInfo        = require("core.sheetInfo")
 local levelGeneratorEntities = require("core.levelGeneratorEntities")
 local utils                  = require("core.utils")
 
@@ -11,7 +10,7 @@ local LevelGenerator = {
     StartWidth       = 13,
     StartXpos        = 6,
     StartHeight      = 24,
-    TileSize         = spriteSheetInfo.tileSize,
+    TileSize         = 75,
 
     environments     = {},
     tiles            = {},
@@ -36,61 +35,67 @@ local percent = utils.percent
 
 
 function LevelGenerator:setup()
-    spriteSheetInfo:setup()
+    self.tiles.default          = 2
+    self.tiles.noFloor          = 183
 
-    self.tiles.default          = spriteSheetInfo:getFrameIndex("plain")
-
-    self.tiles.noFloor          = spriteSheetInfo:getFrameIndex("noFloor")
-
-    self.tiles.wallTop          = spriteSheetInfo:getFrameIndex("wallTop")
-    self.tiles.wallBot          = spriteSheetInfo:getFrameIndex("wallBot")
-    self.tiles.wallLeft         = spriteSheetInfo:getFrameIndex("wallLeft")
-    self.tiles.wallRight        = spriteSheetInfo:getFrameIndex("wallRight")
+    self.tiles.wallTop          = 16
+    self.tiles.wallBot          = 76
+    self.tiles.wallLeft         = 47
+    self.tiles.wallRight        = 51
     
-    self.tiles.wallHoriz        = spriteSheetInfo:getFrameIndex("wallHoriz")
-    self.tiles.wallVert         = spriteSheetInfo:getFrameIndex("wallVert")
-    self.tiles.wallVertPattern  = spriteSheetInfo:getFrameIndex("wallVertPattern")
-    self.tiles.wallPyramid      = spriteSheetInfo:getFrameIndex("wallPyramid")
-    self.tiles.wallTopLeft      = spriteSheetInfo:getFrameIndex("wallTopLeft")
-    self.tiles.wallTopRight     = spriteSheetInfo:getFrameIndex("wallTopRight")
-    self.tiles.wallBotLeft      = spriteSheetInfo:getFrameIndex("wallBotLeft")
-    self.tiles.wallBotRight     = spriteSheetInfo:getFrameIndex("wallBotRight")
+    self.tiles.wallHoriz        = 48
+    self.tiles.wallHoriz2       = 49
+    self.tiles.wallHoriz3       = 50
+    self.tiles.wallHoriz4       = 4
 
-    self.tiles.wallBlock        = spriteSheetInfo:getFrameIndex("wallBlock")
+    self.tiles.wallVert         = 31
+    self.tiles.wallVert2        = 46
+    self.tiles.wallVert3        = 61
+    self.tiles.wallVert4        = 20
+    self.tiles.wallTopLeft      = 3
+    self.tiles.wallTopRight     = 5
+    self.tiles.wallBotLeft      = 33
+    self.tiles.wallBotRight     = 35
 
-    self.tiles.edgeBot          = spriteSheetInfo:getFrameIndex("edgeBot")
-    self.tiles.boxEdgeTop       = spriteSheetInfo:getFrameIndex("boxEdgeTop")
+    self.tiles.wallBlock        = 188
+    self.tiles.wallBlock2       = 189
+    self.tiles.wallBlock3       = 190
+    self.tiles.wallBlock4       = 191
 
-    self.tiles.shadowRightTop   = spriteSheetInfo:getFrameIndex("shadowRightTop")
-    self.tiles.shadowRight      = spriteSheetInfo:getFrameIndex("shadowRight")
-    self.tiles.shadowRightBot   = spriteSheetInfo:getFrameIndex("shadowRightBot")
-    self.tiles.shadowBotLeft    = spriteSheetInfo:getFrameIndex("shadowBotLeft")
-    self.tiles.shadowBot        = spriteSheetInfo:getFrameIndex("shadowBot")
+    self.tiles.edgeTopLeft      = 1
+    self.tiles.edgeTopRight     = 15
+    self.tiles.edgeBotLeft      = 125
+    self.tiles.edgeBotRight     = 126
+    self.tiles.edgeBot          = 140
+    -- same as edgeBot BUT not marked as edge so we dont add needless physcics shape (for inside box)
+    self.tiles.boxEdgeTop       = 140
 
-    self.tiles.patternHazzard   = spriteSheetInfo:getFrameIndex("pattern-hazzard")
-    self.tiles.patternPipes     = spriteSheetInfo:getFrameIndex("pattern-pipes")
-    self.tiles.patternGrill     = spriteSheetInfo:getFrameIndex("pattern-grill")
+    self.tiles.shadowRightTop   = 152
+    self.tiles.shadowRight      = 167
+    self.tiles.shadowRightBot   = 197
+    self.tiles.shadowBotLeft    = 168
+    self.tiles.shadowBot        = 169
 
-    self.tiles.paintRedTopLeft  = spriteSheetInfo:getFrameIndex("paintRedTopLeft")
-    self.tiles.paintRedTopRight = spriteSheetInfo:getFrameIndex("paintRedTopRight")
-    self.tiles.paintRedBotLeft  = spriteSheetInfo:getFrameIndex("paintRedBotLeft")
-    self.tiles.paintRedBotRight = spriteSheetInfo:getFrameIndex("paintRedBotRight")
-    self.tiles.paintRedHoriz    = spriteSheetInfo:getFrameIndex("paintRedHoriz")
-    self.tiles.paintRedVert     = spriteSheetInfo:getFrameIndex("paintRedVert")
+    self.tiles.patternHazzard   = 89
+    self.tiles.patternPipes     = 13
+    self.tiles.patternGrill     = 11
 
-    self.tiles.paintBlueTopLeft  = spriteSheetInfo:getFrameIndex("paintBlueTopLeft")
-    self.tiles.paintBlueTopRight = spriteSheetInfo:getFrameIndex("paintBlueTopRight")
-    self.tiles.paintBlueBotLeft  = spriteSheetInfo:getFrameIndex("paintBlueBotLeft")
-    self.tiles.paintBlueBotRight = spriteSheetInfo:getFrameIndex("paintBlueBotRight")
-    self.tiles.paintBlueHoriz    = spriteSheetInfo:getFrameIndex("paintBlueHoriz")
-    self.tiles.paintBlueVert     = spriteSheetInfo:getFrameIndex("paintBlueVert")
+    self.tiles.paintRedTopLeft  = 52
+    self.tiles.paintRedTopRight = 54
+    self.tiles.paintRedBotLeft  = 67
+    self.tiles.paintRedBotRight = 69
+    self.tiles.paintRedHoriz    = 53
+    self.tiles.paintRedVert     = 82
 
-    -- Random selection of plain tiles
-    self.tiles.plain = {}
+    self.tiles.paintBlueTopLeft  = 262
+    self.tiles.paintBlueTopRight = 264
+    self.tiles.paintBlueBotLeft  = 277
+    self.tiles.paintBlueBotRight = 279
+    self.tiles.paintBlueHoriz    = 263
+    self.tiles.paintBlueVert     = 292
 
-    for i=1, 12 do
-        self.tiles.plain[i] = spriteSheetInfo:getFrameIndex("plain-"..i)
-    end
+    -- plain tile variations, default:
+    self.tiles.defaultVarations = {6, 7, 8, 9, 21, 22, 23, 24, 36, 37, 38, 39}
 end
 
 
@@ -128,8 +133,6 @@ function LevelGenerator:newEnvironment()
         self:setEnvironmentTiles(env)
         self:setEnvironmentEdges(env)
 
-        print(self.section..". width="..env.width)
-
         if self.section == 1 then
             self:setStartEdge(env)
         else
@@ -163,7 +166,6 @@ end
 
 
 function LevelGenerator:shouldLoadOwnMap()
-    --return (self.section == 10)
     return (self.section == 2)
 end
 
@@ -241,7 +243,7 @@ function LevelGenerator:setEnvironmentSize(env)
 end
 
 
-function LevelGenerator:setEnvironmentTiles(env)    
+function LevelGenerator:setEnvironmentTiles(env)
     for y=1, env.height do
         env.tiles[y]    = {}
         env.shadows[y]  = {}
@@ -468,8 +470,6 @@ end
 
 
 function LevelGenerator:makeHorizWall(env, x, y, width, randY)
-    --print("vert: x="..x.." y="..y.." width="..width)
-
     if randY then
         y = (y-2) + random(3)
     end
@@ -495,8 +495,6 @@ end
 
 
 function LevelGenerator:makeVertWall(env, x, y, length)
-    --print("horiz: x="..x.." y="..y.." length="..length)
-
     env.tiles[y][x] = self.tiles.wallBot
     -- shadow:
     env.shadows[y+1][x+1] = self.tiles.shadowRightBot
@@ -616,7 +614,7 @@ function LevelGenerator:setEnvironmentFloor(env)
                 end]]
 
                 -- NOTE: this has to run after entities have been placed so we can detect normal tiles
-                --env.tiles[y][x] = self.tiles.plain[random(#self.tiles.plain)]
+                env.tiles[y][x] = self.tiles.defaultVarations[random(#self.tiles.defaultVarations)]
             end
         end
     end
@@ -626,37 +624,50 @@ function LevelGenerator:setEnvironmentFloor(env)
         env.tiles[1][env.startX + x] = self.tiles.patternHazzard
     end
 
-    -- customise first section
+    -- Customise specific sections
     if self.section == 1 then
-        -- inner ring
-        env.tiles[18][11] = self.tiles.paintRedTopLeft
-        env.tiles[18][12] = self.tiles.paintRedHoriz
-        env.tiles[18][13] = self.tiles.paintRedTopRight
-        env.tiles[19][11] = self.tiles.paintRedVert
-        env.tiles[19][13] = self.tiles.paintRedVert
-        env.tiles[20][11] = self.tiles.paintRedBotLeft
-        env.tiles[20][12] = self.tiles.paintRedHoriz
-        env.tiles[20][13] = self.tiles.paintRedBotRight
-
-        -- outer ring
-        env.tiles[16][9]  = self.tiles.paintBlueTopLeft
-        for i=10,14 do 
-            env.tiles[16][i] = self.tiles.paintBlueHoriz
-        end
-        env.tiles[16][15] = self.tiles.paintBlueTopRight
-
-        for i=17, 21 do
-            env.tiles[i][9]  = self.tiles.paintBlueVert
-            env.tiles[i][15] = self.tiles.paintBlueVert
-        end
-
-        env.tiles[22][9]  = self.tiles.paintBlueBotLeft
-        for i=10,14 do 
-            env.tiles[22][i] = self.tiles.paintBlueHoriz
-        end
-        env.tiles[22][15] = self.tiles.paintBlueBotRight
+        self:setEnvironmentFirstSection(env)
+    elseif env.isLast then
+        self:setEnvironmentLastSection(env)
     end
 end
+
+
+function LevelGenerator:setEnvironmentFirstSection(env)
+    -- inner ring
+    env.tiles[18][11] = self.tiles.paintRedTopLeft
+    env.tiles[18][12] = self.tiles.paintRedHoriz
+    env.tiles[18][13] = self.tiles.paintRedTopRight
+    env.tiles[19][11] = self.tiles.paintRedVert
+    env.tiles[19][13] = self.tiles.paintRedVert
+    env.tiles[20][11] = self.tiles.paintRedBotLeft
+    env.tiles[20][12] = self.tiles.paintRedHoriz
+    env.tiles[20][13] = self.tiles.paintRedBotRight
+
+    -- outer ring
+    env.tiles[16][9]  = self.tiles.paintBlueTopLeft
+    for i=10,14 do 
+        env.tiles[16][i] = self.tiles.paintBlueHoriz
+    end
+    env.tiles[16][15] = self.tiles.paintBlueTopRight
+
+    for i=17, 21 do
+        env.tiles[i][9]  = self.tiles.paintBlueVert
+        env.tiles[i][15] = self.tiles.paintBlueVert
+    end
+
+    env.tiles[22][9]  = self.tiles.paintBlueBotLeft
+    for i=10,14 do 
+        env.tiles[22][i] = self.tiles.paintBlueHoriz
+    end
+    env.tiles[22][15] = self.tiles.paintBlueBotRight
+end
+
+
+function LevelGenerator:setEnvironmentLastSection(env)
+
+end
+
 
 
 

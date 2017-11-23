@@ -160,7 +160,7 @@ function Loader:load(LevelGenerator)
 
         --print("Section "..index.." enemyPoints="..self.enemyPoints.." weaponLimit="..self.enemyWeaponLimit.." rankLimit="..self.enemyRankLimit.." weaponAlloc="..self.enemyWeaponAlloc.." rankAlloc="..self.enemyRankAlloc)
 
-        if env.ownMap then
+        if env.isCustom then
             self:loadEntitiesFromMap()
         else
             self:generateEntities()
@@ -192,8 +192,8 @@ function Loader:load(LevelGenerator)
 
 
     function LevelGenerator:generateEntities()
-        -- There are no enemies on the first section
-        if index > 1 then
+        -- There are no enemies on the first and last sections
+        if index > 1 and not env.isLast then
             -- define early presets here:
             if index == 2 then
                 self.enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly

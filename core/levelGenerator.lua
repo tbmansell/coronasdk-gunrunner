@@ -119,14 +119,14 @@ function LevelGenerator:newEnvironment()
         tiles    = {},
         shadows  = {},
         entities = {},
-        ownMap   = false,
+        isCustom = false,
     }
 
     self.section = self.section + 1
 
-    if self:shouldLoadOwnMap() then
+    if self:shouldLoadisCustom() then
         -- Load one of our own pre-built maps
-        self:loadOwnMap(env)
+        self:loadisCustom(env)
     else
         -- Generate a map dynamically
         self:setEnvironmentSize(env)
@@ -144,6 +144,12 @@ function LevelGenerator:newEnvironment()
     self.environments[#self.environments + 1] = env
 
     return env
+end
+
+
+function LevelGenerator:markLastSection()
+    local last  = self.environments[#self.environments]
+    last.isLast = true
 end
 
 
@@ -165,12 +171,12 @@ end
 ----- LOADING EXTERNAL MAP -----
 
 
-function LevelGenerator:shouldLoadOwnMap()
-    return (self.section == 2)
+function LevelGenerator:shouldLoadisCustom()
+    return (self.section == 10)
 end
 
 
-function LevelGenerator:loadOwnMap(env)
+function LevelGenerator:loadisCustom(env)
     local file     = "json/maps/testmap1.json"
     local filepath = system.pathForFile(file, system.ResourceDirectory)
     local map, pos, msg = json.decodeFile(filepath)
@@ -179,7 +185,7 @@ function LevelGenerator:loadOwnMap(env)
         print("JSON Load failed for ["..file.."] at "..tostring(pos)..": "..tostring(msg))
     end
 
-    env.ownMap = true
+    env.isCustom = true
     env.width  = map.width
     env.height = map.height
     env.dir    = "straight"
@@ -625,10 +631,8 @@ function LevelGenerator:setEnvironmentFloor(env)
     end
 
     -- Customise specific sections
-    if self.section == 1 then
+    if self.section == 1 or env.isLast then
         self:setEnvironmentFirstSection(env)
-    elseif env.isLast then
-        self:setEnvironmentLastSection(env)
     end
 end
 

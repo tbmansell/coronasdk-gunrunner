@@ -395,31 +395,40 @@ end
 
 
 function Hud:updateMapSection()
-    local ownMap = localPlayer.currentSection.ownMap
+    if not transitionMapType then
+        if localPlayer.currentSection.isCustom then
+            self:handleCustomMapTransition()
 
-    if not transitionMapType and ownMap then
-        local enemies = level:getNumberEnemies(localPlayer.currentSection.number)
-        
-        if forceScroll and enemies > 0 then
+        elseif localPlayer.currentSection.isLast then
             transitionMapType = true
-            self.changeMusicHandler(nil, sounds.music.customScene)
+            self.player:completedCallback() 
+        end
+    end
+end
 
-            after(1000, function() 
-                transitionMapType = false
-                forceScroll       = false
-            end)
 
-        elseif not forceScroll and enemies == 0 then
-            transitionMapType = true
-            sounds:general("mapComplete")
-            self.changeMusicHandler(nil, sounds.music.rollingGame, 20000)
+function Hud:handleCustomMapTransition()
+    local enemies = level:getNumberEnemies(localPlayer.currentSection.number)
+    
+    if forceScroll and enemies > 0 then
+        transitionMapType = true
+        self.changeMusicHandler(nil, sounds.music.customScene)
 
-            after(2000, function()
-                transitionMapType = false
-                forceScroll       = true
-                localPlayer:loopLegs("run")
-            end)
-        end            
+        after(1000, function() 
+            transitionMapType = false
+            forceScroll       = false
+        end)
+
+    elseif not forceScroll and enemies == 0 then
+        transitionMapType = true
+        sounds:general("mapComplete")
+        self.changeMusicHandler(nil, sounds.music.rollingGame, 20000)
+
+        after(2000, function()
+            transitionMapType = false
+            forceScroll       = true
+            localPlayer:loopLegs("run")
+        end)
     end
 end
 
@@ -437,7 +446,7 @@ function Hud:updateDebugData()
     self.debugNumParticles:setText("particles: "..level:getNumberParticles())
     self.debugSection:setText("section: "..section.number)
     self.debugYPos:setText("ypos: "..round(self.player:y()))
-    self.debugCustomMap:setText("custom: "..tostring(section.ownMap))
+    self.debugCustomMap:setText("custom: "..tostring(section.isCustom))
     self.debugSectionEnemies:setText("enemies at: "..sectionEnemies)
 end
 
@@ -543,7 +552,7 @@ function Hud:startLevelSequence(level, player)
 end
 
 
-function Hud:displayGameOver()
+function Hud:displayGameOver(completed)
     self = Hud
 
     if globalGameMode == GameMode.over then
@@ -552,8 +561,14 @@ function Hud:displayGameOver()
         local mins, secs = stats:getTime()
 
         draw:newBlocker(group, 0.9, 0,0,0)
-        draw:newText(group, "game over", globalCenterX, 50, 1, "white")
         self:createButtonReplay(group, globalCenterX, globalHeight-50)
+
+        if completed then
+            draw:newText(group, "well done!",                   globalCenterX, 50,  1, "yellow")
+            draw:newText(group, "you have completed the game!", globalCenterX, 100, 0.7, "green")
+        else
+            draw:newText(group, "game over", globalCenterX, 50, 1, "white")
+        end
 
         local pointsLabel   = draw:newText(group, "score:",    300, 150, 0.6, "grey", "RIGHT")
         local pointsValue   = draw:newText(group, stats.points, 330, 150, 0.6, "green", "LEFT")

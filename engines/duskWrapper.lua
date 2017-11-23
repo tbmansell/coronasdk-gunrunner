@@ -1,5 +1,4 @@
-local dusk            = require("Dusk.Dusk")
-local spriteSheetInfo = require("core.sheetInfo")
+local dusk = require("Dusk.Dusk")
 
 
 local TileEngine = {
@@ -125,25 +124,12 @@ function TileEngine:buildLayers()
     self.objectLayer2 = self.map.layer["EntityLayer"]
     self.objectLayer3 = self.map.layer["AboveEntityLayer"]
     
-    --[[for tile in self.tileLayer.tilesInRange(1,1, self.cols, self.rows) do
-        local index = tile.tilesetGID
-        local frame = spriteSheetInfo.sheet.frames[index]
-        
-        if frame then
-            if frame.isWall then
-                --self:createWall(tile, frame)
-            elseif frame.isHole then
-                self:createHole(tile)
-            end
-        end
-    end]]
-
     self.map:scale(0.7, 0.7)
     self.map.y = 250
 end
 
 
-function TileEngine:createWall(tile, frame)
+--[[function TileEngine:createWall(tile, frame)
     physics.addBody(tile, "static", {density=1, friction=0, bounce=0, shape=frame.shape, filter=Filters.obstacle})
 
     tile.collision = eventWallCollision
@@ -160,7 +146,7 @@ function TileEngine:createHole(tile)
     tile.collision = eventHoleCollision
     tile:addEventListener("collision", tile)
     tile.isHole = true
-end
+end]]
 
 
 function TileEngine:addEntity(entity, focus, layer)

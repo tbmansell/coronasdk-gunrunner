@@ -101,7 +101,7 @@ function scene:loadLevel()
     local bgr = display.newImage(self.view, "images/background2.jpg", globalCenterX, globalCenterY)
     bgr:scale(2,2)
 
-    local sections    = 3
+    local sections    = 11
     local environment = {}
     local entities    = {}
 
@@ -117,10 +117,12 @@ function scene:loadLevel()
         environment[#environment+1] = env
         entities[#entities+1]       = levelGenerator:fillEnvironment()
 
-        if not env.ownMap then
+        if not env.isCustom then
             levelGenerator:setEnvironmentFloor(env)
         end
     end
+
+    levelGenerator:markLastSection()
 
     -- tile engine renders sections in reverse, so feed them in backward
     for i=sections, 1, -1 do
@@ -133,7 +135,7 @@ function scene:loadLevel()
     tileEngine.map.setTrackingLevel(0.1)
 
     -- Build entities into the level
-    for i=1, sections do
+    for i=1, sections-1 do
         level:createElements(entities[i])
     end
 end
@@ -143,14 +145,24 @@ function scene:loadPlayer()
     player = level:createPlayer({xpos=11.5, ypos=-5.5}, hud)
     player:setWeapon(Weapons.rifle)
     
-    -- Create Game Over callback
+    -- Create Game Over callbacks
     player.failedCallback = function()
-        after(2000, function()
+        after(2000, function(sound)
             scene:pauseLevel()
             sounds:general("gameOver")
 
             globalGameMode = GameMode.over
             hud:displayGameOver()
+        end)
+    end
+
+    player.completedCallback = function()
+        after(2000, function(sound)
+            scene:pauseLevel()
+            sounds:general("mapComplete")
+
+            globalGameMode = GameMode.over
+            hud:displayGameOver(true)
         end)
     end
 

@@ -17,22 +17,15 @@ local random  = math.random
 local percent = utils.percent
 
 
-function Obstacle.eventCollision(self, event)
-    local other = event.other.object
-    local self  = self.object
 
-    --[[if other and other.isProjectile then
-        sounds:projectile(other.weapon.hitSound)
-        other:destroy()
-    end]]
-end
+function Obstacle:setPhysics(isSensor, shapeWidth, shapeHeight)
+    local shape = nil
 
+    if shapeWidth and shapeHeight then
+        shape = {-shapeWidth,-shapeHeight, shapeWidth,-shapeHeight, shapeWidth,shapeHeight, -shapeWidth,shapeHeight}
+    end
 
-function Obstacle:setPhysics()
-    physics.addBody(self.image, "static", {density=1, friction=0, bounce=0, filter=Filters.obstacle})
-
-    self.image.collision = Obstacle.eventCollision
-    self.image:addEventListener("collision", self.image)
+    physics.addBody(self.image, "static", {isSensor=isSensor, shape=shape, density=1, friction=0, bounce=0, filter=Filters.obstacle})
 end
 
 
@@ -47,7 +40,8 @@ function Obstacle:hit(shot)
         
     if self.hits <= 0 then
         self:explode()
-    else
+
+    elseif self.image.setFillColor then
         self.image:setFillColor(1, 0.6, 0.6)
         after(50, function() 
             if self.image then self.image:setFillColor(1, 1, 1) end

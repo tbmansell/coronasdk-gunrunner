@@ -66,10 +66,11 @@ end
 
 
 local function eventShootPlayer(event)
+    aimPlayerAllow = Hud.player:canAim()
+
     if event.phase == "began" then
         Hud:clearResetAim()
-        display.getCurrentStage():setFocus(event.target, event.id)
-        aimPlayerAllow = Hud.player:canAim()
+        display.getCurrentStage():setFocus(event.target, event.id)    
         aimPlayerX     = event.x
         aimPlayerY     = event.y
     elseif event.phase == "moved" and aimPlayerAllow then
@@ -421,6 +422,9 @@ function Hud:handleCustomMapTransition()
 
     elseif not forceScroll and enemies == 0 then
         transitionMapType = true
+
+        localPlayer.currentSection.securityDoorExit:open()
+
         sounds:general("mapComplete")
         self.changeMusicHandler(nil, sounds.music.rollingGame, 20000)
 

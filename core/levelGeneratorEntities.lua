@@ -186,6 +186,15 @@ function Loader:load(LevelGenerator)
 
                     self:createEntitySpec(x, y, attributes)
                 end
+
+                local tile = env.tiles[y][x]
+
+                if tile == self.tiles.entrance then
+                    self:createEntitySpec(x, y, {object="obstacle", type="securityDoor", guards="entrance", dontRotate=true, section=self.section})
+
+                elseif tile == self.tiles.exit then
+                    self:createEntitySpec(x, y, {object="obstacle", type="securityDoor", guards="exit", dontRotate=true, section=self.section})
+                end
             end
         end
     end

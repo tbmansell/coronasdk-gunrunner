@@ -414,12 +414,7 @@ end
 
 function GameObject:inDistance(target, distance)
     local tx, ty = target:pos()
-    local x,  y  = self:pos() 
-
-    --local distX = abs(tx - x)
-    --local distY = abs(ty - y)
-    --local close = (distX < distance and distY < distance)
-    --print("Distance X="..distX..", "..distY.." InRange="..tostring(close))
+    local x,  y  = self:pos()
 
     return abs(tx - x) < distance and abs(ty - y) < distance
 end

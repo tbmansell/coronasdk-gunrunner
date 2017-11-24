@@ -126,7 +126,7 @@ end
 
 
 function Player:canAim()
-    return self.mode ~= PlayerMode.dead
+    return self.mode ~= PlayerMode.dead and not self.shootingLocked
 end
 
 
@@ -163,7 +163,7 @@ end
 
 
 function Player:setPhysics()
-    physics.addBody(self.image, (self.physicsBody or "dynamic"), {radius=self.intWidth, density=1, friction=1, bounce=0, filter=Filters.player})
+    physics.addBody(self.image, (self.physicsBody or "dynamic"), {radius=self.intWidth, density=1, friction=1, bounce=0--[[, filter=Filters.player]]})
    
     self.image.isFixedRotation   = true
     self.image.isSleepingAllowed = false
@@ -491,6 +491,11 @@ function Player:removeLaserSight()
         self.laserSightEntity:removeSelf()
         self.laserSightEntity = nil
     end
+end
+
+
+function Player:lockShooting(lock)
+    self.shootingLocked = lock
 end
 
 

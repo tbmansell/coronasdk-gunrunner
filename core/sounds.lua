@@ -42,6 +42,7 @@ function Sounds:preload()
 
     self.generalSounds.gameOver      = loadSound("sounds/gameOver.mp3")
     self.generalSounds.mapComplete   = loadSound("sounds/mapComplete.wav")
+    self.generalSounds.doorOpen      = loadSound("sounds/doorOpen.wav")
 
     self.music.rollingGame           = loadSound("sounds/music-cyborgNinja.mp3")
     self.music.customScene           = loadSound("sounds/music-powerBotsLoop.wav")

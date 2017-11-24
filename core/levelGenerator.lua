@@ -38,6 +38,9 @@ function LevelGenerator:setup()
     self.tiles.default          = 2
     self.tiles.noFloor          = 183
 
+    self.tiles.entrance         = 26
+    self.tiles.exit             = 11
+
     self.tiles.wallTop          = 16
     self.tiles.wallBot          = 76
     self.tiles.wallLeft         = 47
@@ -124,9 +127,9 @@ function LevelGenerator:newEnvironment()
 
     self.section = self.section + 1
 
-    if self:shouldLoadisCustom() then
+    if self:shouldloadCustomMap() then
         -- Load one of our own pre-built maps
-        self:loadisCustom(env)
+        self:loadCustomMap(env)
     else
         -- Generate a map dynamically
         self:setEnvironmentSize(env)
@@ -168,15 +171,20 @@ function LevelGenerator:getSection(ypos)
 end
 
 
------ LOADING EXTERNAL MAP -----
-
-
-function LevelGenerator:shouldLoadisCustom()
-    return (self.section == 10)
+function LevelGenerator:assignEntityRef(referenceName, entity)
+    self.environments[entity.section][referenceName] = entity
 end
 
 
-function LevelGenerator:loadisCustom(env)
+----- LOADING EXTERNAL MAP -----
+
+
+function LevelGenerator:shouldloadCustomMap()
+    return (self.section == 2)
+end
+
+
+function LevelGenerator:loadCustomMap(env)
     local file     = "json/maps/testmap1.json"
     local filepath = system.pathForFile(file, system.ResourceDirectory)
     local map, pos, msg = json.decodeFile(filepath)

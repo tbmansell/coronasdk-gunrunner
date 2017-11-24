@@ -98,10 +98,10 @@ end
 
 
 function scene:loadLevel()
-    local bgr = display.newImage(self.view, "images/background2.jpg", globalCenterX, globalCenterY)
+    local bgr = display.newImage(self.view, "images/background.jpg", globalCenterX, globalCenterY)
     bgr:scale(2,2)
 
-    local sections    = 11
+    local sections    = 10
     local environment = {}
     local entities    = {}
 
@@ -136,7 +136,7 @@ function scene:loadLevel()
 
     -- Build entities into the level
     for i=1, sections-1 do
-        level:createElements(entities[i])
+        level:createElements(entities[i], levelGenerator)
     end
 end
 

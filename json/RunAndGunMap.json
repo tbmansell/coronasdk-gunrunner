@@ -116,8 +116,20 @@
                     "physics:enabled":  "true",
                     "physics:filter":   "obstacle"
                 },
+                "10":{
+                    "isExit":           "true",
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "false",
+                    "physics:isSensor": "true",
+                    "physics:filter":   "exit"
+                },
                 "14":{
                     "isHole":          "true",
+                    "isWall":          "true",
                     "bodyType":        "static",
                     "physics:enabled": "true",
                     "physics:filter":  "hole",
@@ -140,6 +152,17 @@
                     "physics:bounce":   "0",
                     "physics:enabled":  "true",
                     "physics:filter":   "obstacle"
+                },
+                "25":{
+                    "isEntrance":       "true",
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "false",
+                    "physics:isSensor": "true",
+                    "physics:filter":   "entrance"
                 },
                 "30":{
                     "isWall":           "true",

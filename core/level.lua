@@ -74,13 +74,6 @@ function Level:new(cameraRef)
 end
 
 
-function Level:createEventHandlers()
-    check_spine_animation     = spineCollection.animateEach
-    check_moving_objects      = movingCollection.moveEach
-    --check_background_movement = self.checkBackgroundMovement
-end
-
-
 function Level:destroy()
     spineCollection:destroy()
     movingCollection:destroy()
@@ -134,26 +127,28 @@ function Level:getNumberParticles()
 end
 
 
-
-function Level:createElements(levelElements)
-    self:createElementsFromData(levelElements)
-    --self:createBackgrounds(camera)
+function Level:createElements(levelElements, levelGenerator)
+    self:createElementsFromData(levelElements, levelGenerator)
     self:createEventHandlers()
 end
 
 
-function Level:appendElements(levelElements)
-    return self:createElementsFromData(levelElements)
+function Level:createEventHandlers()
+    check_spine_animation = spineCollection.animateEach
+    check_moving_objects  = movingCollection.moveEach
 end
 
 
-function Level:createElementsFromData(levelElements)
+function Level:createElementsFromData(levelElements, levelGenerator)
     for _,item in pairs(levelElements) do
         local object = item.object
 
-        if     object == "enemy"       then self:createEnemy(item)
-        elseif object == "obstacle"    then self:createObstacle(item)
-        elseif object == "weapon" or object == "jewel" or object == "powerup" then self:createCollectable(item)
+        if object == "weapon" or object == "jewel" or object == "powerup" then 
+            self:createCollectable(item)
+        elseif object == "enemy" then 
+            self:createEnemy(item)
+        elseif object == "obstacle" then 
+            self:createObstacle(item, levelGenerator)
         end
     end
 end
@@ -178,16 +173,9 @@ function Level:createCollectable(item)
 end
 
 
-function Level:createPowerup(powerup, xpos, ypos)
-    after(50, function()
-        self:createCollectable({object="powerup", type=powerup, health=5, xpos=xpos, ypos=ypos, dontReposition=true})
-    end)
-end
-
-
-function Level:createObstacle(item)
+function Level:createObstacle(item, levelGenerator)
     -- 50% chance non rotated item will be randomly rotated
-    if item.rotation == nil and percent(50) then
+    if item.rotation == nil and not item.dontRotate and percent(50) then
         if percent(50) then
             item.rotation = random(10)
         else
@@ -197,6 +185,18 @@ function Level:createObstacle(item)
 
     local obstacle = obstacleBuilder:newItem(camera, item)
     obstacleCollection:add(obstacle)
+
+    -- For custom map security doors, we need a reference to them so we can triger actions on them from game activity
+    if obstacle.type == "securityDoor" and obstacle.guards == "exit" then
+        levelGenerator:assignEntityRef("securityDoorExit", obstacle)
+    end
+end
+
+
+function Level:createPowerup(powerup, xpos, ypos)
+    after(50, function()
+        self:createCollectable({object="powerup", type=powerup, health=5, xpos=xpos, ypos=ypos, dontReposition=true})
+    end)
 end
 
 
@@ -251,18 +251,6 @@ function Level:eventUpdateFrame(event)
     --check_moving_objects(movingCollection, delta, camera)
 end
 
-
-function Level:eventUpdateFrameFrozen(event)
-    globalFPS = globalFPS + 1
-
-    -- Compute time in seconds since last frame.
-    local currentTime = event.time / (1000 / FPS)
-    local delta       = currentTime - lastTime
-    lastTime          = currentTime
-
-    check_background_movement(delta)
-    check_spine_animation(spineCollection, event, true)
-end
 
 
 return Level

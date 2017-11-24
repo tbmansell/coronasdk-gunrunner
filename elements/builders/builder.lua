@@ -9,10 +9,11 @@ local masterCollection = require("elements.collections.masterCollection")
 local Builder = {}
 
 -- Local vars for performance
-local leftBoundary      = -1000
-local rightBoundary     = 1000
-local topBoundary       = -1000
-local bottomBoundary    = 1000
+local spineDrawDistance = 1200
+local leftBoundary      = -1200
+local rightBoundary     = 1200
+local topBoundary       = -1200
+local bottomBoundary    = 1200
 
 -- Used for spine animation
 local lastTime          = 0
@@ -202,22 +203,9 @@ function Builder:newSpineCollection()
 
 	        if object and object ~= -1 and object.inGame then
 	        	-- Check if image on-screen (or close to on-screen for fast movement)
-                if object:inDistance(player, 1000) then
+                if object:inDistance(player, spineDrawDistance) then
                     object:updateSpine(delta)
                 end
-
-                -- this is not working because images X and Y are not being updated for some reason
-	        	--local image = object.image
-	            --local x, y  = image.x, image.y
-
-	            --if x and y then
-                    --print(tostring(object.key).." "..x..", "..y)
-                    --print(tostring(object.key).." "..object:x()..", "..object:y())
-	            	--if not visibleOnly or object.alwaysAnimate or (x >= leftBoundary and x <= rightBoundary and y >= topBoundary and y <= bottomBoundary) then
-                    --if (x >= leftBoundary and x <= rightBoundary and y >= topBoundary and y <= bottomBoundary) then
-                        --object:updateSpine(delta, player)
-		            --end
-	            --end
 	        end
 	    end
 	end

@@ -128,7 +128,7 @@ end
 
 function ObstacleBuilder:buildEntranceDoor(camera, door)
     -- create a physics shape to open the door when the player gets near and allow them through, but not allow them to shoot or enemies rush through
-    local sensor  = display.newRect(door:x(), door:y()+75, 450, 300)
+    local sensor  = display.newRect(door:x(), door:y()+100, 450, 300)
     sensor.alpha  = 0
     sensor.isWall = true
     physics.addBody(sensor, "static", {isSensor=true, filter=Filters.collectable})

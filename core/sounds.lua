@@ -4,6 +4,7 @@ local Sounds = {
     projectileSounds  = {},
     enemySounds       = {},
     collectableSounds = {},
+    voices            = {},
     generalSounds     = {},
     music             = {},
 }
@@ -32,20 +33,45 @@ function Sounds:preload()
     self.projectileSounds.laserHit      = loadSound("sounds/laserHit.mp3")
     self.projectileSounds.reload        = loadSound("sounds/reload.mp3")
 
-    self.enemySounds.hurt            = loadSound("sounds/hurt.mp3")
-    self.enemySounds.killed          = loadSound("sounds/killed.mp3")
-    self.enemySounds.charge          = loadSound("sounds/charge.mp3")
-    self.enemySounds.melee           = loadSound("sounds/melee.mp3")
+    self.enemySounds.hurt               = loadSound("sounds/hurt.mp3")
+    self.enemySounds.killed             = loadSound("sounds/killed.mp3")
+    self.enemySounds.charge             = loadSound("sounds/charge.mp3")
+    self.enemySounds.melee              = loadSound("sounds/melee.mp3")
 
-    self.collectableSounds.gotWeapon = loadSound("sounds/collectedWeapon.wav")
-    self.collectableSounds.gotJewel  = loadSound("sounds/collectedJewel.mp3")
+    self.collectableSounds.gotWeapon    = loadSound("sounds/collectedWeapon.wav")
+    self.collectableSounds.gotJewel     = loadSound("sounds/collectedJewel.mp3")
 
-    self.generalSounds.gameOver      = loadSound("sounds/gameOver.mp3")
-    self.generalSounds.mapComplete   = loadSound("sounds/mapComplete.wav")
-    self.generalSounds.doorOpen      = loadSound("sounds/doorOpen.wav")
+    -- weapon voices
+    self.voices.rifle                   = loadSound("sounds/voices/battleRifle.mp3")
+    self.voices.shotgun                 = loadSound("sounds/voices/shotgun.mp3")
+    self.voices.launcher                = loadSound("sounds/voices/rocketLauncher.mp3")
+    self.voices.laserGun                = loadSound("sounds/voices/plasmaRifle.mp3")
+    self.voices.chainGun                = loadSound("sounds/voices/chainGun.mp3")
+    self.voices.laserCannon             = loadSound("sounds/voices/laserCannon.mp3")
+    -- collectable voices
+    self.voices.damage                  = loadSound("sounds/voices/increasedDamage.mp3")
+    self.voices.extraAmmo               = loadSound("sounds/voices/extendedMag.mp3")
+    self.voices.fastMove                = loadSound("sounds/voices/speedBoost.mp3")
+    self.voices.fastShoot               = loadSound("sounds/voices/rapidFire.mp3")
+    self.voices.health                  = loadSound("sounds/voices/health.mp3")
+    self.voices.laserSight              = loadSound("sounds/voices/laserSight.mp3")
+    self.voices.shield                  = loadSound("sounds/voices/shield.mp3")
+    -- general voices
+    self.voices.goodLuck                = loadSound("sounds/voices/goodLuck.mp3")
+    self.voices.getReady                = loadSound("sounds/voices/getReady.mp3")
+    self.voices.hopeReady               = loadSound("sounds/voices/hopeReady.mp3")
+    self.voices.fight                   = loadSound("sounds/voices/fight.mp3")
+    self.voices.warning                 = loadSound("sounds/voices/warning.mp3")
+    self.voices.betterLuckNextTime      = loadSound("sounds/voices/betterLuck.mp3")
+    self.voices.goodbye                 = loadSound("sounds/voices/goodBye.mp3")
 
-    self.music.rollingGame           = loadSound("sounds/music-cyborgNinja.mp3")
-    self.music.customScene           = loadSound("sounds/music-powerBotsLoop.wav")
+
+    self.generalSounds.gameOver         = loadSound("sounds/gameOver.mp3")
+    self.generalSounds.mapComplete      = loadSound("sounds/mapComplete.wav")
+    self.generalSounds.doorOpen         = loadSound("sounds/doorOpen.wav")
+
+    self.music.rollingGame              = loadSound("sounds/music-cyborgNinja.mp3")
+    self.music.customScene              = loadSound("sounds/music-powerBotsLoop.wav")
 end
 
 
@@ -85,6 +111,11 @@ end
 
 function Sounds:collectable(sound, params)
     self:play(self.collectableSounds[sound], params)
+end
+
+
+function Sounds:voice(sound, params)
+    self:play(self.voices[sound], params)
 end
 
 

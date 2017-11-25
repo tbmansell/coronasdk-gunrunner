@@ -414,6 +414,8 @@ function Hud:handleCustomMapTransition()
     if forceScroll and enemies > 0 then
         transitionMapType = true
         self.changeMusicHandler(nil, sounds.music.customScene)
+        sounds:voice("getReady")
+        after(1000, function() sounds:voice("fight") end)
 
         after(1000, function() 
             transitionMapType = false

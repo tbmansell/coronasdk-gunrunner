@@ -33,7 +33,8 @@ end
 
 function Collectable:collectedBy(player)
     if self.object == "weapon" then
-        sounds:collectable("gotWeapon")
+        --sounds:collectable("gotWeapon")
+        sounds:voice(Weapons[self.type].name)
         player:setWeapon(Weapons[self.type])
 
     elseif self.object == "jewel" then
@@ -41,7 +42,8 @@ function Collectable:collectedBy(player)
         player:addPoints(self.points or 5)
 
     elseif self.object == "powerup" then
-        sounds:collectable("gotWeapon")
+        --sounds:collectable("gotWeapon")
+        sounds:voice(self.type)
 
         if     self.type == Powerups.health     then player:heal(self.health)
         elseif self.type == Powerups.damage     then player:extraDamage()

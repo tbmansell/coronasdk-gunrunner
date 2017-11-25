@@ -149,7 +149,7 @@ function scene:loadPlayer()
     player.failedCallback = function()
         after(2000, function(sound)
             scene:pauseLevel()
-            sounds:general("gameOver")
+            sounds:voice("betterLuckNextTime")
 
             globalGameMode = GameMode.over
             hud:displayGameOver()
@@ -234,6 +234,8 @@ function scene:startPlaying()
     --player:applyForce(0, -50)
     -- runs the game loop and allows it to start. We allow some delay before this to allow everything to load
     self:createEventHandlers()
+
+    sounds:voice("goodLuck")
 end
 
 

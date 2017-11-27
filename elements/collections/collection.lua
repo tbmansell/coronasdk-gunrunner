@@ -180,8 +180,49 @@ function Collection:checkBehaviour(camera, player)
 
     for i=1,num do
         local object = items[i]
-        if object and object ~= -1 and object.inGame and object.checkBehaviour then
+        if object and object ~= -1 and object.inGame then
             object:checkBehaviour(camera, player)
+        end
+    end
+end
+
+
+function Collection:checkDistancedBehaviour(camera, player, distance1, distance2)
+    local items = self.items
+    local num   = #items
+
+    for i=1,num do
+        local object = items[i]
+        if object and object ~= -1 and object.inGame then
+            local x, y = object:distanceFrom(player)
+
+            if x < distance1 and y < distance1 then
+                -- entities in this range should come alive and update their behaviour
+                object:checkBehaviour(camera, player)
+
+            elseif x < distance2 and y < distance2 then
+                -- entities in this range could be in area of tile culling and so we should freeze them if they are moving, to avoid them going through objects
+                object:checkShouldFreeze(x, y)
+            end
+        end
+    end
+end
+
+
+function Collection:debugInfo(show)
+    local items = self.items
+    local num   = #items
+
+    for i=1,num do
+        local object = items[i]
+        if object and object ~= -1 and object.inGame then
+            if object.debugInfo then
+                object.debugInfo.alpha = show
+
+            elseif show == 1 then
+                object.debugInfo = display.newText(tostring(object.key), 0, -75, "arial", 25)
+                object.image:insert(object.debugInfo)
+            end
         end
     end
 end

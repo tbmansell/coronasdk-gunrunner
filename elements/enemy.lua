@@ -169,7 +169,7 @@ end
 
 
 function Enemy:canCharge()
-    return self.mode ~= EnemyMode.dead and --[[self.mode ~= EnemyMode.walk and]] self.flagChargeAllowed
+    return self.mode ~= EnemyMode.dead and self.flagChargeAllowed
 end
 
 
@@ -202,9 +202,27 @@ function Enemy:setWeapon(weapon)
 end
 
 
+function Enemy:checkShouldFreeze(distX, distY)
+    local fx, fy = self:getForce()
+
+    if fx ~= 0 or fy ~= 0 then
+        --print(self.key.." FREEZE distance("..tostring(distX)..", "..tostring(distY)..") force("..tostring(fx)..", "..tostring(fy)..") mode="..tostring(self.mode))
+        self.frozen = {fx, fy}
+        self:stopMomentum()
+    end
+end
+
+
 function Enemy:checkBehaviour(camera, player)
     -- Enemy must be in certain distance before they will do anything
-    if self.mode ~= EnemyMode.dead and self:inDistance(player, 1000) then
+    if self.mode ~= EnemyMode.dead then
+        -- check if we should unfreeze:
+        if self.frozen then
+            --print(self.key.." UNfreeze force("..tostring(self.frozen[1])..", "..tostring(self.frozen[2])..") mode="..tostring(self.mode))
+            self:applyForce(self.frozen[1], self.frozen[2])
+            self.frozen = nil
+        end
+
         if self:lineOfSight(player) then
             -- Face player if not charging
             if self:canTurn() and self.mode ~= EnemyMode.charge  then

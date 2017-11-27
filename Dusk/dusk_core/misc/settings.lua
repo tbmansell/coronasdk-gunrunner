@@ -104,7 +104,7 @@ local data = {
 	
 	-- Tiles outside the screen to draw. If you're seeing tiles being drawn and
 	-- erased, set this as needed. Otherwise, a value of 1 should be fine.
-	cullingMargin = 30,
+	cullingMargin = 14,
 
 	-- Functions called to style objects
 	stylePointBasedObject = function(p) p.strokeWidth = 5 p:setStrokeColor(1, 1, 1, 0.5) end,

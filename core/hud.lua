@@ -223,31 +223,13 @@ end
 function Hud:switchDebugMode()
     local self = Hud
     self.debugMode = not self.debugMode
-    
+
     if self.debugMode then
         self.textDebugMode:setText("debug mode")
-        self.debugGroup = display.newGroup()
-
-        -- loop through elements to add debug info here ...
-        
-        self.camera:add(self.debugGroup, 2, false)
+        level:debugInfo(1)
     else
         self.textDebugMode:setText("game mode")
-        self.camera:remove(self.debugGroup)
-        
-        if self.debugPoint ~= nil then
-            self.debugPoint:removeSelf()
-            self.debugPointInfo:removeSelf()
-            self.debugPoint = nil
-            self.debugPointInfo = nil
-        end
-        
-        if self.debugGroup ~= nil then
-            self.debugGroup:removeSelf()
-            self.debugGroup = nil
-        end
-
-        -- loop through elements to clear debug info
+        level:debugInfo(0)
     end
 end
 

@@ -196,15 +196,22 @@ end
 
 
 function scene:startMusic()
+    print("startMusic")
     audio.reserveChannels(1)
     sounds:play(sounds.music.rollingGame, {channel=1, volume=0.3, fadein=8000, loops=-1})
+    print("startMusic [end]")
 end
 
 
 function scene:changeMusic(newMusic, fadeIn)
+    print("fadeMusic")
     audio.fadeOut({channel=1, time=1000})
+    print("fadeMusic [end]")
+
     after(1100, function()
+        print("changeMusic")
         sounds:play(newMusic, {channel=1, volume=0.3, fadein=(fadeIn or 2000), loops=-1})
+        print("changeMusic [end]")
     end)
 end
 

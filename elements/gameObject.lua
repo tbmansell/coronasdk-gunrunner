@@ -420,6 +420,14 @@ function GameObject:inDistance(target, distance)
 end
 
 
+function GameObject:distanceFrom(target)
+    local tx, ty = target:pos()
+    local x,  y  = self:pos()
+
+    return abs(tx - x), abs(ty - y)
+end
+
+
 -- MOVEMENT
 
 

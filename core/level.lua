@@ -229,7 +229,7 @@ end
 
 function Level:updateBehaviours()
     particleCollection:checkEach()
-    enemyCollection:checkBehaviour(camera, mainPlayer)
+    enemyCollection:checkDistancedBehaviour(camera, mainPlayer, 1000, 1500)
 
     mainPlayer:updateLegs()
     stats:setDistance(mainPlayer:y())
@@ -240,7 +240,7 @@ function Level:eventUpdateFrame(event)
     globalFPS = globalFPS + 1
 
     -- Compute time in seconds since last frame.
-    local currentTime = event.time / 1000  --(1000 / FPS)
+    local currentTime = event.time / 1000
     local delta       = currentTime - lastTime
     lastTime          = currentTime
 
@@ -248,7 +248,11 @@ function Level:eventUpdateFrame(event)
 
     check_background_movement(delta)
     check_spine_animation(spineCollection, delta, true, mainPlayer)
-    --check_moving_objects(movingCollection, delta, camera)
+end
+
+
+function Level:debugInfo(show)
+    enemyCollection:debugInfo(show)
 end
 
 

@@ -485,6 +485,7 @@ function Enemy:explode()
             if self.isTurret then
                 self:emit("explosionLarge")
                 self:emit("smokeLarge")
+                level:addScorchMark(self:x(), self:y(), 2)
             else
                 self:emit("enemyDie1")
                 self:emit("enemyDie2")

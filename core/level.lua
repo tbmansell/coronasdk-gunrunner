@@ -223,9 +223,18 @@ function Level:createSpineObject(item, spineParams)
 end
 
 
+function Level:addScorchMark(x, y, scale)
+    local scorch = display.newImage("images/obstacles/scorchMark"..random(4)..".png", x, y)
+
+    if scale then
+        scorch:scale(scale, scale)
+    end
+
+    camera:addCollectable(scorch)
+end
+
+
 function Level:cullElements(fromSection)
-    print("")
-    print("<=== Cull sections from "..fromSection)
     --particleCollection:cull(fromSection)
     enemyCollection:cull(fromSection)
     obstacleCollection:cull(fromSection)

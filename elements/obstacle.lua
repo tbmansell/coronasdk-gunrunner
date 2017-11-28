@@ -73,6 +73,8 @@ function Obstacle:explode()
         -- enviromental damage has to hurt both player and enemies
         level:createAreaOfEffect({xpos=self:x(), ypos=self:y(), area=self.weapon.area, filter=Filters.playerShot, effect=effect, mapSection=self.mapSection})
         level:createAreaOfEffect({xpos=self:x(), ypos=self:y(), area=self.weapon.area, filter=Filters.enemyShot,  effect=effect, mapSection=self.mapSection})
+
+        level:addScorchMark(self:x(), self:y())
     end
 
     self:destroy()

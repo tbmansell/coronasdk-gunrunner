@@ -163,6 +163,8 @@ function scene:loadPlayer()
     
     -- Create Game Over callbacks
     player.failedCallback = function()
+        hud:forceMoving(false)
+
         after(2000, function(sound)
             scene:pauseLevel()
             sounds:voice("betterLuckNextTime")
@@ -173,6 +175,8 @@ function scene:loadPlayer()
     end
 
     player.completedCallback = function()
+        hud:forceMoving(false)
+        
         after(2000, function(sound)
             scene:pauseLevel()
             sounds:general("mapComplete")

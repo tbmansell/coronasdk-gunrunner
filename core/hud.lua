@@ -402,7 +402,7 @@ function Hud:handleCustomMapTransition()
 
         after(1000, function() 
             transitionMapType = false
-            forceScroll       = false
+            self:forceMoving(false)
         end)
 
     elseif not forceScroll and enemies == 0 then
@@ -417,7 +417,7 @@ function Hud:handleCustomMapTransition()
 
         after(2000, function()
             transitionMapType = false
-            forceScroll       = true
+            self:forceMoving(true)
             localPlayer:loopLegs("run")
         end)
     end
@@ -459,6 +459,11 @@ function Hud:updateHealth(player)
     else
         self.healthCounter.width = self.healthCounter.widthPerHealth * player.health
     end
+end
+
+
+function Hud:forceMoving(move)
+    forceScroll = move
 end
 
 

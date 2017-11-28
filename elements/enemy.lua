@@ -477,16 +477,15 @@ function Enemy:explode()
         local seq = anim:chainSeq("die", self.image)
         seq:tran({time=350, alpha=0})
         seq.onComplete = function()
-            print("*** explode "..self.key)
             self:destroy()
         end
         seq:start()
 
         after(50, function()
-            --self:destroyEmitter()
             if self.isTurret then
                 self:emit("explosionLarge")
                 self:emit("smokeLarge")
+                level:addScorchMark(self:x(), self:y(), 2)
             else
                 self:emit("enemyDie1")
                 self:emit("enemyDie2")
@@ -505,12 +504,11 @@ function Enemy:fallToDeath(hole)
         sounds:player("killed")
 
         self:stopMomentum(true)
-        --self:animate(animation or "death_"..random(2))
+        self:animate("falling")
 
         local seq = anim:chainSeq("die", self.image)
         seq:tran({time=1000, x=hole.x, y=hole.y, xScale=0.01, yScale=0.01, alpha=0})
         seq.onComplete = function()
-            print("*** fallToDeath "..self.key)
             self:destroy()
         end
         seq:start()

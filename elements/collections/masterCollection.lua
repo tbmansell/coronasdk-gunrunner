@@ -121,7 +121,6 @@ function MasterCollection:remove(object)
         -- instead of setting an element to nil, set to -1 as nil breaks usage of #
         self.items[object.id] = -1
         object.master = nil
-
     end
 end
 

@@ -537,20 +537,11 @@ function GameObject:bindEmitter(effectName, params)
     self:destroyEmitter()
     self.boundEmitterOn = true
     self.boundEmitter   = self:emit(effectName, params, self.isSpine)
-
-    --if self.master then
-        -- TODO: check if already in collection
-    --    self.master.particleEmitterCollection:add(self)
-    --end
 end
 
 
 function GameObject:destroyEmitter()
     if self.boundEmitter then
-        --if self.master and self.master.particleEmitterCollection then
-        --    self.master.particleEmitterCollection:remove(self)
-        --end
-
         self.boundEmitter:destroy()
         self.boundEmitter   = nil
         self.boundEmitterOn = false

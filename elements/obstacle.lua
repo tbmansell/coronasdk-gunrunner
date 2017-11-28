@@ -71,8 +71,8 @@ function Obstacle:explode()
         end
 
         -- enviromental damage has to hurt both player and enemies
-        level:createAreaOfEffect({xpos=self:x(), ypos=self:y(), area=self.weapon.area, filter=Filters.playerShot, effect=effect})
-        level:createAreaOfEffect({xpos=self:x(), ypos=self:y(), area=self.weapon.area, filter=Filters.enemyShot,  effect=effect})
+        level:createAreaOfEffect({xpos=self:x(), ypos=self:y(), area=self.weapon.area, filter=Filters.playerShot, effect=effect, mapSection=self.mapSection})
+        level:createAreaOfEffect({xpos=self:x(), ypos=self:y(), area=self.weapon.area, filter=Filters.enemyShot,  effect=effect, mapSection=self.mapSection})
     end
 
     self:destroy()
@@ -85,13 +85,13 @@ function Obstacle:generatePowerup(chance)
         local x = self:x()
         local y = self:y()
         
-        if     r <= 14 then level:createPowerup(Powerups.health, x, y)
-        elseif r <= 28 then level:createPowerup(Powerups.damage, x, y)
-        elseif r <= 42 then level:createPowerup(Powerups.fastMove, x, y)
-        elseif r <= 56 then level:createPowerup(Powerups.fastShoot, x, y)
-        elseif r <= 70 then level:createPowerup(Powerups.extraAmmo, x, y)
-        elseif r <= 84 then level:createPowerup(Powerups.laserSight, x, y)
-        else                level:createPowerup(Powerups.shield, x, y)
+        if     r <= 14 then level:createPowerup(Powerups.health,     x, y, self.mapSection)
+        elseif r <= 28 then level:createPowerup(Powerups.damage,     x, y, self.mapSection)
+        elseif r <= 42 then level:createPowerup(Powerups.fastMove,   x, y, self.mapSection)
+        elseif r <= 56 then level:createPowerup(Powerups.fastShoot,  x, y, self.mapSection)
+        elseif r <= 70 then level:createPowerup(Powerups.extraAmmo,  x, y, self.mapSection)
+        elseif r <= 84 then level:createPowerup(Powerups.laserSight, x, y, self.mapSection)
+        else                level:createPowerup(Powerups.shield,     x, y, self.mapSection)
         end
     end
 end

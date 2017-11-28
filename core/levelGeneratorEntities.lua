@@ -148,10 +148,8 @@ function Loader:load(LevelGenerator)
     end
 
 
-    -- The start logic for placing al entities in a section
+    -- The start logic for placing all entities in a section
     function LevelGenerator:fillEnvironment()
-        self.entities = {}
-
         defaultTile = self.tiles.default
         index       = self.section
         env         = self.environments[index]
@@ -162,29 +160,24 @@ function Loader:load(LevelGenerator)
 
         if env.isCustom then
             self:loadEntitiesFromMap()
-        else
+        elseif not env.isLast then
             self:generateEntities()
         end
 
         self:updateProgression()
-
-        return self.entities
     end
 
 
     function LevelGenerator:loadEntitiesFromMap()
         local entityData = env.entityData
-
+        
         for y=1, env.height do
             for x=1, env.width do
                 local gridIndex   = ((y-1)*env.height) + x
                 local entityIndex = entityData[gridIndex]
 
                 if entityDefs[entityIndex] then
-                    local attributes = entityDefs[entityIndex]
-                    attributes.mapSection = env.number
-
-                    self:createEntitySpec(x, y, attributes)
+                    self:createEntitySpec(x, y, entityDefs[entityIndex])
                 end
 
                 local tile = env.tiles[y][x]
@@ -288,12 +281,12 @@ function Loader:load(LevelGenerator)
             spec.ypos = spec.ypos - 0.5
         end
 
-        self.entities[#self.entities+1] = spec
+        envEntities[#envEntities+1] = spec
     end
 
 
     function LevelGenerator:createEntitySpec(xpos, ypos, otherAttributes)
-        local spec = {xpos=xpos, ypos=ypos}
+        local spec = {xpos=xpos, ypos=ypos, mapSection=env.number}
 
         for name,value in pairs(otherAttributes) do
             spec[name] = value
@@ -613,7 +606,7 @@ function Loader:load(LevelGenerator)
 
                 safety = safety + 1
                 if safety > 1000 then
-                    print("Unable to placeClusterFuck for "..attribs.object)
+                    --print("Unable to placeClusterFuck for "..attribs.object)
                     break
                 end
             end
@@ -637,7 +630,7 @@ function Loader:load(LevelGenerator)
 
                 safety = safety + 1
                 if safety > 1000 then
-                    print("Unable to placeMob for "..attribs.object)
+                    --print("Unable to placeMob for "..attribs.object)
                     break
                 end
             end
@@ -664,7 +657,7 @@ function Loader:load(LevelGenerator)
 
                 safety = safety + 1
                 if safety > 1000 then
-                    print("Unable to placeChain for "..attribs.object)
+                    --print("Unable to placeChain for "..attribs.object)
                     break
                 end
             end

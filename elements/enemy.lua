@@ -523,7 +523,7 @@ function Enemy:dropWeapon()
     local weapon = self.weapon
 
     if weapon.collect and percent(weapon.collect) then
-        level:createCollectable({object="weapon", type=weapon.name, xpos=self:x(), ypos=self:y(), dontReposition=true})
+        level:createCollectable({object="weapon", type=weapon.name, xpos=self:x(), ypos=self:y(), dontReposition=true, mapSection=self.mapSection})
     end
 end
 

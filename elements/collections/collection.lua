@@ -97,6 +97,21 @@ function Collection:remove(object)
 end
 
 
+function Collection:cull(fromSection)
+    local items = self.items
+    local num   = #items
+
+    for i=1,num do
+        local object = items[i]
+
+        if object and object ~= -1 and object.mapSection and object.mapSection <= fromSection then
+            --if not isProjectile then print("Culling "..object.key.." section="..tostring(object.mapSection)) end
+            object:destroy()
+        end
+    end
+end
+
+
 -- Indexes into this collection with an ID and fetches the item at that index
 -- @param id - id of item or index of collection (should be the same for master collections)
 -- @return object at the index

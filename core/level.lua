@@ -189,13 +189,17 @@ function Level:createObstacle(item, levelGenerator)
     -- For custom map security doors, we need a reference to them so we can triger actions on them from game activity
     if obstacle.type == "securityDoor" and obstacle.guards == "exit" then
         levelGenerator:assignEntityRef("securityDoorExit", obstacle)
+
+    elseif obstacle.type == "securityDoor" and obstacle.guards == "entrance" then
+        levelGenerator:assignEntityRef("securityDoorEntrance", obstacle)
+
     end
 end
 
 
-function Level:createPowerup(powerup, xpos, ypos)
+function Level:createPowerup(powerup, xpos, ypos, mapSection)
     after(50, function()
-        self:createCollectable({object="powerup", type=powerup, health=5, xpos=xpos, ypos=ypos, dontReposition=true})
+        self:createCollectable({object="powerup", type=powerup, health=5, xpos=xpos, ypos=ypos, dontReposition=true, mapSection=mapSection})
     end)
 end
 
@@ -216,6 +220,17 @@ function Level:createSpineObject(item, spineParams)
     local object = builder:newSpineObject(item, spineParams)
     spineCollection:add(object)
     return object
+end
+
+
+function Level:cullElements(fromSection)
+    print("")
+    print("<=== Cull sections from "..fromSection)
+    --particleCollection:cull(fromSection)
+    enemyCollection:cull(fromSection)
+    obstacleCollection:cull(fromSection)
+    collectableCollection:cull(fromSection)
+    projectileCollection:cull(fromSection)
 end
 
 

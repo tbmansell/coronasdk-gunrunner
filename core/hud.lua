@@ -113,12 +113,13 @@ end
 
 -- Class Members
 
-function Hud:create(camera, player, pauseGameHandler, resumeGameHandler, changeMusicHandler)
+function Hud:create(camera, player, pauseGameHandler, resumeGameHandler, changeMusicHandler, loadLevelHandler)
     self.camera            = camera
     self.player            = player
     self.pauseGameHandler  = pauseGameHandler
     self.resumeGameHandler = resumeGameHandler
     self.changeMusicHandler= changeMusicHandler
+    self.loadLevelHandler  = loadLevelHandler
     self.group             = display.newGroup()
     
     self.debugMode         = false
@@ -407,10 +408,12 @@ function Hud:handleCustomMapTransition()
     elseif not forceScroll and enemies == 0 then
         transitionMapType = true
 
-        localPlayer.currentSection.securityDoorExit:open()
-
-        sounds:general("mapComplete")
+        self.loadLevelHandler(nil, localPlayer.currentSection.number + 2)
         self.changeMusicHandler(nil, sounds.music.rollingGame, 20000)
+
+        localPlayer.currentSection.securityDoorExit:open()
+        
+        sounds:general("mapComplete")
 
         after(2000, function()
             transitionMapType = false

@@ -11,10 +11,6 @@ function Character:setWeaponBones(weapon)
     
     if weapon.bone then
         self.boneBarrel = self.skeleton:findBone("barrel-"..weapon.bone)
-
-        --[[if weapon.name == "launcher" then
-            self.boneGunRear = self.skeleton:findBone("launcher-rear")
-        end]]
     end
 end
 
@@ -52,11 +48,11 @@ function Character:shootProjectile(projectileBuilder, camera, filter, reloadCall
     self:animate("shoot_"..name)
 
     if name == "shotgun" then
-        level:createProjectile({xpos=x, ypos=y, angle=angle-10, filter=filter, powerupDamage=damage}, weapon)
-        level:createProjectile({xpos=x, ypos=y, angle=angle,    filter=filter, powerupDamage=damage}, weapon)
-        level:createProjectile({xpos=x, ypos=y, angle=angle+10, filter=filter, powerupDamage=damage}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle-10, filter=filter, powerupDamage=damage, mapSection=self.mapSection}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle,    filter=filter, powerupDamage=damage, mapSection=self.mapSection}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle+10, filter=filter, powerupDamage=damage, mapSection=self.mapSection}, weapon)
     else
-        level:createProjectile({xpos=x, ypos=y, angle=angle, filter=filter, powerupDamage=damage}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle,    filter=filter, powerupDamage=damage, mapSection=self.mapSection}, weapon)
     end
 
     local rof = self.weapon.rof

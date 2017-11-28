@@ -38,7 +38,7 @@ end
 
 
 local function eventUpdateGameLogic()
-    player.currentSection = levelGenerator:getSection(player:y())
+    player.currentSection = levelGenerator:getSectionAtPosition(player:y())
 
     level:updateBehaviours()
     hud:updateMapSection()
@@ -98,34 +98,32 @@ end
 
 
 function scene:loadLevel()
-    local bgr = display.newImage(self.view, "images/background.jpg", globalCenterX, globalCenterY)
-    bgr:scale(2,2)
-
-    local sections    = 10
     local environment = {}
-    local entities    = {}
-
+    --local entities    = {}
+    local bgr         = display.newImage(self.view, "images/background.jpg", globalCenterX, globalCenterY)
+    bgr:scale(2,2)
+    
     -- Build up tile engine
     tileEngine:init("images/tiles.png")
     levelGenerator:setup()
     level:new(tileEngine)
 
     -- generate the level content
-    for i=1,sections do
-        local env = levelGenerator:newEnvironment()
+    for i=1, globalMaxSections do
+        local isCustom = (i % globalLoadSections == 0)
+        local isLast   = (i == globalMaxSections)
+        local env      = levelGenerator:newEnvironment(isCustom, isLast)
 
         environment[#environment+1] = env
-        entities[#entities+1]       = levelGenerator:fillEnvironment()
+        levelGenerator:fillEnvironment()
 
-        if not env.isCustom then
+        if not isCustom then
             levelGenerator:setEnvironmentFloor(env)
         end
     end
 
-    levelGenerator:markLastSection()
-
     -- tile engine renders sections in reverse, so feed them in backward
-    for i=sections, 1, -1 do
+    for i=globalMaxSections, 1, -1 do
         tileEngine:loadEnvironment(environment[i])
     end
 
@@ -134,9 +132,27 @@ function scene:loadLevel()
     --tileEngine.map.setCameraBounds({xMin=400, xMax=1200, yMin=false, yMax=false})
     tileEngine.map.setTrackingLevel(0.1)
 
-    -- Build entities into the level
-    for i=1, sections-1 do
-        level:createElements(entities[i], levelGenerator)
+    self:loadEntities(1)
+end
+
+
+function scene:loadEntities(fromSection)
+    -- remove last batch of entities
+    if fromSection > 1 then
+        level:cullElements(fromSection-3)
+    end
+
+    -- generate next batch of entities
+    local toSection = fromSection + globalLoadSections
+
+    if toSection >= globalMaxSections then
+        toSection = globalMaxSections
+    end
+
+    for i=fromSection, toSection do
+        print("===> Create elements for section "..i)
+        local section = levelGenerator:getSection(i)
+        level:createElements(section.entities, levelGenerator)
     end
 end
 
@@ -174,7 +190,7 @@ end
 
 
 function scene:loadInterface()
-    hud:create(tileEngine, player, scene.pauseLevel, scene.resumeLevel, scene.changeMusic)
+    hud:create(tileEngine, player, scene.pauseLevel, scene.resumeLevel, scene.changeMusic, scene.loadEntities)
 end
 
 
@@ -196,22 +212,22 @@ end
 
 
 function scene:startMusic()
-    print("startMusic")
+    --print("startMusic")
     audio.reserveChannels(1)
     sounds:play(sounds.music.rollingGame, {channel=1, volume=0.3, fadein=8000, loops=-1})
-    print("startMusic [end]")
+    --print("startMusic [end]")
 end
 
 
 function scene:changeMusic(newMusic, fadeIn)
-    print("fadeMusic")
+    --print("fadeMusic")
     audio.fadeOut({channel=1, time=1000})
-    print("fadeMusic [end]")
+    --print("fadeMusic [end]")
 
     after(1100, function()
-        print("changeMusic")
+        --print("changeMusic")
         sounds:play(newMusic, {channel=1, volume=0.3, fadein=(fadeIn or 2000), loops=-1})
-        print("changeMusic [end]")
+        --print("changeMusic [end]")
     end)
 end
 

@@ -117,17 +117,18 @@ function LevelGenerator:destroy()
 end
 
 
-function LevelGenerator:newEnvironment()
+function LevelGenerator:newEnvironment(isCustom, isLast)
     local env = {
         tiles    = {},
         shadows  = {},
         entities = {},
-        isCustom = false,
+        isCustom = isCustom,
+        isLast   = isLast,
     }
 
     self.section = self.section + 1
 
-    if self:shouldloadCustomMap() then
+    if isCustom then
         -- Load one of our own pre-built maps
         self:loadCustomMap(env)
     else
@@ -140,7 +141,10 @@ function LevelGenerator:newEnvironment()
             self:setStartEdge(env)
         else
             self:setPrevBottomEdge(env, self.environments[#self.environments])
-            self:setEnvironmentWalls(env)
+
+            if not isLast then
+                self:setEnvironmentWalls(env)
+            end
         end
     end
 
@@ -150,14 +154,13 @@ function LevelGenerator:newEnvironment()
 end
 
 
-function LevelGenerator:markLastSection()
-    local last  = self.environments[#self.environments]
-    last.isLast = true
+function LevelGenerator:getSection(index)
+    return self.environments[index]
 end
 
 
 -- Gets current section based on ypos, but as sections are generated from top down, we flip this, so we call the bottom section #1
-function LevelGenerator:getSection(ypos)
+function LevelGenerator:getSectionAtPosition(ypos)
     local sections = #self.environments
     
     for i=sections, 1, -1 do
@@ -177,11 +180,6 @@ end
 
 
 ----- LOADING EXTERNAL MAP -----
-
-
-function LevelGenerator:shouldloadCustomMap()
-    return (self.section == 2)
-end
 
 
 function LevelGenerator:loadCustomMap(env)
@@ -639,8 +637,11 @@ function LevelGenerator:setEnvironmentFloor(env)
     end
 
     -- Customise specific sections
-    if self.section == 1 or env.isLast then
+    if env.number == 1 then
         self:setEnvironmentFirstSection(env)
+
+    elseif env.isLast then
+        self:setEnvironmentLastSection(env)
     end
 end
 
@@ -677,7 +678,7 @@ end
 
 
 function LevelGenerator:setEnvironmentLastSection(env)
-
+    self:setEnvironmentFirstSection(env)
 end
 
 

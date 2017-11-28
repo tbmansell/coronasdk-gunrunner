@@ -243,10 +243,6 @@ function Player:explode(sound, message)
             self:failedCallback() 
         end
         seq:start()
-
-        if message then
-            hud:displayMessageDied(message)
-        end
     end
 end
 
@@ -259,7 +255,7 @@ function Player:fallToDeath(hole)
 
         self:destroyEmitter()
         self:stopMomentum(true)
-        --self:animate(animation or "death_"..random(2))
+        self:animate("falling")
 
         local seq = anim:chainSeq("die", self.image)
         seq:tran({time=1000, x=hole.x, y=hole.y, xScale=0.01, yScale=0.01, alpha=0})

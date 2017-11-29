@@ -69,6 +69,7 @@ function Sounds:preload()
     self.generalSounds.gameOver         = loadSound("sounds/gameOver.mp3")
     self.generalSounds.mapComplete      = loadSound("sounds/mapComplete.wav")
     self.generalSounds.doorOpen         = loadSound("sounds/doorOpen.wav")
+    self.generalSounds.button           = loadSound("sounds/buttonClick.wav")
 
     self.music.rollingGame              = loadSound("sounds/music-cyborgNinja.mp3")
     self.music.customScene              = loadSound("sounds/music-powerBotsLoop.wav")
@@ -76,17 +77,10 @@ end
 
 
 function Sounds:play(sound, options)
-    local channel = nil
+    local options = options or {channel=nil}
 
-    if options and options.channel then
-        channel = options.channel
-    else
-        channel = findChannel()
-        if options then
-            options.channel = channel
-        else
-            options = {channel=channel}
-        end
+    if options.channel == nil then
+        options.channel = findChannel()
     end
 
     setVolume(options.volume or 1, options)

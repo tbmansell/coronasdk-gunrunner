@@ -148,9 +148,7 @@ function Draw:newButton(group, x, y, image, callback, multiClick, clickSound, si
                 after(multiClick, function() if btn then btn.activated = false end end)
             end
 
-            if not clickSound or clicksound ~= "no" then
-                sounds:play(clickSound or sounds.sceneEnter)
-            end
+            sounds:general("button")
 
             btn.alpha, btnOverlay.alpha = 0, 1
             after(150, function()

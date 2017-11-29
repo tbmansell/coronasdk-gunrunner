@@ -13,7 +13,7 @@ globalHeight           = display.contentHeight
 globalBackgroundWidth  = 640
 globalBackgroundHeight = 1300
 globalCamera           = nil
-globalMaxSections      = 101
+globalMaxSections      = 11
 globalLoadSections     = 10
 
 -- Define global objects

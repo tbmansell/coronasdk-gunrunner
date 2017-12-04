@@ -8,18 +8,18 @@ local random = math.random
 
 
 function EnemyBuilder:newEnemy(camera, spec)
-    if spec.type == "turret" then
-        return self:newTurret(camera, spec)
-    
-    elseif spec.type == "reptile" then
+    if spec.type == EnemyTypes.reptileSmall or spec.type == EnemyTypes.reptileFlamer then
         return self:newReptile(camera, spec)
+
+    elseif spec.category == "turret" then
+        return self:newTurret(camera, spec)
     else
-        return self:newEnemySoldier(camera, spec)
+        return self:newLizardSoldier(camera, spec)
     end
 end
 
 
-function EnemyBuilder:newEnemySoldier(camera, spec)
+function EnemyBuilder:newLizardSoldier(camera, spec)
     -- Copy the enemy rank def and reference the modifyImage before spine creation
     local rankDef = builder:newClone(EnemyTypes[spec.type][spec.rank])
     local anim    = spec.animation or "stationary_1"

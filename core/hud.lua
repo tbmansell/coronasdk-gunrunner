@@ -584,7 +584,7 @@ function Hud:displayGameOver(completed)
         self:displayWeaponStats(group, Weapons.rifle.name,    400)
         self:displayWeaponStats(group, Weapons.shotgun.name,  450)
         self:displayWeaponStats(group, Weapons.launcher.name, 500)
-        self:displayWeaponStats(group, Weapons.laserGun.name, 550)
+        self:displayWeaponStats(group, Weapons.lasergun.name, 550)
 
         self.gameOverSprites = {}
 
@@ -643,7 +643,7 @@ end
 
 
 function Hud:displayEnemyKills(group, enemies, enemyType, rank, xpos, ypos)
-    local enemy = self:createSpineEnemy(enemyType, rank)
+    --[[local enemy = self:createSpineEnemy(enemyType, rank)
 
     enemy:moveTo(xpos, ypos)
 
@@ -657,19 +657,19 @@ function Hud:displayEnemyKills(group, enemies, enemyType, rank, xpos, ypos)
         draw:newText(group, kills, xpos+30, ypos, 0.45, "red", "LEFT")
     else
         enemy:visible(0.2)
-    end
+    end]]
 end
 
 
 function Hud:createSpineEnemy(enemyType, rank)
-    local spec   = EnemyTypes[enemyType][rank]
+    --[[local spec   = EnemyTypes[enemyType][rank]
     local weapon = Weapons[spec.weapon]
     local enemy  = builder:newCharacter({}, {jsonName="characterBody", imagePath="character", skin=spec.skin, animation="stationary_1"})
 
     enemy.skeleton:setAttachment(weapon.slot, weapon.skin)
     enemy.image:scale(0.5, 0.5)
 
-    return enemy
+    return enemy]]
 end
 
 

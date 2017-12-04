@@ -1,4 +1,3 @@
--- Game states
 GameMode = {
     loading = 1,
     started = 2,
@@ -96,65 +95,41 @@ Weapons.chainGunTurret.shotSound    = "chainGunShot";  Weapons.chainGunTurret.hi
 Weapons.laserCannonTurret.shotSound = "laserBolt";     Weapons.laserCannonTurret.hitSound = "laserHit";
 
 
+EnemyCategories = {
+    melee   = "melee",
+    shooter = "shooter",
+    heavy   = "heavy",
+    turret  = "turret",
+    flying  = "flying",
+    vehicle = "vehicle",
+}
+
+
+EnemyRanks = {
+    normal  = 1,
+    captain = 2,
+    elite   = 3,
+}
+
 
 EnemyTypes = {
-    melee = {
-        -- lizard men
-        [1] = {skin="lizard_club",              weapon="club",     health=1, decisionDelay=1000, aggression=70, fidgit=50, roaming=1000, speed=150, melee=true},
-        [2] = {skin="lizard_club_captain",      weapon="club",     health=2, decisionDelay=750,  aggression=80, fidgit=50, roaming=1000, speed=150, melee=true},
-        [3] = {skin="lizard_club_elite",        weapon="club",     health=3, decisionDelay=500,  aggression=90, fidgit=50, roaming=1000, speed=150, melee=true},
-    },
-    reptile = {
-        [1] = {skin="reptile_runner",           weapon="claws",    health=1, decisionDelay=500, aggression=50, fidgit=90, roaming=2500, speed=250, melee=true, scale=0.2},
-        [2] = {skin="reptile_runner_captain",   weapon="claws",    health=5, decisionDelay=500, aggression=50, fidgit=90, roaming=2000, speed=200, melee=true, scale=0.4, json="reptiles-captain"},
-    },
-    shooter = {
-        -- Infantry of each weapon
-        [1]  = {skin="lizard_assault",          weapon="rifle",    health=2, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100, inaccuracy=50},
-        [2]  = {skin="lizard_shotgun",          weapon="shotgun",  health=2, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100, inaccuracy=40},
-        [3]  = {skin="lizard_launcher",         weapon="launcher", health=3, decisionDelay=1000, aggression=40, fidgit=20, roaming=1000, speed=50,  inaccuracy=50},
-        [4]  = {skin="lizard_laser",            weapon="laserGun", health=3, decisionDelay=1000, aggression=50, fidgit=40, roaming=1000, speed=150, inaccuracy=40},
-        -- Captains of each weapon
-        [5]  = {skin="lizard_assault_captain",  weapon="rifle",    health=4, decisionDelay=750, aggression=50, fidgit=40, roaming=1000, speed=150,  inaccuracy=30},
-        [6]  = {skin="lizard_shotgun_captain",  weapon="shotgun",  health=4, decisionDelay=750, aggression=70, fidgit=60, roaming=1000, speed=150,  inaccuracy=25},
-        [7]  = {skin="lizard_launcher_captain", weapon="launcher", health=6, decisionDelay=750, aggression=60, fidgit=30, roaming=1000, speed=100,  inaccuracy=30},
-        [8]  = {skin="lizard_laser_captain",    weapon="laserGun", health=6, decisionDelay=750, aggression=70, fidgit=50, roaming=1000, speed=200,  inaccuracy=20},
-        -- Elites of each weapon
-        [9]  = {skin="lizard_assault_elite",    weapon="rifle",    health=6, decisionDelay=500, aggression=70, fidgit=50, roaming=1000, speed=200,  inaccuracy=10},
-        [10] = {skin="lizard_shotgun_elite",    weapon="shotgun",  health=6, decisionDelay=500, aggression=90, fidgit=70, roaming=1000, speed=200,  inaccuracy=10},
-        [11] = {skin="lizard_launcher_elite",   weapon="launcher", health=8, decisionDelay=500, aggression=80, fidgit=40, roaming=1000, speed=150,  inaccuracy=10},
-        [12] = {skin="lizard_laser_elite",      weapon="laserGun", health=8, decisionDelay=500, aggression=90, fidgit=60, roaming=1000, speed=250,  inaccuracy=10},
-    },
-    turret = {
-        [1] = {skin="chainGun",                 weapon="chainGunTurret",    health=10, inaccuracy=20, decisionDelay=1000, aggression=50},
-        [2] = {skin="laserCannon",              weapon="laserCannonTurret", health=10, inaccuracy=20, decisionDelay=1000, aggression=50},
-    }
+    -- melee
+    lizardClub          = 1,
+    reptileSmall        = 2,
+    -- shooter
+    lizardRifle         = 1,
+    lizardShotgun       = 2,
+    -- heavy
+    lizardLauncher      = 1,
+    lizardLaserGun      = 2,
+    reptileFlamer       = 3,
+    -- turrets
+    turretChainGun      = 1,
+    turretLaserCannon   = 2,
 }
 
 
-EnemyWeaponAllocations = {
-    meleeOnly       = 1,
-    riflesOnly      = 2,
-    meleeAndRifles  = 3,
-    heavyOnly       = 4,
-    meleeAndHeavy   = 5,
-    heavyAndRifles  = 6,
-    all             = 7,
-}
-
-
-EnemyRankAllocations = {
-    infantry            = 1,
-    captain             = 2,
-    infantryWithCaptain = 3,
-    elite               = 4,
-    infantryWithElite   = 5,
-    captainWithElite    = 6,
-    all                 = 7,
-}
-
-
-EntityFormations = {
+Formations = {
     clusterFuck = 1,  -- spread everywhere, no connection
     mob         = 2,  -- in one mass group, close together
     chain       = 3,  -- in one group, spread out
@@ -166,15 +141,123 @@ EntityFormations = {
     cross       = 9,
 }
 
---[[
-EnemyFormationMinimums = {
-    EntityFormations.clusterFuck = 1,
-    EntityFormations.mob         = 2,
-    EntityFormations.squad       = 2,
-    EntityFormations.wall        = 2,
-    EntityFormations.triangle    = 3,  
-    EntityFormations.square      = 4, 
-    EntityFormations.jagged      = 4,
-    EntityFormations.circle      = 6,
-    EntityFormations.cross       = 6,
-}]]
+
+-- Local Shortcuts
+local melee               = EnemyCategories.melee
+local shooter             = EnemyCategories.shooter
+local heavy               = EnemyCategories.heavy
+local turret              = EnemyCategories.turret
+local flying              = EnemyCategories.flying
+local vehicle             = EnemyCategories.vehicle
+
+local normal              = EnemyRanks.normal
+local captain             = EnemyRanks.captain
+local elite               = EnemyRanks.elite
+
+local lizardClub          = EnemyTypes.lizardClub
+local reptileSmall        = EnemyTypes.reptileSmall
+local lizardRifle         = EnemyTypes.lizardRifle
+local lizardShotgun       = EnemyTypes.lizardShotgun
+local lizardLauncher      = EnemyTypes.lizardLauncher
+local lizardLaserGun      = EnemyTypes.lizardLaserGun
+local reptileFlamer       = EnemyTypes.reptileFlamer
+local turretChainGun      = EnemyTypes.turretChainGun
+local turretLaserCannon   = EnemyTypes.turretLaserCannon
+
+
+-- Rules: 
+--  only allocating in units of 25
+--  heavys  cant be more than 50% of enemies in section
+--  turrets cant be more than 25% of enemies in section
+EnemyLayouts = {
+    [1]  = {[100]=melee},
+    [2]  = {[100]=shooter},
+
+    [3]  = {[75]=melee,     [25]=shooter},
+    [4]  = {[50]=melee,     [50]=shooter},
+    [5]  = {[25]=melee,     [75]=shooter},
+
+    [6]  = {[75]=melee,     [25]=heavy},
+    [7]  = {[50]=melee,     [50]=heavy},
+
+    [8]  = {[75]=shooter,   [25]=heavy},
+    [9]  = {[50]=shooter,   [50]=heavy},
+
+    [10] = {[50]=melee,     [25]=shooter,   [25]=heavy},
+    [11] = {[25]=melee,     [50]=shooter,   [25]=heavy},
+    [12] = {[25]=melee,     [25]=shooter,   [50]=heavy},
+
+    [13] = {[50]=melee,     [25]=shooter,   [25]=turret},
+    [14] = {[25]=melee,     [50]=shooter,   [25]=turret},
+    [15] = {[50]=melee,     [25]=heavy,     [25]=turret},
+    [16] = {[25]=melee,     [50]=heavy,     [25]=turret},
+    [17] = {[50]=shooter,   [25]=heavy,     [25]=turret},
+    [18] = {[25]=shooter,   [50]=heavy,     [25]=turret},
+
+    [19] = {[25]=melee,     [25]=shooter,   [25]=heavy,     [25]=turret},
+}
+
+
+EnemyLayoutIntro = {
+    [1]=1,  -- start with all melee                 (melee=100%)
+    [2]=3,  -- introduce a few shooters             (melee=75%, shooters=25%)
+    [3]=4,  -- introduce more shooters              (melee=50%, shooters=50%)
+    [4]=6,  -- introduce some heavies               (melee=75%, heavies=25%)
+    [5]=10, -- mix melee, shooters and heavies      (melee=50%, shooters=25%, heavies=25%)
+    [6]=5,  -- majority shooters                    (melee=25%, shooters=75%)
+    [7]=13, -- introduce turrets                    (melee=50%, shooters=25%, turrets=5%)
+    [8]=15, -- mix turrets with melee & heavy       (melee=50%, heavy=25%,    turrets=25%)
+    [9]=17, -- mix turrets with shooters & heavy    (shooter=50%, heavy=25%,  turrets=25%)
+    --[10]=0, -- custom map
+}
+
+
+EnemyDefs = {
+    melee = {
+        [lizardClub] = {
+            [normal]  = {skin="lizard_club",             weapon="club",     health=1, decisionDelay=1000, aggression=70, fidgit=50, roaming=1000, speed=150, melee=true},
+            [captain] = {skin="lizard_club_captain",     weapon="club",     health=2, decisionDelay=750,  aggression=80, fidgit=50, roaming=1000, speed=150, melee=true},
+            [elite]   = {skin="lizard_club_elite",       weapon="club",     health=3, decisionDelay=500,  aggression=90, fidgit=50, roaming=1000, speed=150, melee=true},
+        },
+        [reptileSmall] = {
+            [normal]  = {skin="reptile_runner",          weapon="claws",    health=1, decisionDelay=500, aggression=50, fidgit=90, roaming=2500, speed=250, melee=true, scale=0.2},
+        }
+    },
+    shooter = {
+        [lizardRifle] = {
+            [normal]  = {skin="lizard_assault",          weapon="rifle",    health=2, decisionDelay=1000, aggression=30, fidgit=30, roaming=1000, speed=100, inaccuracy=50},
+            [captain] = {skin="lizard_assault_captain",  weapon="rifle",    health=4, decisionDelay=750,  aggression=50, fidgit=40, roaming=1000, speed=150, inaccuracy=30},
+            [elite]   = {skin="lizard_assault_elite",    weapon="rifle",    health=6, decisionDelay=500,  aggression=70, fidgit=50, roaming=1000, speed=200, inaccuracy=10},
+        },
+        [lizardShotgun] = {
+            [normal]  = {skin="lizard_shotgun",          weapon="shotgun",  health=2, decisionDelay=1000, aggression=50, fidgit=50, roaming=1000, speed=100, inaccuracy=40},
+            [captain] = {skin="lizard_shotgun_captain",  weapon="shotgun",  health=4, decisionDelay=750,  aggression=70, fidgit=60, roaming=1000, speed=150, inaccuracy=25},
+            [elite]   = {skin="lizard_shotgun_elite",    weapon="shotgun",  health=6, decisionDelay=500,  aggression=90, fidgit=70, roaming=1000, speed=200, inaccuracy=10},
+        },
+    },
+    heavy = {
+        [lizardLauncher] = {
+            [normal]  = {skin="lizard_launcher",         weapon="launcher", health=3, decisionDelay=1000, aggression=40, fidgit=20, roaming=1000, speed=50,  inaccuracy=50},
+            [captain] = {skin="lizard_launcher_captain", weapon="launcher", health=6, decisionDelay=750,  aggression=60, fidgit=30, roaming=1000, speed=100, inaccuracy=30},
+            [elite]   = {skin="lizard_launcher_elite",   weapon="launcher", health=8, decisionDelay=500,  aggression=80, fidgit=40, roaming=1000, speed=150, inaccuracy=10},
+        },
+        [lizardLaserGun] = {
+            [normal]  = {skin="lizard_laser",            weapon="laserGun", health=3, decisionDelay=1000, aggression=50, fidgit=40, roaming=1000, speed=150, inaccuracy=40},
+            [captain] = {skin="lizard_laser_captain",    weapon="laserGun", health=6, decisionDelay=750,  aggression=70, fidgit=50, roaming=1000, speed=200, inaccuracy=20},
+            [elite]   = {skin="lizard_laser_elite",      weapon="laserGun", health=8, decisionDelay=500,  aggression=90, fidgit=60, roaming=1000, speed=250, inaccuracy=10},
+        },
+        [reptileFlamer] = {
+            [normal]  = {skin="reptile_runner_captain",  weapon="claws",    health=5, decisionDelay=500,  aggression=50, fidgit=90, roaming=2000, speed=200, melee=true, scale=0.4, json="reptiles-captain"},
+        }
+    },
+    turret = {
+        [turretChainGun] = {
+            [normal]  = {skin="chainGun",                weapon="chainGunTurret",    health=10, inaccuracy=20, decisionDelay=1000, aggression=50},
+        },
+        [turretLaserCannon] = {
+            [normal]  = {skin="laserCannon",             weapon="laserCannonTurret", health=10, inaccuracy=20, decisionDelay=1000, aggression=50},
+        },
+    },
+
+}
+

@@ -17,11 +17,11 @@ local env         = nil
 local envTiles    = nil
 local envEntities = nil
 local defaultTile = nil
-local melees      = nil
-local shooters    = nil
-local reptiles    = nil
-local turrets     = nil
-local points      = nil
+--local melees      = nil
+--local shooters    = nil
+--local reptiles    = nil
+--local turrets     = nil
+--local points      = nil
 
 -- entity definitions for own maps
 local entityDefs = {
@@ -77,7 +77,7 @@ local entityDefs = {
     [391] = {object="weapon",   type=Weapons.rifle.name},
     [392] = {object="weapon",   type=Weapons.shotgun.name},
     [393] = {object="weapon",   type=Weapons.launcher.name},
-    [394] = {object="weapon",   type=Weapons.laserGun.name},
+    [394] = {object="weapon",   type=Weapons.lasergun.name},
     [406] = {object="powerup",  type=Powerups.damage},
     [407] = {object="powerup",  type=Powerups.extraAmmo},
     [408] = {object="powerup",  type=Powerups.fastMove},
@@ -142,9 +142,9 @@ function Loader:load(LevelGenerator)
         envTiles    = nil
         envEntities = nil
         defaultTile = nil
-        melees      = nil
-        shooters    = nil
-        points      = nil
+        --melees      = nil
+        --shooters    = nil
+        --points      = nil
     end
 
 
@@ -177,7 +177,7 @@ function Loader:load(LevelGenerator)
                 local entityIndex = entityData[gridIndex]
 
                 if entityDefs[entityIndex] then
-                    self:createEntitySpec(x, y, entityDefs[entityIndex])
+                    --self:createEntitySpec(x, y, entityDefs[entityIndex])
                 end
 
                 local tile = env.tiles[y][x]
@@ -198,11 +198,11 @@ function Loader:load(LevelGenerator)
         if index > 1 and not env.isLast then
             -- define early presets here:
             if index == 2 then
-                self.enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly
-                self.enemyRankAlloc   = EnemyRankAllocations.infantry
+                --self.enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly
+                --self.enemyRankAlloc   = EnemyRankAllocations.infantry
             else
-                self.enemyWeaponAlloc = random(self.enemyWeaponLimit)
-                self.enemyRankAlloc   = random(self.enemyRankLimit)
+                --self.enemyWeaponAlloc = random(self.enemyWeaponLimit)
+                --self.enemyRankAlloc   = random(self.enemyRankLimit)
             end
 
             --print("Section "..index.." enemyPoints="..self.enemyPoints.." weaponLimit="..self.enemyWeaponLimit.." rankLimit="..self.enemyRankLimit.." weaponAlloc="..self.enemyWeaponAlloc.." rankAlloc="..self.enemyRankAlloc)
@@ -220,7 +220,7 @@ function Loader:load(LevelGenerator)
         self.currentHeight = self.currentHeight + env.height
 
         --print("Section "..index.." height="..self.currentHeight.." heightPixels="..(self.currentHeight*self.TileSize))
-
+        --[[
         -- Increment the weapons that can appear by one each section
         if index > 1 and self.enemyWeaponLimit < EnemyWeaponAllocations.all then
             self.enemyWeaponLimit = self.enemyWeaponLimit + 1
@@ -247,7 +247,7 @@ function Loader:load(LevelGenerator)
             else
                 self.enemyPoints = self.enemyPoints - 5
             end
-        end
+        end]]
     end
 
 
@@ -337,22 +337,23 @@ function Loader:load(LevelGenerator)
 
     function LevelGenerator:addEnemies()
         -- we must generate the enemies and then place them
-        melees   = {}
-        shooters = {}
-        reptiles = {}
-        turrets  = {}
-        points   = self.enemyPoints
+        --melees   = {}
+        --shooters = {}
+        --reptiles = {}
+        --turrets  = {}
+        --points   = self.enemyPoints
 
         self:generateEnemies()
         -- TODO: Order them by highest rank first for better placing around higher ranks
-        self:placeEntities(turrets)
-        self:placeEntities(melees)
-        self:placeEntities(shooters)
-        self:placeEntities(reptiles)
+        --self:placeEntities(turrets)
+        --self:placeEntities(melees)
+        --self:placeEntities(shooters)
+        --self:placeEntities(reptiles)
     end
 
 
     function LevelGenerator:generateEnemies()
+        --[[
         local alloc = self.enemyWeaponAlloc
 
         -- Generate the enemies weapons and ranks
@@ -376,10 +377,10 @@ function Loader:load(LevelGenerator)
                 self:generateShooterEnemies()
                 self:generateReptiles()
             end
-        end
+        end]]
     end
 
-
+    --[[
     function LevelGenerator:generateMeleeEnemies(pointsToSpend)
         local spendTo = points - (pointsToSpend or points)
         local alloc   = self.enemyWeaponAlloc
@@ -450,7 +451,7 @@ function Loader:load(LevelGenerator)
             turrets[#turrets+1] = {object="enemy", type="turret", rank=random(2), tileWidth=2, tileHeight=2}
         end
     end
-
+    
 
     function LevelGenerator:generateShooterWeapon()
         local weapon = self.enemyWeaponAlloc
@@ -503,7 +504,7 @@ function Loader:load(LevelGenerator)
         end
         return rank
     end
-
+    ]]
 
     function LevelGenerator:addScenery()
         if percent(50) then
@@ -575,15 +576,15 @@ function Loader:load(LevelGenerator)
 
 
     function LevelGenerator:placeEntities(group, distance)
-        local formation = random(EntityFormations.chain)
+        local formation = random(Formations.chain)
 
-        if formation == EntityFormations.clusterFuck then
+        if formation == Formations.clusterFuck then
             -- ClusterFuck: place each one randomly anywhere
             self:placeClusterfuck(group)
-        elseif formation == EntityFormations.mob then
+        elseif formation == Formations.mob then
             -- Mob: generate a start point and stick everyone around it
             self:placeMob(group, distance or 1)
-        elseif formation == EntityFormations.chain then
+        elseif formation == Formations.chain then
             -- Squad: same as mob but more spaced out
             self:placeChain(group, distance or 2)
         end

@@ -45,7 +45,7 @@ function Sounds:preload()
     self.voices.rifle                   = loadSound("sounds/voices/battleRifle.mp3")
     self.voices.shotgun                 = loadSound("sounds/voices/shotgun.mp3")
     self.voices.launcher                = loadSound("sounds/voices/rocketLauncher.mp3")
-    self.voices.laserGun                = loadSound("sounds/voices/plasmaRifle.mp3")
+    self.voices.lasergun                = loadSound("sounds/voices/plasmaRifle.mp3")
     self.voices.chainGun                = loadSound("sounds/voices/chainGun.mp3")
     self.voices.laserCannon             = loadSound("sounds/voices/laserCannon.mp3")
     -- collectable voices

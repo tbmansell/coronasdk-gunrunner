@@ -17,12 +17,18 @@ local LevelGenerator = {
     section          = 0,
     currentHeight    = 0,
 
-    enemyRankLimit   = 1,
-    enemyWeaponLimit = 1,
-    enemyPoints      = 10,
-    enemyPatternSet  = true,
-    enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly,
-    enemyRankAlloc   = EnemyRankAllocations.infantry,
+    enemyUnitsRange   = {10, 10},
+    enemyCaptainRange = {0,  0},
+    enemyEliteRange   = {0,  0},
+    enemyLayout       = nil,
+
+
+    --enemyRankLimit   = 1,
+    --enemyWeaponLimit = 1,
+    --enemyPoints      = 10,
+    --enemyPatternSet  = true,
+    --enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly,
+    --enemyRankAlloc   = EnemyRankAllocations.infantry,
 }
 
 -- Aliases:
@@ -107,11 +113,17 @@ function LevelGenerator:destroy()
     self.tiles            = {}
     self.section          = 0
     self.currentHeight    = 0
-    self.enemyRankLimit   = 1
-    self.enemyWeaponLimit = 1
-    self.enemyPoints      = 10
-    self.enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly
-    self.enemyRankAlloc   = EnemyRankAllocations.infantry
+
+    self.enemyUnitsRange   = {10, 10}
+    self.enemyCaptainRange = {0,  0}
+    self.enemyEliteRange   = {0,  0}
+    self.enemyLayout       = nil
+    
+    --self.enemyRankLimit   = 1
+    --self.enemyWeaponLimit = 1
+    --self.enemyPoints      = 10
+    --self.enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly
+    --self.enemyRankAlloc   = EnemyRankAllocations.infantry
 
     self:destroyEntities()
 end

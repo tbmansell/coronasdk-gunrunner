@@ -55,8 +55,9 @@ function scene:create(event)
     self:loadLevel()
     self:loadPlayer()
     self:loadInterface()
-    --self:createEventHandlers()
     particles:preLoadEmitters()
+
+    self.musicChannel = 1
 
     -- these top and bottom borders ensure that devices where the length is greater than 960 (ipad retina) the game doesnt show under or above the background size limits
     local topBorder = display.newRect(globalCenterX, -50, globalWidth, 100)
@@ -99,7 +100,6 @@ end
 
 function scene:loadLevel()
     local environment = {}
-    --local entities    = {}
     local bgr         = display.newImage(self.view, "images/background.jpg", globalCenterX, globalCenterY)
     bgr:scale(2,2)
     
@@ -110,6 +110,7 @@ function scene:loadLevel()
 
     -- generate the level content
     for i=1, globalMaxSections do
+        --print("=> Load environment "..i)
         local isCustom = (i % globalLoadSections == 0)
         local isLast   = (i == globalMaxSections)
         local env      = levelGenerator:newEnvironment(isCustom, isLast)
@@ -124,6 +125,7 @@ function scene:loadLevel()
 
     -- tile engine renders sections in reverse, so feed them in backward
     for i=globalMaxSections, 1, -1 do
+        --print("==> Build layer "..i)
         tileEngine:loadEnvironment(environment[i])
     end
 
@@ -150,7 +152,7 @@ function scene:loadEntities(fromSection)
     end
 
     for i=fromSection, toSection do
-        print("===> Create elements for section "..i)
+        --print("===> Create elements for section "..i)
         local section = levelGenerator:getSection(i)
         level:createElements(section.entities, levelGenerator)
     end
@@ -158,7 +160,9 @@ end
 
 
 function scene:loadPlayer()
+    --print("creatign player")
     player = level:createPlayer({xpos=11.5, ypos=-5.5}, hud)
+    --print("create player")
     player:setWeapon(Weapons.rifle)
     
     -- Create Game Over callbacks
@@ -176,7 +180,7 @@ function scene:loadPlayer()
 
     player.completedCallback = function()
         hud:forceMoving(false)
-        
+
         after(2000, function(sound)
             scene:pauseLevel()
             sounds:general("mapComplete")
@@ -216,22 +220,16 @@ end
 
 
 function scene:startMusic()
-    --print("startMusic")
-    audio.reserveChannels(1)
-    sounds:play(sounds.music.rollingGame, {channel=1, volume=0.3, fadein=8000, loops=-1})
-    --print("startMusic [end]")
+    audio.reserveChannels(self.musicChannel)
+    sounds:play(sounds.music.rollingGame, {channel=self.musicChannel, volume=0.3, fadein=8000, loops=-1}, true)
 end
 
 
 function scene:changeMusic(newMusic, fadeIn)
-    --print("fadeMusic")
-    audio.fadeOut({channel=1, time=1000})
-    --print("fadeMusic [end]")
+    audio.fadeOut({channel=self.musicChannel, time=1000})
 
     after(1100, function()
-        --print("changeMusic")
-        sounds:play(newMusic, {channel=1, volume=0.3, fadein=(fadeIn or 2000), loops=-1})
-        --print("changeMusic [end]")
+        sounds:play(newMusic, {channel=self.musicChannel, volume=0.3, fadein=(fadeIn or 2000), loops=-1})
     end)
 end
 
@@ -246,11 +244,6 @@ function scene:resumeMusic()
 end
 
 
-function scene:endMusic()
-    audio.fadeOut({channel=self.musicChannel, time=1000})
-end
-
-
 function scene:startPlaying()
     math.randomseed(os.time())
 
@@ -258,7 +251,6 @@ function scene:startPlaying()
 
     stats:init(player:y())
     physics:start()
-    --player:applyForce(0, -50)
     -- runs the game loop and allows it to start. We allow some delay before this to allow everything to load
     self:createEventHandlers()
 
@@ -303,7 +295,7 @@ end
 function scene:unloadLevel()
     Runtime:removeEventListener("enterFrame", eventUpdateFrame)
 
-    self:endMusic()
+    audio.stop()
     timer.cancel(scene.gameLoopHandle)
     track:cancelEventHandles()
 

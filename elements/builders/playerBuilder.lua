@@ -42,7 +42,6 @@ function PlayerBuilder:newPlayer(camera, spec, hud)
     player:moveTo(player.xpos or 0, player.ypos or 0)
     player:setPhysics()
     player:visible()
-
     player.image:insert(player.legs.image)
     player.legs:moveTo(0, -5)
     player.legs:visible()
@@ -66,12 +65,6 @@ function PlayerBuilder:applyPlayerOptions(player)
             player:loop(player.animation)
         end
     end
-
-    --[[if player.loadGear then
-        for _,gear in pairs(player.loadGear) do
-            player:setIndividualGear(gear)
-        end
-    end]]
 end
 
 

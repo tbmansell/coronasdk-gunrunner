@@ -355,6 +355,8 @@ function Loader:load(LevelGenerator)
     function LevelGenerator:generateEnemies()
         local alloc = self.enemyWeaponAlloc
 
+        reptiles[#reptiles+1] = {object="enemy", type="reptile", rank=2, tileWidth=1, tileHeight=1}
+
         -- Generate the enemies weapons and ranks
         if alloc == EnemyWeaponAllocations.meleeOnly then
             self:generateMeleeEnemies()

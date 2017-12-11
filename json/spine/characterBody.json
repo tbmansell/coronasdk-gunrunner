@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "i0fC2sTV7QVTTds+pGLKgs9DsJM", "spine": "3.6.43", "width": 185.7, "height": 468.75 },
+"skeleton": { "hash": "3Dq7pBwDVubxYVcL86lV4iTyGK0", "spine": "3.6.43", "width": 194.6, "height": 445.79 },
 "bones": [
 	{ "name": "root", "rotation": -35.26 },
 	{ "name": "Body", "parent": "root", "length": 70.01, "rotation": 88.91, "x": 1 },
@@ -22,7 +22,7 @@
 	{ "name": "left_forearm", "bone": "LeftForearm", "attachment": "left_forearm" },
 	{ "name": "right_forearm", "bone": "RightForearm", "attachment": "right_forearm" },
 	{ "name": "Body", "bone": "Body", "attachment": "body" },
-	{ "name": "weapon", "bone": "weapon", "attachment": "weapons/gun_launcher" },
+	{ "name": "weapon", "bone": "weapon", "attachment": "weapons/gun_assault" },
 	{ "name": "head", "bone": "Head", "attachment": "head" },
 	{ "name": "weapons/muzzle", "bone": "barrel-rifle", "color": "ffffff00", "attachment": "weapons/muzzle" },
 	{ "name": "weapons/laserMuzzle", "bone": "barrel-laser", "color": "ffffff00", "attachment": "weapons/laserMuzzle" },
@@ -94,7 +94,7 @@
 			"body": { "name": "lizard_assault/body_elite", "x": -0.58, "y": 0.17, "rotation": -88.91, "width": 163, "height": 78 }
 		},
 		"head": {
-			"head": { "name": "lizard_assault/head_elite", "x": 14.39, "y": 6.71, "rotation": -58.33, "width": 58, "height": 105 }
+			"head": { "name": "lizard_assault/head_elite", "x": 14.39, "y": 6.71, "rotation": -58.33, "width": 61, "height": 114 }
 		},
 		"left_arm": {
 			"left_arm": { "name": "lizard_assault/left_arm", "x": 16.49, "y": 1.63, "rotation": -90, "width": 35, "height": 47 }
@@ -134,7 +134,7 @@
 			"body": { "name": "lizard_club/body_captain", "x": 1, "y": 3, "rotation": -85.72, "width": 163, "height": 78 }
 		},
 		"head": {
-			"head": { "name": "lizard_club/head", "x": 12.24, "y": 5.19, "rotation": -58.33, "width": 68, "height": 80 }
+			"head": { "name": "lizard_club/head_captain", "x": 12.24, "y": 5.19, "rotation": -58.33, "width": 68, "height": 81 }
 		},
 		"left_arm": {
 			"left_arm": { "name": "lizard_club/left_arm", "x": 16.49, "y": 1.63, "rotation": -90, "width": 35, "height": 47 }
@@ -154,7 +154,7 @@
 			"body": { "name": "lizard_club/body_elite", "x": 1, "y": 3, "rotation": -85.72, "width": 169, "height": 78 }
 		},
 		"head": {
-			"head": { "name": "lizard_club/head", "x": 12.24, "y": 5.19, "rotation": -58.33, "width": 68, "height": 80 }
+			"head": { "name": "lizard_club/head_elite", "x": 6.7, "y": 1.77, "rotation": -58.33, "width": 90, "height": 101 }
 		},
 		"left_arm": {
 			"left_arm": { "name": "lizard_club/left_arm", "x": 16.49, "y": 1.63, "rotation": -90, "width": 35, "height": 47 }
@@ -294,7 +294,7 @@
 			"body": { "name": "lizard_shotgun/body", "x": 1, "y": 3, "rotation": -85.72, "width": 130, "height": 70 }
 		},
 		"head": {
-			"head": { "name": "lizard_shotgun/head", "x": 10.9, "y": 4.56, "rotation": -58.33, "width": 62, "height": 121 }
+			"head": { "name": "lizard_shotgun/head", "x": 10.9, "y": 4.56, "rotation": -58.33, "width": 62, "height": 110 }
 		},
 		"left_arm": {
 			"left_arm": { "name": "lizard_shotgun/left_arm", "x": 16.49, "y": 1.63, "rotation": -90, "width": 35, "height": 47 }

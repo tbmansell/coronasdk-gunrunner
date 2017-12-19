@@ -115,7 +115,7 @@ function Stats:addKill(weapon, type, rank)
         stat.kills = stat.kills + 1
     end
 
-    self.enemies[type][rank] = self.enemies[type][rank] + 1
+    --self.enemies[type][rank] = self.enemies[type][rank] + 1
 end 
 
 

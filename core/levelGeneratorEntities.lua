@@ -27,21 +27,22 @@ local defaultTile = nil
 
 -- entity definitions for own maps
 local entityDefs = {
-    [361] = {object="enemy",    type="melee",   rank=1},
-    [362] = {object="enemy",    type="shooter", rank=1},
-    [363] = {object="enemy",    type="shooter", rank=1},
-    [364] = {object="enemy",    type="shooter", rank=1},
-    [365] = {object="enemy",    type="shooter", rank=1},
-    [366] = {object="enemy",    type="melee",   rank=1},
-    [367] = {object="enemy",    type="shooter", rank=1},
-    [368] = {object="enemy",    type="shooter", rank=1},
-    [369] = {object="enemy",    type="shooter", rank=1},
-    [370] = {object="enemy",    type="shooter", rank=1},
-    [371] = {object="enemy",    type="melee",   rank=1},
-    [372] = {object="enemy",    type="shooter", rank=1},
-    [373] = {object="enemy",    type="shooter", rank=1},
-    [374] = {object="enemy",    type="shooter", rank=1},
-    [375] = {object="enemy",    type="shooter", rank=1},
+    [361] = {object="enemy",    category="melee",   type=EnemyTypes.lizardClub,     rank=1},
+    [362] = {object="enemy",    category="shooter", type=EnemyTypes.lizardRifle,    rank=1},
+    [363] = {object="enemy",    category="shooter", type=EnemyTypes.lizardShotgun,  rank=1},
+    [364] = {object="enemy",    category="heavy",   type=EnemyTypes.lizardLauncher, rank=1},
+    [365] = {object="enemy",    category="heavy",   type=EnemyTypes.lizardLaserGun, rank=4},
+    [366] = {object="enemy",    category="melee",   type=EnemyTypes.lizardClub,     rank=2},
+    [367] = {object="enemy",    category="shooter", type=EnemyTypes.lizardRifle,    rank=2},
+    [368] = {object="enemy",    category="shooter", type=EnemyTypes.lizardShotgun,  rank=2},
+    [369] = {object="enemy",    category="shooter", type=EnemyTypes.lizardLauncher, rank=2},
+    [370] = {object="enemy",    category="shooter", type=EnemyTypes.lizardLaserGun, rank=2},
+    [371] = {object="enemy",    category="melee",   type=EnemyTypes.lizardClub,     rank=3},
+    [372] = {object="enemy",    category="shooter", type=EnemyTypes.lizardRifle,    rank=3},
+    [373] = {object="enemy",    category="shooter", type=EnemyTypes.lizardShotgun,  rank=3},
+    [374] = {object="enemy",    category="shooter", type=EnemyTypes.lizardLauncher, rank=3},
+    [375] = {object="enemy",    category="shooter", type=EnemyTypes.lizardLaserGun, rank=3},
+
     [391] = {object="weapon",   type=Weapons.rifle.name},
     [392] = {object="weapon",   type=Weapons.shotgun.name},
     [393] = {object="weapon",   type=Weapons.launcher.name},
@@ -60,41 +61,6 @@ local entityDefs = {
     [429] = {object="obstacle", type="computer", variant="1"},
     [430] = {object="obstacle", type="computer", variant="2"},
     [431] = {object="obstacle", type="computer", variant="3"},
-    --[[
-    [361] = {object="enemy",    type="melee",   rank=1},
-    [362] = {object="enemy",    type="shooter", rank=1},
-    [363] = {object="enemy",    type="shooter", rank=2},
-    [364] = {object="enemy",    type="shooter", rank=3},
-    [365] = {object="enemy",    type="shooter", rank=4},
-    [366] = {object="enemy",    type="melee",   rank=2},
-    [367] = {object="enemy",    type="shooter", rank=5},
-    [368] = {object="enemy",    type="shooter", rank=6},
-    [369] = {object="enemy",    type="shooter", rank=7},
-    [370] = {object="enemy",    type="shooter", rank=8},
-    [371] = {object="enemy",    type="melee",   rank=3},
-    [372] = {object="enemy",    type="shooter", rank=9},
-    [373] = {object="enemy",    type="shooter", rank=10},
-    [374] = {object="enemy",    type="shooter", rank=11},
-    [375] = {object="enemy",    type="shooter", rank=12},
-    [391] = {object="weapon",   type=Weapons.rifle.name},
-    [392] = {object="weapon",   type=Weapons.shotgun.name},
-    [393] = {object="weapon",   type=Weapons.launcher.name},
-    [394] = {object="weapon",   type=Weapons.lasergun.name},
-    [406] = {object="powerup",  type=Powerups.damage},
-    [407] = {object="powerup",  type=Powerups.extraAmmo},
-    [408] = {object="powerup",  type=Powerups.fastMove},
-    [409] = {object="powerup",  type=Powerups.fastShoot},
-    [410] = {object="powerup",  type=Powerups.health, health=5},
-    [411] = {object="powerup",  type=Powerups.laserSight},
-    [412] = {object="powerup",  type=Powerups.shield},
-    [421] = {object="obstacle", type="crate",    variant="small"},
-    [422] = {object="obstacle", type="crate",    variant="big"},
-    [425] = {object="obstacle", type="gas",      variant="small"},
-    [426] = {object="obstacle", type="gas",      variant="big"},
-    [429] = {object="obstacle", type="computer", variant="1"},
-    [430] = {object="obstacle", type="computer", variant="2"},
-    [431] = {object="obstacle", type="computer", variant="3"},
-    ]]
 }
 
 
@@ -158,8 +124,6 @@ function Loader:load(LevelGenerator)
         envTiles    = env.tiles
         envEntities = env.entities
 
-        print("Section "..index)
-
         if env.isCustom then
             self:loadEntitiesFromMap()
         elseif not env.isLast then
@@ -179,7 +143,7 @@ function Loader:load(LevelGenerator)
                 local entityIndex = entityData[gridIndex]
 
                 if entityDefs[entityIndex] then
-                    --self:createEntitySpec(x, y, entityDefs[entityIndex])
+                    self:createEntitySpec(x, y, entityDefs[entityIndex])
                 end
 
                 local tile = env.tiles[y][x]

@@ -226,10 +226,10 @@ end
 
 
 function scene:changeMusic(newMusic, fadeIn)
-    audio.fadeOut({channel=self.musicChannel, time=1000})
+    audio.fadeOut({channel=scene.musicChannel, time=1000})
 
     after(1100, function()
-        sounds:play(newMusic, {channel=self.musicChannel, volume=0.3, fadein=(fadeIn or 2000), loops=-1})
+        sounds:play(newMusic, {channel=scene.musicChannel, volume=0.3, fadein=(fadeIn or 2000), loops=-1})
     end)
 end
 

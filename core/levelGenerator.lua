@@ -113,11 +113,15 @@ function LevelGenerator:destroy()
     self.tiles            = {}
     self.section          = 0
     self.currentHeight    = 0
-
-    self.enemyUnitsRange   = {10, 10}
+    -- ranges
+    self.enemyUnitsRange   = {8, 12}
     self.enemyCaptainRange = {0,  0}
     self.enemyEliteRange   = {0,  0}
+    -- values picked
     self.enemyLayout       = nil
+    self.enemyUnits        = 0
+    self.enemyCaptains     = 0
+    self.enemyElites       = 0
     
     --self.enemyRankLimit   = 1
     --self.enemyWeaponLimit = 1

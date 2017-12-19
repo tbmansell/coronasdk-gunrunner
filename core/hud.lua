@@ -584,7 +584,7 @@ function Hud:displayGameOver(completed)
         self:displayWeaponStats(group, Weapons.rifle.name,    400)
         self:displayWeaponStats(group, Weapons.shotgun.name,  450)
         self:displayWeaponStats(group, Weapons.launcher.name, 500)
-        self:displayWeaponStats(group, Weapons.lasergun.name, 550)
+        self:displayWeaponStats(group, Weapons.laserGun.name, 550)
 
         self.gameOverSprites = {}
 

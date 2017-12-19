@@ -170,6 +170,34 @@ local turretLaserCannon   = EnemyTypes.turretLaserCannon
 --  heavys  cant be more than 50% of enemies in section
 --  turrets cant be more than 25% of enemies in section
 EnemyLayouts = {
+    [1] = {[melee]=100,     [shooter]=0,    [heavy]=0,      [turret]=0,     [flying]=0,     [vehicle]=0},
+    [2] = {[melee]=0,       [shooter]=100,  [heavy]=0,      [turret]=0,     [flying]=0,     [vehicle]=0},
+
+    [3] = {[melee]=75,      [shooter]=25,   [heavy]=0,      [turret]=0,     [flying]=0,     [vehicle]=0},
+    [4] = {[melee]=50,      [shooter]=50,   [heavy]=0,      [turret]=0,     [flying]=0,     [vehicle]=0},
+    [5] = {[melee]=25,      [shooter]=75,   [heavy]=0,      [turret]=0,     [flying]=0,     [vehicle]=0},
+    
+    [6] = {[melee]=75,      [shooter]=0,    [heavy]=25,     [turret]=0,     [flying]=0,     [vehicle]=0},
+    [7] = {[melee]=50,      [shooter]=0,    [heavy]=50,     [turret]=0,     [flying]=0,     [vehicle]=0},
+    
+    [8] = {[melee]=0,       [shooter]=75,   [heavy]=25,     [turret]=0,     [flying]=0,     [vehicle]=0},
+    [9] = {[melee]=0,       [shooter]=50,   [heavy]=50,     [turret]=0,     [flying]=0,     [vehicle]=0},
+    
+    [10] = {[melee]=50,     [shooter]=25,   [heavy]=25,     [turret]=0,     [flying]=0,     [vehicle]=0},
+    [11] = {[melee]=25,     [shooter]=50,   [heavy]=25,     [turret]=0,     [flying]=0,     [vehicle]=0},
+    [12] = {[melee]=25,     [shooter]=25,   [heavy]=50,     [turret]=0,     [flying]=0,     [vehicle]=0},
+    
+    [13] = {[melee]=50,     [shooter]=25,   [heavy]=0,      [turret]=25,    [flying]=0,     [vehicle]=0},
+    [14] = {[melee]=25,     [shooter]=50,   [heavy]=0,      [turret]=25,    [flying]=0,     [vehicle]=0},
+    [15] = {[melee]=50,     [shooter]=0,    [heavy]=25,     [turret]=25,    [flying]=0,     [vehicle]=0},
+    [16] = {[melee]=25,     [shooter]=0,    [heavy]=50,     [turret]=25,    [flying]=0,     [vehicle]=0},
+    [17] = {[melee]=0,      [shooter]=50,   [heavy]=25,     [turret]=25,    [flying]=0,     [vehicle]=0},
+    [18] = {[melee]=0,      [shooter]=25,   [heavy]=50,     [turret]=25,    [flying]=0,     [vehicle]=0},
+
+    [19] = {[melee]=25,     [shooter]=25,   [heavy]=25,     [turret]=25,    [flying]=0,     [vehicle]=0},
+    
+
+    --[[
     [1]  = {[100]=melee},
     [2]  = {[100]=shooter},
 
@@ -195,20 +223,21 @@ EnemyLayouts = {
     [18] = {[25]=shooter,   [50]=heavy,     [25]=turret},
 
     [19] = {[25]=melee,     [25]=shooter,   [25]=heavy,     [25]=turret},
+    ]]
 }
 
 
 EnemyLayoutIntro = {
-    [1]=1,  -- start with all melee                 (melee=100%)
-    [2]=3,  -- introduce a few shooters             (melee=75%, shooters=25%)
-    [3]=4,  -- introduce more shooters              (melee=50%, shooters=50%)
-    [4]=6,  -- introduce some heavies               (melee=75%, heavies=25%)
-    [5]=10, -- mix melee, shooters and heavies      (melee=50%, shooters=25%, heavies=25%)
-    [6]=5,  -- majority shooters                    (melee=25%, shooters=75%)
-    [7]=13, -- introduce turrets                    (melee=50%, shooters=25%, turrets=5%)
-    [8]=15, -- mix turrets with melee & heavy       (melee=50%, heavy=25%,    turrets=25%)
-    [9]=17, -- mix turrets with shooters & heavy    (shooter=50%, heavy=25%,  turrets=25%)
-    --[10]=0, -- custom map
+    [1] = 0,  -- first section has no enemies
+    [2] = 1,  -- start with all melee                 (melee=100%)
+    [3] = 3,  -- introduce a few shooters             (melee=75%, shooters=25%)
+    [4] = 4,  -- introduce more shooters              (melee=50%, shooters=50%)
+    [5] = 6,  -- introduce some heavies               (melee=75%, heavies=25%)
+    [6] = 10, -- mix melee, shooters and heavies      (melee=50%, shooters=25%, heavies=25%)
+    [7] = 5,  -- majority shooters                    (melee=25%, shooters=75%)
+    [8] = 13, -- introduce turrets                    (melee=50%, shooters=25%, turrets=5%)
+    [9] = 17, -- mix turrets with shooters & heavy    (shooter=50%, heavy=25%,  turrets=25%)
+    -- 10 is custom map
 }
 
 
@@ -220,7 +249,7 @@ EnemyDefs = {
             [elite]   = {skin="lizard_club_elite",       weapon="club",     health=3, decisionDelay=500,  aggression=90, fidgit=50, roaming=1000, speed=150, melee=true},
         },
         [reptileSmall] = {
-            [normal]  = {skin="reptile_runner",          weapon="claws",    health=1, decisionDelay=500, aggression=50, fidgit=90, roaming=2500, speed=250, melee=true, scale=0.2},
+            [normal]  = {skin="reptile_runner",          weapon="claws",    health=1, decisionDelay=500,  aggression=50, fidgit=90, roaming=2500, speed=250, melee=true, scale=0.2},
         }
     },
     shooter = {
@@ -260,4 +289,3 @@ EnemyDefs = {
     },
 
 }
-

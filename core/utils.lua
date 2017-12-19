@@ -4,6 +4,7 @@ local Utils = {}
 -- Aliases
 local random = math.random
 local abs    = math.abs
+local floor  = math.floor
 
 
 function Utils.percent(chance)
@@ -39,6 +40,11 @@ function Utils.percentFrom(set, default)
 end
 
 
+function Utils.percentOf(amount, percent)
+    return floor((amount / 100) * percent)
+end
+
+
 -- returns the first element from a percentage set
 function Utils.firstFrom(set, default)
 	if set == nil or set[1] == nil then return default end
@@ -57,6 +63,16 @@ function Utils.randomRange(low, high)
         else
             return value
         end
+    end
+end
+
+
+-- Simpler version of randomRange, just passing a pair rather than values and not checking for negatives
+function Utils.randomInRange(pair)
+    if pair[2] < 1 then
+        return 0
+    else
+        return random(pair[1], pair[2])
     end
 end
 

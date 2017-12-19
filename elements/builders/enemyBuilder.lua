@@ -21,7 +21,7 @@ end
 
 function EnemyBuilder:newLizardSoldier(camera, spec)
     -- Copy the enemy rank def and reference the modifyImage before spine creation
-    local rankDef = builder:newClone(EnemyTypes[spec.type][spec.rank])
+    local rankDef = builder:newClone(EnemyDefs[spec.category][spec.type][spec.rank])
     local anim    = spec.animation or "stationary_1"
 
     spec.modifyImage = rankDef.modifyImage
@@ -64,7 +64,7 @@ end
 
 function EnemyBuilder:newReptile(camera, spec)
     -- Copy the enemy rank def and reference the modifyImage before spine creation
-    local rankDef = builder:newClone(EnemyTypes[spec.type][spec.rank])
+    local rankDef = builder:newClone(EnemyDefs[spec.category][spec.type][spec.rank])
     local anim    = spec.animation or "stationary_1"
 
     spec.modifyImage = rankDef.modifyImage
@@ -96,7 +96,7 @@ end
 
 function EnemyBuilder:newTurret(camera, spec)
     -- Copy the enemy rank def and reference the modifyImage before spine creation
-    local rankDef = builder:newClone(EnemyTypes[spec.type][spec.rank])
+    local rankDef = builder:newClone(EnemyDefs[spec.category][spec.type][spec.rank])
     local scale   = spec.scale     or 0.5
     local anim    = spec.animation or "scanningTargets"
 

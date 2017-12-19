@@ -6,10 +6,12 @@ local Loader = {}
 
 
 -- Aliases:
-local random  = math.random
-local abs     = math.abs
-local min     = math.min
-local percent = utils.percent
+local random    = math.random
+local abs       = math.abs
+local min       = math.min
+local percent   = utils.percent
+local inRange   = utils.randomInRange
+local percentOf = utils.percentOf
 
 -- Locals:
 local index       = 1
@@ -156,7 +158,7 @@ function Loader:load(LevelGenerator)
         envTiles    = env.tiles
         envEntities = env.entities
 
-        --print("Section "..index.." enemyPoints="..self.enemyPoints.." weaponLimit="..self.enemyWeaponLimit.." rankLimit="..self.enemyRankLimit.." weaponAlloc="..self.enemyWeaponAlloc.." rankAlloc="..self.enemyRankAlloc)
+        print("Section "..index)
 
         if env.isCustom then
             self:loadEntitiesFromMap()
@@ -196,16 +198,17 @@ function Loader:load(LevelGenerator)
     function LevelGenerator:generateEntities()
         -- There are no enemies on the first and last sections
         if index > 1 and not env.isLast then
-            -- define early presets here:
-            if index == 2 then
-                --self.enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly
-                --self.enemyRankAlloc   = EnemyRankAllocations.infantry
+            if index <= #EnemyLayoutIntro then
+                -- ease them into the various enemies in the first set of sections
+                self.enemyLayout = EnemyLayouts[EnemyLayoutIntro[index]]
             else
-                --self.enemyWeaponAlloc = random(self.enemyWeaponLimit)
-                --self.enemyRankAlloc   = random(self.enemyRankLimit)
+                -- pick a random layout
+                self.enemyLayout = EnemyLayouts[random(#EnemyLayouts)]
             end
 
-            --print("Section "..index.." enemyPoints="..self.enemyPoints.." weaponLimit="..self.enemyWeaponLimit.." rankLimit="..self.enemyRankLimit.." weaponAlloc="..self.enemyWeaponAlloc.." rankAlloc="..self.enemyRankAlloc)
+            self.enemyUnits    = inRange(self.enemyUnitsRange)
+            self.enemyCaptains = inRange(self.enemyCaptainRange)
+            self.enemyElites   = inRange(self.enemyEliteRange)
             
             self:addEnemies()
         end
@@ -219,39 +222,38 @@ function Loader:load(LevelGenerator)
         -- Increment map height
         self.currentHeight = self.currentHeight + env.height
 
-        --print("Section "..index.." height="..self.currentHeight.." heightPixels="..(self.currentHeight*self.TileSize))
-        --[[
-        -- Increment the weapons that can appear by one each section
-        if index > 1 and self.enemyWeaponLimit < EnemyWeaponAllocations.all then
-            self.enemyWeaponLimit = self.enemyWeaponLimit + 1
-            --print("+ WeaponLimit now "..self.enemyWeaponLimit)
-        end
+        -- Increment ranges after every custom section
+        if index % (globalLoadSections+1) == 0 then
 
-        -- Increment the enemy ranks that can appear by 2 every 4 sections
-        if index % 4 == 0 and self.enemyRankLimit < EnemyRankAllocations.all  then
-            self.enemyRankLimit = self.enemyRankLimit + 2
-            --print("+ RankLimit now "..self.enemyRankLimit)
-        end
+            if self.enemyUnitsRange[1] < 20 then
+                self.enemyUnitsRange[1] = self.enemyUnitsRange[1] + 2
+                self.enemyUnitsRange[2] = self.enemyUnitsRange[2] + 4
+            end
 
-        -- Increment the enemy points up or down between 20 - 50
-        if self.enemyPoints < 20  then
-            -- up the points evey 4 sections
-            if index % 4 == 0 then
-                self.enemyPoints = self.enemyPoints + 5
+            if self.enemyCaptainRange[2] < 100 then
+                self.enemyCaptainRange[1] = self.enemyCaptainRange[1] + 5
+                self.enemyCaptainRange[2] = self.enemyCaptainRange[2] + 10
             end
-        elseif self.enemyPoints >= 50 then
-            self.enemyPoints = self.enemyPoints - 5
-        else
-            if random(50) then
-                self.enemyPoints = self.enemyPoints + 5
-            else
-                self.enemyPoints = self.enemyPoints - 5
+
+            if index > (globalLoadSections*2) and self.enemyEliteRange[2] < 100 then
+                self.enemyEliteRange[1] = self.enemyEliteRange[1] + 5
+                self.enemyEliteRange[2] = self.enemyEliteRange[2] + 10
             end
-        end]]
+        end
     end
 
 
     -- CORE PLACEMENT
+
+    function LevelGenerator:createEntitySpec(xpos, ypos, otherAttributes)
+        local spec = {xpos=xpos, ypos=ypos, mapSection=env.number}
+
+        for name,value in pairs(otherAttributes) do
+            spec[name] = value
+        end
+
+        self:addEntity(spec)
+    end
 
 
     function LevelGenerator:addEntity(spec)
@@ -282,17 +284,6 @@ function Loader:load(LevelGenerator)
         end
 
         envEntities[#envEntities+1] = spec
-    end
-
-
-    function LevelGenerator:createEntitySpec(xpos, ypos, otherAttributes)
-        local spec = {xpos=xpos, ypos=ypos, mapSection=env.number}
-
-        for name,value in pairs(otherAttributes) do
-            spec[name] = value
-        end
-
-        self:addEntity(spec)
     end
 
 
@@ -336,175 +327,65 @@ function Loader:load(LevelGenerator)
 
 
     function LevelGenerator:addEnemies()
-        -- we must generate the enemies and then place them
-        --melees   = {}
-        --shooters = {}
-        --reptiles = {}
-        --turrets  = {}
-        --points   = self.enemyPoints
-
-        self:generateEnemies()
-        -- TODO: Order them by highest rank first for better placing around higher ranks
-        --self:placeEntities(turrets)
-        --self:placeEntities(melees)
-        --self:placeEntities(shooters)
-        --self:placeEntities(reptiles)
+        self:addEnemyCategory(EnemyCategories.melee)
+        self:addEnemyCategory(EnemyCategories.shooter)
+        self:addEnemyCategory(EnemyCategories.heavy)
+        self:addEnemyCategory(EnemyCategories.turret)
     end
 
 
-    function LevelGenerator:generateEnemies()
-        --[[
-        local alloc = self.enemyWeaponAlloc
+    function LevelGenerator:addEnemyCategory(category)
+        local amount = percentOf(self.enemyUnits, self.enemyLayout[category])
 
-        -- Generate the enemies weapons and ranks
-        if alloc == EnemyWeaponAllocations.meleeOnly then
-            self:generateMeleeEnemies()
-            self:generateReptiles()
-
-        elseif alloc == EnemyWeaponAllocations.riflesOnly or alloc == EnemyWeaponAllocations.heavyOnly then
-            self:generateShooterEnemies()
-            self:generateTurrets()
-        else
-            local r = random(100)
-            if r <= 50 then
-                self:generateShooterEnemies(points / 2)
-                self:generateMeleeEnemies()
-
-            elseif r <= 75 then
-                self:generateMeleeEnemies()
-                self:generateTurrets()
-            else
-                self:generateShooterEnemies()
-                self:generateReptiles()
-            end
-        end]]
-    end
-
-    --[[
-    function LevelGenerator:generateMeleeEnemies(pointsToSpend)
-        local spendTo = points - (pointsToSpend or points)
-        local alloc   = self.enemyWeaponAlloc
-
-        while points > 0 and points > spendTo do
-            local rank = 1
-
-            if self.enemyRankAlloc > 1 then
-                local limit = min(self.enemyRankAlloc, 3)
-                rank = random(limit)
-            end
-
-            points = points - rank
-            melees[#melees+1] = {object="enemy", type="melee", rank=rank}
+        if amount > 0 then
+            self.amountCaptains = percentOf(amount, self.enemyCaptains)
+            self.amountElites   = percentOf(amount, self.enemyElites)
+            -- TODO: Order them by highest rank first for better placing around higher ranks
+            self:addEnemyTypes(category, amount)
         end
     end
 
 
-    function LevelGenerator:generateShooterEnemies(pointsToSpend)
-        local spendTo = points - (pointsToSpend or points)
-        
-        while points > 0 and points > spendTo do
-            local rank = 1
+    function LevelGenerator:addEnemyTypes(category, amount)
+        local types    = #EnemyDefs[category]
+        local entities = {}
 
-            -- Modify rank by the weapon choice
-            rank = rank + self:generateShooterWeapon()
-            -- Modify rank by the Rank allocation
-            rank = rank + self:generateShooterLeader()
-
-            -- after all that, if we dont have enough points left for the rank generated, cut the rank down to what is left
-            if rank > points then rank = points end
-
-            points = points - rank
-            shooters[#shooters+1] = {object="enemy", type="shooter", rank=rank}
+        -- Setup entities arrays
+        for i=1, types do
+            entities[i] = {}
         end
-    end
 
+        -- Fill entities arrays
+        for i=1, amount do
+            local type  = random(types)
+            local group = entities[type]
+            local enemy = {object="enemy", category=category, type=type, rank=1}
 
-    function LevelGenerator:generateReptiles(pointsToSpend)
-        if percent(50) then
-            local r = random(100)
+            self:upgradeEnemy(enemy, category, type)
+            
+            group[#group+1] = enemy
+        end
 
-            if r <= 50 then
-                for i=1, random(10) do
-                    reptiles[#reptiles+1] = {object="enemy", type="reptile", rank=1, tileWidth=1, tileHeight=1}
-                end
-            elseif r <= 75 then
-                reptiles[#reptiles+1] = {object="enemy", type="reptile", rank=2, tileWidth=1, tileHeight=1}
-            else
-                for i=1, random(5) do
-                    reptiles[#reptiles+1] = {object="enemy", type="reptile", rank=1, tileWidth=1, tileHeight=1}
-                end
-
-                reptiles[#reptiles+1] = {object="enemy", type="reptile", rank=2, tileWidth=1, tileHeight=1}
+        -- Place entities
+        for i=1, types do
+            if #entities[i] > 0 then
+                self:placeEntities(entities[i])
             end
         end
     end
 
 
-    function LevelGenerator:generateTurrets(pointsToSpend)
-        local num = 0
-        local r   = random(100)
-        
-        if     r <= 40 then num = 1
-        elseif r <= 50 then num = 2 end
-        
-        for i=1, num do 
-            turrets[#turrets+1] = {object="enemy", type="turret", rank=random(2), tileWidth=2, tileHeight=2}
+    function LevelGenerator:upgradeEnemy(enemySpec, category, type)
+        if self.amountElites > 0 and table.indexOf(EnemyDefs[category][type], EnemyRanks.elite) then
+            enemySpec.rank    = EnemyRanks.elite
+            self.amountElites = self.amountElites - 1
+
+        elseif self.amountCaptains > 0 and table.indexOf(EnemyDefs[category][type], EnemyRanks.captain) then
+            enemySpec.rank      = EnemyRanks.captain
+            self.amountCaptains = self.amountCaptains - 1
         end
     end
-    
 
-    function LevelGenerator:generateShooterWeapon()
-        local weapon = self.enemyWeaponAlloc
-        local rank   = 0
-
-        if weapon == EnemyWeaponAllocations.riflesOnly or weapon == EnemyWeaponAllocations.meleeAndRifles then
-            -- if rifles only, 30% chance of having a shotgun (one higher rank)
-            if percent(30) then rank = rank + 1 end
-        elseif weapon == EnemyWeaponAllocations.heavyOnly or weapon == EnemyWeaponAllocations.meleeAndHeavy then
-            -- if heavy only, add 2 rank for min launcher and 30% of having a laser
-            rank = rank + 2
-            if percent(30) then rank = rank + 1 end
-        elseif weapon == EnemyWeaponAllocations.all then
-            -- if all, 25% chance of each
-            local  r = random(100)
-            if     r > 25 and r <= 50 then rank = rank + 1     -- shotgun
-            elseif r > 50 and r <= 50 then rank = rank + 2     -- launcher
-            elseif r > 75             then rank = rank + 3 end -- laser
-        end
-        return rank
-    end
-
-
-    function LevelGenerator:generateShooterLeader()
-        local alloc = self.enemyRankAlloc
-        local rank  = 0
-
-        if alloc == EnemyRankAllocations.captain then
-            rank = rank + 4
-        elseif alloc == EnemyRankAllocations.elite then
-            rank = rank + 8
-        elseif alloc == EnemyRankAllocations.infantryWithCaptain then
-            -- 30% chance of captain
-            if percent(30) then rank = rank + 4 end
-        elseif alloc == EnemyRankAllocations.infantryWithElite then
-            -- 30% chance elite 
-            if percent(30) then rank = rank + 8 end
-        elseif alloc == EnemyRankAllocations.captainWithElite then
-            -- 30% chance of elite
-            if percent(30) then 
-                rank = rank + 8
-            else
-                rank = rank + 4
-            end
-        elseif alloc == EnemyRankAllocations.all then
-            -- 30% chance of captain or elite
-            local r = random(100)
-            if     r > 40 and r <= 70 then rank = rank + 4
-            elseif r > 70 then rank = rank + 8 end
-        end
-        return rank
-    end
-    ]]
 
     function LevelGenerator:addScenery()
         if percent(50) then

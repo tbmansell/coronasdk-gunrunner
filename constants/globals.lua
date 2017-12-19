@@ -276,7 +276,7 @@ EnemyDefs = {
             [elite]   = {skin="lizard_laser_elite",      weapon="laserGun", health=8, decisionDelay=500,  aggression=90, fidgit=60, roaming=1000, speed=250, inaccuracy=10},
         },
         [reptileFlamer] = {
-            [normal]  = {skin="reptile_runner_captain",  weapon="claws",    health=5, decisionDelay=500,  aggression=50, fidgit=90, roaming=2000, speed=200, melee=true, scale=0.4, json="reptiles-captain"},
+            [normal]  = {skin="reptile_runner_captain",  weapon="claws",    health=5, decisionDelay=500,  aggression=50, fidgit=90, roaming=2000, speed=200, melee=true, scale=0.4, json="reptiles-flamer"},
         }
     },
     turret = {

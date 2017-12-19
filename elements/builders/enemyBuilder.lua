@@ -8,10 +8,14 @@ local random = math.random
 
 
 function EnemyBuilder:newEnemy(camera, spec)
-    if spec.type == EnemyTypes.reptileSmall or spec.type == EnemyTypes.reptileFlamer then
+    local category, type = spec.category, spec.type
+
+    if (category == EnemyCategories.melee and type == EnemyTypes.reptileSmall) or 
+       (category == EnemyCategories.heavy and type == EnemyTypes.reptileFlamer) 
+    then
         return self:newReptile(camera, spec)
 
-    elseif spec.category == "turret" then
+    elseif category == EnemyCategories.turret then
         return self:newTurret(camera, spec)
     else
         return self:newLizardSoldier(camera, spec)
@@ -68,6 +72,8 @@ function EnemyBuilder:newReptile(camera, spec)
     local anim    = spec.animation or "stationary_1"
 
     spec.modifyImage = rankDef.modifyImage
+
+    print("newReptile")
 
     local enemy = builder:newCharacter(spec, {
                        jsonName  = rankDef.json or "reptiles",

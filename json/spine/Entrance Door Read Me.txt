@@ -1,9 +1,0 @@
-Animations
-
-open - door opens
-close - door closes
-Length of animation - .25 seconds
-
-
-opened - Door in open position
-closed - Door in closed position

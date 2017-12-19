@@ -159,6 +159,7 @@ end
 
 
 function Builder:newCharacter(spec, spineParams)
+    print("build new charcater: skin="..tostring(spineParams.skin).." json="..tostring(spineParams.jsonName))
     local character = self:newSpineObject(spec, spineParams)
 
     self:deepCopy(characterObject, character)

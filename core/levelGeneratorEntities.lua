@@ -19,11 +19,6 @@ local env         = nil
 local envTiles    = nil
 local envEntities = nil
 local defaultTile = nil
---local melees      = nil
---local shooters    = nil
---local reptiles    = nil
---local turrets     = nil
---local points      = nil
 
 -- entity definitions for own maps
 local entityDefs = {
@@ -110,9 +105,6 @@ function Loader:load(LevelGenerator)
         envTiles    = nil
         envEntities = nil
         defaultTile = nil
-        --melees      = nil
-        --shooters    = nil
-        --points      = nil
     end
 
 

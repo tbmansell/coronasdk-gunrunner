@@ -39,8 +39,8 @@ function LevelGenerator:setup()
     self.tiles.entrance         = 26
     self.tiles.exit             = 11
 
-    self.tiles.wallTop          = 16
-    self.tiles.wallBot          = 76
+    self.tiles.wallTop          = 1--16
+    self.tiles.wallBot          = 61--76
     self.tiles.wallLeft         = 47
     self.tiles.wallRight        = 51
     
@@ -63,10 +63,10 @@ function LevelGenerator:setup()
     self.tiles.wallBlock3       = 190
     self.tiles.wallBlock4       = 191
 
-    self.tiles.edgeTopLeft      = 1
-    self.tiles.edgeTopRight     = 15
-    self.tiles.edgeBotLeft      = 125
-    self.tiles.edgeBotRight     = 126
+    --self.tiles.edgeTopLeft      = 1
+    --self.tiles.edgeTopRight     = 15
+    --self.tiles.edgeBotLeft      = 125
+    --self.tiles.edgeBotRight     = 126
     self.tiles.edgeBot          = 140
     -- same as edgeBot BUT not marked as edge so we dont add needless physcics shape (for inside box)
     self.tiles.boxEdgeTop       = 140
@@ -77,7 +77,7 @@ function LevelGenerator:setup()
     self.tiles.shadowBotLeft    = 168
     self.tiles.shadowBot        = 169
 
-    self.tiles.patternHazzard   = 89
+    self.tiles.patternHazzard   = 102
     self.tiles.patternPipes     = 13
     self.tiles.patternGrill     = 11
 
@@ -96,7 +96,7 @@ function LevelGenerator:setup()
     self.tiles.paintBlueVert     = 292
 
     -- plain tile variations, default:
-    self.tiles.defaultVarations = {6, 7, 8, 9, 21, 22, 23, 24, 36, 37, 38, 39}
+    self.tiles.defaultVarations = {6, 7, 8, 9, 10, 21, 22, 23, 24, 25, 36, 37, 38, 39, 40}
 end
 
 

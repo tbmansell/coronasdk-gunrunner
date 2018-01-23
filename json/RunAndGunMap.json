@@ -83,11 +83,13 @@
          "properties":{},
          "tileproperties":{
                 "0":{
-                    "isHole":           "true",
+                    "isWall":           "true",
                     "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
                     "physics:enabled":  "true",
-                    "physics:filter":   "hole",
-                    "physics:shape":    "hole"
+                    "physics:filter":   "obstacle"
                 },
                 "2":{
                     "isWall":           "true",
@@ -251,15 +253,6 @@
                     "physics:bounce":  "0",
                     "physics:enabled": "true",
                     "physics:filter":  "obstacle"
-                },
-                "75":{
-                    "isWall":           "true",
-                    "bodyType":         "static",
-                    "physics:density":  "1",
-                    "physics:friction": "0",
-                    "physics:bounce":   "0",
-                    "physics:enabled":  "true",
-                    "physics:filter":   "obstacle"
                 },
                 "124":{
                     "isHole":           "true",

@@ -6,21 +6,21 @@ local scene    = composer.newScene()
 -- Called when the scene's view does not exist:
 function scene:create(event)
     --local tileSize = 75
-    local tileSize = 77
+    local tileSize = 78
     local scale    = 0.5
     local cols     = 15
     local rows     = 24
-    --local startX   = 20
-    local startX   = 10
-    --local startY   = 10
-    local startY   = 360
+    local startX   = 3
+    --local startX   = 10
+    local startY   = -17
+    --local startY   = 360
 
     local rect = display.newRect(self.view, 0, 0, 2000, 2000)
-    --local bgr  = display.newImage(self.view, "images/tiles-grid-new.png", globalCenterX, globalCenterY)
-    local bgr  = display.newImage(self.view, "images/objectMap.png", globalCenterX, globalCenterY)
+    local bgr  = display.newImage(self.view, "images/tiles-grid-new.png", globalCenterX, globalCenterY)
+    --local bgr  = display.newImage(self.view, "images/objectMap.png", globalCenterX, globalCenterY)
 
     rect:setFillColor(0.7, 0.5, 0.7)
-    bgr:scale(scale, scale)
+    --bgr:scale(scale, scale)
 
     for x=1,cols do
         for y=1,rows do
@@ -28,11 +28,16 @@ function scene:create(event)
             local xpos  = x * (tileSize*scale)
             local ypos  = y * (tileSize*scale)
 
-            index = index + 360
+            --index = index + 360
 
-            local number = display.newText(self.view, index, startX + xpos, startY + ypos, "arial", 12)
+            local number = display.newText(self.view, index, startX + xpos, startY + ypos, "arial", 16)
             number:setTextColor(0,0,0)
         end
+
+
+        local lineX = 20 + (x * (39))
+        local line  = display.newLine(self.view, lineX, startY+10, lineX, globalHeight)
+        line:setStrokeColor(0,0,0)
     end
 end
 

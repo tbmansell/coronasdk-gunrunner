@@ -50,7 +50,9 @@ function PlayerBuilder:newPlayer(camera, spec, hud)
     self:applyPlayerOptions(player)
     self:applyPlayerHooks(player, hud)
 
-    camera:addEntity(player, true)
+    --print("place player")
+    after(100, function() camera:addEntity(player, true) end)
+    --print("placed player")
 	
 	  return player
 end

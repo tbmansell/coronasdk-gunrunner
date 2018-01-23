@@ -329,4 +329,51 @@ function Draw:closeDebugPanel()
 end
 
 
+function Draw:displayLoader()
+    self:hideLoader()
+    globalLoadingDisplay = display.newGroup()
+
+    local x, y   = globalCenterX, 500
+    
+    local loader = display.newRoundedRect(globalLoadingDisplay, x, y, globalWidth, 100, 15)
+    loader:setFillColor(0.3,    0.3,  0.3)
+    loader:setStrokeColor(0.75, 0.75, 0.75)
+    loader.strokeWidth = 2
+
+    local heading = self:newText(globalLoadingDisplay, "loading", x, y, 0.8, "white")
+
+    --[[
+    local progressHolder = display.newRoundedRect(globalLoadingDisplay, x, y, globalWidth-100, 75, 15)
+    progressHolder:setFillColor(0.8, 0.3,  0.3)
+    progressHolder:setStrokeColor(1, 0.75, 0.75)
+    progressHolder.strokeWidth = 2
+
+    local progress = display.newRoundedRect(globalLoadingDisplay, x, y, 0, 75, 15)
+    progress:setFillColor(0.3, 0.8,  0.3)
+    progress:setStrokeColor(1, 0.75, 0.75)
+    progress.strokeWidth = 2
+
+    globalLoadingDisplay.progress  = progress
+    globalLoadingDisplay.increment = (globalWidth-100) / globalMaxSections
+    ]]
+end
+
+
+function Draw:updateLoader()
+    globalLoadingDisplay.progress.width = globalLoadingDisplay.progress.width + globalLoadingDisplay.increment
+    globalLoadingDisplay:toFront()
+end
+
+
+function Draw:hideLoader()
+    if globalLoadingDisplay then
+        globalLoadingDisplay:removeSelf()
+        globalLoadingDisplay = nil
+    end
+end
+
+
+
+
+
 return Draw

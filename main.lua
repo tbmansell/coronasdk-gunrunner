@@ -13,8 +13,9 @@ globalHeight           = display.contentHeight
 globalBackgroundWidth  = 640
 globalBackgroundHeight = 1300
 globalCamera           = nil
-globalMaxSections      = 11
+globalMaxSections      = 101
 globalLoadSections     = 10
+globalLoadingDisplay   = nil
 
 -- Define global objects
 stats   = require("core.stats")

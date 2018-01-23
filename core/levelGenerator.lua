@@ -21,14 +21,6 @@ local LevelGenerator = {
     enemyCaptainRange = {0,  0},
     enemyEliteRange   = {0,  0},
     enemyLayout       = nil,
-
-
-    --enemyRankLimit   = 1,
-    --enemyWeaponLimit = 1,
-    --enemyPoints      = 10,
-    --enemyPatternSet  = true,
-    --enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly,
-    --enemyRankAlloc   = EnemyRankAllocations.infantry,
 }
 
 -- Aliases:
@@ -122,12 +114,6 @@ function LevelGenerator:destroy()
     self.enemyUnits        = 0
     self.enemyCaptains     = 0
     self.enemyElites       = 0
-    
-    --self.enemyRankLimit   = 1
-    --self.enemyWeaponLimit = 1
-    --self.enemyPoints      = 10
-    --self.enemyWeaponAlloc = EnemyWeaponAllocations.meleeOnly
-    --self.enemyRankAlloc   = EnemyRankAllocations.infantry
 
     self:destroyEntities()
 end

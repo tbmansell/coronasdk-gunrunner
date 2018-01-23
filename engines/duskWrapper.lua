@@ -129,26 +129,6 @@ function TileEngine:buildLayers()
 end
 
 
---[[function TileEngine:createWall(tile, frame)
-    physics.addBody(tile, "static", {density=1, friction=0, bounce=0, shape=frame.shape, filter=Filters.obstacle})
-
-    tile.collision = eventWallCollision
-    tile:addEventListener("collision", tile)
-    tile.isWall = true
-end
-
-
-function TileEngine:createHole(tile)
-    local shape = {-10,-10, 10,-10, 10,10, -10,10}
-
-    physics.addBody(tile, "static", {density=1, friction=0, bounce=0, shape=shape, filter=Filters.hole})
-
-    tile.collision = eventHoleCollision
-    tile:addEventListener("collision", tile)
-    tile.isHole = true
-end]]
-
-
 function TileEngine:addEntity(entity, focus, layer)
     if layer and layer == 1 then
         self.objectLayer1:insert(entity.image)

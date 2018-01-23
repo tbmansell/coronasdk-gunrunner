@@ -51,21 +51,28 @@ end
 
 -- Called when the scene's view does not exist:
 function scene:create(event)
-    self:initPhysics()
-    self:loadLevel()
-    self:loadPlayer()
-    self:loadInterface()
-    particles:preLoadEmitters()
+    draw:displayLoader()
 
-    self.musicChannel = 1
+    -- cerate delay to allow loader to display
+    after(1, function()
+        self:initPhysics()
+        self:loadLevel()
+        self:loadPlayer()
+        self:loadInterface()
+        particles:preLoadEmitters()
 
-    -- these top and bottom borders ensure that devices where the length is greater than 960 (ipad retina) the game doesnt show under or above the background size limits
-    local topBorder = display.newRect(globalCenterX, -50, globalWidth, 100)
-    local botBorder = display.newRect(globalCenterX, globalHeight+50, globalWidth, 100)
-    topBorder:setFillColor(0,0,0)
-    botBorder:setFillColor(0,0,0)
+        self.musicChannel = 1
 
-    self:startLevelSequence()
+        draw:hideLoader()
+
+        -- these top and bottom borders ensure that devices where the length is greater than 960 (ipad retina) the game doesnt show under or above the background size limits
+        local topBorder = display.newRect(globalCenterX, -50, globalWidth, 100)
+        local botBorder = display.newRect(globalCenterX, globalHeight+50, globalWidth, 100)
+        topBorder:setFillColor(0,0,0)
+        botBorder:setFillColor(0,0,0)
+
+        self:startLevelSequence()
+    end)
 end
 
 
@@ -135,6 +142,7 @@ function scene:loadLevel()
     tileEngine.map.setTrackingLevel(0.1)
 
     self:loadEntities(1)
+    --print("Loaded Level")
 end
 
 
@@ -160,7 +168,7 @@ end
 
 
 function scene:loadPlayer()
-    --print("creatign player")
+    --print("creating player")
     player = level:createPlayer({xpos=11.5, ypos=-5.5}, hud)
     --print("create player")
     player:setWeapon(Weapons.rifle)

@@ -23,6 +23,16 @@ local LevelGenerator = {
     enemyLayout       = nil,
 }
 
+-- Paint colors:
+local red   = 1
+local blue  = 2
+-- Patterns
+local grill       = 1
+local transparent = 3
+local broken      = 6
+local hazzard     = 7
+local bars        = 8
+
 -- Aliases:
 local random  = math.random
 local min     = math.min
@@ -33,14 +43,55 @@ local percent = utils.percent
 
 
 function LevelGenerator:setup()
+    -- global default tiles:
     self.tiles.default          = 2
+    -- global no floor with physics shape for hole
     self.tiles.noFloor          = 183
+    -- global no floor for inside boxes where we dont need a physics shape
+    self.tiles.noFloorInside    = 184
+    
 
+    -- special tiles for custom map entrance and exit doors:
     self.tiles.entrance         = 26
     self.tiles.exit             = 11
+    
+    -- shadows:
+    self.tiles.shadowRightTop   = 152
+    self.tiles.shadowRight      = 167
+    self.tiles.shadowRightBot   = 197
+    self.tiles.shadowBotLeft    = 168
+    self.tiles.shadowBot        = 169
 
-    self.tiles.wallTop          = 16
-    self.tiles.wallBot          = 76
+    -- standard floor edge with physics shape
+    self.tiles.edgeBot          = 140
+    -- floor edge for inside box with no physics shape
+    self.tiles.edgeBotInside    = 141
+
+
+    -- simple straight-only walls
+    self.tiles.walls = {
+        simple = {
+            horiz = {
+                [1] = {158, 159, 160, 161},
+                [2] = {173, 174, 175, 176},
+                [3] = {188, 189, 190, 191},
+                [4] = {203, 204, 205, 206},
+            },
+            vert = {
+                [1] = {165, 180, 195, 210},
+                [2] = {164, 179, 194, 209},
+                [3] = {163, 178, 193, 208},
+                [4] = {162, 177, 192, 207},
+            }
+        },
+        complex = {
+
+        }
+    }
+
+
+    self.tiles.wallTop          = 1
+    self.tiles.wallBot          = 61
     self.tiles.wallLeft         = 47
     self.tiles.wallRight        = 51
     
@@ -63,40 +114,60 @@ function LevelGenerator:setup()
     self.tiles.wallBlock3       = 190
     self.tiles.wallBlock4       = 191
 
-    self.tiles.edgeTopLeft      = 1
-    self.tiles.edgeTopRight     = 15
-    self.tiles.edgeBotLeft      = 125
-    self.tiles.edgeBotRight     = 126
-    self.tiles.edgeBot          = 140
-    -- same as edgeBot BUT not marked as edge so we dont add needless physcics shape (for inside box)
-    self.tiles.boxEdgeTop       = 140
 
-    self.tiles.shadowRightTop   = 152
-    self.tiles.shadowRight      = 167
-    self.tiles.shadowRightBot   = 197
-    self.tiles.shadowBotLeft    = 168
-    self.tiles.shadowBot        = 169
+    self.tiles.paint = {
+        [red] = {
+            topLeft  = 52,
+            topRight = 54,
+            botLeft  = 67,
+            botRight = 69,
+            horiz    = 53,
+            vert     = 82,
+        },
+        [blue] = {
+            topLeft  = 262,
+            topRight = 264,
+            botLeft  = 277,
+            botRight = 279,
+            horiz    = 263,
+            vert     = 292,
+        }
+    }
 
-    self.tiles.patternHazzard   = 89
-    self.tiles.patternPipes     = 13
-    self.tiles.patternGrill     = 11
 
-    self.tiles.paintRedTopLeft  = 52
-    self.tiles.paintRedTopRight = 54
-    self.tiles.paintRedBotLeft  = 67
-    self.tiles.paintRedBotRight = 69
-    self.tiles.paintRedHoriz    = 53
-    self.tiles.paintRedVert     = 82
+    -- patterned tiles:
+    self.tiles.patterns = {
+        [1] = {
+            [grill]       = {12,  13,  14,  15},
+            [2]           = {27,  28,  29,  30},
+            [transparent] = {42,  43,  44,  45},
+            [4]           = {57,  58,  59,  60},
+            [5]           = {72,  73,  74,  75},
+            [broken]      = {87,  88,  89,  90},
+            [hazzard]     = {102, 103, 104, 105},
+            [bars]        = {117, 118, 119, 120},
+            [9]           = {132, 133, 134, 135},
+        },
+        [2] = {
+            [grill]       = {222, 223, 224, 225},
+            [2]           = {237, 238, 239, 240},
+            [transparent] = {252, 253, 254, 255},
+            [4]           = {267, 268, 269, 270},
+            [5]           = {282, 283, 284, 285},
+            [broken]      = {297, 298, 299, 300},
+            [hazzard]     = {312, 313, 314, 315},
+            [bars]        = {327, 328, 329, 330},
+            [9]           = {342, 343, 344, 345},
+        }
+    }
 
-    self.tiles.paintBlueTopLeft  = 262
-    self.tiles.paintBlueTopRight = 264
-    self.tiles.paintBlueBotLeft  = 277
-    self.tiles.paintBlueBotRight = 279
-    self.tiles.paintBlueHoriz    = 263
-    self.tiles.paintBlueVert     = 292
-
-    -- plain tile variations, default:
-    self.tiles.defaultVarations = {6, 7, 8, 9, 21, 22, 23, 24, 36, 37, 38, 39}
+    -- plain tile variations:
+    self.tiles.defaultVariations = {
+        [1] = {7,   8,   9,   22,  23,  24,  37,  38,  39},
+        [2] = {97,  98,  99,  112, 113, 114, 127, 128, 129},
+        [3] = {217, 218, 219, 232, 233, 234, 247, 248, 249},
+        [4] = {307, 308, 309, 322, 323, 324, 337, 338, 339}
+    }
 end
 
 
@@ -563,9 +634,9 @@ function LevelGenerator:makeBoxWall(env, x, y, width, height)
     -- fill in center with no floor
     for i=1, height do
         for v=1, width do
-            local tile = self.tiles.noFloor
+            local tile = self.tiles.noFloorInside
 
-            if i == height then tile = self.tiles.boxEdgeTop end
+            if i == height then tile = self.tiles.edgeBotInside end
 
             env.tiles[y - i][x + v] = tile
         end
@@ -614,6 +685,9 @@ end
 
 
 function LevelGenerator:setEnvironmentFloor(env)
+    local defaults    = self.tiles.defaultVariations[1]
+    local numDefaults = #defaults
+
     -- Determine any special tiles, or floor patterns or random tiling patterns on plain tiles
     for y=1, env.height do
         for x=1, env.width do
@@ -628,14 +702,17 @@ function LevelGenerator:setEnvironmentFloor(env)
                 end]]
 
                 -- NOTE: this has to run after entities have been placed so we can detect normal tiles
-                env.tiles[y][x] = self.tiles.defaultVarations[random(#self.tiles.defaultVarations)]
+                env.tiles[y][x] = defaults[random(numDefaults)]
             end
         end
     end
 
+    local hazzards    = self.tiles.patterns[2][hazzard]
+    local numHazzards = #hazzards
+
     -- differentiate each section
     for x=1, env.width-2 do
-        env.tiles[1][env.startX + x] = self.tiles.patternHazzard
+        env.tiles[1][env.startX + x] = hazzards[random(numHazzards)]
     end
 
     -- Customise specific sections
@@ -650,39 +727,38 @@ end
 
 function LevelGenerator:setEnvironmentFirstSection(env)
     -- inner ring
-    env.tiles[18][11] = self.tiles.paintRedTopLeft
-    env.tiles[18][12] = self.tiles.paintRedHoriz
-    env.tiles[18][13] = self.tiles.paintRedTopRight
-    env.tiles[19][11] = self.tiles.paintRedVert
-    env.tiles[19][13] = self.tiles.paintRedVert
-    env.tiles[20][11] = self.tiles.paintRedBotLeft
-    env.tiles[20][12] = self.tiles.paintRedHoriz
-    env.tiles[20][13] = self.tiles.paintRedBotRight
+    env.tiles[18][11] = self.tiles.paint[red].topLeft
+    env.tiles[18][12] = self.tiles.paint[red].horiz
+    env.tiles[18][13] = self.tiles.paint[red].topRight
+    env.tiles[19][11] = self.tiles.paint[red].vert
+    env.tiles[19][13] = self.tiles.paint[red].vert
+    env.tiles[20][11] = self.tiles.paint[red].botLeft
+    env.tiles[20][12] = self.tiles.paint[red].horiz
+    env.tiles[20][13] = self.tiles.paint[red].botRight
 
     -- outer ring
-    env.tiles[16][9]  = self.tiles.paintBlueTopLeft
+    env.tiles[16][9]  = self.tiles.paint[blue].topLeft
     for i=10,14 do 
-        env.tiles[16][i] = self.tiles.paintBlueHoriz
+        env.tiles[16][i] = self.tiles.paint[blue].horiz
     end
-    env.tiles[16][15] = self.tiles.paintBlueTopRight
+    env.tiles[16][15] = self.tiles.paint[blue].topRight
 
     for i=17, 21 do
-        env.tiles[i][9]  = self.tiles.paintBlueVert
-        env.tiles[i][15] = self.tiles.paintBlueVert
+        env.tiles[i][9]  = self.tiles.paint[blue].vert
+        env.tiles[i][15] = self.tiles.paint[blue].vert
     end
 
-    env.tiles[22][9]  = self.tiles.paintBlueBotLeft
+    env.tiles[22][9]  = self.tiles.paint[blue].botLeft
     for i=10,14 do 
-        env.tiles[22][i] = self.tiles.paintBlueHoriz
+        env.tiles[22][i] = self.tiles.paint[blue].horiz
     end
-    env.tiles[22][15] = self.tiles.paintBlueBotRight
+    env.tiles[22][15] = self.tiles.paint[blue].botRight
 end
 
 
 function LevelGenerator:setEnvironmentLastSection(env)
     self:setEnvironmentFirstSection(env)
 end
-
 
 
 

@@ -146,6 +146,15 @@
                     "physics:enabled":  "true",
                     "physics:filter":   "obstacle"
                 },
+                "17":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
                 "19":{
                     "isWall":           "true",
                     "bodyType":         "static",
@@ -176,6 +185,15 @@
                     "physics:filter":   "obstacle"
                 },
                 "32":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "33":{
                     "isWall":           "true",
                     "bodyType":         "static",
                     "physics:density":  "1",
@@ -254,6 +272,159 @@
                     "physics:enabled": "true",
                     "physics:filter":  "obstacle"
                 },
+                "62":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "63":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "64":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "75":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "77":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "79":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "90":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "92":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "93":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "94":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "105":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "106":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "107":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "108":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "109":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "110":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "120":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
                 "124":{
                     "isHole":           "true",
                     "bodyType":         "static",
@@ -267,6 +438,15 @@
                     "physics:enabled":  "true",
                     "physics:filter":   "hole",
                     "physics:shape":    "hole"
+                },
+                "135":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
                 },
                 "139":{
                     "isHole":           "true",
@@ -570,6 +750,15 @@
                     "physics:enabled":  "true",
                     "physics:filter":   "obstacle"
                 },
+                "210":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
                 "212":{
                     "isWall":           "true",
                     "bodyType":         "static",
@@ -723,6 +912,33 @@
                     "physics:enabled":  "true",
                     "physics:filter":   "obstacle"
                 },
+                "272":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "273":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "274":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
                 "285":{
                     "isWall":           "true",
                     "bodyType":         "static",
@@ -731,7 +947,124 @@
                     "physics:bounce":   "0",
                     "physics:enabled":  "true",
                     "physics:filter":   "obstacle"
-                }
+                },
+                "287":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "389":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "300":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "302":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "303":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "304":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "315":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "316":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "317":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "318":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "319":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "330":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "345":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
             }
         }],
  "tilewidth":75,

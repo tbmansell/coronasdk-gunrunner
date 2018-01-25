@@ -5,22 +5,31 @@ local utils                  = require("core.utils")
 
 -- Class
 local LevelGenerator = {
-    MaxWidth         = 24,
-    MinWidth         = 8,
-    StartWidth       = 13,
-    StartXpos        = 6,
-    StartHeight      = 24,
-    TileSize         = 75,
+    MaxWidth          = 24,
+    MinWidth          = 8,
+    StartWidth        = 13,
+    StartXpos         = 6,
+    StartHeight       = 24,
+    TileSize          = 75,
 
-    environments     = {},
-    tiles            = {},
-    section          = 0,
-    currentHeight    = 0,
+    environments      = {},
+    tiles             = {},
+    section           = 0,
+    currentHeight     = 0,
+    setVariants       = true,
 
     enemyUnitsRange   = {10, 10},
     enemyCaptainRange = {0,  0},
     enemyEliteRange   = {0,  0},
     enemyLayout       = nil,
+
+    variant = {
+        simpleWall    = 1,
+        complexWall   = 1,
+        pattern       = 1,
+        default       = 1,
+    }
+
 }
 
 -- Paint colors:
@@ -49,12 +58,14 @@ function LevelGenerator:setup()
     self.tiles.noFloor          = 183
     -- global no floor for inside boxes where we dont need a physics shape
     self.tiles.noFloorInside    = 184
-    
-
     -- special tiles for custom map entrance and exit doors:
     self.tiles.entrance         = 26
     self.tiles.exit             = 11
-    
+    -- standard floor edge with physics shape:
+    self.tiles.edgeBot          = 140
+    -- floor edge for inside box with no physics shape:
+    self.tiles.edgeBotInside    = 141
+
     -- shadows:
     self.tiles.shadowRightTop   = 152
     self.tiles.shadowRight      = 167
@@ -62,59 +73,39 @@ function LevelGenerator:setup()
     self.tiles.shadowBotLeft    = 168
     self.tiles.shadowBot        = 169
 
-    -- standard floor edge with physics shape
-    self.tiles.edgeBot          = 140
-    -- floor edge for inside box with no physics shape
-    self.tiles.edgeBotInside    = 141
-
-
-    -- simple straight-only walls
+    -- simple straight-only walls:
     self.tiles.walls = {
         simple = {
-            horiz = {
-                [1] = {158, 159, 160, 161},
-                [2] = {173, 174, 175, 176},
-                [3] = {188, 189, 190, 191},
-                [4] = {203, 204, 205, 206},
-            },
-            vert = {
-                [1] = {165, 180, 195, 210},
-                [2] = {164, 179, 194, 209},
-                [3] = {163, 178, 193, 208},
-                [4] = {162, 177, 192, 207},
-            }
+            [1] = { horiz={158, 159, 160, 161}, vert={165, 180, 195, 210} },
+            [2] = { horiz={173, 174, 175, 176}, vert={164, 179, 194, 209} },
+            [3] = { horiz={188, 189, 190, 191}, vert={163, 178, 193, 208} },
+            [4] = { horiz={203, 204, 205, 206}, vert={162, 177, 192, 207} },
         },
         complex = {
-
+            [1] = {
+                horiz = { left=47, right=51, middle={48, 49, 50} },
+                vert  = { top=1,   bot=61,   middle={16, 31, 46} },
+                box   = { topLeft=3, top=4, topRight=5, left=18, right=20, botLeft=33, bot=34, botRight=35 },
+            },
+            [2] = {
+                horiz = { left=107, right=111, middle={108, 109, 110} },
+                vert  = { top=76,   bot=136,   middle={91, 106, 121} },
+                box   = { topLeft=63, top=64, topRight=65, left=78, right=80, botLeft=93, bot=94, botRight=95 },
+            },
+            [3] = {
+                horiz = { left=257, right=261, middle={258, 259, 260} },
+                vert  = { top=211,  bot=271,   middle={226, 241, 256} },
+                box   = { topLeft=213, top=214, topRight=215, left=228, right=230, botLeft=243, bot=244, botRight=245 },
+            },
+            [4] = {
+                horiz = { left=317, right=321, middle={318, 319, 320} },
+                vert  = { top=286,  bot=346,   middle={301, 316, 331} },
+                box   = { topLeft=273, top=274, topRight=275, left=288, right=290, botLeft=303, bot=304, botRight=305 },
+            },            
         }
     }
 
-
-    self.tiles.wallTop          = 1
-    self.tiles.wallBot          = 61
-    self.tiles.wallLeft         = 47
-    self.tiles.wallRight        = 51
-    
-    self.tiles.wallHoriz        = 48
-    self.tiles.wallHoriz2       = 49
-    self.tiles.wallHoriz3       = 50
-    self.tiles.wallHoriz4       = 4
-
-    self.tiles.wallVert         = 31
-    self.tiles.wallVert2        = 46
-    self.tiles.wallVert3        = 61
-    self.tiles.wallVert4        = 20
-    self.tiles.wallTopLeft      = 3
-    self.tiles.wallTopRight     = 5
-    self.tiles.wallBotLeft      = 33
-    self.tiles.wallBotRight     = 35
-
-    self.tiles.wallBlock        = 188
-    self.tiles.wallBlock2       = 189
-    self.tiles.wallBlock3       = 190
-    self.tiles.wallBlock4       = 191
-
-
+    -- painted tiles:
     self.tiles.paint = {
         [red] = {
             topLeft  = 52,
@@ -133,7 +124,6 @@ function LevelGenerator:setup()
             vert     = 292,
         }
     }
-
 
     -- patterned tiles:
     self.tiles.patterns = {
@@ -172,10 +162,11 @@ end
 
 
 function LevelGenerator:destroy()
-    self.environments     = {}
-    self.tiles            = {}
-    self.section          = 0
-    self.currentHeight    = 0
+    self.environments      = {}
+    self.tiles             = {}
+    self.section           = 0
+    self.currentHeight     = 0
+    self.setVariants       = true
     -- ranges
     self.enemyUnitsRange   = {8, 12}
     self.enemyCaptainRange = {0,  0}
@@ -204,8 +195,11 @@ function LevelGenerator:newEnvironment(isCustom, isLast)
     if isCustom then
         -- Load one of our own pre-built maps
         self:loadCustomMap(env)
+        -- set this so will change for the next set of sections:
+        self.setVariants = true
     else
         -- Generate a map dynamically
+        self:setVariantTiles()
         self:setEnvironmentSize(env)
         self:setEnvironmentTiles(env)
         self:setEnvironmentEdges(env)
@@ -293,6 +287,45 @@ end
 ----- GENERATING A MAP DYNAMICALLY -----
 
 
+function LevelGenerator:setVariantTiles()
+    if self.setVariants then
+        self.setVariants         = false
+        self.variant.simpleWall  = random(#self.tiles.walls.simple)
+        self.variant.complexWall = random(#self.tiles.walls.complex)
+        self.variant.default     = random(#self.tiles.defaultVariations)
+        self.variant.pattern     = random(#self.tiles.patterns)
+    end
+
+    self.simpleHorizTiles  = self.tiles.walls.simple[self.variant.simpleWall].horiz
+    self.simpleVertTiles   = self.tiles.walls.simple[self.variant.simpleWall].vert
+
+    self.complexHorizTiles = self.tiles.walls.complex[self.variant.complexWall].horiz
+    self.complexVertTiles  = self.tiles.walls.complex[self.variant.complexWall].vert
+    self.complexBoxTiles   = self.tiles.walls.complex[self.variant.complexWall].box
+
+    self.patternTiles      = self.tiles.patterns[self.variant.pattern]
+    self.defaultTiles      = self.tiles.defaultVariations[self.variant.default]
+end
+
+
+function LevelGenerator:getHorizTiles()
+    if percent(30) then
+        return self.simpleHorizTiles
+    else
+        return self.complexHorizTiles
+    end
+end
+
+
+function LevelGenerator:getVertTiles()
+    if percent(30) then
+        return self.simpleVertTiles
+    else
+        return self.complexVertTiles
+    end
+end
+
+
 function LevelGenerator:setEnvironmentSize(env)
     local number = #self.environments
 
@@ -356,13 +389,16 @@ end
 
 
 function LevelGenerator:setStraightEdge(env, x, y, shadow)
+    local tiles  = self.complexVertTiles
+    local numMid = #tiles.middle
+
     while y > 1 do
         -- 75% chance of wall each time
         if y > 3 and percent(75) then
             -- Determine wall length: 3 max: height left
             local length = random(y-2)
 
-            env.tiles[y][x] = self.tiles.wallBot
+            env.tiles[y][x] = tiles.bot
             -- shadow:
             if shadow then
                 if y>2 then env.shadows[y-1][x+1] = self.tiles.shadowRightBot end
@@ -370,12 +406,12 @@ function LevelGenerator:setStraightEdge(env, x, y, shadow)
             end
 
             for i=1, length do
-                env.tiles[y-i][x] = self.tiles.wallVert
+                env.tiles[y-i][x] = tiles.middle[random(numMid)]
                 -- shadow:
                 if shadow then env.shadows[y-i][x+1] = self.tiles.shadowRight end
             end
 
-            env.tiles[y-length-1][x] = self.tiles.wallTop
+            env.tiles[y-length-1][x] = tiles.top
             -- shadow:
             if shadow then env.shadows[y-length-1][x+1] = self.tiles.shadowRightTop end
 
@@ -468,21 +504,22 @@ function LevelGenerator:makeStripVertWalls(env, y)
     local spaceWall = 3
     local maxWalls  = floor(spaceX / spaceWall)
     local walls     = random(maxWalls)
+    local tiles     = self:getVertTiles()
 
     if maxWalls == 1 then walls = 1 end
 
     if walls == 1 then
-        self:makeVertWall(env, start+random(spaceX-1), y, spaceY)
+        self:makeVertWall(env, tiles, start+random(spaceX-1), y, spaceY)
 
     elseif walls == 2 then
         local half = spaceX / 2
-        self:makeVertWall(env, start+random(half-1),      y, spaceY)
-        self:makeVertWall(env, start+half+random(half-1), y, spaceY)
+        self:makeVertWall(env, tiles, start+random(half-1),      y, spaceY)
+        self:makeVertWall(env, tiles, start+half+random(half-1), y, spaceY)
     else
         local distance = floor(spaceX / walls)
 
         for i=1, walls do
-            self:makeVertWall(env, start+(distance*i), y, 2+random(spaceY-2))
+            self:makeVertWall(env, tiles, start+(distance*i), y, 2+random(spaceY-2))
         end
     end
 
@@ -497,20 +534,21 @@ function LevelGenerator:makeStripHorizWalls(env, y)
     local spaceWall = 5
     local maxWalls  = floor(spaceX / spaceWall)
     local walls     = random(maxWalls)
+    local tiles     = self:getHorizTiles()
 
     if maxWalls == 1 then walls = 1 end
 
     if walls == 1 then
         local width = 2 + random(spaceX-4)
-        self:makeHorizWall(env, start+random(spaceX - width), y, width, false)
+        self:makeHorizWall(env, tiles, start+random(spaceX - width), y, width, false)
 
     elseif walls == 2 then
         local half = spaceX/2
         local width1 = 1 + random(half-2)
         local width2 = 1 + random(half-2)
 
-        self:makeHorizWall(env, start+random(half-width1),        y, width1, false)
-        self:makeHorizWall(env, 1+start+half+random(half-width2), y, width2, false)
+        self:makeHorizWall(env, tiles, start+random(half-width1),        y, width1, false)
+        self:makeHorizWall(env, tiles, 1+start+half+random(half-width2), y, width2, false)
 
     elseif walls == 3 then
         local third  = spaceX/3
@@ -518,9 +556,9 @@ function LevelGenerator:makeStripHorizWalls(env, y)
         local width2 = 1 + random(third-2)
         local width3 = 1 + random(third-2)
 
-        self:makeHorizWall(env, start+random(third-width1),               y, width1, percent(50))
-        self:makeHorizWall(env, 1+start+third+random(third-width2),       y, width2, percent(50))
-        self:makeHorizWall(env, 1+start+third+third+random(third-width3), y, width3, percent(50))
+        self:makeHorizWall(env, tiles, start+random(third-width1),               y, width1, percent(50))
+        self:makeHorizWall(env, tiles, 1+start+third+random(third-width2),       y, width2, percent(50))
+        self:makeHorizWall(env, tiles, 1+start+third+third+random(third-width3), y, width3, percent(50))
     end
 
     return 6
@@ -534,44 +572,53 @@ function LevelGenerator:makeStripBoxWalls(env, y)
     local spaceWall = 5
     local maxWalls  = floor(spaceX / spaceWall)
     local walls     = random(maxWalls)
+    local tiles     = self.complexBoxTiles
 
     if maxWalls == 1 then walls = 1 end 
     
     if walls == 1 then
         local width = 2 + random(spaceX-4)
-        self:makeBoxWall(env, start+random(spaceX - width), y, width, random(5))
+        self:makeBoxWall(env, tiles, start+random(spaceX - width), y, width, random(5))
 
     else
         local half   = spaceX/2
         local width1 = random(max(3, half-3))
         local width2 = random(max(3, half-3))
 
-        self:makeBoxWall(env, start+half-(width1)-1,      y, width1, random(5))
-        self:makeBoxWall(env, start+half+half-(width2), y, width2, random(5))
+        self:makeBoxWall(env, tiles, start+half-(width1)-1,    y, width1, random(5))
+        self:makeBoxWall(env, tiles, start+half+half-(width2), y, width2, random(5))
     end
 
     return 12
 end
 
 
-function LevelGenerator:makeHorizWall(env, x, y, width, randY)
+function LevelGenerator:makeHorizWall(env, tiles, x, y, width, randY)
     if randY then
         y = (y-2) + random(3)
     end
 
-    env.tiles[y][x] = self.tiles.wallLeft
+    -- size of simple wall
+    local num = #tiles
+    if tiles.middle then num = #tiles.middle end
+
+    env.tiles[y][x]     = tiles.left or tiles[random(num)]
     -- shadow:
     env.shadows[y+1][x] = self.tiles.shadowBotLeft
 
     local middle = width - 2
 
     for i=1, middle do
-        env.tiles[y][x + i] = self.tiles.wallHoriz
+        if tiles.middle then
+            env.tiles[y][x + i] = tiles.middle[random(num)]
+        else
+            env.tiles[y][x + i] = tiles[random(num)]
+        end
         -- shadow:
-        env.shadows[y+1][x+i] = self.tiles.shadowBot
+        env.shadows[y+1][x+i]   = self.tiles.shadowBot
     end
 
-    env.tiles[y][x + middle + 1] = self.tiles.wallRight
+    env.tiles[y][x + middle + 1]   = tiles.right or tiles[random(num)]
     -- shadows:
     env.shadows[y][x+middle + 2]   = self.tiles.shadowRightTop
     env.shadows[y+1][x+middle + 1] = self.tiles.shadowBot
@@ -579,8 +626,12 @@ function LevelGenerator:makeHorizWall(env, x, y, width, randY)
 end
 
 
-function LevelGenerator:makeVertWall(env, x, y, length)
-    env.tiles[y][x] = self.tiles.wallBot
+function LevelGenerator:makeVertWall(env, tiles, x, y, length)
+    -- size of simple wall
+    local num = #tiles
+    if tiles.middle then num = #tiles.middle end
+
+    env.tiles[y][x]        = tiles.bot or tiles[random(num)]
     -- shadow:
     env.shadows[y+1][x+1] = self.tiles.shadowRightBot
     env.shadows[y+1][x]   = self.tiles.shadowBotLeft
@@ -589,26 +640,31 @@ function LevelGenerator:makeVertWall(env, x, y, length)
     local middle = length - 2
 
     for i=1, middle do
-        env.tiles[y - i][x]   = self.tiles.wallVert
+        if tiles.middle then
+            env.tiles[y - i][x] = tiles.middle[random(num)]
+        else
+            env.tiles[y - i][x] = tiles[random(num)]
+        end
         -- shadow:
-        env.shadows[y-i][x+1] = self.tiles.shadowRight
+        env.shadows[y-i][x+1]   = self.tiles.shadowRight
     end
 
-    env.tiles[y - middle - 1][x] = self.tiles.wallTop
+    env.tiles[y - middle - 1][x] = tiles.top or tiles[random(num)]
     -- shadow:
     env.shadows[y-middle-1][x+1] = self.tiles.shadowRightTop
 end
 
 
-function LevelGenerator:makeBoxWall(env, x, y, width, height)
+function LevelGenerator:makeBoxWall(env, tiles, x, y, width, height)
     local right, top = x+width+1, y-height-1
 
     --print("box: x="..x.." y="..y.." width="..width.." height="..height)
+    --box   = { topLeft=273, top=274, topRight=275, left=288, right=290, botLeft=303, bot=304, botRight=305 },
 
-    env.tiles[y][x]       = self.tiles.wallBotLeft
-    env.tiles[y][right]   = self.tiles.wallBotRight
-    env.tiles[top][x]     = self.tiles.wallTopLeft
-    env.tiles[top][right] = self.tiles.wallTopRight
+    env.tiles[y][x]       = tiles.botLeft
+    env.tiles[y][right]   = tiles.botRight
+    env.tiles[top][x]     = tiles.topLeft
+    env.tiles[top][right] = tiles.topRight
 
     -- shadow:
     env.shadows[y+1][x]       = self.tiles.shadowBotLeft
@@ -618,15 +674,15 @@ function LevelGenerator:makeBoxWall(env, x, y, width, height)
     env.shadows[y+1][right+1] = self.tiles.shadowRightBot
 
     for i=1, width do
-        env.tiles[y][x + i]   = self.tiles.wallHoriz
-        env.tiles[top][x + i] = self.tiles.wallHoriz
+        env.tiles[y][x + i]   = tiles.bot
+        env.tiles[top][x + i] = tiles.top
         -- shadow:
         env.shadows[y+1][x+i] = self.tiles.shadowBot
     end
 
     for i=1, height do
-        env.tiles[y - i][x]     = self.tiles.wallVert
-        env.tiles[y - i][right] = self.tiles.wallVert
+        env.tiles[y - i][x]     = tiles.left
+        env.tiles[y - i][right] = tiles.right
         -- shadow:
         env.shadows[y-i][right+1] = self.tiles.shadowRight
     end
@@ -685,7 +741,7 @@ end
 
 
 function LevelGenerator:setEnvironmentFloor(env)
-    local defaults    = self.tiles.defaultVariations[1]
+    local defaults    = self.tiles.defaultVariations[self.variant.default]
     local numDefaults = #defaults
 
     -- Determine any special tiles, or floor patterns or random tiling patterns on plain tiles
@@ -707,7 +763,7 @@ function LevelGenerator:setEnvironmentFloor(env)
         end
     end
 
-    local hazzards    = self.tiles.patterns[2][hazzard]
+    local hazzards    = self.tiles.patterns[self.variant.pattern][hazzard]
     local numHazzards = #hazzards
 
     -- differentiate each section

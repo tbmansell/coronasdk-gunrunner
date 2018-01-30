@@ -5,12 +5,15 @@ local utils                  = require("core.utils")
 
 -- Class
 local LevelGenerator = {
+    -- Constants
     MaxWidth          = 24,
     MinWidth          = 8,
     StartWidth        = 13,
     StartXpos         = 6,
     StartHeight       = 24,
     TileSize          = 75,
+    NumberCustomMaps  = 3,   -- total number of custom maps created, used to pick one randomly
+    SimpleWallPercent = 30,  -- % chance striaght wall will use simple wall graphic
 
     environments      = {},
     tiles             = {},
@@ -250,7 +253,7 @@ end
 
 
 function LevelGenerator:loadCustomMap(env)
-    local file     = "json/maps/testmap1.json"
+    local file     = "json/maps/testmap".. random(self.NumberCustomMaps).. ".json"
     local filepath = system.pathForFile(file, system.ResourceDirectory)
     local map, pos, msg = json.decodeFile(filepath)
 
@@ -309,7 +312,7 @@ end
 
 
 function LevelGenerator:getHorizTiles()
-    if percent(30) then
+    if percent(self.SimpleWallPercent) then
         return self.simpleHorizTiles
     else
         return self.complexHorizTiles
@@ -318,7 +321,7 @@ end
 
 
 function LevelGenerator:getVertTiles()
-    if percent(30) then
+    if percent(self.SimpleWallPercent) then
         return self.simpleVertTiles
     else
         return self.complexVertTiles

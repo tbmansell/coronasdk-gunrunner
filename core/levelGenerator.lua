@@ -14,6 +14,7 @@ local LevelGenerator = {
     TileSize          = 75,
     NumberCustomMaps  = 3,   -- total number of custom maps created, used to pick one randomly
     SimpleWallPercent = 30,  -- % chance striaght wall will use simple wall graphic
+    ComplexWallOrder  = {1, 3, 4, 2},  -- sequence that complex walls are always shown in
 
     environments      = {},
     tiles             = {},
@@ -27,17 +28,18 @@ local LevelGenerator = {
     enemyLayout       = nil,
 
     variant = {
-        simpleWall    = 1,
-        complexWall   = 1,
-        pattern       = 1,
-        default       = 1,
+        simpleWall         = 1,
+        complexWall        = 1,
+        complexWallTracker = 0,
+        pattern            = 1,
+        default            = 1,
     }
 
 }
 
 -- Paint colors:
-local red   = 1
-local blue  = 2
+local red         = 1
+local blue        = 2
 -- Patterns
 local grill       = 1
 local transparent = 3
@@ -170,6 +172,7 @@ function LevelGenerator:destroy()
     self.section           = 0
     self.currentHeight     = 0
     self.setVariants       = true
+    self.variants.complexWallTracker = 0
     -- ranges
     self.enemyUnitsRange   = {8, 12}
     self.enemyCaptainRange = {0,  0}
@@ -292,15 +295,42 @@ end
 
 function LevelGenerator:setVariantTiles()
     if self.setVariants then
-        self.setVariants         = false
-        self.variant.simpleWall  = random(#self.tiles.walls.simple)
-        self.variant.complexWall = random(#self.tiles.walls.complex)
-        self.variant.default     = random(#self.tiles.defaultVariations)
-        self.variant.pattern     = random(#self.tiles.patterns)
+        self.setVariants = false
+        
+        -- Complex walls: cycle through one per 10 sections in order 1,3,4,2 to show progression
+        self.variant.complexWallTracker = self.variant.complexWallTracker + 1
+
+        if self.variant.complexWallTracker > #self.ComplexWallOrder then
+            self.variant.complexWallTracker = 1
+        end
+
+        self.variant.complexWall = self.ComplexWallOrder[self.variant.complexWallTracker]
+
+        -- Simple walls:  pick two random ones to use for whole set of 10 sections (only use those two)
+        self.variant.simpleWall  = {
+            random(#self.tiles.walls.simple),
+            random(#self.tiles.walls.simple)
+        }
+        -- ensure they are not the same
+        if self.variant.simpleWall[1] == self.variant.simpleWall[2] then
+            if self.variant.simpleWall[2] < 4 then 
+                self.variant.simpleWall[2] = self.variant.simpleWall[2] + 1
+            else
+                self.variant.simpleWall[2] = 1
+            end
+        end
+        
+        -- Default floor: pick one random one to use for 10 sections
+        self.variant.default = random(#self.tiles.defaultVariations)
+
+        -- Patterns: pick any randomly for now, use only one type within a single section (eg. if using hazzards only use one type in a section)
+        self.variant.pattern = random(#self.tiles.patterns)
+
+        print("complexWall: "..self.variant.complexWall.." simpleWall: "..self.variant.simpleWall[1]..", "..self.variant.simpleWall[2])
     end
 
-    self.simpleHorizTiles  = self.tiles.walls.simple[self.variant.simpleWall].horiz
-    self.simpleVertTiles   = self.tiles.walls.simple[self.variant.simpleWall].vert
+    self.simpleHorizTiles  = self.tiles.walls.simple[self.variant.simpleWall[random(2)]].horiz
+    self.simpleVertTiles   = self.tiles.walls.simple[self.variant.simpleWall[random(2)]].vert
 
     self.complexHorizTiles = self.tiles.walls.complex[self.variant.complexWall].horiz
     self.complexVertTiles  = self.tiles.walls.complex[self.variant.complexWall].vert

@@ -776,22 +776,17 @@ end
 function LevelGenerator:setEnvironmentFloor(env)
     local defaults    = self.tiles.defaultVariations[self.variant.default]
     local numDefaults = #defaults
+    local width       = env.width - 2
 
     -- Determine any special tiles, or floor patterns or random tiling patterns on plain tiles
     for y=1, env.height do
-        for x=1, env.width do
-            if env.tiles[y][x] == self.tiles.default then
+        for x=1, width do
+            local xpos = env.startX + x
 
-                --[[if self.section == 1 then
-                    env.tiles[y][x] = self.tiles.patternHazzard
-                elseif self.section == 2 then
-                    env.tiles[y][x] = self.tiles.patternPipes
-                elseif self.section == 3 then
-                    env.tiles[y][x] = self.tiles.patternGrill
-                end]]
+            if env.tiles[y][xpos] == self.tiles.default then
 
                 -- NOTE: this has to run after entities have been placed so we can detect normal tiles
-                env.tiles[y][x] = defaults[random(numDefaults)]
+                env.tiles[y][xpos] = defaults[random(numDefaults)]
             end
         end
     end
@@ -800,7 +795,7 @@ function LevelGenerator:setEnvironmentFloor(env)
     local numHazzards = #hazzards
 
     -- differentiate each section
-    for x=1, env.width-2 do
+    for x=1, width do
         env.tiles[1][env.startX + x] = hazzards[random(numHazzards)]
     end
 

@@ -6,26 +6,27 @@ local utils                  = require("core.utils")
 -- Class
 local LevelGenerator = {
     -- Constants
-    MaxWidth          = 24,
-    MinWidth          = 8,
-    StartWidth        = 13,
-    StartXpos         = 6,
-    StartHeight       = 24,
-    TileSize          = 75,
-    NumberCustomMaps  = 3,   -- total number of custom maps created, used to pick one randomly
-    SimpleWallPercent = 30,  -- % chance striaght wall will use simple wall graphic
-    ComplexWallOrder  = {1, 3, 4, 2},  -- sequence that complex walls are always shown in
+    MaxWidth            = 24,
+    MinWidth            = 8,
+    StartWidth          = 13,
+    StartXpos           = 6,
+    StartHeight         = 24,
+    TileSize            = 75,
+    NumberCustomMaps    = 3,   -- total number of custom maps created, used to pick one randomly
+    SimpleWallPercent   = 30,  -- % chance straight wall will use simple wall graphic
+    FloorPatternPercent = 100,  -- % chance section will have a floor pattern
+    ComplexWallOrder    = {1, 3, 4, 2},  -- sequence that complex walls are always shown in
 
-    environments      = {},
-    tiles             = {},
-    section           = 0,
-    currentHeight     = 0,
-    setVariants       = true,
+    environments        = {},
+    tiles               = {},
+    section             = 0,
+    currentHeight       = 0,
+    setVariants         = true,
 
-    enemyUnitsRange   = {10, 10},
-    enemyCaptainRange = {0,  0},
-    enemyEliteRange   = {0,  0},
-    enemyLayout       = nil,
+    enemyUnitsRange     = {10, 10},
+    enemyCaptainRange   = {0,  0},
+    enemyEliteRange     = {0,  0},
+    enemyLayout         = nil,
 
     variant = {
         simpleWall         = 1,
@@ -46,6 +47,8 @@ local transparent = 3
 local broken      = 6
 local hazzard     = 7
 local bars        = 8
+-- Performance for default file checking: MUST MATCH self.tiles.default
+local DefaultTile = 2
 
 -- Aliases:
 local random  = math.random
@@ -172,7 +175,7 @@ function LevelGenerator:destroy()
     self.section           = 0
     self.currentHeight     = 0
     self.setVariants       = true
-    self.variants.complexWallTracker = 0
+    self.variant.complexWallTracker = 0
     -- ranges
     self.enemyUnitsRange   = {8, 12}
     self.enemyCaptainRange = {0,  0}
@@ -778,26 +781,35 @@ function LevelGenerator:setEnvironmentFloor(env)
     local numDefaults = #defaults
     local width       = env.width - 2
 
-    -- Determine any special tiles, or floor patterns or random tiling patterns on plain tiles
+    -- Check if should show a floor pattern:
+    if env.number > 1 and not env.isLast and percent(self.FloorPatternPercent) then
+        -- Pick a shape and a set of floor tiles to make the pattern:
+        local tiles = self.patternTiles[random(#self.patternTiles)]
+        local shape = random(#TilePatterns)
+
+        self:setEnvironmentPattern(env, tiles, shape)
+    end
+
+    -- Randomise remaining default tiles
+    -- NOTE: this has to run after entities have been placed so we can detect normal tiles
     for y=1, env.height do
         for x=1, width do
             local xpos = env.startX + x
 
-            if env.tiles[y][xpos] == self.tiles.default then
-
-                -- NOTE: this has to run after entities have been placed so we can detect normal tiles
+            if env.tiles[y][xpos] == DefaultTile then
                 env.tiles[y][xpos] = defaults[random(numDefaults)]
             end
         end
     end
 
+    --[[
     local hazzards    = self.tiles.patterns[self.variant.pattern][hazzard]
     local numHazzards = #hazzards
 
     -- differentiate each section
     for x=1, width do
         env.tiles[1][env.startX + x] = hazzards[random(numHazzards)]
-    end
+    end]]
 
     -- Customise specific sections
     if env.number == 1 then
@@ -807,6 +819,34 @@ function LevelGenerator:setEnvironmentFloor(env)
         self:setEnvironmentLastSection(env)
     end
 end
+
+
+function LevelGenerator:setEnvironmentPattern(env, tiles, shape)
+    local shapeName = TilePatterns[shape]
+    local numTiles  = #tiles
+    local width     = env.width - 2
+
+    if shapeName == "horizBar" then
+        -- bar goes all the way from left to right from centre Vert, min height:3, max height: half section width
+        local height = 2 + random((env.height-2) / 2)
+        local startY = 1 + floor((env.height/2) - (height/2))
+
+        print("horizBar envHeight="..env.height.." patternHeight: "..height.." startY="..startY)
+
+        for y=startY, startY + height - 1 do
+            for x=1, width do
+                local xpos = env.startX + x
+
+                if env.tiles[y][xpos] == self.tiles.default then
+                    env.tiles[y][xpos] = tiles[random(numTiles)]
+                end
+            end
+        end
+    end
+
+
+end
+
 
 
 function LevelGenerator:setEnvironmentFirstSection(env)

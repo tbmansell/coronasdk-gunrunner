@@ -14,7 +14,7 @@ globalBackgroundWidth  = 640
 globalBackgroundHeight = 1300
 globalCamera           = nil
 globalMaxSections      = 11
-globalLoadSections     = 2
+globalLoadSections     = 10
 globalLoadingDisplay   = nil
 
 -- Define global objects

@@ -289,3 +289,10 @@ EnemyDefs = {
     },
 
 }
+
+
+TilePatterns = {
+    "horizBar"
+    --"horizBar", "vertBar", "centreSquare", "horizBlocks", "cornerSquare", "cornerTriangle", "horizTriangles", "centreRing", "cornerDiamond", "parallelTriangle"
+}
+

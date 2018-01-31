@@ -129,14 +129,6 @@
                     "physics:isSensor": "true",
                     "physics:filter":   "exit"
                 },
-                "14":{
-                    "isHole":          "true",
-                    "isWall":          "true",
-                    "bodyType":        "static",
-                    "physics:enabled": "true",
-                    "physics:filter":  "hole",
-                    "physics:shape":   "hole"
-                },
                 "15":{
                     "isWall":           "true",
                     "bodyType":         "static",
@@ -1039,6 +1031,15 @@
                     "physics:filter":   "obstacle"
                 },
                 "319":{
+                    "isWall":           "true",
+                    "bodyType":         "static",
+                    "physics:density":  "1",
+                    "physics:friction": "0",
+                    "physics:bounce":   "0",
+                    "physics:enabled":  "true",
+                    "physics:filter":   "obstacle"
+                },
+                "320":{
                     "isWall":           "true",
                     "bodyType":         "static",
                     "physics:density":  "1",

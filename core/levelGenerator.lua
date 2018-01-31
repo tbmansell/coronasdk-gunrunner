@@ -141,7 +141,8 @@ function LevelGenerator:setup()
             [transparent] = {42,  43,  44,  45},
             [4]           = {57,  58,  59,  60},
             [5]           = {72,  73,  74,  75},
-            [broken]      = {87,  88,  89,  90},
+            --[broken]      = {87,  88,  89,  90},
+            [broken]      = {42,  43,  44,  45},
             [hazzard]     = {102, 103, 104, 105},
             [bars]        = {117, 118, 119, 120},
             [9]           = {132, 133, 134, 135},
@@ -152,7 +153,8 @@ function LevelGenerator:setup()
             [transparent] = {252, 253, 254, 255},
             [4]           = {267, 268, 269, 270},
             [5]           = {282, 283, 284, 285},
-            [broken]      = {297, 298, 299, 300},
+            --[broken]      = {297, 298, 299, 300},
+            [broken]      = {252, 253, 254, 255},
             [hazzard]     = {312, 313, 314, 315},
             [bars]        = {327, 328, 329, 330},
             [9]           = {342, 343, 344, 345},
@@ -781,13 +783,15 @@ function LevelGenerator:setEnvironmentFloor(env)
     local numDefaults = #defaults
     local width       = env.width - 2
 
-    -- Check if should show a floor pattern:
+    -- Check if should show any floor patterns:
     if env.number > 1 and not env.isLast and percent(self.FloorPatternPercent) then
-        -- Pick a shape and a set of floor tiles to make the pattern:
-        local tiles = self.patternTiles[random(#self.patternTiles)]
-        local shape = random(#TilePatterns)
+        for i=1, 2 do
+            -- Pick a shape and a set of floor tiles to make the pattern:
+            local tiles = self.patternTiles[random(#self.patternTiles)]
+            local shape = random(#TilePatterns)
 
-        self:setEnvironmentPattern(env, tiles, shape)
+            self:setEnvironmentPattern(env, tiles, shape)
+        end
     end
 
     -- Randomise remaining default tiles
@@ -822,31 +826,71 @@ end
 
 
 function LevelGenerator:setEnvironmentPattern(env, tiles, shape)
-    local shapeName = TilePatterns[shape]
-    local numTiles  = #tiles
-    local width     = env.width - 2
+    local shapeName    = TilePatterns[shape]
+    local numTiles     = #tiles
+    local sectionWidth = env.width - 2
 
     if shapeName == "horizBar" then
-        -- bar goes all the way from left to right from centre Vert, min height:3, max height: half section width
+        -- bar goes all the way from left to right from centre Vert, min height:3, max height: half section height
         local height = 2 + random((env.height-2) / 2)
         local startY = 1 + floor((env.height/2) - (height/2))
 
-        print("horizBar envHeight="..env.height.." patternHeight: "..height.." startY="..startY)
+        for y=startY, startY + height -1 do
+            for x=1, sectionWidth do
+                self:setRandomTile(env, tiles, numTiles, y, x)
+            end
+        end
 
-        for y=startY, startY + height - 1 do
-            for x=1, width do
-                local xpos = env.startX + x
+    elseif shapeName == "vertBar" then
+        -- bar goes all the way from top to bottom from centre horiz, min width: 2, max width: half section width
+        local width  = 1 + random(sectionWidth/2)
+        local startX = floor((env.width/2) - (width/2))
 
-                if env.tiles[y][xpos] == self.tiles.default then
-                    env.tiles[y][xpos] = tiles[random(numTiles)]
+        for y=1, env.height do
+            for x=startX, startX + width -1 do
+                self:setRandomTile(env, tiles, numTiles, y, x)
+            end
+        end
+
+    elseif shapeName == "centreSquare" then
+        -- solid square in the middle of the section, min width/height: 2, max width/height: half section
+        local size   = 1 + random(sectionWidth/2)
+        local startY = 1 + floor((env.height/2) - (size/2))
+        local startX = floor((env.width/2) - (size/2))
+
+        for y=startY, startY + size -1 do
+            for x=startX, startX + size -1 do
+                self:setRandomTile(env, tiles, numTiles, y, x)
+            end
+        end
+
+    elseif shapeName == "centreRing" then
+        -- ring square in the middle of the section, min width/height: 3, max width/height: half section
+        local size   = 2 + random(sectionWidth/2)
+        local startY = 2 + floor((env.height/2) - (size/2))
+        local startX = floor((env.width/2) - (size/2))
+        local bottom = startY + size -1
+        local right  = startX + size -1
+
+        for y=startY, bottom do
+            for x=startX, right do
+                if y == startY or y == bottom or x == startX or x == right then
+                    self:setRandomTile(env, tiles, numTiles, y, x)
                 end
             end
         end
+
     end
-
-
 end
 
+
+function LevelGenerator:setRandomTile(env, tiles, numTiles, y, x)
+    local xpos = env.startX + x
+
+    if env.tiles[y][xpos] == DefaultTile then
+        env.tiles[y][xpos] = tiles[random(numTiles)]
+    end
+end
 
 
 function LevelGenerator:setEnvironmentFirstSection(env)

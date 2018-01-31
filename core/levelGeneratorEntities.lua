@@ -119,7 +119,7 @@ function Loader:load(LevelGenerator)
         if env.isCustom then
             self:loadEntitiesFromMap()
         elseif not env.isLast then
---            self:generateEntities()
+            self:generateEntities()
         end
 
         self:updateProgression()

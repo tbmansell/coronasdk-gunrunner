@@ -180,7 +180,6 @@ function Loader:load(LevelGenerator)
 
         -- Increment ranges after every custom section
         if index % (globalLoadSections+1) == 0 then
-
             if self.enemyUnitsRange[1] < 20 then
                 self.enemyUnitsRange[1] = self.enemyUnitsRange[1] + 2
                 self.enemyUnitsRange[2] = self.enemyUnitsRange[2] + 4
@@ -349,7 +348,7 @@ function Loader:load(LevelGenerator)
                 if percent(20) then return "big" else return "small" end
             end
             
-            self:generateScenery(15, "crate", variantGenerator)
+            self:generateScenery(15, 6, "crate", variantGenerator)
         end
 
         if percent(30) then
@@ -357,7 +356,7 @@ function Loader:load(LevelGenerator)
                 if percent(30) then return "big" else return "small" end
             end
 
-            self:generateScenery(10, "gas", variantGenerator)
+            self:generateScenery(10, 4, "gas", variantGenerator)
         end
 
         if index > 1 and percent(50) then
@@ -366,17 +365,19 @@ function Loader:load(LevelGenerator)
                 if r <= 35 then return "1" elseif r <= 70 then return "2" else return "3" end
             end
 
-            self:generateScenery(8, "computer", variantGenerator, 2)
+            self:generateScenery(6, 1, "computer", variantGenerator, 2)
         end
     end
 
 
-    function LevelGenerator:generateScenery(maxAmount, type, variantGenerator, tileWidth, tileHeight)
+    function LevelGenerator:generateScenery(maxAmount, maxBatch, type, variantGenerator, tileWidth, tileHeight)
         local amount = random(maxAmount)
 
         while amount > 0 do
             local batch = random(amount)
             local group = {}
+
+            if batch > maxBatch then batch = maxBatch end
 
             if amount == 1 then batch = 1 end
 

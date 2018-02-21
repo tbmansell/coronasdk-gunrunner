@@ -35,7 +35,6 @@ local LevelGenerator = {
         pattern            = 1,
         default            = 1,
     }
-
 }
 
 -- Paint colors:
@@ -55,6 +54,7 @@ local random  = math.random
 local min     = math.min
 local max     = math.max
 local floor   = math.floor
+local ceil    = math.ceil
 local percent = utils.percent
 
 
@@ -141,8 +141,8 @@ function LevelGenerator:setup()
             [transparent] = {42,  43,  44,  45},
             [4]           = {57,  58,  59,  60},
             [5]           = {72,  73,  74,  75},
-            --[broken]      = {87,  88,  89,  90},
-            [broken]      = {42,  43,  44,  45},
+            [broken]      = {87,  88,  89,  90},
+            --[broken]      = {42,  43,  44,  45},
             [hazzard]     = {102, 103, 104, 105},
             [bars]        = {117, 118, 119, 120},
             [9]           = {132, 133, 134, 135},
@@ -153,8 +153,8 @@ function LevelGenerator:setup()
             [transparent] = {252, 253, 254, 255},
             [4]           = {267, 268, 269, 270},
             [5]           = {282, 283, 284, 285},
-            --[broken]      = {297, 298, 299, 300},
-            [broken]      = {252, 253, 254, 255},
+            [broken]      = {297, 298, 299, 300},
+            --[broken]      = {252, 253, 254, 255},
             [hazzard]     = {312, 313, 314, 315},
             [bars]        = {327, 328, 329, 330},
             [9]           = {342, 343, 344, 345},
@@ -785,7 +785,7 @@ function LevelGenerator:setEnvironmentFloor(env)
 
     -- Check if should show any floor patterns:
     if env.number > 1 and not env.isLast and percent(self.FloorPatternPercent) then
-        for i=1, 2 do
+        for i=1, 1 do
             -- Pick a shape and a set of floor tiles to make the pattern:
             local tiles = self.patternTiles[random(#self.patternTiles)]
             local shape = random(#TilePatterns)
@@ -807,13 +807,14 @@ function LevelGenerator:setEnvironmentFloor(env)
     end
 
     --[[
+    -- differentiate each section with a hazzard line
     local hazzards    = self.tiles.patterns[self.variant.pattern][hazzard]
     local numHazzards = #hazzards
 
-    -- differentiate each section
     for x=1, width do
         env.tiles[1][env.startX + x] = hazzards[random(numHazzards)]
-    end]]
+    end
+    ]]
 
     -- Customise specific sections
     if env.number == 1 then
@@ -852,6 +853,23 @@ function LevelGenerator:setEnvironmentPattern(env, tiles, shape)
             end
         end
 
+    elseif shapeName == "vertBarSides" then
+        -- two bars left and right side, go from top to bottom of length: half to full height, with width 3rd section width
+        local height = env.height/2 + random(env.height/2) -1
+        local width  = sectionWidth/3
+        local startY = 1 + floor((env.height/2) - (height/2))
+        local startX = ceil(width*2) +1
+
+        for y=startY, startY + height -1 do
+            for x=1, width do
+                self:setRandomTile(env, tiles, numTiles, y, x)
+            end
+
+            for x=startX, sectionWidth do
+                self:setRandomTile(env, tiles, numTiles, y, x)
+            end
+        end
+
     elseif shapeName == "centreSquare" then
         -- solid square in the middle of the section, min width/height: 2, max width/height: half section
         local size   = 1 + random(sectionWidth/2)
@@ -880,6 +898,110 @@ function LevelGenerator:setEnvironmentPattern(env, tiles, shape)
             end
         end
 
+    elseif shapeName == "cornerSquare" then
+        -- each corner is a square from min width: 3 max width third section width
+        local size   = 2 + random((sectionWidth/3) - 2)
+        local startX = 1 + sectionWidth - size
+        local startY = 1 + env.height - size
+
+        self:setCornerSquares(1,      size,       startX, size, env, tiles, numTiles, sectionWidth)
+        self:setCornerSquares(startY, env.height, startX, size, env, tiles, numTiles, sectionWidth)
+
+    elseif shapeName == "cornerTriangle" then
+        -- each corner is a triangle from min width: 3 max width third section width
+        local size   = 2 + random((sectionWidth/3) - 2)
+        local startX = 1 + sectionWidth - size
+        local startY = 1 + env.height - size
+
+        self:setCornerTriangles(1,      size,       startX, size, env, tiles, numTiles, sectionWidth)
+        self:setCornerTriangles(startY, env.height, startX, size, env, tiles, numTiles, sectionWidth, true)
+
+    elseif shapeName == "parallelTriangle" then
+        -- like corner triangle but only one corner at top and bottom, opposite each other, have triangles and their max widths are half section width
+        local size   = 2 + random((sectionWidth/2) - 2)
+        local startX = 1 + sectionWidth - size
+        local startY = 1 + env.height - size
+
+        self:setCornerTriangle(1,      size,       startX, size, env, tiles, numTiles, sectionWidth)
+        self:setCornerTriangle(startY, env.height, startX, size, env, tiles, numTiles, sectionWidth, true)
+
+    elseif shapeName == "horizTriangles" then
+        -- Left and right have centre triangle pointing into middle, centred in middle horzontally, min width: 3, max half section width
+        local size   = 2 + random((sectionWidth/2) - 2)
+        local startY = 1 + floor((env.height/2) - (size/2))
+        local endY   = startY + size + 1
+        local midY   = floor(startY + ((endY - startY)/2))
+        local mark   = 1
+
+        for y=startY, endY do
+            for x=1, mark do
+                self:setRandomTile(env, tiles, numTiles, y, x)
+            end
+
+            for x=sectionWidth - mark +1, sectionWidth do
+                self:setRandomTile(env, tiles, numTiles, y, x)
+            end
+
+            if y < midY then mark = mark + 1 else mark = mark - 1 end
+        end
+
+    end
+end
+
+
+function LevelGenerator:setCornerSquares(startY, endY, startX, size, env, tiles, numTiles, sectionWidth)
+    for y=startY, endY do
+        for x=1, size do
+            self:setRandomTile(env, tiles, numTiles, y, x)
+        end
+
+        for x=startX, sectionWidth do
+            self:setRandomTile(env, tiles, numTiles, y, x)
+        end
+    end
+end
+
+
+function LevelGenerator:setCornerTriangles(startY, endY, startX, size, env, tiles, numTiles, sectionWidth, flipMark)
+    local mark = 0
+
+    if flipMark then mark = size-1 end
+
+    for y=startY, endY do
+        for x=1, size - mark do
+            self:setRandomTile(env, tiles, numTiles, y, x)
+        end
+
+        for x=startX + mark, sectionWidth do
+            self:setRandomTile(env, tiles, numTiles, y, x)
+        end
+
+        if flipMark then 
+            mark = mark - 1
+        else
+            mark = mark + 1
+        end
+    end
+end
+
+
+function LevelGenerator:setCornerTriangle(startY, endY, startX, size, env, tiles, numTiles, sectionWidth, flipMark)
+    local mark = 0
+
+    if flipMark then mark = size-1 end
+
+    for y=startY, endY do
+        if flipMark then
+            for x=startX + mark, sectionWidth do
+                self:setRandomTile(env, tiles, numTiles, y, x)
+            end
+            mark = mark - 1
+        else
+            for x=1, size - mark do
+                self:setRandomTile(env, tiles, numTiles, y, x)
+            end
+            mark = mark + 1
+        end
     end
 end
 

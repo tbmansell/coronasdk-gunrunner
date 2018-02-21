@@ -166,7 +166,7 @@ function Loader:load(LevelGenerator)
             self.enemyCaptains = inRange(self.enemyCaptainRange)
             self.enemyElites   = inRange(self.enemyEliteRange)
             
-            self:addEnemies()
+--            self:addEnemies()
         end
 
         self:addScenery()

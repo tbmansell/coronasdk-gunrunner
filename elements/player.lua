@@ -10,8 +10,8 @@ local Player = {
     intHeight         = 25,
     intWidth          = 25,
     intMaxHealth      = 20,
-    verticalSpeed     = 8,--4,
-    strafeSpeed       = 8,--4,
+    verticalSpeed     = 4,--8,--4,
+    strafeSpeed       = 4,--8,--4,
     powerupDuration   = 15000,
 
     mode              = PlayerMode.ready,
@@ -62,7 +62,7 @@ function Player:updateLegs(anim)
     local y  = self:y()
     local dy = round(self.prevY - y)
 
-    if dy == 0 then 
+    if dy == 0 then
         if not self.hudMovement and self.legAnimation ~= "stationary" then
             self:loopLegs("stationary")
         end
@@ -261,7 +261,7 @@ function Player:fallToDeath(hole)
         seq:tran({time=1000, x=hole.x, y=hole.y, xScale=0.01, yScale=0.01, alpha=0})
         seq.onComplete = function()
             self:hide()
-            self:failedCallback() 
+            self:failedCallback()
         end
         seq:start()
     end

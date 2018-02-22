@@ -945,6 +945,16 @@ function LevelGenerator:setEnvironmentPattern(env, tiles, shape)
             if y < midY then mark = mark + 1 else mark = mark - 1 end
         end
 
+    elseif shapeName == "cornerDiamond" then
+        -- Diamond in each corner of the section min size: 3, max size: half section width, but each centred in middle of each section corner (so if small, there is space before edge) 
+        local size   = 2 + random((sectionWidth/2) -2)
+        local quartX = floor(env.width/4)
+        local quartY = floor(env.height/4)
+
+        self:setCornerDiamond(quartY,   quartX,   size, env, tiles, numTiles)
+        self:setCornerDiamond(quartY,   quartX*3, size, env, tiles, numTiles)
+        self:setCornerDiamond(quartY*3, quartX,   size, env, tiles, numTiles)
+        self:setCornerDiamond(quartY*3, quartX*3, size, env, tiles, numTiles)
     end
 end
 
@@ -976,7 +986,7 @@ function LevelGenerator:setCornerTriangles(startY, endY, startX, size, env, tile
             self:setRandomTile(env, tiles, numTiles, y, x)
         end
 
-        if flipMark then 
+        if flipMark then
             mark = mark - 1
         else
             mark = mark + 1
@@ -1002,6 +1012,22 @@ function LevelGenerator:setCornerTriangle(startY, endY, startX, size, env, tiles
             end
             mark = mark + 1
         end
+    end
+end
+
+
+function LevelGenerator:setCornerDiamond(originY, originX, size, env, tiles, numTiles)
+    local startY = originY - floor(size/2)
+    local endY   = originY + floor(size/2)
+    local midY   = floor(startY + ((endY - startY)/2))
+    local mark   = 0
+
+    for y=startY, endY do
+        for x=originX - mark, originX + mark do
+            self:setRandomTile(env, tiles, numTiles, y, x)
+        end
+
+        if y < midY then mark = mark + 1 else mark = mark - 1 end
     end
 end
 

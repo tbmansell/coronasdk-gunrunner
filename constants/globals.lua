@@ -293,9 +293,8 @@ EnemyDefs = {
 
 TilePatterns = {
     -- TEST:
-    -- "cornerDiamond"
 
     -- DONE:
-    "horizBar", "vertBar", "centreSquare", "centreRing", "vertBarSides", "cornerSquare", "cornerTriangle", "horizTriangles", "parallelTriangle"
+    "horizBar", "vertBar", "centreSquare", "centreRing", "vertBarSides", "cornerSquare", "cornerTriangle", "horizTriangles", "parallelTriangle", "cornerDiamond"
 }
 

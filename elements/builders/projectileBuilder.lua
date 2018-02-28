@@ -19,11 +19,12 @@ function ProjectileBuilder:newShot(camera, spec, weapon)
     
     builder:deepCopy(projectileDef, shot)
 
-    shot.weapon       = weapon
-    shot.filter       = spec.filter
-    shot.angle        = spec.angle
-    shot.ricochet     = weapon.ricochet
-    shot.shootThrough = weapon.shootThrough
+    shot.weapon        = weapon
+    shot.filter        = spec.filter
+    shot.angle         = spec.angle
+    shot.powerupDamage = spec.powerupDamage
+    shot.ricochet      = weapon.ricochet
+    shot.shootThrough  = weapon.shootThrough
 
     shot:moveTo(spec.xpos or 0, spec.ypos or 0)
     shot:setPhysics(isSensor)

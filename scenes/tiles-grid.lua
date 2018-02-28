@@ -16,7 +16,7 @@ function scene:create(event)
     --local startY   = 360
 
     local rect = display.newRect(self.view, 0, 0, 2000, 2000)
-    local bgr  = display.newImage(self.view, "images/tiles-grid-new.png", globalCenterX, globalCenterY)
+    local bgr  = display.newImage(self.view, "images/tiles-grid.png", globalCenterX, globalCenterY)
     --local bgr  = display.newImage(self.view, "images/objectMap.png", globalCenterX, globalCenterY)
 
     rect:setFillColor(0.7, 0.5, 0.7)

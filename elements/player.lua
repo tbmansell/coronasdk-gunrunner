@@ -1,6 +1,5 @@
-local anim        = require("core.animations")
-local spine       = require("core.spine")
---local soundEngine = require("core.sound-engine")
+local anim  = require("core.animations")
+local spine = require("core.spine")
 
 -- Class
 local Player = {
@@ -10,8 +9,8 @@ local Player = {
     intHeight         = 25,
     intWidth          = 25,
     intMaxHealth      = 20,
-    verticalSpeed     = 4,--8,--4,
-    strafeSpeed       = 4,--8,--4,
+    verticalSpeed     = 4,
+    strafeSpeed       = 4,
     powerupDuration   = 15000,
 
     mode              = PlayerMode.ready,
@@ -199,7 +198,7 @@ function Player:hit(shot)
     if not self:isDead() then
         local damage = shot.weapon.damage
 
-        if shot.getDamge then
+        if shot.getDamage then
             damage = shot:getDamage()
         end
 
@@ -451,6 +450,8 @@ function Player:laserSight()
         self:startPowerup(Powerups.laserSight, function()
             self:removeLaserSight()
         end)
+
+        self:drawLaserSight()
     end
 end
 

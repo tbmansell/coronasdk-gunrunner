@@ -446,7 +446,7 @@ function Enemy:hit(shot)
         if not self.shielded or shot.weapon.shieldBuster then
             local damage = shot.weapon.damage
 
-            if shot.getDamge then
+            if shot.getDamage then
                 damage = shot:getDamage()
             end
             

@@ -23,6 +23,7 @@ function ProjectileBuilder:newShot(camera, spec, weapon)
     shot.filter        = spec.filter
     shot.angle         = spec.angle
     shot.powerupDamage = spec.powerupDamage
+    shot.customDeath   = weapon.customDeath
     shot.ricochet      = weapon.ricochet
     shot.shootThrough  = weapon.shootThrough
 

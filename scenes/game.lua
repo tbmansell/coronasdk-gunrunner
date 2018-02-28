@@ -160,7 +160,6 @@ function scene:loadEntities(fromSection)
     end
 
     for i=fromSection, toSection do
-        --print("===> Create elements for section "..i)
         local section = levelGenerator:getSection(i)
         level:createElements(section.entities, levelGenerator)
     end
@@ -168,9 +167,7 @@ end
 
 
 function scene:loadPlayer()
-    --print("creating player")
     player = level:createPlayer({xpos=11.5, ypos=-5.5}, hud)
-    --print("create player")
     player:setWeapon(Weapons.rifle)
     
     -- Create Game Over callbacks

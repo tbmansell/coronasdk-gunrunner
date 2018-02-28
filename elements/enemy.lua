@@ -456,7 +456,7 @@ function Enemy:hit(shot)
             self:animate("hit_1")
 
             if self.health <= 0 then
-                self:explode()
+                self:explode(shot)
                 stats:addKill(shot.weapon, self.type, self.rank)
             end
         end
@@ -464,7 +464,7 @@ function Enemy:hit(shot)
 end
 
 
-function Enemy:explode()
+function Enemy:explode(shot)
     -- guard to stop multiple deaths
     if not self:isDead() then
         self.mode = EnemyMode.dead
@@ -486,6 +486,11 @@ function Enemy:explode()
                 self:emit("explosionLarge")
                 self:emit("smokeLarge")
                 level:addScorchMark(self:x(), self:y(), 2)
+
+            elseif shot and shot.customDeath then
+                local name = "enemyDie-"..shot.weapon.name
+                self:emit(name.."1")
+                self:emit(name.."2")
             else
                 self:emit("enemyDie1")
                 self:emit("enemyDie2")

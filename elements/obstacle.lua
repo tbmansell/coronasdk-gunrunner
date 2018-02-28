@@ -32,7 +32,7 @@ end
 function Obstacle:hit(shot)
     local damage = shot.weapon.damage
 
-    if shot.getDamge then
+    if shot.getDamage then
         damage = shot:getDamage()
     end
 

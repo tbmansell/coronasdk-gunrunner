@@ -70,7 +70,7 @@ local function eventShootPlayer(event)
 
     if event.phase == "began" then
         Hud:clearResetAim()
-        display.getCurrentStage():setFocus(event.target, event.id)    
+        display.getCurrentStage():setFocus(event.target, event.id)
         aimPlayerX     = event.x
         aimPlayerY     = event.y
     elseif event.phase == "moved" and aimPlayerAllow then
@@ -317,6 +317,11 @@ function Hud:eventUpdateFrame(event)
 
     if forceScroll then
         localPlayer:moveBy(0, forcePlayerMoveY)
+
+        -- It's possible to be moving when in stationary animation. This fixes that for vertical movement
+        if not movePlayerAllow and localPlayer:verticalMovement() > 8 and localPlayer.legAnimation == "stationary" then
+            localPlayer:updateLegs("run_slow")
+        end
     end
 
     if localPlayer.shieldEntity then
@@ -340,8 +345,8 @@ function Hud:updateFrameUserMovement(event)
 
     if forceScroll then
         if localPlayer:verticalMovement() <= 0 or dy > 0 then
-            legs = "run_slow" 
-        elseif dy < 0 then 
+            legs = "run_slow"
+        elseif dy < 0 then
             legs = "run_fast"
         end
     end

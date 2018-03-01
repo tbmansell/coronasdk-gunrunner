@@ -117,7 +117,6 @@ function scene:loadLevel()
 
     -- generate the level content
     for i=1, globalMaxSections do
-        --print("=> Load environment "..i)
         local isCustom = (i % globalLoadSections == 0)
         local isLast   = (i == globalMaxSections)
         local env      = levelGenerator:newEnvironment(isCustom, isLast)
@@ -132,7 +131,6 @@ function scene:loadLevel()
 
     -- tile engine renders sections in reverse, so feed them in backward
     for i=globalMaxSections, 1, -1 do
-        --print("==> Build layer "..i)
         tileEngine:loadEnvironment(environment[i])
     end
 
@@ -142,7 +140,6 @@ function scene:loadLevel()
     tileEngine.map.setTrackingLevel(0.1)
 
     self:loadEntities(1)
-    --print("Loaded Level")
 end
 
 

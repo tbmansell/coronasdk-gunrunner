@@ -56,6 +56,7 @@ local max     = math.max
 local floor   = math.floor
 local ceil    = math.ceil
 local percent = utils.percent
+local indexOf = table.indexOf
 
 
 
@@ -111,6 +112,18 @@ function LevelGenerator:setup()
                 box   = { topLeft=273, top=274, topRight=275, left=288, right=290, botLeft=303, bot=304, botRight=305 },
             },            
         }
+    }
+
+    -- flat array of wall tile numbers, so we can quickly search through them to determine if a tile is a wall based just on its index:
+    self.wallTilesList = {
+        1, 3, 4, 5, 16, 18, 20, 31, 33, 34, 35, 46, 47, 48, 49, 50, 51, 61,
+        63, 64, 65, 76, 78, 80, 91, 93, 94, 95, 106, 107, 108, 109, 110, 111, 121, 136,
+        211, 271, 226, 241, 256, 257, 261, 258, 259, 260, 213, 214, 215, 228, 230, 243, 244, 245,
+        317, 321, 318, 319, 320, 286, 346, 301, 316, 331, 273, 274, 275, 288, 290, 303, 304, 305,
+        158, 159, 160, 161, 165, 180, 195, 210,
+        173, 174, 175, 176, 164, 179, 194, 209,
+        188, 189, 190, 191, 163, 178, 193, 208,
+        203, 204, 205, 206, 162, 177, 192, 207,
     }
 
     -- painted tiles:
@@ -276,8 +289,7 @@ function LevelGenerator:loadCustomMap(env)
     env.number = #self.environments + 1
 
     local floorLayer = map.layers[1].data
-
-    env.entityData = map.layers[2].data
+    env.entityData   = map.layers[2].data
 
     for y=1, env.height do
         env.tiles[y]    = {}
@@ -292,6 +304,53 @@ function LevelGenerator:loadCustomMap(env)
             env.entities[y][x] = false
         end
     end
+
+    -- loop back through and add shadows
+    self:loadCustomMapShadows(env)
+end
+
+
+function LevelGenerator:loadCustomMapShadows(env)
+    for y=1, env.height do
+        for x=1, env.width do
+            local tile      = env.tiles[y][x]
+            local botFree   = false
+            local rightFree = false
+
+            if indexOf(self.wallTilesList, tile) then
+                -- check if tile below should have shadow (if not also wall)
+                if y < env.height then
+                    if self:isFree(env, y+1, x) then
+                        env.shadows[y+1][x] = self.tiles.shadowBot
+                        botFree = true
+                    end
+                end
+
+                -- check if the tile to the right should have a shadow (if not also a wall)
+                if x < env.width then
+                    if self:isFree(env, y, x+1) then
+                        -- check if we want to show a top right shadow or just side right shadow
+                        if y > 1 and self:isFree(env, y-1, x) then
+                            env.shadows[y][x+1] = self.tiles.shadowRightTop
+                        else
+                            env.shadows[y][x+1] = self.tiles.shadowRight
+                        end
+                        rightFree = true
+                    end
+                end
+
+                -- check if bot/right free
+                if botFree and rightFree and self:isFree(env, y+1, x+1) then
+                    env.shadows[y+1][x+1] = self.tiles.shadowRightBot
+                end
+            end
+        end
+    end
+end
+
+
+function LevelGenerator:isFree(env, y, x)
+    return (indexOf(self.wallTilesList, env.tiles[y][x]) == nil)
 end
 
 
@@ -330,8 +389,6 @@ function LevelGenerator:setVariantTiles()
 
         -- Patterns: pick any randomly for now, use only one type within a single section (eg. if using hazzards only use one type in a section)
         self.variant.pattern = random(#self.tiles.patterns)
-
-        print("complexWall: "..self.variant.complexWall.." simpleWall: "..self.variant.simpleWall[1]..", "..self.variant.simpleWall[2])
     end
 
     self.simpleHorizTiles  = self.tiles.walls.simple[self.variant.simpleWall[random(2)]].horiz

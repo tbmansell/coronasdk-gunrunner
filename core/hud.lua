@@ -335,9 +335,17 @@ end
 
 
 function Hud:updateFrameUserMovement(event)
-    local angle = atan2(moveControllerY - movePlayerY, moveControllerX - movePlayerX) * PI
+    local moveY  = moveControllerY - movePlayerY
+    local speedY = movePlayerSpeedY
+
+    -- If player is moving backward, we have to counteract the forceMove value if in effect
+    if forceScroll and moveY < 0 then
+        speedY = speedY - forcePlayerMoveY
+    end
+
+    local angle = atan2(moveY, moveControllerX - movePlayerX) * PI
     local dx    = movePlayerSpeedX * -cos(rad(angle))
-    local dy    = movePlayerSpeedY * -sin(rad(angle))
+    local dy    = speedY * -sin(rad(angle))
     local legs  = "run"
 
     localPlayer:stopMomentum()

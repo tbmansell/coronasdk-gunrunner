@@ -535,11 +535,11 @@ function LevelGenerator:setStartEdge(env)
     local startX = env.startX + 1
     local endX   = env.startX + env.width - 2
 
-    env.tiles[y][startX] = self.tiles.wallLeft
-    env.tiles[y][endX]   = self.tiles.wallRight
+    env.tiles[y][startX] = self.complexHorizTiles.left
+    env.tiles[y][endX]   = self.complexHorizTiles.right
 
-    for x=startX+1, endX-1 do 
-        env.tiles[y][x] = self.tiles.wallHoriz
+    for x=startX+1, endX-1 do
+        env.tiles[y][x] = self.complexHorizTiles.middle[1]
     end
 end
 

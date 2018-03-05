@@ -76,15 +76,22 @@ local function canPlace(x, y, width, height)
         return canPlaceAt(x, y)
     end
 
-    if width then
+    if width and height then
+        for h=0, height-1 do
+            for w=0, width-1 do
+                if not canPlaceAt(x+w, y-h) then
+                    return false
+                end
+            end
+        end
+
+    elseif width then
         for w=1, width do
             if not canPlaceAt(x+w-1, y) then
                 return false
             end
         end
-    end
-
-    if height then
+    elseif height then
         for h=1, height do
             if not canPlaceAt(x, y-h+1) then
                 return false
@@ -214,13 +221,17 @@ function Loader:load(LevelGenerator)
     function LevelGenerator:addEntity(spec)
         envEntities[spec.ypos][spec.xpos] = true
 
-        if spec.tileWidth then
+        if spec.tileWidth and spec.tileHeight then
+            for y=0, spec.tileHeight-1 do
+                for w=0, spec.tileWidth-1 do
+                    envEntities[spec.ypos-y][spec.xpos+w] = true
+                end
+            end
+        elseif spec.tileWidth then
             for w=1, spec.tileWidth-1 do
                 envEntities[spec.ypos][spec.xpos+w] = true
             end
-        end
-
-        if spec.tileHeight then
+        elseif spec.tileHeight then
             for y=1, spec.tileHeight-1 do
                 envEntities[spec.ypos-y][spec.xpos] = true
             end
@@ -315,6 +326,11 @@ function Loader:load(LevelGenerator)
             local type  = random(types)
             local group = entities[type]
             local enemy = {object="enemy", category=category, type=type, rank=1}
+
+            if category == "turret" then
+                enemy.tileWidth  = 2
+                enemy.tileHeight = 2
+            end
 
             self:upgradeEnemy(enemy, category, type)
             

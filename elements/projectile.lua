@@ -25,7 +25,7 @@ function Projectile.eventCollision(self, event)
         if self.ricochet and other.isWall then
             self:bounce(false)
         else
-            self:impact(other.isWall)
+            self:impact(other.isWall, other)
         end
     end
 end
@@ -111,9 +111,9 @@ function Projectile:bounce(fromWall)
 end
 
 
-function Projectile:impact(isWall)
+function Projectile:impact(isWall, target)
     sounds:projectile(self.weapon.hitSound)
-    self:displayImpact()
+    self:displayImpact(isWall, target)
 
     if self.weapon.area then
         local effect = function(target)
@@ -129,11 +129,19 @@ function Projectile:impact(isWall)
 end
 
 
-function Projectile:displayImpact()
+function Projectile:displayImpact(isWall, target)
     local particle = self.weapon.hitAnim
 
     if particle then
-        self:emit(particle)
+        if self.isFlame then
+            if isWall then
+                self:emit(particle, {xpos=target.x, ypos=target.y})
+            else
+                self:emit(particle, {xpos=target:x(), ypos=target:y()})
+            end
+        else
+            self:emit(particle)
+        end
 
         if self.weapon.hitAnim2nd then
             self:emit(self.weapon.hitAnim2nd)

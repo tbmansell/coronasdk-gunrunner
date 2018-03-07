@@ -50,19 +50,20 @@ function Obstacle:hit(shot)
 end
 
 
-function Obstacle:explode()
-    sounds:projectile("rocketHit")
-    
+function Obstacle:explode() 
     if self.isCrate then
+        sounds:projectile("crateExplode"..random(3))
         self:emit("explosionCrate")
         self:emit("smokeCrate")
         self:generatePowerup(20)
 
     elseif self.isComputer then
+        sounds:projectile("rocketHit")
         self:emit("explosion")
         self:emit("smoke")
 
     elseif self.isGas then
+        sounds:projectile("rocketHit")
         self:emit("explosionGas")
         self:emit("smoke")
 

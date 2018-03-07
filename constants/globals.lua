@@ -64,8 +64,9 @@ Weapons = {
     claws             = {name="claw",        damage=1, time=500},
     rifle             = {name="rifle",       damage=1, ammoType="bullet",    speed=650, rof=205,  ammo=30, reload=1000, collect=15},
     shotgun           = {name="shotgun",     damage=1, ammoType="shell",     speed=650, rof=750,  ammo=10, reload=1200, collect=25},
-    launcher          = {name="launcher",    damage=5, ammoType="rocket",    speed=550, rof=1200, ammo=4,  reload=1500, collect=50, area=75},
-    laserGun          = {name="laserGun",    damage=2, ammoType="laser",     speed=600, rof=400,  ammo=15, reload=1300, collect=50, ricochet=2,        customDeath=true},
+    launcher          = {name="launcher",    damage=5, ammoType="rocket",    speed=550, rof=1200, ammo=6,  reload=1500, collect=50, area=75},
+    flamer            = {name="flamer",      damage=1, ammoType="flame",     speed=0,   rof=1000, ammo=5,  reload=1500, collect=50},
+    laserGun          = {name="laserGun",    damage=2, ammoType="laser",     speed=600, rof=400,  ammo=15, reload=1500, collect=50, ricochet=2,        customDeath=true},
     chainGun          = {name="chainGun",    damage=1, ammoType="chainShot", speed=700, rof=150,  ammo=50, reload=2000, collect=50, burst=3,           customDeath=true},
     chainGunTurret    = {name="chainGun",    damage=1, ammoType="chainShot", speed=700, rof=150,  ammo=50, reload=2000, collect=50, burst=3,           customDeath=true},
     laserCannon       = {name="laserCannon", damage=4, ammoType="laserBolt", speed=600, rof=900,  ammo=20, reload=2000, collect=50, shootThrough=true, customDeath=true},
@@ -73,10 +74,11 @@ Weapons = {
 }
 
 -- Load in weapon stats for spine and particles:
-Weapons.club.slot              = "weapon";  Weapons.club.skin              = "weapons/weapon-club";  
+Weapons.club.slot              = "weapon";  Weapons.club.skin              = "weapons/weapon-club";
 Weapons.rifle.slot             = "weapon";  Weapons.rifle.skin             = "weapons/gun_assault";   Weapons.rifle.bone             = "rifle";         Weapons.rifle.hitAnim             = "bulletImpact"
 Weapons.shotgun.slot           = "weapon";  Weapons.shotgun.skin           = "weapons/gun_shotgun";   Weapons.shotgun.bone           = "rifle";         Weapons.shotgun.hitAnim           = "bulletImpact"
 Weapons.launcher.slot          = "weapon";  Weapons.launcher.skin          = "weapons/gun_launcher";  Weapons.launcher.bone          = "launcher";      Weapons.launcher.hitAnim          = "smoke";         Weapons.launcher.hitAnim2nd="explosion"
+Weapons.flamer.slot            = "weapon";  Weapons.flamer.skin            = "weapons/gun_flamer";    Weapons.flamer.bone            = "flamer";        Weapons.flamer.hitAnim            = "smoke";         --Weapons.flamer.hitAnim2nd="explosion"
 Weapons.laserGun.slot          = "weapon";  Weapons.laserGun.skin          = "weapons/gun_laser";     Weapons.laserGun.bone          = "laser";         Weapons.laserGun.hitAnim          = "plasmaImpact";
 Weapons.chainGun.slot          = "weapon";  Weapons.chainGun.skin          = "weapons/chainGun";      Weapons.chainGun.bone          = "chainGun";      Weapons.chainGun.hitAnim          = "bulletImpact"
 Weapons.laserCannon.slot       = "weapon";  Weapons.laserCannon.skin       = "weapons/laserCannon";   Weapons.laserCannon.bone       = "laserCannon";   Weapons.laserCannon.hitAnim       = "plasmaImpact";
@@ -88,6 +90,7 @@ Weapons.club.hitSound               = "";
 Weapons.rifle.shotSound             = "rifleShot";     Weapons.rifle.hitSound             = "bulletHit";
 Weapons.shotgun.shotSound           = "shotGunShot";   Weapons.shotgun.hitSound           = "bulletHit";
 Weapons.launcher.shotSound          = "rocketShot";    Weapons.launcher.hitSound          = "rocketHit";
+Weapons.flamer.shotSound            = "rocketShot";    Weapons.flamer.hitSound            = "rocketHit";
 Weapons.laserGun.shotSound          = "laserShot";     Weapons.laserGun.hitSound          = "laserHit";
 Weapons.chainGun.shotSound          = "chainGunShot";  Weapons.chainGun.hitSound          = "bulletHit";
 Weapons.laserCannon.shotSound       = "laserBolt";     Weapons.laserCannon.hitSound       = "laserHit";
@@ -196,7 +199,6 @@ EnemyLayouts = {
 
     [19] = {[melee]=25,     [shooter]=25,   [heavy]=25,     [turret]=25,    [flying]=0,     [vehicle]=0},
     
-
     --[[
     [1]  = {[100]=melee},
     [2]  = {[100]=shooter},

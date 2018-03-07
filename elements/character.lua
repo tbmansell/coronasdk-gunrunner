@@ -51,8 +51,11 @@ function Character:shootProjectile(projectileBuilder, camera, filter, reloadCall
         level:createProjectile({xpos=x, ypos=y, angle=angle-10, filter=filter, powerupDamage=damage, mapSection=self.mapSection}, weapon)
         level:createProjectile({xpos=x, ypos=y, angle=angle,    filter=filter, powerupDamage=damage, mapSection=self.mapSection}, weapon)
         level:createProjectile({xpos=x, ypos=y, angle=angle+10, filter=filter, powerupDamage=damage, mapSection=self.mapSection}, weapon)
+
+    elseif ammo == "flame" then
+        self.flameShot = level:createFlame({xpos=x, ypos=y, angle=angle, filter=filter, powerupDamage=damage, mapSection=self.mapSection}, weapon)
     else
-        level:createProjectile({xpos=x, ypos=y, angle=angle,    filter=filter, powerupDamage=damage, mapSection=self.mapSection}, weapon)
+        level:createProjectile({xpos=x, ypos=y, angle=angle, filter=filter, powerupDamage=damage, mapSection=self.mapSection}, weapon)
     end
 
     local rof = self.weapon.rof
@@ -62,6 +65,11 @@ function Character:shootProjectile(projectileBuilder, camera, filter, reloadCall
     end
 
     after(rof, function()
+        if ammo == "flame" then
+            self.flameShot:destroy()
+            self.flameShot = nil
+        end
+
         self.flagShootAllowed = true
         self:loop(self.stationaryAnim)
 

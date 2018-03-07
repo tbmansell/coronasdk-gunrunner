@@ -6,10 +6,11 @@ local Projectile = {
 }
 
 -- Aliases
-local cos = math.cos
-local sin = math.sin
-local rad = math.rad
-local abs = math.abs
+local cos     = math.cos
+local sin     = math.sin
+local rad     = math.rad
+local abs     = math.abs
+local indexOf = indexOf
 
 
 function Projectile.eventCollision(self, event)
@@ -32,15 +33,27 @@ end
 
 function Projectile:setPhysics(isSensor)
     local bounce = 0
+    local shape  = nil
 
     if self.ricochet then
         bounce = 1
     end
 
-    physics.addBody(self.image, "dynamic", {isSensor=isSensor, density=0, friction=0, bounce=bounce, filter=self.filter})
+    if self.isFlame then
+        shape = {-30,180, 30,180, 5,0, -5,0}
+    end
+
+    physics.addBody(self.image, "dynamic", {isSensor=isSensor, density=0, friction=0, bounce=bounce, shape=shape, filter=self.filter})
 
     self.image.collision = Projectile.eventCollision
     self.image:addEventListener("collision", self.image)
+end
+
+
+function Projectile:removePhysics()
+    physics.removeBody(self.image)
+    self.image:removeEventListener("collision", self.image)
+    self.image.collision = nil
 end
 
 
@@ -65,6 +78,12 @@ function Projectile:fire()
 
     elseif weapon.ammoType == "laserBolt" then
         self:bindEmitter("laserBolt", {angle=self.image.rotation})
+        self.image:insert(self.boundEmitter)
+        self.boundEmitter.x = 0
+        self.boundEmitter.y = 0
+
+    elseif weapon.ammoType == "flame" then
+        self:bindEmitter("flamer", {angle=self.image.rotation})
         self.image:insert(self.boundEmitter)
         self.boundEmitter.x = 0
         self.boundEmitter.y = 0
@@ -104,7 +123,7 @@ function Projectile:impact(isWall)
         level:createAreaOfEffect({xpos=self:x(), ypos=self:y(), area=self.weapon.area, filter=self.filter, effect=effect})
     end
 
-    if self.shootThrough == nil or isWall then
+    if (self.shootThrough == nil or isWall) and not self.isFlame then
         self:destroy()
     end
 end

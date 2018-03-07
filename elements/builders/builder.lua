@@ -71,7 +71,7 @@ function Builder:deepPrint(orig)
 end
 
 
-function Builder:newGameObject(spec, image, makeGroup)
+function Builder:newGameObject(spec, image, makeGroup, anchorY)
 	-- an object is at its foundation a copy of the table spec passed in where we can override specifics
 	local object = self:newClone(spec)
 
@@ -86,6 +86,10 @@ function Builder:newGameObject(spec, image, makeGroup)
 	object.bindQueue   = {}
 
     if makeGroup then
+        if anchorY ~= nil then
+            image.anchorY = anchorY
+        end
+
         object.image        = display.newGroup()
         object.image.object = object
         object.image:insert(image)

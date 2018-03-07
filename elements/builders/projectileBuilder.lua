@@ -5,17 +5,21 @@ local ProjectileBuilder = {}
 
 
 function ProjectileBuilder:newShot(camera, spec, weapon)
-    local isSensor, makeGroup
+    local isSensor, makeGroup, anchorY
 
     if weapon.ammoType == "rocket" then
         makeGroup = true
     elseif weapon.ammoType == "laserBolt" then
         makeGroup = true
         isSensor  = true
+    elseif weapon.ammoType == "flame" then
+        makeGroup = true
+        isSensor  = true
+        anchorY   = 1
     end
 
     local image = display.newImage("images/projectiles/"..weapon.ammoType..".png", 0, 0)
-    local shot  = builder:newGameObject(spec, image, makeGroup)
+    local shot  = builder:newGameObject(spec, image, makeGroup, anchorY)
     
     builder:deepCopy(projectileDef, shot)
 
@@ -27,12 +31,24 @@ function ProjectileBuilder:newShot(camera, spec, weapon)
     shot.ricochet      = weapon.ricochet
     shot.shootThrough  = weapon.shootThrough
 
-    shot:moveTo(spec.xpos or 0, spec.ypos or 0)
-    shot:setPhysics(isSensor)
-
     if weapon.ammoType == "laserBolt" then
         image.alpha = 0
+
+    elseif weapon.ammoType == "flame" then
+        image.alpha  = 0
+        shot.isFlame = true
+
+        shot.flameTimer = timer.performWithDelay(500, function()
+            if shot.image then
+                shot:removePhysics()
+                shot:setPhysics()
+            end
+
+        end, shot.weapon.rof/500)
     end
+
+    shot:moveTo(spec.xpos or 0, spec.ypos or 0)
+    shot:setPhysics(isSensor)
 
     camera:addProjectile(shot)
 

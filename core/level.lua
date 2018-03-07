@@ -211,6 +211,15 @@ function Level:createProjectile(item, weapon)
 end
 
 
+function Level:createFlame(item, weapon)
+    local shot = projectileBuilder:newShot(camera, item, weapon)
+    projectileCollection:add(shot)
+    shot:fire()
+
+    return shot
+end
+
+
 function Level:createAreaOfEffect(item)
     projectileBuilder:newAreaOfEffect(camera, item) 
 end

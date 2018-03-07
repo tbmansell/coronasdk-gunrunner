@@ -331,6 +331,11 @@ function Hud:eventUpdateFrame(event)
     if localPlayer.laserSightEntity then
         localPlayer:drawLaserSight()
     end
+
+    if localPlayer.flameShot then
+        localPlayer.flameShot:moveTo(localPlayer:x() + localPlayer.boneBarrel.worldX, localPlayer:y() - localPlayer.boneBarrel.worldY)
+        localPlayer.flameShot:rotate(localPlayer.angle-180)
+    end
 end
 
 

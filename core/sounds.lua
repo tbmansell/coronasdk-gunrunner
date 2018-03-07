@@ -27,11 +27,17 @@ function Sounds:preload()
     self.projectileSounds.laserShot     = loadSound("sounds/laserShot.mp3")
     self.projectileSounds.laserBolt     = loadSound("sounds/laserBolt.mp3")
     self.projectileSounds.chainGunShot  = loadSound("sounds/chainGunShot.mp3")
+    self.projectileSounds.flamerShot    = loadSound("sounds/flamerShot.wav")
     
     self.projectileSounds.bulletHit     = loadSound("sounds/bulletHit.mp3")
     self.projectileSounds.rocketHit     = loadSound("sounds/rocketHit.mp3")
     self.projectileSounds.laserHit      = loadSound("sounds/laserHit.mp3")
     self.projectileSounds.reload        = loadSound("sounds/reload.mp3")
+    self.projectileSounds.flamerHit     = loadSound("sounds/flamerHit.wav")
+
+    self.projectileSounds.crateExplode1 = loadSound("sounds/crateExplode_1.wav")
+    self.projectileSounds.crateExplode2 = loadSound("sounds/crateExplode_2.wav")
+    self.projectileSounds.crateExplode3 = loadSound("sounds/crateExplode_3.wav")
 
     self.enemySounds.hurt               = loadSound("sounds/hurt.mp3")
     self.enemySounds.killed             = loadSound("sounds/killed.mp3")

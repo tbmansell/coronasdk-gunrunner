@@ -32,6 +32,7 @@ function Particles:preLoadEmitters()
     self:loadEmitter("collectable")
     self:loadEmitter("collectFlash-left")
     self:loadEmitter("collectFlash-right")
+    self:loadEmitter("flamer")
 end
 
 

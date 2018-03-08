@@ -53,7 +53,7 @@ end
 function scene:create(event)
     draw:displayLoader()
 
-    -- cerate delay to allow loader to display
+    -- create delay to allow loader to display
     after(1, function()
         self:initPhysics()
         self:loadLevel()
@@ -66,10 +66,10 @@ function scene:create(event)
         draw:hideLoader()
 
         -- these top and bottom borders ensure that devices where the length is greater than 960 (ipad retina) the game doesnt show under or above the background size limits
-        local topBorder = display.newRect(globalCenterX, -50, globalWidth, 100)
-        local botBorder = display.newRect(globalCenterX, globalHeight+50, globalWidth, 100)
-        topBorder:setFillColor(0,0,0)
-        botBorder:setFillColor(0,0,0)
+        --local topBorder = display.newRect(globalCenterX, -50, globalWidth, 100)
+        --local botBorder = display.newRect(globalCenterX, globalHeight+50, globalWidth, 100)
+        --topBorder:setFillColor(0,0,0)
+        --botBorder:setFillColor(0,0,0)
 
         self:startLevelSequence()
     end)
@@ -165,7 +165,7 @@ end
 
 function scene:loadPlayer()
     player = level:createPlayer({xpos=11.5, ypos=-5.5}, hud)
-    player:setWeapon(Weapons.flamer)
+    player:setWeapon(Weapons.rifle)
     
     -- Create Game Over callbacks
     player.failedCallback = function()

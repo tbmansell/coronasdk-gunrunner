@@ -572,40 +572,44 @@ function Hud:displayGameOver(completed)
         local distance   = stats:getDistance()
         local mins, secs = stats:getTime()
 
-        draw:newBlocker(group, 0.9, 0,0,0)
-        self:createButtonReplay(group, globalCenterX, globalHeight-50)
+        --draw:newBlocker(group, 0.9, 0,0,0)
+        draw:newBlocker(group, 0, 0,0,0)
+        draw:newImage(group, "summaryScreen", globalCenterX, globalCenterY)
+        self:createButtonReplay(group, globalCenterX, globalCenterY+250)
 
-        if completed then
+        local score  = display.newText({parent=group, text=stats.points, x=350, y=635, fontSize=32, font="arial", align="left"})
+
+        --[[if completed then
             draw:newText(group, "well done!",                   globalCenterX, 50,  1, "yellow")
             draw:newText(group, "you have completed the game!", globalCenterX, 100, 0.7, "green")
         else
             draw:newText(group, "game over", globalCenterX, 50, 1, "white")
-        end
+        end]]
 
-        local pointsLabel   = draw:newText(group, "score:",    300, 150, 0.6, "grey", "RIGHT")
-        local pointsValue   = draw:newText(group, stats.points, 330, 150, 0.6, "green", "LEFT")
+        --local pointsLabel   = draw:newText(group, "score:",    300, 150, 0.6, "grey", "RIGHT")
+        --local pointsValue   = draw:newText(group, stats.points, 330, 150, 0.6, "green", "LEFT")
+        
 
-        local timeLabel     = draw:newText(group, "survived:",  300, 200, 0.6, "grey", "RIGHT")
-        local minValue      = draw:newText(group, mins,         330, 200, 0.6, "aqua", "LEFT")
-        local minUnit       = draw:newText(group, "mins",       minValue.x + minValue.width - 20, 205, 0.3, "aqua", "LEFT")
-        local secValue      = draw:newText(group, secs,         minUnit.x  + minUnit.width  - 95, 200, 0.6, "aqua", "LEFT")
-        local secUnit       = draw:newText(group, "secs",       secValue.x + secValue.width - 20, 205, 0.3, "aqua", "LEFT")
+        --local timeLabel     = draw:newText(group, "survived:",  300, 200, 0.6, "grey", "RIGHT")
+        --local minValue      = draw:newText(group, mins,         330, 200, 0.6, "aqua", "LEFT")
+        --local minUnit       = draw:newText(group, "mins",       minValue.x + minValue.width - 20, 205, 0.3, "aqua", "LEFT")
+        --local secValue      = draw:newText(group, secs,         minUnit.x  + minUnit.width  - 95, 200, 0.6, "aqua", "LEFT")
+        --local secUnit       = draw:newText(group, "secs",       secValue.x + secValue.width - 20, 205, 0.3, "aqua", "LEFT")
 
-        local distanceLabel = draw:newText(group, "distance:",  300, 250, 0.6, "grey", "RIGHT")
-        local distanceValue = draw:newText(group, distance,     330, 250, 0.6, "yellow", "LEFT")
-        local distanceUnit  = draw:newText(group, "metres",     distanceValue.x + distanceValue.width - 20, 255, 0.3, "yellow", "LEFT")
+        --local distanceLabel = draw:newText(group, "distance:",  300, 250, 0.6, "grey", "RIGHT")
+        --local distanceValue = draw:newText(group, distance,     330, 250, 0.6, "yellow", "LEFT")
+        --local distanceUnit  = draw:newText(group, "metres",     distanceValue.x + distanceValue.width - 20, 255, 0.3, "yellow", "LEFT")
+        --local weaponTitles  = draw:newText(group, "shots  accuracy  kills", 250, 350, 0.4, "grey", "LEFT")
 
-        local weaponTitles  = draw:newText(group, "shots  accuracy  kills", 250, 350, 0.4, "grey", "LEFT")
-
-        self:displayWeaponStats(group, Weapons.rifle.name,    400)
-        self:displayWeaponStats(group, Weapons.shotgun.name,  450)
-        self:displayWeaponStats(group, Weapons.launcher.name, 500)
-        self:displayWeaponStats(group, Weapons.laserGun.name, 550)
+        --self:displayWeaponStats(group, Weapons.rifle.name,    400)
+        --self:displayWeaponStats(group, Weapons.shotgun.name,  450)
+        --self:displayWeaponStats(group, Weapons.launcher.name, 500)
+        --self:displayWeaponStats(group, Weapons.laserGun.name, 550)
 
         self.gameOverSprites = {}
 
-        self:displayMeleeEnemiesKilled(group,   self.gameOverSprites, 660)
-        self:displayShooterEnemiesKilled(group, self.gameOverSprites, 660)
+        --self:displayMeleeEnemiesKilled(group,   self.gameOverSprites, 660)
+        --self:displayShooterEnemiesKilled(group, self.gameOverSprites, 660)
 
         Runtime:addEventListener("enterFrame", eventUpdateFrameGameOver)
     end

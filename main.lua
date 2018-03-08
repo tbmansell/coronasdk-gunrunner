@@ -17,7 +17,8 @@ globalMaxSections      = 51
 globalLoadSections     = 10
 globalLoadingDisplay   = nil
 
-print("Width: "..tostring(display.contentWidth).." Height: "..tostring(display.contentHeight))
+print("ContentWidth: "..tostring(display.contentWidth).." ContentHeight: "..tostring(display.contentHeight))
+print("PixelWidth:   "..tostring(display.pixelWidth).."   PixelHeight:   "..tostring(display.pixelHeight))
 
 -- Define global objects
 stats   = require("core.stats")

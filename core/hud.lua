@@ -125,7 +125,6 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler, changeM
     self.debugMode         = false
     self.physicsMode       = false
 
-    self.background        = display.newRect(self.group, globalCenterX, globalCenterY, globalWidth, globalHeight)
     self.playerIcon        = draw:newImage(self.group, "hud/pause", 45, 45, 0.5)
     self.textScore         = draw:newText(self.group,  "", globalWidth-5, 25, 0.7, "green", "RIGHT")
     self.controlMove       = draw:newImage(self.group, "hud/control-move",  100,             globalHeight-110, nil, 0.7)
@@ -133,7 +132,6 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler, changeM
     self.healthCounter     = display.newRoundedRect(self.group, globalCenterX, globalHeight-100, 200, 50, 10)
     self.ammoCounter       = draw:newText(self.group,  player.weapon.ammo,  globalWidth-100, globalHeight-40,  0.8, "red")
 
-    self.background:setFillColor(0.5, 0.2, 0.5, 0.2)
     self.playerIcon:scale(4, 4)
     self.healthCounter:setFillColor(0.5,   1,   0.5, 0.5)
     self.healthCounter:setStrokeColor(0.2, 0.5, 0.2, 0.9)

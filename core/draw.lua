@@ -334,13 +334,15 @@ function Draw:displayLoader()
     globalLoadingDisplay = display.newGroup()
 
     local x, y   = globalCenterX, 500
-    
+    --[[
     local loader = display.newRoundedRect(globalLoadingDisplay, x, y, globalWidth, 100, 15)
     loader:setFillColor(0.3,    0.3,  0.3)
     loader:setStrokeColor(0.75, 0.75, 0.75)
     loader.strokeWidth = 2
-
-    local heading = self:newText(globalLoadingDisplay, "loading", x, y, 0.8, "white")
+    ]]
+    local loader  = self:newBackground(globalLoadingDisplay, "titleScreen", x, globalCenterY)
+    --local loader  = display.newImage(globalLoadingDisplay, "images/titleScreen.png", globalCenterX, globalCenterY)
+    local heading = self:newText(globalLoadingDisplay,  "loading", x, y, 0.8, "white")
 
     --[[
     local progressHolder = display.newRoundedRect(globalLoadingDisplay, x, y, globalWidth-100, 75, 15)

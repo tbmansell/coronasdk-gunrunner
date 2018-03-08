@@ -40,7 +40,7 @@ function Projectile:setPhysics(isSensor)
     end
 
     if self.isFlame then
-        shape = {-30,180, 30,180, 5,0, -5,0}
+        shape = {-30,280, 30,280, 5,0, -5,0}
     end
 
     physics.addBody(self.image, "dynamic", {isSensor=isSensor, density=0, friction=0, bounce=bounce, shape=shape, filter=self.filter})

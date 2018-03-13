@@ -165,7 +165,7 @@ end
 
 function scene:loadPlayer()
     player = level:createPlayer({xpos=11.5, ypos=-5.5}, hud)
-    player:setWeapon(Weapons.flamer)
+    player:setWeapon(Weapons.shotgun)
     
     -- Create Game Over callbacks
     player.failedCallback = function()

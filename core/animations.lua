@@ -392,11 +392,11 @@ function Anim:createCommonEffect(seq, handler)
     if playSound then
         if playDelay then
             local soundHandle = timer.performWithDelay(playDelay,function()
-                play(playSound)
+                sounds:play(playSound)
             end)
             table.insert(seq.timerHandles, soundHandle)
         else
-            play(playSound)
+            sounds:play(playSound)
         end
     end
 end

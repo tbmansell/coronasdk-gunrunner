@@ -7,8 +7,8 @@ application =
 	content =
 	{
         fps    = 60,
-        --width  = 640,
-        --height = 960,
+        width  = 640,
+        height = 960,
         scale  = "letterbox",	 --game built in this format so far
 	},
 	license =

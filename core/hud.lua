@@ -97,6 +97,7 @@ end
 
 
 -- Triggered only when game over occurs
+--[[
 local function eventUpdateFrameGameOver(event)
     if Hud.gameOverSprites then
         local currentTime = event.time / 1000
@@ -107,7 +108,7 @@ local function eventUpdateFrameGameOver(event)
             item:updateSpine(delta)
         end
     end
-end
+end]]
 
 
 
@@ -198,13 +199,14 @@ function Hud:destroy()
         self.splash = nil
     end
 
+    --[[
     if self.gameOverSprites then
         for _,item in pairs(self.gameOverSprites) do
             item:destroy()
             item = nil
         end
         self.gameOverSprites = nil
-    end
+    end]]
 
     self.group:removeSelf()
     self.group              = nil
@@ -569,127 +571,42 @@ function Hud:displayGameOver(completed)
 
     if globalGameMode == GameMode.over then
         local group      = self.group
-        local distance   = stats:getDistance()
+        local metres     = stats:getDistance()
         local mins, secs = stats:getTime()
+        local accuracy   = stats:getHitRatio()
+        local text       = {}
+        local font       = "arial"
 
-        --draw:newBlocker(group, 0.9, 0,0,0)
         draw:newBlocker(group, 0, 0,0,0)
         draw:newImage(group, "summaryScreen", globalCenterX, globalCenterY)
         self:createButtonReplay(group, globalCenterX, globalCenterY+250)
 
-        local score  = display.newText({parent=group, text=stats.points, x=350, y=635, fontSize=32, font="arial", align="left"})
+        text[1] = display.newText({parent=group, text=mins..":"..secs, x=500, y=195, fontSize=32, font=font, width=300})
+        text[2] = display.newText({parent=group, text=metres.."m",     x=500, y=280, fontSize=32, font=font, width=300})
+        text[3] = display.newText({parent=group, text=stats.kills,     x=500, y=370, fontSize=32, font=font, width=300})
+        text[4] = display.newText({parent=group, text=stats.shots,     x=500, y=460, fontSize=32, font=font, width=300})
+        text[5] = display.newText({parent=group, text=accuracy.."%",   x=500, y=545, fontSize=32, font=font, width=300})
+        text[6] = display.newText({parent=group, text=stats.points,    x=500, y=635, fontSize=32, font=font, width=300})
 
-        --[[if completed then
-            draw:newText(group, "well done!",                   globalCenterX, 50,  1, "yellow")
-            draw:newText(group, "you have completed the game!", globalCenterX, 100, 0.7, "green")
-        else
-            draw:newText(group, "game over", globalCenterX, 50, 1, "white")
-        end]]
-
-        --local pointsLabel   = draw:newText(group, "score:",    300, 150, 0.6, "grey", "RIGHT")
-        --local pointsValue   = draw:newText(group, stats.points, 330, 150, 0.6, "green", "LEFT")
-        
-
-        --local timeLabel     = draw:newText(group, "survived:",  300, 200, 0.6, "grey", "RIGHT")
-        --local minValue      = draw:newText(group, mins,         330, 200, 0.6, "aqua", "LEFT")
-        --local minUnit       = draw:newText(group, "mins",       minValue.x + minValue.width - 20, 205, 0.3, "aqua", "LEFT")
-        --local secValue      = draw:newText(group, secs,         minUnit.x  + minUnit.width  - 95, 200, 0.6, "aqua", "LEFT")
-        --local secUnit       = draw:newText(group, "secs",       secValue.x + secValue.width - 20, 205, 0.3, "aqua", "LEFT")
-
-        --local distanceLabel = draw:newText(group, "distance:",  300, 250, 0.6, "grey", "RIGHT")
-        --local distanceValue = draw:newText(group, distance,     330, 250, 0.6, "yellow", "LEFT")
-        --local distanceUnit  = draw:newText(group, "metres",     distanceValue.x + distanceValue.width - 20, 255, 0.3, "yellow", "LEFT")
-        --local weaponTitles  = draw:newText(group, "shots  accuracy  kills", 250, 350, 0.4, "grey", "LEFT")
-
-        --self:displayWeaponStats(group, Weapons.rifle.name,    400)
-        --self:displayWeaponStats(group, Weapons.shotgun.name,  450)
-        --self:displayWeaponStats(group, Weapons.launcher.name, 500)
-        --self:displayWeaponStats(group, Weapons.laserGun.name, 550)
-
-        self.gameOverSprites = {}
-
-        --self:displayMeleeEnemiesKilled(group,   self.gameOverSprites, 660)
-        --self:displayShooterEnemiesKilled(group, self.gameOverSprites, 660)
-
-        Runtime:addEventListener("enterFrame", eventUpdateFrameGameOver)
-    end
-end
-
-
-function Hud:displayWeaponStats(group, weaponName, ypos)
-    local weapon   = Weapons[weaponName]
-    local stats    = stats.weapons[weaponName]
-    local accuracy = math.round((stats.hits / stats.shots) * 100)
-
-    local icon  = draw:newImage(group, "collectables/"..weapon.name, 150, ypos)
-    local shots = draw:newText(group,  stats.shots,                  280, ypos, 0.4, "white",  "CENTER")
-    local acc   = draw:newText(group,  accuracy.."%",                380, ypos, 0.4, "yellow", "CENTER")
-    local kills = draw:newText(group,  stats.kills,                  480, ypos, 0.4, "red",    "CENTER")
-
-    if stats.shots == 0 then
-        icon.alpha = 0.2
-        shots:setText("-")
-        acc:setText("-")
-        kills:setText("-")
-    end
-end
-
-
-function Hud:displayMeleeEnemiesKilled(group, enemies, ypos)
-    local xpos = 100
-
-    for rank=1, 3 do
-        self:displayEnemyKills(group, enemies, "melee", rank, xpos, ypos)
-
-        ypos = ypos + 75
-    end
-end
-
-
-function Hud:displayShooterEnemiesKilled(group, enemies, ypos)
-    local xpos = 200
-
-    for rank=1, 12 do
-        self:displayEnemyKills(group, enemies, "shooter", rank, xpos, ypos)
-
-        xpos = xpos + 100
-
-        if rank % 4 == 0 then
-            xpos = 200
-            ypos = ypos + 75
+        for i=1, #text do
+            text[i]:setTextColor(0, 1, 0)
+            text[i].alpha = 0
         end
+
+        for i=1, #text do
+            local seq   = anim:chainSeq("summary", text[i])
+            local delay = 0
+
+            if i==1 then delay = 500 end
+
+            seq:tran({time=250, alpha=1, delay=delay, playSound=sounds.generalSounds.button})
+        end
+
+        anim:startQueue("summary")
+
+        --self.gameOverSprites = {}
+        --Runtime:addEventListener("enterFrame", eventUpdateFrameGameOver)
     end
-end
-
-
-function Hud:displayEnemyKills(group, enemies, enemyType, rank, xpos, ypos)
-    --[[local enemy = self:createSpineEnemy(enemyType, rank)
-
-    enemy:moveTo(xpos, ypos)
-
-    after(random(10)*100, function()
-        enemies[#enemies+1] = enemy
-    end)
-
-    local kills = stats.enemies[enemyType][rank]
-
-    if kills > 0 then
-        draw:newText(group, kills, xpos+30, ypos, 0.45, "red", "LEFT")
-    else
-        enemy:visible(0.2)
-    end]]
-end
-
-
-function Hud:createSpineEnemy(enemyType, rank)
-    --[[local spec   = EnemyTypes[enemyType][rank]
-    local weapon = Weapons[spec.weapon]
-    local enemy  = builder:newCharacter({}, {jsonName="characterBody", imagePath="character", skin=spec.skin, animation="stationary_1"})
-
-    enemy.skeleton:setAttachment(weapon.slot, weapon.skin)
-    enemy.image:scale(0.5, 0.5)
-
-    return enemy]]
 end
 
 

@@ -1,56 +1,16 @@
-local Stats = {
-    -- total points gained over game
-    points = 0,
-    -- number of jewels collected
-    jewels = 0,
-
-    -- time when game started
-    startingTime = nil,
-    -- time when game ended
-    endingTime = nil,
-
-    -- as we are moving negatively upscreen, we need to mark the start point
-    startingDistance = 0,
-    -- distance in tiles (1 tile = 1 metre)
-    distance = 0,
-
-    -- stats per weapon
-    weapons = {
-        [Weapons.rifle.name]    = { shots=0, hits=0, kills=0 },
-        [Weapons.shotgun.name]  = { shots=0, hits=0, kills=0 },
-        [Weapons.launcher.name] = { shots=0, hits=0, kills=0 },
-        [Weapons.laserGun.name] = { shots=0, hits=0, kills=0 },
-    },
-
-    -- stats per enemy: format is rank => kills
-    enemies = {
-        ["melee"]   = {[1]=0, [2]=0, [3]=0},
-        ["shooter"] = {[1]=0, [2]=0, [3]=0, [4]=0, [5]=0, [6]=0, [7]=0, [8]=0, [9]=0, [10]=0, [11]=0, [12]=0},
-        ["reptile"] = {[1]=0, [2]=0, [3]=0},
-        ["turret"]  = {[1]=0, [2]=0, [3]=0},
-    }
-}
+local Stats = {}
 
 
 function Stats:init(startDistance)
     self.points           = 0
     self.jewels           = 0
+    self.shots            = 0
+    self.hits             = 0
+    self.kills            = 0
     self.startingTime     = os.time()
     self.endingTime       = nil
     self.startingDistance = startDistance
     self.distance         = startDistance
-
-    self.weapons[Weapons.rifle.name]    = { shots=0, hits=0, kills=0 }
-    self.weapons[Weapons.shotgun.name]  = { shots=0, hits=0, kills=0 }
-    self.weapons[Weapons.launcher.name] = { shots=0, hits=0, kills=0 }
-    self.weapons[Weapons.laserGun.name] = { shots=0, hits=0, kills=0 }
-
-    self.enemies = {
-        ["melee"]   = {[1]=0, [2]=0, [3]=0},
-        ["shooter"] = {[1]=0, [2]=0, [3]=0, [4]=0, [5]=0, [6]=0, [7]=0, [8]=0, [9]=0, [10]=0, [11]=0, [12]=0},
-        ["reptile"] = {[1]=0, [2]=0, [3]=0},
-        ["turret"]  = {[1]=0, [2]=0, [3]=0},
-    }
 end
 
 
@@ -86,36 +46,35 @@ function Stats:getTime()
     local seconds = os.difftime(self.endingTime, self.startingTime)
 
     -- Return minutes and seconds
-    return math.round(seconds / 60), math.round(seconds % 60)
+    local mins, secs = math.round(seconds / 60), math.round(seconds % 60)
+
+    if mins < 10 then mins = "0"..mins end
+    if secs < 10 then secs = "0"..secs end
+
+    return mins, secs
+end
+
+
+function Stats:getHitRatio()
+    if self.hits == 0 or self.shots == 0 then
+        return 0
+    end
+    return math.round((self.hits / self.shots) * 100)
 end
 
 
 function Stats:addShot(weapon)
-    local stat = self.weapons[weapon.name]
-
-    if stat then
-        stat.shots = stat.shots + 1
-    end
+    self.shots = self.shots + 1
 end
 
 
 function Stats:addHit(weapon)
-    local stat = self.weapons[weapon.name]
-
-    if stat then
-        stat.hits  = stat.hits + 1
-    end
+    self.hits = self.hits + 1
 end
 
 
 function Stats:addKill(weapon, type, rank)
-    local stat = self.weapons[weapon.name]
-
-    if stat then
-        stat.kills = stat.kills + 1
-    end
-
-    --self.enemies[type][rank] = self.enemies[type][rank] + 1
+    self.kills = self.kills + 1
 end 
 
 

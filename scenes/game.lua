@@ -42,6 +42,7 @@ local function eventUpdateGameLogic()
 
     level:updateBehaviours()
     hud:updateMapSection()
+    hud:updateDistance()
 
     if globalDebugGame then
         hud:updateDebugData()
@@ -165,7 +166,7 @@ end
 
 function scene:loadPlayer()
     player = level:createPlayer({xpos=11.5, ypos=-5.5}, hud)
-    player:setWeapon(Weapons.laserCannon)
+    player:setWeapon(Weapons.shotgun)
     
     -- Create Game Over callbacks
     player.failedCallback = function()
@@ -194,7 +195,7 @@ function scene:loadPlayer()
 
     function player:addPoints(points)
         stats:addPoints(points)
-        hud:updatePoints()
+        --hud:updatePoints()
     end
 end
 
@@ -251,7 +252,7 @@ function scene:startPlaying()
 
     globalGameMode = GameMode.playing
 
-    stats:init(player:y())
+    stats:init(hud, player:y())
     physics:start()
     -- runs the game loop and allows it to start. We allow some delay before this to allow everything to load
     self:createEventHandlers()

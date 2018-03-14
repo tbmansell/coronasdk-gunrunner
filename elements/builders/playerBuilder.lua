@@ -77,7 +77,7 @@ end
 function PlayerBuilder:applyPlayerHooks(player, hud)
     -- update hud with current ammo counter
     function player:hookAmmoCounter() 
-        hud:setAmmoCounter(self.ammo) 
+        hud:updateAmmoCounter(self.ammo) 
     end
 
     -- Update hud with player health

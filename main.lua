@@ -10,6 +10,8 @@ globalCenterX          = display.contentCenterX
 globalCenterY          = display.contentCenterY
 globalWidth            = display.contentWidth
 globalHeight           = display.contentHeight
+globalTop              = -((display.actualContentHeight - display.contentHeight) / 2)
+globalBottom           = globalHeight + ((display.actualContentHeight - display.contentHeight) / 2)
 globalBackgroundWidth  = 640
 globalBackgroundHeight = 1300
 globalCamera           = nil
@@ -17,8 +19,11 @@ globalMaxSections      = 51
 globalLoadSections     = 10
 globalLoadingDisplay   = nil
 
-print("ContentWidth: "..tostring(display.contentWidth).." ContentHeight: "..tostring(display.contentHeight))
-print("PixelWidth:   "..tostring(display.pixelWidth).."   PixelHeight:   "..tostring(display.pixelHeight))
+--print("ContentWidth: "..display.contentWidth.." ContentHeight: "..display.contentHeight.." ratio: "..(display.contentWidth / display.contentHeight))
+--print("PixelWidth:   "..display.pixelWidth.." PixelHeight:   "..display.pixelHeight.." ratio: "..(display.pixelWidth / display.pixelHeight))
+--print("ActualWidth:  "..display.actualContentWidth.." ActualHeight:  "..display.actualContentHeight.." ratio: "..(display.actualContentWidth / display.actualContentHeight))
+--print("Width  diff: "..(display.contentWidth  / display.pixelWidth))
+--print("Height diff: "..(display.contentHeight / display.pixelHeight))
 
 -- Define global objects
 stats   = require("core.stats")

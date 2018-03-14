@@ -26,7 +26,7 @@ TextCandy.AddCharsetFromBMF("gamefont_white",  "text_candy/ingamefont_white.fnt"
 TextCandy.AddCharsetFromBMF("gamefont_grey",   "text_candy/ingamefont_grey.fnt",   32)
 TextCandy.AddCharsetFromBMF("gamefont_yellow", "text_candy/ingamefont_yellow.fnt", 32)
 TextCandy.AddCharsetFromBMF("gamefont_black",  "text_candy/ingamefont_black.fnt",  32)
-
+--TextCandy.AddCharset("gamefont_white", "pcpData", "pcpTexture.png", "()+-0123456789=abcdefghijklmnopqrstuvwxyz:/")
 
 function Draw:printDate(text)
     print(os.date("%H:%M:%S ")..text)

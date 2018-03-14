@@ -1,7 +1,8 @@
 local Stats = {}
 
 
-function Stats:init(startDistance)
+function Stats:init(hud, startDistance)
+    self.hud              = hud
     self.points           = 0
     self.jewels           = 0
     self.shots            = 0
@@ -75,6 +76,7 @@ end
 
 function Stats:addKill(weapon, type, rank)
     self.kills = self.kills + 1
+    self.hud:updateKills()
 end 
 
 

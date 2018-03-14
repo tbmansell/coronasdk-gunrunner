@@ -26,6 +26,7 @@ local lastTime         = 0
 local resetAimHandle   = nil
 local resettingAim     = false
 local transitionMapType= false
+local font             = "arial"
 
 -- Aliases
 local PI     = 180 / math.pi
@@ -111,7 +112,6 @@ local function eventUpdateFrameGameOver(event)
 end]]
 
 
-
 -- Class Members
 
 function Hud:create(camera, player, pauseGameHandler, resumeGameHandler, changeMusicHandler, loadLevelHandler)
@@ -126,14 +126,17 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler, changeM
     self.debugMode         = false
     self.physicsMode       = false
 
-    self.playerIcon        = draw:newImage(self.group, "hud/pause", 45, 45, 0.5)
-    self.textScore         = draw:newText(self.group,  "", globalWidth-5, 25, 0.7, "green", "RIGHT")
-    self.controlMove       = draw:newImage(self.group, "hud/control-move",  100,             globalHeight-110, nil, 0.7)
-    self.controlShoot      = draw:newImage(self.group, "hud/control-shoot", globalWidth-100, globalHeight-130, nil, 0.7)
-    self.healthCounter     = display.newRoundedRect(self.group, globalCenterX, globalHeight-100, 200, 50, 10)
-    self.ammoCounter       = draw:newText(self.group,  player.weapon.ammo,  globalWidth-100, globalHeight-40,  0.8, "red")
+    self.topFilter         = draw:newImage(self.group, "hud/scoreFilter",   globalCenterX,   globalTop + 25)
+    self.pauseIcon         = draw:newImage(self.group, "hud/pause",         45,              globalTop + 45, 0.5)
+    self.textKills         = draw:newText(self.group, "kills: 0",           250,             globalTop+25, 28, "left",  300)
+    self.textDistance      = draw:newText(self.group, "dist: 0m",           globalWidth-160, globalTop+25, 28, "right", 300)
 
-    self.playerIcon:scale(4, 4)
+    self.controlMove       = draw:newImage(self.group, "hud/control-move",  100,             globalBottom-130, nil, 0.7)
+    self.controlShoot      = draw:newImage(self.group, "hud/control-shoot", globalWidth-100, globalBottom-130, nil, 0.7)
+    self.healthCounter     = display.newRoundedRect(self.group,             globalCenterX,   globalBottom-130, 200, 50, 10)
+    self.ammoCounter       = draw:newText(self.group,  player.weapon.ammo,  globalCenterX,   globalBottom-130,  48, "center", 250, "darkred")
+
+    self.pauseIcon:scale(4, 4)
     self.healthCounter:setFillColor(0.5,   1,   0.5, 0.5)
     self.healthCounter:setStrokeColor(0.2, 0.5, 0.2, 0.9)
     self.healthCounter.strokeWidth    = 3
@@ -147,7 +150,7 @@ function Hud:create(camera, player, pauseGameHandler, resumeGameHandler, changeM
     moveControllerX,  moveControllerY  = self.controlMove.x,  self.controlMove.y
     shootControllerX, shootControllerY = self.controlShoot.x, self.controlShoot.y + (self.controlShoot.height/2)
 
-    self.playerIcon:addEventListener("tap",     self.eventPauseGame)
+    self.pauseIcon:addEventListener("tap",     self.eventPauseGame)
     self.controlMove:addEventListener("touch",  eventMovePlayer)
     self.controlShoot:addEventListener("touch", eventShootPlayer)
     self.controlShoot:addEventListener("tap",   eventShootPlayerTap)
@@ -163,19 +166,19 @@ function Hud:drawDebug()
     local panelBack = display.newRect(self.debugPanel, 0, 200, 350, globalHeight)
     panelBack:setFillColor(0.3, 0.3, 0.3, 0.6)
 
-    self.textDebugMode        = draw:newText(self.debugPanel, "game mode",    5, 100, 0.4, "green", "LEFT")
-    self.textPhysicsMode      = draw:newText(self.debugPanel, "hide physics", 5, 140, 0.4, "blue",  "LEFT")
-    self.debugSizeEntites     = draw:newText(self.debugPanel, "",   5, 180, 0.4, "aqua",  "LEFT")
-    self.debugNumEntites      = draw:newText(self.debugPanel, "",   5, 220, 0.4, "white", "LEFT")
-    self.debugNumEnemies      = draw:newText(self.debugPanel, "",   5, 260, 0.4, "white", "LEFT")
-    self.debugNumObstacles    = draw:newText(self.debugPanel, "",   5, 300, 0.4, "white", "LEFT")
-    self.debugNumCollectables = draw:newText(self.debugPanel, "",   5, 340, 0.4, "white", "LEFT")
-    self.debugNumProjectiles  = draw:newText(self.debugPanel, "",   5, 380, 0.4, "white", "LEFT")
-    self.debugNumParticles    = draw:newText(self.debugPanel, "",   5, 420, 0.4, "white", "LEFT")
-    self.debugSection         = draw:newText(self.debugPanel, "",   5, 460, 0.4, "white", "LEFT")
-    self.debugYPos            = draw:newText(self.debugPanel, "",   5, 500, 0.4, "white", "LEFT")
-    self.debugCustomMap       = draw:newText(self.debugPanel, "",   5, 540, 0.4, "white", "LEFT")
-    self.debugSectionEnemies  = draw:newText(self.debugPanel, "",   5, 580, 0.4, "white", "LEFT")
+    self.textDebugMode        = draw:newText(self.debugPanel, "game mode",    5, 100, 20, "LEFT")
+    self.textPhysicsMode      = draw:newText(self.debugPanel, "hide physics", 5, 140, 20, "LEFT")
+    self.debugSizeEntites     = draw:newText(self.debugPanel, "",   5, 180, 20, "LEFT")
+    self.debugNumEntites      = draw:newText(self.debugPanel, "",   5, 220, 20, "LEFT")
+    self.debugNumEnemies      = draw:newText(self.debugPanel, "",   5, 260, 20, "LEFT")
+    self.debugNumObstacles    = draw:newText(self.debugPanel, "",   5, 300, 20, "LEFT")
+    self.debugNumCollectables = draw:newText(self.debugPanel, "",   5, 340, 20, "LEFT")
+    self.debugNumProjectiles  = draw:newText(self.debugPanel, "",   5, 380, 20, "LEFT")
+    self.debugNumParticles    = draw:newText(self.debugPanel, "",   5, 420, 20, "LEFT")
+    self.debugSection         = draw:newText(self.debugPanel, "",   5, 460, 20, "LEFT")
+    self.debugYPos            = draw:newText(self.debugPanel, "",   5, 500, 20, "LEFT")
+    self.debugCustomMap       = draw:newText(self.debugPanel, "",   5, 540, 20, "LEFT")
+    self.debugSectionEnemies  = draw:newText(self.debugPanel, "",   5, 580, 20, "LEFT")
     
     self.textDebugMode:addEventListener("tap",   self.switchDebugMode)
     self.textPhysicsMode:addEventListener("tap", self.switchPhysicsMode)
@@ -215,7 +218,7 @@ function Hud:destroy()
     self.camera             = nil
     self.player             = nil
     localPlayer             = nil
-    self.playerIcon         = nil
+    self.pauseIcon         = nil
     self.textScore          = nil
     self.ammoCounter        = nil
 end
@@ -446,17 +449,17 @@ function Hud:updateDebugData()
     local section        = self.player.currentSection
     local sectionEnemies = level:getNumberEnemies(section.number)
 
-    self.debugSizeEntites:setText("size: "..level:getSizeEntities())
-    self.debugNumEntites:setText("entities: "..level:getNumberEntities())
-    self.debugNumEnemies:setText("enemies: "..level:getNumberEnemies())
-    self.debugNumObstacles:setText("obstacles: "..level:getNumberObstacles())
-    self.debugNumCollectables:setText("collect: "..level:getNumberCollectables())
-    self.debugNumProjectiles:setText("shots: "..level:getNumberProjectiles())
-    self.debugNumParticles:setText("particles: "..level:getNumberParticles())
-    self.debugSection:setText("section: "..section.number)
-    self.debugYPos:setText("ypos: "..round(self.player:y()))
-    self.debugCustomMap:setText("custom: "..tostring(section.isCustom))
-    self.debugSectionEnemies:setText("enemies at: "..sectionEnemies)
+    self.debugSizeEntites.text      = ("size: "..level:getSizeEntities())
+    self.debugNumEntites.text       = ("entities: "..level:getNumberEntities())
+    self.debugNumEnemies.text       = ("enemies: "..level:getNumberEnemies())
+    self.debugNumObstacles.text     = ("obstacles: "..level:getNumberObstacles())
+    self.debugNumCollectables.text  = ("collect: "..level:getNumberCollectables())
+    self.debugNumProjectiles.text   = ("shots: "..level:getNumberProjectiles())
+    self.debugNumParticles.text     = ("particles: "..level:getNumberParticles())
+    self.debugSection.text          = ("section: "..section.number)
+    self.debugYPos.text             = ("ypos: "..round(self.player:y()))
+    self.debugCustomMap.text        = ("custom: "..tostring(section.isCustom))
+    self.debugSectionEnemies.text   = ("enemies at: "..sectionEnemies)
 end
 
 
@@ -480,6 +483,23 @@ function Hud:updateHealth(player)
 end
 
 
+function Hud:updateKills()
+    self.textKills.text = "kills: "..stats.kills
+end
+
+
+function Hud:updateDistance()
+    self.textDistance.text = "dist: "..stats:getDistance().."m"
+end
+
+
+function Hud:updateAmmoCounter(number)
+    if self.ammoCounter then
+        self.ammoCounter.text = (number or "0")
+    end
+end
+
+
 function Hud:forceMoving(move)
     forceScroll = move
 end
@@ -488,18 +508,6 @@ end
 function Hud:collect(item)
     item:emit("collected")
     item:collect(self.camera)
-end
-
-
-function Hud:updatePoints()
-    self.textScore:setText(stats.points)
-end
-
-
-function Hud:setAmmoCounter(number)
-    if self.ammoCounter then
-        self.ammoCounter:setText(number or "0")
-    end
 end
 
 
@@ -515,50 +523,8 @@ function Hud:displayMessage(message, color, ypos)
 end
 
 
-function Hud:showTutorialSplash()
-    self.splash = display.newImage("images/message-tabs/tutorial-splash.png", globalCenterX-50, globalCenterY)
-
-    -- block touch event
-    self.splash:addEventListener("touch", function() return true end)
-
-    self.splash:addEventListener("tap", function()
-        self.splash:removeSelf()
-        self.splash = nil
-    end)
-end
-
-
-function Hud:animateScoreText(scoreadd, scoreCategory, textX, textY)
-    local color = "white"
-    if     scoreCategory == scoreCategoryFirst  then color = "green"
-    elseif scoreCategory == scoreCategorySecond then color = "yellow"
-    elseif scoreCategory == scoreCategoryThird  then color = "red" end
-
-    local textScore = draw:newText(nil, scoreadd, textX, textY+15, 1, color, "CENTER")
-    
-    textScore.alpha = 0
-    self.camera:add(textScore, 2)
-    
-    local seq = anim:chainSeq("jumpScore", textScore, true)
-    seq:tran({time=250, alpha=1,  xScale=1.25, yScale=1.25})
-    seq:tran({time=750, delay=500, x=hud.textScore.x, y=hud.textScore.y, xScale=0.5, yScale=0.5, transition=easing.inQuad})
-    seq:callback(function() hud:addJumpScore(scoreadd) end)
-    seq:start()
-end
-
-
-function Hud:createButtonExit(group, x, y)
-    return draw:newButton(group, x, y, "menu", function() composer.gotoScene("scenes.game") end)
-end
-
-
 function Hud:createButtonReplay(group, x, y)
     return draw:newButton(group, x, y, "replay", function() composer.gotoScene("scenes.game") end)
-end
-
-
-function Hud:createButtonNext(group, x, y)
-    return draw:newButton(group, x, y, "next", function() composer.gotoScene("scenes.game") end)
 end
 
 
@@ -581,12 +547,12 @@ function Hud:displayGameOver(completed)
         draw:newImage(group, "summaryScreen", globalCenterX, globalCenterY)
         self:createButtonReplay(group, globalCenterX, globalCenterY+250)
 
-        text[1] = display.newText({parent=group, text=mins..":"..secs, x=500, y=195, fontSize=32, font=font, width=300})
-        text[2] = display.newText({parent=group, text=metres.."m",     x=500, y=280, fontSize=32, font=font, width=300})
-        text[3] = display.newText({parent=group, text=stats.kills,     x=500, y=370, fontSize=32, font=font, width=300})
-        text[4] = display.newText({parent=group, text=stats.shots,     x=500, y=460, fontSize=32, font=font, width=300})
-        text[5] = display.newText({parent=group, text=accuracy.."%",   x=500, y=545, fontSize=32, font=font, width=300})
-        text[6] = display.newText({parent=group, text=stats.points,    x=500, y=635, fontSize=32, font=font, width=300})
+        text[1] = display.newText({parent=group, text=mins..":"..secs, x=500, y=195, fontSize=38, font=font, width=300})
+        text[2] = display.newText({parent=group, text=metres.."m",     x=500, y=280, fontSize=38, font=font, width=300})
+        text[3] = display.newText({parent=group, text=stats.kills,     x=500, y=370, fontSize=38, font=font, width=300})
+        text[4] = display.newText({parent=group, text=stats.shots,     x=500, y=460, fontSize=38, font=font, width=300})
+        text[5] = display.newText({parent=group, text=accuracy.."%",   x=500, y=545, fontSize=38, font=font, width=300})
+        text[6] = display.newText({parent=group, text=stats.points,    x=500, y=635, fontSize=38, font=font, width=300})
 
         for i=1, #text do
             text[i]:setTextColor(0, 1, 0)

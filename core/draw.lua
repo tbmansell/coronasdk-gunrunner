@@ -1,5 +1,5 @@
 local composer  = require("composer")
-local TextCandy = require("text_candy.lib_text_candy")
+--local TextCandy = require("text_candy.lib_text_candy")
 
 -- Class
 Draw = {
@@ -8,6 +8,8 @@ Draw = {
     interSceneGroup = display.newGroup()
 }
 
+local font = "arial"
+
 -- Aliases:
 local math_round     = math.round
 local math_random    = math.random
@@ -15,7 +17,7 @@ local play           = globalSoundPlayer
 local new_image      = display.newImage
 local new_image_rect = display.newImageRect
 
-
+--[[
 TextCandy.AddCharsetFromBMF("gamefont_aqua",   "text_candy/ingamefont_aqua.fnt",   32)
 TextCandy.AddCharsetFromBMF("gamefont_blue",   "text_candy/ingamefont_blue.fnt",   32)
 TextCandy.AddCharsetFromBMF("gamefont_green",  "text_candy/ingamefont_green.fnt",  32)
@@ -26,13 +28,14 @@ TextCandy.AddCharsetFromBMF("gamefont_white",  "text_candy/ingamefont_white.fnt"
 TextCandy.AddCharsetFromBMF("gamefont_grey",   "text_candy/ingamefont_grey.fnt",   32)
 TextCandy.AddCharsetFromBMF("gamefont_yellow", "text_candy/ingamefont_yellow.fnt", 32)
 TextCandy.AddCharsetFromBMF("gamefont_black",  "text_candy/ingamefont_black.fnt",  32)
-
+]]
 
 function Draw:printDate(text)
     print(os.date("%H:%M:%S ")..text)
 end
 
 
+--[[
 function Draw:newText(group, text, x, y, scale, color, align, wrapWidth)
     local font = TextCandy.CreateText({
         fontName    = "gamefont_"..color,
@@ -54,7 +57,24 @@ function Draw:newText(group, text, x, y, scale, color, align, wrapWidth)
     end
 
     return font
+end]]
+
+
+function Draw:newText(group, text, x, y, size, align, width, color)
+    local label = display.newText({parent=group, text=text, x=x, y=y, font=font, fontSize=size, align=align, width=width})
+
+    if color then
+        if     color == "black"   then label:setTextColor(0, 0, 0)
+        elseif color == "red"     then label:setTextColor(1, 0, 0)
+        elseif color == "green"   then label:setTextColor(0, 1, 0)
+        elseif color == "blue"    then label:setTextColor(0, 0, 1)
+        elseif color == "darkred" then label:setTextColor(0.7, 0, 0)
+        end
+    end
+
+    return label
 end
+
 
 
 function Draw:animateText(label, onComplete)
@@ -114,7 +134,7 @@ function Draw:newBlocker(group, alpha, r,g,b, onclick, touchEvent)
         onclick = function() return true end
     end
 
-    local rect = display.newRect(group, globalCenterX, globalCenterY, 1400, 1000)
+    local rect = display.newRect(group, globalCenterX, globalCenterY, 1400, 1400)
     rect.alpha = alpha or 0.5
     rect:setFillColor(r or 0, g or 0, b or 0)
     rect:addEventListener("tap", onclick)
@@ -342,7 +362,7 @@ function Draw:displayLoader()
     ]]
     local loader  = self:newBackground(globalLoadingDisplay, "titleScreen", x, globalCenterY)
     --local loader  = display.newImage(globalLoadingDisplay, "images/titleScreen.png", globalCenterX, globalCenterY)
-    local heading = self:newText(globalLoadingDisplay,  "loading", x, y, 0.8, "white")
+    local heading = self:newText(globalLoadingDisplay, "loading...", x, y, 48, "center", 600)
 
     --[[
     local progressHolder = display.newRoundedRect(globalLoadingDisplay, x, y, globalWidth-100, 75, 15)

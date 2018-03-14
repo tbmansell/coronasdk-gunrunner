@@ -452,7 +452,12 @@ function Enemy:hit(shot)
             
             self.health = self.health - damage
 
-            sounds:enemy("hurt")
+            if self.isTurret then
+                sounds:enemy("hurtTurret")
+            else
+                sounds:enemy("hurt")
+            end
+
             self:animate("hit_1")
 
             if self.health <= 0 then
@@ -469,8 +474,7 @@ function Enemy:explode(shot)
     if not self:isDead() then
         self.mode = EnemyMode.dead
 
-        sounds:enemy("killed")
-
+        self:playKilledSound()
         self:stopMomentum()
         self:animate("death_"..random(3))
 
@@ -506,8 +510,7 @@ function Enemy:fallToDeath(hole)
     if not self:isDead() then
         self.mode = EnemyMode.dead
 
-        sounds:player("killed")
-
+        self:playKilledSound()
         self:stopMomentum(true)
         self:animate("falling")
 
@@ -517,6 +520,17 @@ function Enemy:fallToDeath(hole)
             self:destroy()
         end
         seq:start()
+    end
+end
+
+
+function Enemy:playKilledSound()
+    if self.isReptile then
+        sounds:enemy("killedReptile")
+    elseif self.isTurret then
+        sounds:enemy("killedTurret")
+    else
+        sounds:enemy("killed")
     end
 end
 

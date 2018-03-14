@@ -18,8 +18,10 @@ local play        = audio.play
 
 
 function Sounds:preload()
-    self.playerSounds.hurt              = loadSound("sounds/hurt.mp3")
-    self.playerSounds.killed            = loadSound("sounds/killed.mp3")
+    self.playerSounds.hurt1             = loadSound("sounds/playerHit_1.wav")
+    self.playerSounds.hurt2             = loadSound("sounds/playerHit_2.wav")
+    self.playerSounds.hurt3             = loadSound("sounds/playerHit_3.wav")
+    self.playerSounds.killed            = loadSound("sounds/playerHit_3.wav")
 
     self.projectileSounds.rifleShot     = loadSound("sounds/rifleShot.wav")
     self.projectileSounds.shotGunShot   = loadSound("sounds/shotGunShot.mp3")
@@ -40,7 +42,10 @@ function Sounds:preload()
     self.projectileSounds.crateExplode3 = loadSound("sounds/crateExplode_3.wav")
 
     self.enemySounds.hurt               = loadSound("sounds/hurt.mp3")
+    self.enemySounds.hurtTurret         = loadSound("sounds/hitTurret.wav")
     self.enemySounds.killed             = loadSound("sounds/killed.mp3")
+    self.enemySounds.killedReptile      = loadSound("sounds/killedReptile.wav")
+    self.enemySounds.killedTurret       = loadSound("sounds/killedTurret.wav")
     self.enemySounds.charge             = loadSound("sounds/charge.mp3")
     self.enemySounds.melee              = loadSound("sounds/melee.mp3")
 

@@ -213,7 +213,7 @@ function Player:hit(shot)
         else
             self.health = self.health - damage
             
-            sounds:player("hurt")
+            sounds:player("hurt"..random(3))
             self:animate("hit_1")
             self:updateHudHealth()
 

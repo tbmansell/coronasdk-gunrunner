@@ -90,6 +90,7 @@ function EnemyBuilder:newReptile(camera, spec)
 
     self:setupEnemyCommon(camera, enemy, spec)
 
+    enemy.isReptile      = true
     enemy.stationaryAnim = anim
     enemy.turnsOnMove    = true
     enemy.turnSpeed      = 250

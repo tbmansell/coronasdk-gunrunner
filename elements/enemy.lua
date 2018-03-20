@@ -477,8 +477,7 @@ function Enemy:explode(shot)
         self:playKilledSound()
         self:stopMomentum()
         self:animate("death_"..random(3))
-        print( "DEATH" )
-
+        
         local seq = anim:chainSeq("die", self.image)
         seq:tran({time=350, alpha=0})
         seq.onComplete = function()

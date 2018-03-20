@@ -1,10 +1,12 @@
 {
-"skeleton": { "hash": "FJm3PhlmMyO4cPpreWYYTxBRwyM", "spine": "3.6.43", "width": 222.54, "height": 415.26 },
+"skeleton": { "hash": "EFRuHPJlcbBrqNmsveUITmH71Wo", "spine": "3.6.43", "width": 222.54, "height": 415.52 },
 "bones": [
 	{ "name": "root" },
 	{ "name": "bodyBottom", "parent": "root", "length": 69.01, "rotation": 90, "x": 0.5, "y": -60 },
 	{ "name": "LegBackLeft", "parent": "bodyBottom", "length": 66.31, "rotation": 95.47, "x": -47.16, "y": 5.49 },
 	{ "name": "LegBackRight", "parent": "bodyBottom", "length": 66.31, "rotation": -95.34, "x": -47.28, "y": -6.24 },
+	{ "name": "weapon", "parent": "bodyBottom", "length": 85.33, "rotation": -0.8, "x": -19.78, "y": 0.28 },
+	{ "name": "barrel-flamer", "parent": "weapon", "length": 34.25, "x": 196.22, "y": 1.61 },
 	{ "name": "bodyTop", "parent": "root", "length": 46.17, "rotation": 90, "x": 0.49, "y": 27 },
 	{ "name": "footBackLeft", "parent": "LegBackLeft", "length": 60.33, "rotation": -95.47, "x": 76.03, "y": -1.04 },
 	{ "name": "footBackRight", "parent": "LegBackRight", "length": 60.33, "rotation": 95.34, "x": 73.28, "y": 0.72 },
@@ -14,8 +16,7 @@
 	{ "name": "footFrontRight", "parent": "legFrontRight", "length": 46.94, "rotation": 68.36, "x": 60.64, "y": -2.18 },
 	{ "name": "head", "parent": "bodyTop", "length": 76.01, "rotation": -0.75, "x": 29, "y": -0.01 },
 	{ "name": "tailBottom", "parent": "bodyBottom", "length": 54.01, "rotation": -180, "x": -48, "y": -1 },
-	{ "name": "tailTop", "parent": "tailBottom", "length": 41.01, "x": 56.28, "y": -2.09 },
-	{ "name": "weapon", "parent": "bodyBottom", "length": 85.33, "rotation": -0.8, "x": -19.78, "y": 0.28 }
+	{ "name": "tailTop", "parent": "tailBottom", "length": 41.01, "x": 56.28, "y": -2.09 }
 ],
 "slots": [
 	{ "name": "footFrontLeft", "bone": "footFrontLeft", "attachment": "FootFrontLeft" },

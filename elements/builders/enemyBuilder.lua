@@ -73,8 +73,6 @@ function EnemyBuilder:newReptile(camera, spec)
 
     spec.modifyImage = rankDef.modifyImage
 
-    print("reptile skin: "..(spec.skin or rankDef.skin))
-
     local enemy = builder:newCharacter(spec, {
                        jsonName  = rankDef.json or "reptiles",
                        imagePath = "character",

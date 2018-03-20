@@ -76,6 +76,11 @@ function Enemy:updateSpine(delta)
     self.state:apply(self.skeleton)
     
     self.boneRoot.rotation = -(self.angle + 30)
+
+    if self.flameShot then
+        self.flameShot:moveTo(self:x() + self.boneBarrel.worldX, self:y() - self.boneBarrel.worldY)
+        self.flameShot:rotate(self.angle-150)
+    end
     
     self.skeleton:updateWorldTransform()
 
@@ -194,7 +199,8 @@ end
 
 
 function Enemy:setWeapon(weapon)
-    if weapon.slot then
+    -- Spine setup not right for reptile flamers, so bypassing (weapon doesnt appear otherwise)
+    if weapon.slot and weapon.name ~= "flamer" then
         self.skeleton:setAttachment(weapon.slot, weapon.skin)
     end
 

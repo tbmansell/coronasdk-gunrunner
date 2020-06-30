@@ -90,6 +90,8 @@ local function eventShootPlayerTap(event)
     if Hud.player:canAim() then
         local angle = 90 + atan2(event.y - Hud.controlShoot.y, event.x - Hud.controlShoot.x) * PI
 
+        print("angle: "..angle)
+
         Hud.player:rotate(angle)
         Hud.player:shoot(Hud.camera)
         Hud:resetAim()

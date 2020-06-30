@@ -67,11 +67,6 @@ settings = {
     },
     plugins = 
     {
-        -- key is the name passed to Lua's 'require()'
-        ["plugin.wattageTileEngine"] =
-        {
-            publisherId = "com.blindprophetsoftware",
-        },
         ["plugin.bit"] =
         {
             publisherId = "com.coronalabs",
